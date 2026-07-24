@@ -77,6 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "LearnHub PH — Learn More. Earn More." },
+      { property: "og:title", content: "LearnHub PH — Learn More. Earn More." },
+      { name: "twitter:title", content: "LearnHub PH — Learn More. Earn More." },
+      { name: "description", content: "Learn in-demand VA skills and start earning online. 9 niches, 81 lessons, quizzes + certificate. Lifetime access, only ₱399 (55% OFF)." },
+      { property: "og:description", content: "Learn in-demand VA skills and start earning online. 9 niches, 81 lessons, quizzes + certificate. Lifetime access, only ₱399 (55% OFF)." },
+      { name: "twitter:description", content: "Learn in-demand VA skills and start earning online. 9 niches, 81 lessons, quizzes + certificate. Lifetime access, only ₱399 (55% OFF)." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/6krp3EM0SNNnRD2neVNsXI0ex7g1/social-images/social-1784933163089-LearnHub_PH_Social.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/6krp3EM0SNNnRD2neVNsXI0ex7g1/social-images/social-1784933163089-LearnHub_PH_Social.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

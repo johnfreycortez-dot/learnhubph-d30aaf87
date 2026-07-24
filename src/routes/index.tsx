@@ -34,13 +34,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "The #1 VA training platform in the Philippines. Lifetime access to 81 lessons across 9 in-demand VA niches for just ₱399.",
+          "Learn in-demand VA skills and start earning online. 9 niches, 81 lessons, quizzes + certificate. Lifetime access, only ₱399 (55% OFF).",
       },
       { property: "og:title", content: "LearnHub PH — Learn More. Earn More." },
       {
         property: "og:description",
         content:
-          "Master 9 high-paying VA specializations with 81 expert lessons, quizzes and certificates. One-time ₱399.",
+          "Learn in-demand VA skills and start earning online. 9 niches, 81 lessons, quizzes + certificate. Lifetime access, only ₱399 (55% OFF).",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
