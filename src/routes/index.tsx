@@ -1087,6 +1087,7 @@ function Landing() {
         <Hero />
         <FeatureStrip />
         <Niches />
+        <Curriculum />
         <Features />
         <WhatYouGet />
         <Certificate />
