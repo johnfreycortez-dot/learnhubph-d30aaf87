@@ -568,7 +568,98 @@ function Niches() {
   );
 }
 
+/* ------- curriculum ------- */
+
+function Curriculum() {
+  const [active, setActive] = useState(0);
+  const niche = NICHES[active];
+  return (
+    <section id="curriculum" className="py-20 sm:py-28 bg-white">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto reveal">
+          <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1.5">
+            Course Curriculum
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            See What's Inside Every Niche
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Each niche includes 3 modules and 9 lessons. Pick a niche to preview its curriculum.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-[280px_1fr] reveal">
+          {/* niche tabs */}
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            {NICHES.map((n, i) => (
+              <button
+                key={n.title}
+                type="button"
+                onClick={() => setActive(i)}
+                className={`shrink-0 lg:shrink text-left rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+                  active === i
+                    ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white border-transparent shadow-md shadow-violet-500/30"
+                    : "bg-white text-slate-700 border-violet-100 hover:border-violet-300 hover:bg-violet-50"
+                }`}
+              >
+                {n.title}
+              </button>
+            ))}
+          </div>
+
+          {/* modules accordion */}
+          <div className="rounded-2xl border border-violet-100 bg-[#f8f6ff] p-5 sm:p-7">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900">{niche.title}</h3>
+              <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 px-3 py-1 text-xs font-bold">
+                3 Modules · 9 Lessons
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-slate-600">{niche.daily}</p>
+
+            <div className="mt-6 space-y-3">
+              {niche.modules.map((m, mi) => (
+                <details
+                  key={m.title}
+                  open={mi === 0}
+                  className="group rounded-xl bg-white border border-violet-100 open:shadow-md transition-all"
+                >
+                  <summary className="cursor-pointer list-none flex items-center justify-between gap-3 px-4 py-3 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <span className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white text-xs font-black shrink-0">
+                        {mi + 1}
+                      </span>
+                      <span className="font-bold text-slate-900">{m.title}</span>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-violet-500 transition-transform group-open:rotate-90" />
+                  </summary>
+                  <ul className="px-4 pb-4 pt-1 space-y-2 border-t border-violet-50">
+                    {m.lessons.map((l, li) => (
+                      <li key={l} className="flex items-start gap-2 text-sm text-slate-700">
+                        <CheckCircle2 className="h-4 w-4 text-violet-500 shrink-0 mt-0.5" />
+                        <span>
+                          <span className="text-slate-400 text-xs mr-1">Lesson {mi * 3 + li + 1}.</span>
+                          {l}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
+
+            <div className="mt-6">
+              <CTAButton>Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" /></CTAButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------- features ------- */
+
 
 function Features() {
   const items = [
