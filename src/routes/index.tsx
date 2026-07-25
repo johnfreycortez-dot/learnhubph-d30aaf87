@@ -317,7 +317,7 @@ function Hero() {
               <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-              <span className="ml-3 text-[10px] text-slate-500 font-medium">learnhub.ph/courses</span>
+              <span className="ml-3 text-[10px] text-slate-500 font-medium">learnhubph.lovable.app</span>
             </div>
             <img
               src={dashAsset.url}
@@ -695,7 +695,7 @@ function Pricing() {
     "243 Quiz Questions",
     "9 Completion Certificates",
     "Lifetime Access – No Expiry",
-    "GCash Payment Accepted",
+    "GCash & BPI Bank Transfer Accepted",
   ];
   return (
     <section id="pricing" className="py-20 sm:py-28 bg-gradient-to-b from-[#f8f6ff] to-white">
@@ -737,7 +737,7 @@ function Pricing() {
             >
               Get Started Now <ArrowRight className="h-5 w-5" />
             </button>
-            <p className="mt-3 text-xs text-violet-100/80">Instant access · Secure GCash checkout</p>
+            <p className="mt-3 text-xs text-violet-100/80">Instant access · GCash & BPI Bank Transfer</p>
           </div>
         </div>
       </div>
@@ -945,10 +945,15 @@ function Footer({
     <footer className="bg-slate-950 text-slate-400 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <LogoMark className="h-8 w-8" />
+          <div className="flex flex-col gap-1">
             <span className="text-white font-extrabold text-lg">
               LearnHub <span className="text-violet-400">PH</span>
+            </span>
+            <span className="text-sm text-slate-400">
+              Contact us:{" "}
+              <a href="mailto:johnfreycortez@gmail.com" className="text-violet-300 hover:text-white transition-colors">
+                johnfreycortez@gmail.com
+              </a>
             </span>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -966,7 +971,7 @@ function Footer({
             >
               Terms &amp; Conditions
             </button>
-            <a href="mailto:support@learnhub.ph" className="hover:text-white transition-colors">
+            <a href="mailto:johnfreycortez@gmail.com" className="hover:text-white transition-colors">
               Contact
             </a>
           </nav>
