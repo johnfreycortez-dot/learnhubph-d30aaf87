@@ -489,7 +489,8 @@ function FlipCard({ niche }: { niche: Niche }) {
   const toggle = () => setFlipped((f) => !f);
   return (
     <div
-      className={`flip-card reveal h-[380px] cursor-pointer group ${flipped ? "is-flipped" : ""}`}
+      className={`flip-card reveal cursor-pointer group ${flipped ? "is-flipped" : ""}`}
+      style={{ minHeight: "480px" }}
       onClick={toggle}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -502,20 +503,22 @@ function FlipCard({ niche }: { niche: Niche }) {
       aria-pressed={flipped}
       aria-label={`${niche.title} — tap to ${flipped ? "flip back" : "learn more"}`}
     >
-      <div className="flip-inner h-full w-full">
+      <div className="flip-inner" style={{ minHeight: "480px" }}>
         {/* front */}
-        <div className="flip-face h-full rounded-2xl bg-white border border-violet-100 shadow-sm p-6 flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300">
-          <div className="h-32 grid place-items-center bg-gradient-to-br from-violet-50 to-purple-100/50 rounded-xl overflow-hidden">
-            <img src={niche.img} alt="" className="h-full w-auto object-contain" loading="lazy" width={512} height={512} />
+        <div className="flip-face rounded-2xl bg-white border border-violet-100 shadow-sm overflow-hidden flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300">
+          <div className="w-full bg-white overflow-hidden" style={{ aspectRatio: "6 / 5" }}>
+            <img src={niche.img.url} alt={niche.title} className="w-full h-full object-cover block" loading="lazy" />
           </div>
-          <h3 className="mt-4 text-lg font-bold text-slate-900">{niche.title}</h3>
-          <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{niche.short}</p>
-          <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1">
-            👆 Tap to learn more
-          </span>
+          <div className="p-5 flex flex-col flex-1">
+            <h3 className="text-lg font-bold text-slate-900">{niche.title}</h3>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{niche.short}</p>
+            <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1">
+              👆 Tap to learn more
+            </span>
+          </div>
         </div>
         {/* back */}
-        <div className="flip-face flip-back h-full rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col">
+        <div className="flip-face flip-back rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col overflow-y-auto">
           <h3 className="text-lg font-bold">{niche.title}</h3>
           <p className="mt-2 text-sm text-violet-100 leading-relaxed">{niche.daily}</p>
           <ul className="mt-3 space-y-1.5 text-sm text-white/90 flex-1">
@@ -526,12 +529,12 @@ function FlipCard({ niche }: { niche: Niche }) {
               </li>
             ))}
           </ul>
-          <div className="mt-3 flex items-center justify-between">
+          <div className="mt-3 flex items-center justify-between gap-2">
             <span className="inline-flex items-center rounded-full bg-white/15 border border-white/25 px-2.5 py-1 text-[11px] font-semibold">
               3 Modules · 9 Lessons
             </span>
             <span className="text-xs font-semibold text-white/90 inline-flex items-center gap-1">
-              ↻ Flip back
+              ↻ Tap to flip back
             </span>
           </div>
         </div>
