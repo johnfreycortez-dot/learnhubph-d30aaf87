@@ -265,7 +265,11 @@ function Hero() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div className="reveal">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold text-white">
-            🇵🇭 #1 VA Training Platform in the Philippines
+            <span aria-hidden="true" className="inline-flex h-4 w-6 overflow-hidden rounded-[3px] ring-1 ring-white/30">
+              <span className="w-1/2 h-full bg-[#0038a8]" />
+              <span className="w-1/2 h-full bg-[#ce1126]" />
+            </span>
+            #1 VA Training Platform in the Philippines
           </span>
           <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05]">
             Launch Your VA Career.{" "}
@@ -277,6 +281,9 @@ function Hero() {
             Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying VA specializations —
             now at <span className="line-through opacity-70">₱899</span>{" "}
             <span className="font-bold text-white">₱399 only!</span>
+          </p>
+          <p className="mt-3 text-sm text-violet-100/80 max-w-xl">
+            🌏 Open to aspiring VAs everywhere — no nationality restrictions.
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
