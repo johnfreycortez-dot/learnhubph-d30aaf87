@@ -155,7 +155,6 @@ function Nav() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-3">
         <a href="#top" className="flex items-center gap-2 shrink-0">
-          <LogoMark className="h-8 w-8" />
           <span
             className={`font-extrabold tracking-tight text-lg ${
               scrolled ? "text-slate-900" : "text-white"
