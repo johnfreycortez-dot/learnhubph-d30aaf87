@@ -361,9 +361,10 @@ function FeatureStrip() {
 type Niche = {
   title: string;
   short: string;
-  img: string;
+  img: { url: string };
   daily: string;
   tasks: string[];
+  modules: { title: string; lessons: string[] }[];
 };
 
 const NICHES: Niche[] = [
@@ -373,6 +374,11 @@ const NICHES: Niche[] = [
     img: nicheSocial,
     daily: "Plan, publish and analyze posts across Facebook, Instagram, TikTok and LinkedIn.",
     tasks: ["Build monthly content calendars", "Design graphics in Canva", "Reply to DMs and comments"],
+    modules: [
+      { title: "Foundations of Social Media", lessons: ["Platforms & audience research", "Brand voice & tone", "Content pillars"] },
+      { title: "Content Creation & Scheduling", lessons: ["Canva for VAs", "Writing captions that convert", "Scheduling with Meta & Buffer"] },
+      { title: "Growth & Reporting", lessons: ["Community management", "Hashtag & trend strategy", "Monthly performance reports"] },
+    ],
   },
   {
     title: "General VA",
@@ -380,6 +386,11 @@ const NICHES: Niche[] = [
     img: nicheGeneral,
     daily: "Handle a mix of admin, inbox, and research tasks that keep a business running.",
     tasks: ["Inbox and calendar management", "Data entry and web research", "Travel and meeting prep"],
+    modules: [
+      { title: "VA Essentials", lessons: ["Client onboarding", "Tools of the trade", "Time & task management"] },
+      { title: "Daily Admin Workflows", lessons: ["Inbox zero systems", "Calendar & scheduling", "Data entry & research"] },
+      { title: "Client Communication", lessons: ["Professional email writing", "Handling feedback", "Weekly reports"] },
+    ],
   },
   {
     title: "Admin Assistant",
@@ -387,6 +398,11 @@ const NICHES: Niche[] = [
     img: nicheAdmin,
     daily: "Keep executives on time and organized with airtight systems and file management.",
     tasks: ["Manage cloud drives and files", "Coordinate schedules and meetings", "Prepare reports and slides"],
+    modules: [
+      { title: "Executive Support Basics", lessons: ["The EA mindset", "Confidentiality & trust", "Daily briefings"] },
+      { title: "Systems & Documentation", lessons: ["Google Workspace mastery", "File & folder structures", "Meeting notes & minutes"] },
+      { title: "Coordination & Reporting", lessons: ["Cross-team scheduling", "Slide & report prep", "Travel coordination"] },
+    ],
   },
   {
     title: "Graphic Designer",
@@ -394,6 +410,11 @@ const NICHES: Niche[] = [
     img: nicheDesigner,
     daily: "Turn ideas into on-brand visuals for social, ads and marketing collateral.",
     tasks: ["Design social graphics and reels covers", "Create brand kits and templates", "Edit product mockups"],
+    modules: [
+      { title: "Design Fundamentals", lessons: ["Color, type & layout", "Working with briefs", "Brand identity basics"] },
+      { title: "Canva & Adobe Workflows", lessons: ["Canva Pro power tools", "Photoshop for VAs", "Illustrator essentials"] },
+      { title: "Client-Ready Deliverables", lessons: ["Social media kits", "Ads & thumbnails", "Handing off assets"] },
+    ],
   },
   {
     title: "Bookkeeping VA",
@@ -401,6 +422,11 @@ const NICHES: Niche[] = [
     img: nicheBooks,
     daily: "Track transactions and keep the books tidy in QuickBooks or Xero.",
     tasks: ["Categorize expenses and reconcile accounts", "Send invoices and follow ups", "Prepare monthly reports"],
+    modules: [
+      { title: "Bookkeeping Foundations", lessons: ["Accounting basics", "Chart of accounts", "Bookkeeping cycle"] },
+      { title: "QuickBooks & Xero", lessons: ["Setting up QuickBooks", "Xero essentials", "Bank reconciliation"] },
+      { title: "Reporting & Payroll", lessons: ["Invoicing & AR follow-up", "Payroll support", "Monthly financial reports"] },
+    ],
   },
   {
     title: "E-Commerce VA",
@@ -408,6 +434,11 @@ const NICHES: Niche[] = [
     img: nicheEcom,
     daily: "Run the day-to-day of an online store from listings to fulfillment.",
     tasks: ["Create and optimize product listings", "Process orders and returns", "Update inventory and pricing"],
+    modules: [
+      { title: "E-Commerce Foundations", lessons: ["Shopify vs Amazon", "Store anatomy", "Product research"] },
+      { title: "Listings & Inventory", lessons: ["Writing product listings", "SEO for products", "Inventory & pricing"] },
+      { title: "Orders & Support", lessons: ["Order fulfillment flow", "Returns & refunds", "Customer support scripts"] },
+    ],
   },
   {
     title: "Operations Assistant",
@@ -415,6 +446,11 @@ const NICHES: Niche[] = [
     img: nicheOps,
     daily: "Design the systems that let a small team scale without chaos.",
     tasks: ["Write and maintain SOPs", "Coordinate remote teams", "Track KPIs and workflows"],
+    modules: [
+      { title: "Ops Foundations", lessons: ["The ops mindset", "Mapping workflows", "Tools stack overview"] },
+      { title: "SOPs & Automation", lessons: ["Writing clear SOPs", "Task management systems", "Basic automations"] },
+      { title: "Team & KPI Management", lessons: ["Coordinating remote teams", "Tracking KPIs", "Weekly ops reviews"] },
+    ],
   },
   {
     title: "Customer Support Specialist",
@@ -422,6 +458,11 @@ const NICHES: Niche[] = [
     img: nicheSupport,
     daily: "Be the friendly, fast voice customers rely on across every channel.",
     tasks: ["Answer tickets in Zendesk / Intercom", "Handle refunds and escalations", "Write help center articles"],
+    modules: [
+      { title: "Support Fundamentals", lessons: ["CX mindset", "Tone & empathy", "Ticket lifecycle"] },
+      { title: "Tools & Channels", lessons: ["Zendesk basics", "Intercom & live chat", "Email & phone support"] },
+      { title: "Escalations & Docs", lessons: ["Refunds & escalations", "Writing help articles", "CSAT & QA"] },
+    ],
   },
   {
     title: "Appointment Setter",
@@ -429,6 +470,11 @@ const NICHES: Niche[] = [
     img: nicheAppt,
     daily: "Fill your client's calendar with qualified sales calls.",
     tasks: ["Outbound DMs, emails and cold calls", "Qualify leads with scripts", "Book calls on the sales team's calendar"],
+    modules: [
+      { title: "Outreach Foundations", lessons: ["ICP & lead research", "Cold email frameworks", "DM & LinkedIn outreach"] },
+      { title: "Scripts & Objections", lessons: ["Discovery scripts", "Handling objections", "Qualifying leads"] },
+      { title: "Booking & Follow-up", lessons: ["Calendar tools", "Follow-up sequences", "Handoff to sales"] },
+    ],
   },
 ];
 
