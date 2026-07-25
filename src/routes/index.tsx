@@ -10,15 +10,15 @@ import {
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 import certAsset from "../assets/learnhub-cert.png.asset.json";
 import dashAsset from "../assets/learnhub-dashboard.jpg.asset.json";
-import nicheSocial from "../assets/niche-social.png";
-import nicheGeneral from "../assets/niche-generalva.png";
-import nicheAdmin from "../assets/niche-admin.png";
-import nicheDesigner from "../assets/niche-designer.png";
-import nicheBooks from "../assets/niche-bookkeeping.png";
-import nicheEcom from "../assets/niche-ecommerce.png";
-import nicheOps from "../assets/niche-operations.png";
-import nicheSupport from "../assets/niche-support.png";
-import nicheAppt from "../assets/niche-appointment.png";
+import nicheSocial from "../assets/niche-social.jpg.asset.json";
+import nicheGeneral from "../assets/niche-generalva.jpg.asset.json";
+import nicheAdmin from "../assets/niche-admin.jpg.asset.json";
+import nicheDesigner from "../assets/niche-designer.jpg.asset.json";
+import nicheBooks from "../assets/niche-bookkeeping.jpg.asset.json";
+import nicheEcom from "../assets/niche-ecommerce.jpg.asset.json";
+import nicheOps from "../assets/niche-operations.jpg.asset.json";
+import nicheSupport from "../assets/niche-support.jpg.asset.json";
+import nicheAppt from "../assets/niche-appointment.jpg.asset.json";
 
 const CTA_URL =
   "https://script.google.com/macros/s/AKfycbzqGxB3gqNqHL1jWsDzq5t9qyj4mgsRtpOb_X7WCm3-cY6wU7GsLrVkkXsxWnTyn9oDdg/exec";
@@ -155,7 +155,6 @@ function Nav() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-3">
         <a href="#top" className="flex items-center gap-2 shrink-0">
-          <LogoMark className="h-8 w-8" />
           <span
             className={`font-extrabold tracking-tight text-lg ${
               scrolled ? "text-slate-900" : "text-white"
@@ -266,7 +265,11 @@ function Hero() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div className="reveal">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold text-white">
-            🇵🇭 #1 VA Training Platform in the Philippines
+            <span aria-hidden="true" className="inline-flex h-4 w-6 overflow-hidden rounded-[3px] ring-1 ring-white/30">
+              <span className="w-1/2 h-full bg-[#0038a8]" />
+              <span className="w-1/2 h-full bg-[#ce1126]" />
+            </span>
+            #1 VA Training Platform in the Philippines
           </span>
           <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05]">
             Launch Your VA Career.{" "}
@@ -278,6 +281,9 @@ function Hero() {
             Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying VA specializations —
             now at <span className="line-through opacity-70">₱899</span>{" "}
             <span className="font-bold text-white">₱399 only!</span>
+          </p>
+          <p className="mt-3 text-sm text-violet-100/80 max-w-xl">
+            🌏 Open to aspiring VAs everywhere — no nationality restrictions.
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
@@ -292,7 +298,7 @@ function Hero() {
               Get Started <ArrowRight className="h-5 w-5" />
             </CTAButton>
             <a
-              href="#pricing"
+              href="#curriculum"
               className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition"
             >
               See what's inside
@@ -311,7 +317,7 @@ function Hero() {
               <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-              <span className="ml-3 text-[10px] text-slate-500 font-medium">learnhub.ph/courses</span>
+              <span className="ml-3 text-[10px] text-slate-500 font-medium">learnhubph.lovable.app</span>
             </div>
             <img
               src={dashAsset.url}
@@ -361,9 +367,10 @@ function FeatureStrip() {
 type Niche = {
   title: string;
   short: string;
-  img: string;
+  img: { url: string };
   daily: string;
   tasks: string[];
+  modules: { title: string; lessons: string[] }[];
 };
 
 const NICHES: Niche[] = [
@@ -373,6 +380,11 @@ const NICHES: Niche[] = [
     img: nicheSocial,
     daily: "Plan, publish and analyze posts across Facebook, Instagram, TikTok and LinkedIn.",
     tasks: ["Build monthly content calendars", "Design graphics in Canva", "Reply to DMs and comments"],
+    modules: [
+      { title: "Foundations of Social Media", lessons: ["Platforms & audience research", "Brand voice & tone", "Content pillars"] },
+      { title: "Content Creation & Scheduling", lessons: ["Canva for VAs", "Writing captions that convert", "Scheduling with Meta & Buffer"] },
+      { title: "Growth & Reporting", lessons: ["Community management", "Hashtag & trend strategy", "Monthly performance reports"] },
+    ],
   },
   {
     title: "General VA",
@@ -380,6 +392,11 @@ const NICHES: Niche[] = [
     img: nicheGeneral,
     daily: "Handle a mix of admin, inbox, and research tasks that keep a business running.",
     tasks: ["Inbox and calendar management", "Data entry and web research", "Travel and meeting prep"],
+    modules: [
+      { title: "VA Essentials", lessons: ["Client onboarding", "Tools of the trade", "Time & task management"] },
+      { title: "Daily Admin Workflows", lessons: ["Inbox zero systems", "Calendar & scheduling", "Data entry & research"] },
+      { title: "Client Communication", lessons: ["Professional email writing", "Handling feedback", "Weekly reports"] },
+    ],
   },
   {
     title: "Admin Assistant",
@@ -387,6 +404,11 @@ const NICHES: Niche[] = [
     img: nicheAdmin,
     daily: "Keep executives on time and organized with airtight systems and file management.",
     tasks: ["Manage cloud drives and files", "Coordinate schedules and meetings", "Prepare reports and slides"],
+    modules: [
+      { title: "Executive Support Basics", lessons: ["The EA mindset", "Confidentiality & trust", "Daily briefings"] },
+      { title: "Systems & Documentation", lessons: ["Google Workspace mastery", "File & folder structures", "Meeting notes & minutes"] },
+      { title: "Coordination & Reporting", lessons: ["Cross-team scheduling", "Slide & report prep", "Travel coordination"] },
+    ],
   },
   {
     title: "Graphic Designer",
@@ -394,6 +416,11 @@ const NICHES: Niche[] = [
     img: nicheDesigner,
     daily: "Turn ideas into on-brand visuals for social, ads and marketing collateral.",
     tasks: ["Design social graphics and reels covers", "Create brand kits and templates", "Edit product mockups"],
+    modules: [
+      { title: "Design Fundamentals", lessons: ["Color, type & layout", "Working with briefs", "Brand identity basics"] },
+      { title: "Canva & Adobe Workflows", lessons: ["Canva Pro power tools", "Photoshop for VAs", "Illustrator essentials"] },
+      { title: "Client-Ready Deliverables", lessons: ["Social media kits", "Ads & thumbnails", "Handing off assets"] },
+    ],
   },
   {
     title: "Bookkeeping VA",
@@ -401,6 +428,11 @@ const NICHES: Niche[] = [
     img: nicheBooks,
     daily: "Track transactions and keep the books tidy in QuickBooks or Xero.",
     tasks: ["Categorize expenses and reconcile accounts", "Send invoices and follow ups", "Prepare monthly reports"],
+    modules: [
+      { title: "Bookkeeping Foundations", lessons: ["Accounting basics", "Chart of accounts", "Bookkeeping cycle"] },
+      { title: "QuickBooks & Xero", lessons: ["Setting up QuickBooks", "Xero essentials", "Bank reconciliation"] },
+      { title: "Reporting & Payroll", lessons: ["Invoicing & AR follow-up", "Payroll support", "Monthly financial reports"] },
+    ],
   },
   {
     title: "E-Commerce VA",
@@ -408,6 +440,11 @@ const NICHES: Niche[] = [
     img: nicheEcom,
     daily: "Run the day-to-day of an online store from listings to fulfillment.",
     tasks: ["Create and optimize product listings", "Process orders and returns", "Update inventory and pricing"],
+    modules: [
+      { title: "E-Commerce Foundations", lessons: ["Shopify vs Amazon", "Store anatomy", "Product research"] },
+      { title: "Listings & Inventory", lessons: ["Writing product listings", "SEO for products", "Inventory & pricing"] },
+      { title: "Orders & Support", lessons: ["Order fulfillment flow", "Returns & refunds", "Customer support scripts"] },
+    ],
   },
   {
     title: "Operations Assistant",
@@ -415,6 +452,11 @@ const NICHES: Niche[] = [
     img: nicheOps,
     daily: "Design the systems that let a small team scale without chaos.",
     tasks: ["Write and maintain SOPs", "Coordinate remote teams", "Track KPIs and workflows"],
+    modules: [
+      { title: "Ops Foundations", lessons: ["The ops mindset", "Mapping workflows", "Tools stack overview"] },
+      { title: "SOPs & Automation", lessons: ["Writing clear SOPs", "Task management systems", "Basic automations"] },
+      { title: "Team & KPI Management", lessons: ["Coordinating remote teams", "Tracking KPIs", "Weekly ops reviews"] },
+    ],
   },
   {
     title: "Customer Support Specialist",
@@ -422,6 +464,11 @@ const NICHES: Niche[] = [
     img: nicheSupport,
     daily: "Be the friendly, fast voice customers rely on across every channel.",
     tasks: ["Answer tickets in Zendesk / Intercom", "Handle refunds and escalations", "Write help center articles"],
+    modules: [
+      { title: "Support Fundamentals", lessons: ["CX mindset", "Tone & empathy", "Ticket lifecycle"] },
+      { title: "Tools & Channels", lessons: ["Zendesk basics", "Intercom & live chat", "Email & phone support"] },
+      { title: "Escalations & Docs", lessons: ["Refunds & escalations", "Writing help articles", "CSAT & QA"] },
+    ],
   },
   {
     title: "Appointment Setter",
@@ -429,6 +476,11 @@ const NICHES: Niche[] = [
     img: nicheAppt,
     daily: "Fill your client's calendar with qualified sales calls.",
     tasks: ["Outbound DMs, emails and cold calls", "Qualify leads with scripts", "Book calls on the sales team's calendar"],
+    modules: [
+      { title: "Outreach Foundations", lessons: ["ICP & lead research", "Cold email frameworks", "DM & LinkedIn outreach"] },
+      { title: "Scripts & Objections", lessons: ["Discovery scripts", "Handling objections", "Qualifying leads"] },
+      { title: "Booking & Follow-up", lessons: ["Calendar tools", "Follow-up sequences", "Handoff to sales"] },
+    ],
   },
 ];
 
@@ -437,7 +489,8 @@ function FlipCard({ niche }: { niche: Niche }) {
   const toggle = () => setFlipped((f) => !f);
   return (
     <div
-      className={`flip-card reveal h-[380px] cursor-pointer group ${flipped ? "is-flipped" : ""}`}
+      className={`flip-card reveal cursor-pointer group ${flipped ? "is-flipped" : ""}`}
+      style={{ minHeight: "480px" }}
       onClick={toggle}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -450,20 +503,22 @@ function FlipCard({ niche }: { niche: Niche }) {
       aria-pressed={flipped}
       aria-label={`${niche.title} — tap to ${flipped ? "flip back" : "learn more"}`}
     >
-      <div className="flip-inner h-full w-full">
+      <div className="flip-inner" style={{ minHeight: "480px" }}>
         {/* front */}
-        <div className="flip-face h-full rounded-2xl bg-white border border-violet-100 shadow-sm p-6 flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300">
-          <div className="h-32 grid place-items-center bg-gradient-to-br from-violet-50 to-purple-100/50 rounded-xl overflow-hidden">
-            <img src={niche.img} alt="" className="h-full w-auto object-contain" loading="lazy" width={512} height={512} />
+        <div className="flip-face rounded-2xl bg-white border border-violet-100 shadow-sm overflow-hidden flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300">
+          <div className="w-full bg-white overflow-hidden" style={{ aspectRatio: "6 / 5" }}>
+            <img src={niche.img.url} alt={niche.title} className="w-full h-full object-cover block" loading="lazy" />
           </div>
-          <h3 className="mt-4 text-lg font-bold text-slate-900">{niche.title}</h3>
-          <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{niche.short}</p>
-          <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1">
-            👆 Tap to learn more
-          </span>
+          <div className="p-5 flex flex-col flex-1">
+            <h3 className="text-lg font-bold text-slate-900">{niche.title}</h3>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{niche.short}</p>
+            <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1">
+              👆 Tap to learn more
+            </span>
+          </div>
         </div>
         {/* back */}
-        <div className="flip-face flip-back h-full rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col">
+        <div className="flip-face flip-back rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col overflow-y-auto">
           <h3 className="text-lg font-bold">{niche.title}</h3>
           <p className="mt-2 text-sm text-violet-100 leading-relaxed">{niche.daily}</p>
           <ul className="mt-3 space-y-1.5 text-sm text-white/90 flex-1">
@@ -474,12 +529,12 @@ function FlipCard({ niche }: { niche: Niche }) {
               </li>
             ))}
           </ul>
-          <div className="mt-3 flex items-center justify-between">
+          <div className="mt-3 flex items-center justify-between gap-2">
             <span className="inline-flex items-center rounded-full bg-white/15 border border-white/25 px-2.5 py-1 text-[11px] font-semibold">
               3 Modules · 9 Lessons
             </span>
             <span className="text-xs font-semibold text-white/90 inline-flex items-center gap-1">
-              ↻ Flip back
+              ↻ Tap to flip back
             </span>
           </div>
         </div>
@@ -513,7 +568,98 @@ function Niches() {
   );
 }
 
+/* ------- curriculum ------- */
+
+function Curriculum() {
+  const [active, setActive] = useState(0);
+  const niche = NICHES[active];
+  return (
+    <section id="curriculum" className="py-20 sm:py-28 bg-white">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="text-center max-w-2xl mx-auto reveal">
+          <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1.5">
+            Course Curriculum
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            See What's Inside Every Niche
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Each niche includes 3 modules and 9 lessons. Pick a niche to preview its curriculum.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-[280px_1fr] reveal">
+          {/* niche tabs */}
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            {NICHES.map((n, i) => (
+              <button
+                key={n.title}
+                type="button"
+                onClick={() => setActive(i)}
+                className={`shrink-0 lg:shrink text-left rounded-xl px-4 py-3 text-sm font-semibold transition-all border ${
+                  active === i
+                    ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white border-transparent shadow-md shadow-violet-500/30"
+                    : "bg-white text-slate-700 border-violet-100 hover:border-violet-300 hover:bg-violet-50"
+                }`}
+              >
+                {n.title}
+              </button>
+            ))}
+          </div>
+
+          {/* modules accordion */}
+          <div className="rounded-2xl border border-violet-100 bg-[#f8f6ff] p-5 sm:p-7">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900">{niche.title}</h3>
+              <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 px-3 py-1 text-xs font-bold">
+                3 Modules · 9 Lessons
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-slate-600">{niche.daily}</p>
+
+            <div className="mt-6 space-y-3">
+              {niche.modules.map((m, mi) => (
+                <details
+                  key={m.title}
+                  open={mi === 0}
+                  className="group rounded-xl bg-white border border-violet-100 open:shadow-md transition-all"
+                >
+                  <summary className="cursor-pointer list-none flex items-center justify-between gap-3 px-4 py-3 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <span className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white text-xs font-black shrink-0">
+                        {mi + 1}
+                      </span>
+                      <span className="font-bold text-slate-900">{m.title}</span>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-violet-500 transition-transform group-open:rotate-90" />
+                  </summary>
+                  <ul className="px-4 pb-4 pt-1 space-y-2 border-t border-violet-50">
+                    {m.lessons.map((l, li) => (
+                      <li key={l} className="flex items-start gap-2 text-sm text-slate-700">
+                        <CheckCircle2 className="h-4 w-4 text-violet-500 shrink-0 mt-0.5" />
+                        <span>
+                          <span className="text-slate-400 text-xs mr-1">Lesson {mi * 3 + li + 1}.</span>
+                          {l}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
+
+            <div className="mt-6">
+              <CTAButton>Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" /></CTAButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------- features ------- */
+
 
 function Features() {
   const items = [
@@ -640,7 +786,7 @@ function Pricing() {
     "243 Quiz Questions",
     "9 Completion Certificates",
     "Lifetime Access – No Expiry",
-    "GCash Payment Accepted",
+    "GCash & BPI Bank Transfer Accepted",
   ];
   return (
     <section id="pricing" className="py-20 sm:py-28 bg-gradient-to-b from-[#f8f6ff] to-white">
@@ -682,7 +828,7 @@ function Pricing() {
             >
               Get Started Now <ArrowRight className="h-5 w-5" />
             </button>
-            <p className="mt-3 text-xs text-violet-100/80">Instant access · Secure GCash checkout</p>
+            <p className="mt-3 text-xs text-violet-100/80">Instant access · GCash & BPI Bank Transfer</p>
           </div>
         </div>
       </div>
@@ -890,10 +1036,15 @@ function Footer({
     <footer className="bg-slate-950 text-slate-400 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <LogoMark className="h-8 w-8" />
+          <div className="flex flex-col gap-1">
             <span className="text-white font-extrabold text-lg">
               LearnHub <span className="text-violet-400">PH</span>
+            </span>
+            <span className="text-sm text-slate-400">
+              Contact us:{" "}
+              <a href="mailto:johnfreycortez@gmail.com" className="text-violet-300 hover:text-white transition-colors">
+                johnfreycortez@gmail.com
+              </a>
             </span>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -911,7 +1062,7 @@ function Footer({
             >
               Terms &amp; Conditions
             </button>
-            <a href="mailto:support@learnhub.ph" className="hover:text-white transition-colors">
+            <a href="mailto:johnfreycortez@gmail.com" className="hover:text-white transition-colors">
               Contact
             </a>
           </nav>
@@ -936,6 +1087,7 @@ function Landing() {
         <Hero />
         <FeatureStrip />
         <Niches />
+        <Curriculum />
         <Features />
         <WhatYouGet />
         <Certificate />
