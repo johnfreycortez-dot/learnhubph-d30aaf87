@@ -301,7 +301,12 @@ function Hero() {
               href="#pricing"
               className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition"
             >
+            <a
+              href="#curriculum"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition"
+            >
               See what's inside
+            </a>
             </a>
           </div>
         </div>
