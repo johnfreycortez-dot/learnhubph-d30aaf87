@@ -10,15 +10,15 @@ import {
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 import certAsset from "../assets/learnhub-cert.png.asset.json";
 import dashAsset from "../assets/learnhub-dashboard.jpg.asset.json";
-import nicheSocial from "../assets/niche-social.png";
-import nicheGeneral from "../assets/niche-generalva.png";
-import nicheAdmin from "../assets/niche-admin.png";
-import nicheDesigner from "../assets/niche-designer.png";
-import nicheBooks from "../assets/niche-bookkeeping.png";
-import nicheEcom from "../assets/niche-ecommerce.png";
-import nicheOps from "../assets/niche-operations.png";
-import nicheSupport from "../assets/niche-support.png";
-import nicheAppt from "../assets/niche-appointment.png";
+import nicheSocial from "../assets/niche-social.jpg.asset.json";
+import nicheGeneral from "../assets/niche-generalva.jpg.asset.json";
+import nicheAdmin from "../assets/niche-admin.jpg.asset.json";
+import nicheDesigner from "../assets/niche-designer.jpg.asset.json";
+import nicheBooks from "../assets/niche-bookkeeping.jpg.asset.json";
+import nicheEcom from "../assets/niche-ecommerce.jpg.asset.json";
+import nicheOps from "../assets/niche-operations.jpg.asset.json";
+import nicheSupport from "../assets/niche-support.jpg.asset.json";
+import nicheAppt from "../assets/niche-appointment.jpg.asset.json";
 
 const CTA_URL =
   "https://script.google.com/macros/s/AKfycbzqGxB3gqNqHL1jWsDzq5t9qyj4mgsRtpOb_X7WCm3-cY6wU7GsLrVkkXsxWnTyn9oDdg/exec";
