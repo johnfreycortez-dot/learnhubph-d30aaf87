@@ -809,7 +809,7 @@ function FlipCard({ niche }: { niche: Niche }) {
   return (
     <div
       className="reveal group"
-      style={{ perspective: "1000px", width: "100%", height: "380px" }}
+      style={{ perspective: "1000px", width: "100%", minHeight: "380px", height: "460px" }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
