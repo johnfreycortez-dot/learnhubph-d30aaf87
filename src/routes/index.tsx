@@ -4,7 +4,7 @@ import {
   BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
   Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
   CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight, Globe, RefreshCw, Check, GraduationCap,
+  Star, X, ArrowRight, Globe, RefreshCw, Check, GraduationCap, ChevronDown,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -376,72 +376,156 @@ const HERO_ORDER: string[] = [
 
 function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayIndex, setDisplayIndex] = useState(0); // watermark text lags for fade-out
+  // Two-layer gradient crossfade
+  const [layerAGradient, setLayerAGradient] = useState(NICHE_COLORS[HERO_ORDER[0]].gradient);
+  const [layerBGradient, setLayerBGradient] = useState(NICHE_COLORS[HERO_ORDER[0]].gradient);
+  const [layerAOpacity, setLayerAOpacity] = useState(1);
+  const [layerBOpacity, setLayerBOpacity] = useState(0);
+  const aIsCurrentRef = useRef(true);
+  // Watermark text lags behind for fade-out
+  const [displayIndex, setDisplayIndex] = useState(0);
   const [wmVisible, setWmVisible] = useState(true);
+  const intervalRef = useRef<number | null>(null);
+
   const reduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  useEffect(() => {
-    if (reduced) return;
-    const id = window.setInterval(() => {
-      setCurrentIndex((i) => (i + 1) % HERO_ORDER.length);
-    }, 10000);
-    return () => window.clearInterval(id);
-  }, [reduced]);
-
-  // watermark crossfade on niche change
-  useEffect(() => {
+  const goToIndex = (nextIdx: number) => {
+    const nextGradient = NICHE_COLORS[HERO_ORDER[nextIdx]].gradient;
+    // Crossfade: whichever layer is currently visible fades out, the other takes new gradient and fades in
+    if (aIsCurrentRef.current) {
+      setLayerBGradient(nextGradient);
+      // next frame trigger transition
+      requestAnimationFrame(() => {
+        setLayerAOpacity(0);
+        setLayerBOpacity(1);
+      });
+    } else {
+      setLayerAGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerBOpacity(0);
+        setLayerAOpacity(1);
+      });
+    }
+    aIsCurrentRef.current = !aIsCurrentRef.current;
+    setCurrentIndex(nextIdx);
+    // Watermark fade
     setWmVisible(false);
-    const t1 = window.setTimeout(() => {
-      setDisplayIndex(currentIndex);
+    window.setTimeout(() => {
+      setDisplayIndex(nextIdx);
       setWmVisible(true);
     }, 400);
-    return () => window.clearTimeout(t1);
+  };
+
+  const startInterval = () => {
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+    intervalRef.current = window.setInterval(() => {
+      setCurrentIndex((i) => {
+        const next = (i + 1) % HERO_ORDER.length;
+        // Call goToIndex-like without recursion via state
+        return next;
+      });
+    }, 10000);
+  };
+
+  // Drive crossfade when currentIndex changes via interval
+  const lastAppliedRef = useRef(0);
+  useEffect(() => {
+    if (currentIndex === lastAppliedRef.current) return;
+    const nextIdx = currentIndex;
+    lastAppliedRef.current = nextIdx;
+    const nextGradient = NICHE_COLORS[HERO_ORDER[nextIdx]].gradient;
+    if (aIsCurrentRef.current) {
+      setLayerBGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerAOpacity(0);
+        setLayerBOpacity(1);
+      });
+    } else {
+      setLayerAGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerBOpacity(0);
+        setLayerAOpacity(1);
+      });
+    }
+    aIsCurrentRef.current = !aIsCurrentRef.current;
+    setWmVisible(false);
+    const t = window.setTimeout(() => {
+      setDisplayIndex(nextIdx);
+      setWmVisible(true);
+    }, 400);
+    return () => window.clearTimeout(t);
   }, [currentIndex]);
 
-  const jumpTo = (i: number) => setCurrentIndex(i);
+  useEffect(() => {
+    if (reduced) return;
+    startInterval();
+    return () => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+    };
+  }, [reduced]);
+
+  const jumpTo = (i: number) => {
+    if (i === currentIndex) return;
+    setCurrentIndex(i);
+    if (!reduced) startInterval(); // reset timer
+  };
 
   const activeName = HERO_ORDER[currentIndex];
-  const activeColor = NICHE_COLORS[activeName];
   const displayName = HERO_ORDER[displayIndex];
   const displayCaps = NICHE_COLORS[displayName].caps;
+
+  const layerBaseStyle = {
+    position: "absolute" as const,
+    inset: 0,
+    backgroundSize: "200% 200%",
+    backgroundPosition: "0% 50%",
+    transition: "opacity 1.5s ease-in-out",
+    animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
+    pointerEvents: "none" as const,
+  };
 
   return (
     <section
       id="top"
       className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32"
-      style={{
-        backgroundImage: activeColor.gradient,
-        backgroundSize: "300% 300%",
-        backgroundPosition: "0% 50%",
-        transition: "background-image 1.5s ease",
-        animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
-      }}
+      style={{ backgroundColor: "#2e1065" }}
     >
-      {/* blobs */}
-      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" />
-      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
-      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+      {/* Gradient crossfade layers */}
+      <div
+        aria-hidden="true"
+        style={{ ...layerBaseStyle, backgroundImage: layerAGradient, opacity: layerAOpacity, zIndex: 0 }}
+      />
+      <div
+        aria-hidden="true"
+        style={{ ...layerBaseStyle, backgroundImage: layerBGradient, opacity: layerBOpacity, zIndex: 0 }}
+      />
 
-      {/* watermark niche name — bottom-left, cropped, behind everything */}
+      {/* blobs */}
+      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" style={{ zIndex: 1 }} />
+      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s", zIndex: 1 }} />
+      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s", zIndex: 1 }} />
+
+      {/* watermark niche name — bottom-left, cropped */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 2 }}
       >
         <span
           style={{
             position: "absolute",
-            bottom: "-20px",
+            bottom: "-15px",
             left: "-10px",
-            fontSize: "18vw",
+            fontSize: "clamp(60px, 8vw, 110px)",
             fontWeight: 900,
-            color: "rgba(255,255,255,0.07)",
-            letterSpacing: "-0.04em",
-            lineHeight: 0.85,
+            color: "rgba(255,255,255,0.05)",
+            letterSpacing: "-3px",
+            lineHeight: 1,
             whiteSpace: "nowrap",
             userSelect: "none",
+            pointerEvents: "none",
             opacity: wmVisible ? 1 : 0,
             transition: "opacity 0.4s ease",
           }}
@@ -531,16 +615,17 @@ function Hero() {
               type="button"
               aria-label={`Show ${n}`}
               onClick={() => jumpTo(i)}
-              className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
               style={{
                 width: isActive ? 24 : 8,
                 height: 8,
+                borderRadius: 4,
                 backgroundColor: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
-                transition: "width 0.4s ease, background-color 0.4s ease",
+                transition: "all 0.4s ease",
                 border: 0,
                 padding: 0,
                 cursor: "pointer",
               }}
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
             />
           );
         })}
@@ -548,6 +633,7 @@ function Hero() {
     </section>
   );
 }
+
 
 
 function FeatureStrip() {
@@ -809,7 +895,7 @@ function FlipCard({ niche }: { niche: Niche }) {
   return (
     <div
       className="reveal group"
-      style={{ perspective: "1000px", width: "100%", minHeight: "380px", height: "460px" }}
+      style={{ perspective: "1000px", width: "100%", minHeight: "420px", height: "480px" }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -876,9 +962,10 @@ function FlipCard({ niche }: { niche: Niche }) {
                 animation: "gradientShift 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite",
                 borderRadius: "16px",
                 border: "1px solid rgba(255,255,255,0.20)",
-                padding: "22px",
+                padding: "24px",
                 display: "flex",
                 flexDirection: "column",
+                justifyContent: "space-between",
                 gap: "14px",
                 overflow: "hidden",
                 color: "white",
@@ -964,42 +1051,8 @@ function FlipCard({ niche }: { niche: Niche }) {
                 </ul>
               </div>
 
-              {/* stats row */}
-              <div
-                style={{
-                  position: "relative",
-                  zIndex: 1,
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gap: 0,
-                  textAlign: "center",
-                  marginTop: "auto",
-                }}
-              >
-                {[
-                  { Icon: BookOpen, n: "3", l: "Modules" },
-                  { Icon: GraduationCap, n: "9", l: "Lessons" },
-                  { Icon: Award, n: "1", l: "Certificate" },
-                ].map((s, i) => (
-                  <div
-                    key={s.l}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "2px",
-                      borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.20)",
-                      padding: "0 4px",
-                    }}
-                  >
-                    <s.Icon size={14} aria-hidden="true" />
-                    <span style={{ fontWeight: 800, fontSize: "16px", lineHeight: 1.1 }}>{s.n}</span>
-                    <span style={{ opacity: 0.6, fontSize: "10px" }}>{s.l}</span>
-                  </div>
-                ))}
-              </div>
 
-              {/* CTA */}
+
               <div style={{ position: "relative", zIndex: 1 }}>
                 <button
                   type="button"
@@ -1368,7 +1421,109 @@ const TESTIMONIALS = [
   },
 ];
 
+const FAQS: { q: string; a: string }[] = [
+  { q: "How do I access the course after payment?", a: "Once your GCash payment or Bank transfer is verified by our team, you'll receive an email with your personal access token. Use that token along with your registered email to log in at learnhubph.lovable.app. Access is granted within 24 hours of payment confirmation." },
+  { q: "Is this really a one-time payment?", a: "Yes — you pay ₱399 once and get lifetime access to all 9 VA niches, 81 lessons, 243 quiz questions, and 9 completion certificates. No monthly fees, no renewals, no hidden charges." },
+  { q: "Do I need prior experience to enroll?", a: "No experience needed at all. LearnHub PH is designed for complete beginners who want to start a VA career. The lessons start from the basics and build up to real, client-ready skills step by step." },
+  { q: "Can I take all 9 niches or just one?", a: "You get access to all 9 niches with your single payment. You can start with any niche you want, learn at your own pace, and complete as many as you like. Most students pick one niche to focus on first and expand from there." },
+  { q: "How do I earn my certificate?", a: "Complete all 9 lessons in a niche and pass the quizzes at the end of each lesson. Once you finish all requirements for a niche, your certificate is automatically generated and available to download from your dashboard." },
+  { q: "What payment methods do you accept?", a: "We currently accept GCash payments & BPI Bank transfer only. After signing up, you'll receive our GCash details and instructions on how to submit your proof of payment for verification." },
+  { q: "How long does it take to finish a niche?", a: "Each niche has 9 lessons across 3 modules. Most students complete a single niche in 3 to 7 days depending on their pace. There are no deadlines — you can go as fast or as slow as you need." },
+  { q: "What if I have a question or need help?", a: "You can reach us through the Messages section inside the platform after logging in, or by emailing us directly. Our team typically responds within 24 hours on business days." },
+  { q: "Is LearnHub PH only for Filipinos?", a: "LearnHub PH was built with Filipino VAs in mind but is open to anyone who wants to build a VA career. The content is in English and the skills taught are applicable to working with international clients worldwide." },
+  { q: "Are the certificates recognized by employers?", a: "LearnHub PH certificates demonstrate that you have completed structured training in a specific VA niche. While they are not government-accredited, they serve as strong portfolio proof of your skills — especially when applying on platforms like Upwork, OnlineJobs.ph, and LinkedIn." },
+];
+
+function FAQ() {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  return (
+    <section id="faq" className="py-20 sm:py-28 bg-[#f8f6ff]">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="text-center reveal">
+          <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1.5">
+            Got Questions?
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Everything you need to know before getting started with LearnHub PH.
+          </p>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 reveal">
+          {FAQS.map((f, i) => {
+            const isOpen = openIdx === i;
+            return (
+              <div
+                key={f.q}
+                style={{
+                  background: "white",
+                  borderRadius: "12px",
+                  border: "1px solid #e5e7eb",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  overflow: "hidden",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+                  style={{
+                    background: isOpen ? "#faf5ff" : "white",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    color: isOpen ? "#7c3aed" : "#0f172a",
+                    transition: "background 0.2s ease, color 0.2s ease",
+                    cursor: "pointer",
+                    border: 0,
+                  }}
+                >
+                  <span>{f.q}</span>
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      flexShrink: 0,
+                      transition: "transform 0.3s ease",
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      color: isOpen ? "#7c3aed" : "#64748b",
+                    }}
+                    aria-hidden="true"
+                  />
+                </button>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateRows: isOpen ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.3s ease",
+                  }}
+                >
+                  <div style={{ overflow: "hidden" }}>
+                    <div
+                      style={{
+                        borderTop: "1px solid #f3f4f6",
+                        padding: "16px 20px",
+                        fontSize: "14px",
+                        color: "#4b5563",
+                        lineHeight: 1.7,
+                      }}
+                    >
+                      {f.a}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Testimonials() {
+
   return (
     <section id="reviews" className="py-20 sm:py-28 bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -1592,6 +1747,7 @@ function Landing() {
         <WhatYouGet />
         <Certificate />
         <Pricing />
+        <FAQ />
         <Testimonials />
         <FinalCTA />
       </main>
