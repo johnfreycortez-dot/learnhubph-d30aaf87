@@ -856,60 +856,194 @@ function FlipCard({ niche }: { niche: Niche }) {
           </div>
         </div>
         {/* back */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            background: niche.back,
-            borderRadius: "16px",
-            padding: "28px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            boxShadow: "0 24px 60px rgba(15, 23, 42, 0.22)",
-            overflow: "hidden",
-          }}
-        >
-          <div>
-            <h3 style={{ color: "white", fontSize: "22px", fontWeight: 800, lineHeight: 1.15 }}>{niche.title}</h3>
-            <p style={{ marginTop: "22px", color: "white", fontSize: "14px", opacity: 0.9, lineHeight: 1.65 }}>
-              {niche.daily}
-            </p>
-            <span
+        {(() => {
+          const meta = NICHE_COLORS[niche.title];
+          const gradient = meta?.gradient ?? `linear-gradient(135deg, ${niche.back}, ${niche.back})`;
+          const accent = meta?.accent ?? niche.back;
+          const description = meta?.description ?? niche.daily;
+          const skills = meta?.skills ?? [];
+          return (
+            <div
               style={{
-                marginTop: "22px",
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: "999px",
-                background: "rgba(255,255,255,0.18)",
-                border: "1px solid rgba(255,255,255,0.28)",
-                color: "rgba(255,255,255,0.7)",
-                padding: "6px 12px",
-                fontSize: "11px",
-                fontWeight: 800,
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                transform: "rotateY(180deg)",
+                backgroundImage: gradient,
+                backgroundSize: "300% 300%",
+                backgroundPosition: "0% 50%",
+                animation: "gradientShift 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,0.20)",
+                padding: "22px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "14px",
+                overflow: "hidden",
+                color: "white",
               }}
             >
-              3 Modules · 9 Lessons
-            </span>
-          </div>
-          <div>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); go(); }}
-              className="inline-flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
-              style={{ color: niche.back, borderRadius: "10px" }}
-            >
-              Enroll Now <ArrowRight className="h-4 w-4" />
-            </button>
-            <span className="mt-3 text-xs font-semibold text-white/85 inline-flex w-full items-center justify-center gap-1.5">
-              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-              Click to flip back
-            </span>
-          </div>
-        </div>
+              {/* decorative orbs */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "-40px",
+                  right: "-40px",
+                  width: "160px",
+                  height: "160px",
+                  borderRadius: "9999px",
+                  background: "rgba(255,255,255,0.15)",
+                  filter: "blur(40px)",
+                  animation: "orbFloat1 9s ease-in-out infinite",
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  bottom: "-50px",
+                  left: "-40px",
+                  width: "180px",
+                  height: "180px",
+                  borderRadius: "9999px",
+                  background: "rgba(255,255,255,0.12)",
+                  filter: "blur(40px)",
+                  animation: "orbFloat2 10s ease-in-out infinite",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* header */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <h3 style={{ fontSize: "18px", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>{niche.title}</h3>
+                <span
+                  style={{
+                    display: "inline-block",
+                    marginTop: "6px",
+                    background: "rgba(255,255,255,0.15)",
+                    color: "white",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    padding: "3px 10px",
+                    borderRadius: "9999px",
+                  }}
+                >
+                  VA Specialization
+                </span>
+              </div>
+
+              {/* description */}
+              <p style={{ position: "relative", zIndex: 1, margin: 0, fontSize: "13px", lineHeight: 1.6, opacity: 0.9 }}>
+                {description}
+              </p>
+
+              {/* skills */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    opacity: 0.6,
+                    marginBottom: "8px",
+                    fontWeight: 700,
+                  }}
+                >
+                  What You'll Learn
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {skills.map((s) => (
+                    <li key={s} style={{ display: "flex", gap: "8px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5, opacity: 0.9 }}>
+                      <Check size={12} style={{ marginTop: "4px", flexShrink: 0 }} aria-hidden="true" />
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* stats row */}
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 0,
+                  textAlign: "center",
+                  marginTop: "auto",
+                }}
+              >
+                {[
+                  { Icon: BookOpen, n: "3", l: "Modules" },
+                  { Icon: GraduationCap, n: "9", l: "Lessons" },
+                  { Icon: Award, n: "1", l: "Certificate" },
+                ].map((s, i) => (
+                  <div
+                    key={s.l}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "2px",
+                      borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.20)",
+                      padding: "0 4px",
+                    }}
+                  >
+                    <s.Icon size={14} aria-hidden="true" />
+                    <span style={{ fontWeight: 800, fontSize: "16px", lineHeight: 1.1 }}>{s.n}</span>
+                    <span style={{ opacity: 0.6, fontSize: "10px" }}>{s.l}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); go(); }}
+                  className="active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
+                  style={{
+                    display: "inline-flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    background: "white",
+                    color: accent,
+                    fontWeight: 700,
+                    fontSize: "14px",
+                    height: "44px",
+                    borderRadius: "10px",
+                    border: 0,
+                    cursor: "pointer",
+                  }}
+                >
+                  Enroll Now <ArrowRight size={16} />
+                </button>
+                <span
+                  style={{
+                    marginTop: "8px",
+                    display: "inline-flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    color: "rgba(255,255,255,0.55)",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <RefreshCw size={12} aria-hidden="true" />
+                  Click to flip back
+                </span>
+              </div>
+            </div>
+          );
+        })()}
+
       </div>
     </div>
   );
