@@ -20,6 +20,7 @@ import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LessonLessonIdRouteImport } from './routes/lesson.$lessonId'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const PendingRoute = PendingRouteImport.update({
   id: '/pending',
@@ -76,10 +77,15 @@ const LessonLessonIdRoute = LessonLessonIdRouteImport.update({
   path: '/lesson/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
@@ -88,11 +94,12 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
@@ -101,12 +108,13 @@ export interface FileRoutesByTo {
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
   '/dashboard': typeof DashboardRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/notifications': typeof NotificationsRoute
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/payment'
     | '/pending'
+    | '/admin/dashboard'
     | '/lesson/$lessonId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/payment'
     | '/pending'
+    | '/admin/dashboard'
     | '/lesson/$lessonId'
   id:
     | '__root__'
@@ -156,12 +167,13 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/payment'
     | '/pending'
+    | '/admin/dashboard'
     | '/lesson/$lessonId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CertificatesRoute: typeof CertificatesRoute
   ConfirmRoute: typeof ConfirmRoute
   DashboardRoute: typeof DashboardRoute
@@ -252,12 +264,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   CertificatesRoute: CertificatesRoute,
   ConfirmRoute: ConfirmRoute,
   DashboardRoute: DashboardRoute,
