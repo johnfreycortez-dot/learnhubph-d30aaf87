@@ -426,7 +426,7 @@ type Niche = {
   short: string;
   img: { url: string };
   daily: string;
-  tasks: string[];
+  back: string;
   modules: { title: string; lessons: string[] }[];
 };
 
@@ -435,108 +435,216 @@ const NICHES: Niche[] = [
     title: "Social Media Manager",
     short: "Manage social accounts, create content, and grow audiences for clients worldwide.",
     img: nicheSocial,
-    daily: "Plan, publish and analyze posts across Facebook, Instagram, TikTok and LinkedIn.",
-    tasks: ["Build monthly content calendars", "Design graphics in Canva", "Reply to DMs and comments"],
+    back: "#6d28d9",
+    daily: "Plan, create, and analyze social content across Facebook, Instagram, TikTok, and LinkedIn to help clients grow their audience.",
     modules: [
-      { title: "Foundations of Social Media", lessons: ["Platforms & audience research", "Brand voice & tone", "Content pillars"] },
-      { title: "Content Creation & Scheduling", lessons: ["Canva for VAs", "Writing captions that convert", "Scheduling with Meta & Buffer"] },
-      { title: "Growth & Reporting", lessons: ["Community management", "Hashtag & trend strategy", "Monthly performance reports"] },
+      { title: "Foundations of Social Media Management", lessons: [
+        "What is Social Media Management?",
+        "The VA Freelancer Mindset",
+        "Understanding Your Ideal Client",
+      ] },
+      { title: "Content Creation & Scheduling", lessons: [
+        "Building a Content Calendar",
+        "Canva for Social Media Graphics",
+        "Scheduling with Buffer & Meta Suite",
+      ] },
+      { title: "Analytics, Reporting & Client Management", lessons: [
+        "Reading Social Media Insights",
+        "Creating Client Reports",
+        "Setting Up & Closing a Client Project",
+      ] },
     ],
   },
   {
     title: "General VA",
     short: "Master the core VA skills every client needs — admin, research, inbox, and more.",
     img: nicheGeneral,
-    daily: "Handle a mix of admin, inbox, and research tasks that keep a business running.",
-    tasks: ["Inbox and calendar management", "Data entry and web research", "Travel and meeting prep"],
+    back: "#0d7377",
+    daily: "Handle the day-to-day admin, research, and inbox work that keeps small businesses running smoothly.",
     modules: [
-      { title: "VA Essentials", lessons: ["Client onboarding", "Tools of the trade", "Time & task management"] },
-      { title: "Daily Admin Workflows", lessons: ["Inbox zero systems", "Calendar & scheduling", "Data entry & research"] },
-      { title: "Client Communication", lessons: ["Professional email writing", "Handling feedback", "Weekly reports"] },
+      { title: "VA Foundations", lessons: [
+        "What Do Clients Really Need from a VA?",
+        "Time Management & Work-from-Home Habits",
+        "Setting Up Your VA Workspace",
+      ] },
+      { title: "Core VA Tools", lessons: [
+        "Google Workspace Essentials",
+        "Trello, Asana & Project Management Tools",
+        "Communication Tools: Slack, Zoom & Email",
+      ] },
+      { title: "Getting Clients", lessons: [
+        "Building Your VA Portfolio",
+        "Where to Find Clients (OnlineJobs, Upwork)",
+        "Writing a Winning Proposal",
+      ] },
     ],
   },
   {
     title: "Admin Assistant",
     short: "Organize schedules, manage documents, coordinate tasks, and support busy executives.",
     img: nicheAdmin,
-    daily: "Keep executives on time and organized with airtight systems and file management.",
-    tasks: ["Manage cloud drives and files", "Coordinate schedules and meetings", "Prepare reports and slides"],
+    back: "#5a8a6a",
+    daily: "Keep executives organized with calendars, documents, reports, and airtight admin systems.",
     modules: [
-      { title: "Executive Support Basics", lessons: ["The EA mindset", "Confidentiality & trust", "Daily briefings"] },
-      { title: "Systems & Documentation", lessons: ["Google Workspace mastery", "File & folder structures", "Meeting notes & minutes"] },
-      { title: "Coordination & Reporting", lessons: ["Cross-team scheduling", "Slide & report prep", "Travel coordination"] },
+      { title: "Admin Fundamentals", lessons: [
+        "Admin VA Role & Responsibilities",
+        "Calendar & Schedule Management",
+        "File Organization & Cloud Storage",
+      ] },
+      { title: "Professional Communication", lessons: [
+        "Professional Email Writing",
+        "Creating Reports & Documents",
+        "Meeting Minutes & Action Items",
+      ] },
+      { title: "Advanced Admin Skills", lessons: [
+        "Automating Tasks with Make.com & Zapier",
+        "Data Entry & Spreadsheet Management",
+        "SOP Writing for Admin Processes",
+      ] },
     ],
   },
   {
     title: "Graphic Designer",
     short: "Create eye-catching visuals, branding assets, and marketing materials using Canva & Adobe.",
     img: nicheDesigner,
-    daily: "Turn ideas into on-brand visuals for social, ads and marketing collateral.",
-    tasks: ["Design social graphics and reels covers", "Create brand kits and templates", "Edit product mockups"],
+    back: "#d45f7a",
+    daily: "Turn ideas into on-brand visuals — social posts, ads, and pitch decks — using Canva and Adobe.",
     modules: [
-      { title: "Design Fundamentals", lessons: ["Color, type & layout", "Working with briefs", "Brand identity basics"] },
-      { title: "Canva & Adobe Workflows", lessons: ["Canva Pro power tools", "Photoshop for VAs", "Illustrator essentials"] },
-      { title: "Client-Ready Deliverables", lessons: ["Social media kits", "Ads & thumbnails", "Handing off assets"] },
+      { title: "Design Foundations", lessons: [
+        "Design Fundamentals: Color, Font & Layout",
+        "Canva Deep Dive: Templates & Brand Kit",
+        "Exporting & Delivering Design Files",
+      ] },
+      { title: "Content & Social Media Design", lessons: [
+        "Social Media Post Design",
+        "Stories, Reels Covers & Thumbnails",
+        "Ads Creatives & Promotional Banners",
+      ] },
+      { title: "Client-Ready Design Work", lessons: [
+        "Building a Brand Kit for a Client",
+        "Presentation & Pitch Deck Design",
+        "Pricing & Packaging Your Design Services",
+      ] },
     ],
   },
   {
     title: "Bookkeeping VA",
     short: "Handle bookkeeping, invoicing, payroll support, and financial reporting for clients.",
     img: nicheBooks,
-    daily: "Track transactions and keep the books tidy in QuickBooks or Xero.",
-    tasks: ["Categorize expenses and reconcile accounts", "Send invoices and follow ups", "Prepare monthly reports"],
+    back: "#4a7fa5",
+    daily: "Track transactions, reconcile accounts, and deliver clear financial reports for busy business owners.",
     modules: [
-      { title: "Bookkeeping Foundations", lessons: ["Accounting basics", "Chart of accounts", "Bookkeeping cycle"] },
-      { title: "QuickBooks & Xero", lessons: ["Setting up QuickBooks", "Xero essentials", "Bank reconciliation"] },
-      { title: "Reporting & Payroll", lessons: ["Invoicing & AR follow-up", "Payroll support", "Monthly financial reports"] },
+      { title: "Accounting Basics", lessons: [
+        "Accounting Basics for Non-Accountants",
+        "Chart of Accounts & Transaction Coding",
+        "Reconciling Accounts & Bank Statements",
+      ] },
+      { title: "Client Financial Tasks", lessons: [
+        "Creating & Sending Invoices",
+        "Expense Tracking & Categorization",
+        "Payroll Support Basics",
+      ] },
+      { title: "Bookkeeping Tools", lessons: [
+        "QuickBooks Online Basics",
+        "Wave Accounting Essentials",
+        "Generating Financial Reports for Clients",
+      ] },
     ],
   },
   {
     title: "E-Commerce VA",
     short: "Manage product listings, orders, customer support, and inventory on Shopify & Amazon.",
     img: nicheEcom,
-    daily: "Run the day-to-day of an online store from listings to fulfillment.",
-    tasks: ["Create and optimize product listings", "Process orders and returns", "Update inventory and pricing"],
+    back: "#c47c2e",
+    daily: "Run online stores end-to-end — listings, orders, inventory, and customers — on Shopify and Amazon.",
     modules: [
-      { title: "E-Commerce Foundations", lessons: ["Shopify vs Amazon", "Store anatomy", "Product research"] },
-      { title: "Listings & Inventory", lessons: ["Writing product listings", "SEO for products", "Inventory & pricing"] },
-      { title: "Orders & Support", lessons: ["Order fulfillment flow", "Returns & refunds", "Customer support scripts"] },
+      { title: "Ecommerce Foundations", lessons: [
+        "The Ecommerce VA Role Explained",
+        "Shopify Store Navigation & Settings",
+        "Amazon Seller Central Overview",
+      ] },
+      { title: "Product & Inventory Management", lessons: [
+        "Writing Product Descriptions That Sell",
+        "Product Photo Guidelines & Basic Editing",
+        "Inventory Tracking & Stock Alerts",
+      ] },
+      { title: "Orders, Customers & Suppliers", lessons: [
+        "Processing Orders & Handling Returns",
+        "Customer Messaging & Review Management",
+        "Working with Suppliers & Logistics",
+      ] },
     ],
   },
   {
     title: "Operations Assistant",
     short: "Streamline processes, manage teams, build SOPs, and run day-to-day operations.",
     img: nicheOps,
-    daily: "Design the systems that let a small team scale without chaos.",
-    tasks: ["Write and maintain SOPs", "Coordinate remote teams", "Track KPIs and workflows"],
+    back: "#4a72b8",
+    daily: "Design the systems, SOPs, and workflows that let small teams scale without chaos.",
     modules: [
-      { title: "Ops Foundations", lessons: ["The ops mindset", "Mapping workflows", "Tools stack overview"] },
-      { title: "SOPs & Automation", lessons: ["Writing clear SOPs", "Task management systems", "Basic automations"] },
-      { title: "Team & KPI Management", lessons: ["Coordinating remote teams", "Tracking KPIs", "Weekly ops reviews"] },
+      { title: "Operations Fundamentals", lessons: [
+        "What Operations Management Actually Means",
+        "Identifying Bottlenecks & Inefficiencies",
+        "Tools of the Trade: ClickUp, Monday & Notion",
+      ] },
+      { title: "SOPs & Process Design", lessons: [
+        "Writing Your First SOP",
+        "Process Mapping & Workflow Diagrams",
+        "Building a Team Knowledge Base",
+      ] },
+      { title: "Team & Performance Management", lessons: [
+        "Onboarding Remote Team Members",
+        "Setting KPIs & Tracking Performance",
+        "Running Productive Team Meetings",
+      ] },
     ],
   },
   {
     title: "Customer Support Specialist",
     short: "Deliver exceptional support via chat, email, and calls.",
     img: nicheSupport,
-    daily: "Be the friendly, fast voice customers rely on across every channel.",
-    tasks: ["Answer tickets in Zendesk / Intercom", "Handle refunds and escalations", "Write help center articles"],
+    back: "#e07070",
+    daily: "Deliver friendly, fast support over chat, email, and phone — turning customers into loyal fans.",
     modules: [
-      { title: "Support Fundamentals", lessons: ["CX mindset", "Tone & empathy", "Ticket lifecycle"] },
-      { title: "Tools & Channels", lessons: ["Zendesk basics", "Intercom & live chat", "Email & phone support"] },
-      { title: "Escalations & Docs", lessons: ["Refunds & escalations", "Writing help articles", "CSAT & QA"] },
+      { title: "Customer Service Foundations", lessons: [
+        "The Golden Rules of Customer Service",
+        "Customer Empathy & Active Listening",
+        "Using Helpdesk Tools: Zendesk & Freshdesk",
+      ] },
+      { title: "Handling Customer Interactions", lessons: [
+        "Handling Email Tickets Professionally",
+        "Live Chat Best Practices",
+        "Phone Support & Call Etiquette",
+      ] },
+      { title: "Difficult Situations & Escalations", lessons: [
+        "De-escalating Angry Customers",
+        "Refunds, Replacements & Policy Enforcement",
+        "When and How to Escalate to a Supervisor",
+      ] },
     ],
   },
   {
     title: "Appointment Setter",
     short: "Master outreach, objection handling, and booking qualified appointments.",
     img: nicheAppt,
-    daily: "Fill your client's calendar with qualified sales calls.",
-    tasks: ["Outbound DMs, emails and cold calls", "Qualify leads with scripts", "Book calls on the sales team's calendar"],
+    back: "#8b6abf",
+    daily: "Fill your client's calendar with qualified sales calls through outreach, follow-up, and CRM work.",
     modules: [
-      { title: "Outreach Foundations", lessons: ["ICP & lead research", "Cold email frameworks", "DM & LinkedIn outreach"] },
-      { title: "Scripts & Objections", lessons: ["Discovery scripts", "Handling objections", "Qualifying leads"] },
-      { title: "Booking & Follow-up", lessons: ["Calendar tools", "Follow-up sequences", "Handoff to sales"] },
+      { title: "Appointment Setting Foundations", lessons: [
+        "What is Appointment Setting?",
+        "Target Market Research & Lead Lists",
+        "Cold Email & LinkedIn Outreach Basics",
+      ] },
+      { title: "Outreach & Objection Handling", lessons: [
+        "Building an Effective Outreach Script",
+        "Handling Common Objections",
+        "Follow-Up Sequences That Convert",
+      ] },
+      { title: "Tools & Reporting", lessons: [
+        "Using Calendly & Scheduling Tools",
+        "CRM Basics: HubSpot & GoHighLevel",
+        "Reporting Your Appointment Setting Results",
+      ] },
     ],
   },
 ];
