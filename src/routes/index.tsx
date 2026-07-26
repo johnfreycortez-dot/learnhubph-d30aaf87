@@ -1421,7 +1421,109 @@ const TESTIMONIALS = [
   },
 ];
 
+const FAQS: { q: string; a: string }[] = [
+  { q: "How do I access the course after payment?", a: "Once your GCash payment or Bank transfer is verified by our team, you'll receive an email with your personal access token. Use that token along with your registered email to log in at learnhubph.lovable.app. Access is granted within 24 hours of payment confirmation." },
+  { q: "Is this really a one-time payment?", a: "Yes — you pay ₱399 once and get lifetime access to all 9 VA niches, 81 lessons, 243 quiz questions, and 9 completion certificates. No monthly fees, no renewals, no hidden charges." },
+  { q: "Do I need prior experience to enroll?", a: "No experience needed at all. LearnHub PH is designed for complete beginners who want to start a VA career. The lessons start from the basics and build up to real, client-ready skills step by step." },
+  { q: "Can I take all 9 niches or just one?", a: "You get access to all 9 niches with your single payment. You can start with any niche you want, learn at your own pace, and complete as many as you like. Most students pick one niche to focus on first and expand from there." },
+  { q: "How do I earn my certificate?", a: "Complete all 9 lessons in a niche and pass the quizzes at the end of each lesson. Once you finish all requirements for a niche, your certificate is automatically generated and available to download from your dashboard." },
+  { q: "What payment methods do you accept?", a: "We currently accept GCash payments & BPI Bank transfer only. After signing up, you'll receive our GCash details and instructions on how to submit your proof of payment for verification." },
+  { q: "How long does it take to finish a niche?", a: "Each niche has 9 lessons across 3 modules. Most students complete a single niche in 3 to 7 days depending on their pace. There are no deadlines — you can go as fast or as slow as you need." },
+  { q: "What if I have a question or need help?", a: "You can reach us through the Messages section inside the platform after logging in, or by emailing us directly. Our team typically responds within 24 hours on business days." },
+  { q: "Is LearnHub PH only for Filipinos?", a: "LearnHub PH was built with Filipino VAs in mind but is open to anyone who wants to build a VA career. The content is in English and the skills taught are applicable to working with international clients worldwide." },
+  { q: "Are the certificates recognized by employers?", a: "LearnHub PH certificates demonstrate that you have completed structured training in a specific VA niche. While they are not government-accredited, they serve as strong portfolio proof of your skills — especially when applying on platforms like Upwork, OnlineJobs.ph, and LinkedIn." },
+];
+
+function FAQ() {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  return (
+    <section id="faq" className="py-20 sm:py-28 bg-[#f8f6ff]">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="text-center reveal">
+          <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1.5">
+            Got Questions?
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Everything you need to know before getting started with LearnHub PH.
+          </p>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 reveal">
+          {FAQS.map((f, i) => {
+            const isOpen = openIdx === i;
+            return (
+              <div
+                key={f.q}
+                style={{
+                  background: "white",
+                  borderRadius: "12px",
+                  border: "1px solid #e5e7eb",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  overflow: "hidden",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+                  style={{
+                    background: isOpen ? "#faf5ff" : "white",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    color: isOpen ? "#7c3aed" : "#0f172a",
+                    transition: "background 0.2s ease, color 0.2s ease",
+                    cursor: "pointer",
+                    border: 0,
+                  }}
+                >
+                  <span>{f.q}</span>
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      flexShrink: 0,
+                      transition: "transform 0.3s ease",
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      color: isOpen ? "#7c3aed" : "#64748b",
+                    }}
+                    aria-hidden="true"
+                  />
+                </button>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateRows: isOpen ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.3s ease",
+                  }}
+                >
+                  <div style={{ overflow: "hidden" }}>
+                    <div
+                      style={{
+                        borderTop: "1px solid #f3f4f6",
+                        padding: "16px 20px",
+                        fontSize: "14px",
+                        color: "#4b5563",
+                        lineHeight: 1.7,
+                      }}
+                    >
+                      {f.a}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Testimonials() {
+
   return (
     <section id="reviews" className="py-20 sm:py-28 bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
