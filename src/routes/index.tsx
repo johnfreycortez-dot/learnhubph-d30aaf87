@@ -252,38 +252,79 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
   );
 }
 
+const HERO_CYCLE: { name: string; from: string; to: string }[] = [
+  { name: "Social Media Manager", from: "#4c1d95", to: "#6d28d9" },
+  { name: "General VA", from: "#0d7377", to: "#14a085" },
+  { name: "Admin Assistant", from: "#3d6b4f", to: "#5a8a6a" },
+  { name: "Graphic Designer", from: "#9b2d4f", to: "#d45f7a" },
+  { name: "Bookkeeping VA", from: "#1e4d78", to: "#4a7fa5" },
+  { name: "E-Commerce VA", from: "#8a4a10", to: "#c47c2e" },
+  { name: "Operations Assistant", from: "#1e3a7a", to: "#4a72b8" },
+  { name: "Customer Support", from: "#8a2020", to: "#e07070" },
+  { name: "Appointment Setter", from: "#4a2080", to: "#8b6abf" },
+];
+
 function Hero() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % HERO_CYCLE.length), 10000);
+    return () => clearInterval(id);
+  }, []);
+  const current = HERO_CYCLE[idx];
   return (
-    <section id="top" className="relative overflow-hidden pt-28 pb-20 sm:pt-32 sm:pb-28">
-      {/* gradient bg */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2e1065] via-[#4c1d95] to-[#7c3aed]" />
+    <section id="top" className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32">
+      {/* animated gradient bg */}
+      <div
+        className="absolute inset-0 transition-[background] duration-[1200ms] ease-in-out"
+        style={{ background: `linear-gradient(135deg, ${current.from} 0%, ${current.to} 100%)` }}
+      />
       {/* blobs */}
-      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-fuchsia-500/30 blur-3xl animate-blob" />
-      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-violet-400/25 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
-      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-purple-300/20 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" />
+      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
+      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+
+      {/* watermark niche name */}
+      <div
+        key={current.name}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center px-4"
+        style={{ animation: "fade-up 1s ease-out both" }}
+      >
+        <span
+          className="font-black text-white text-center whitespace-nowrap select-none"
+          style={{
+            opacity: 0.12,
+            fontSize: "clamp(80px, 12vw, 160px)",
+            fontWeight: 900,
+            letterSpacing: "-2px",
+            lineHeight: 1,
+          }}
+        >
+          {current.name}
+        </span>
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div className="reveal">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold text-white">
-            <span aria-hidden="true" className="inline-flex h-4 w-6 overflow-hidden rounded-[3px] ring-1 ring-white/30">
-              <span className="w-1/2 h-full bg-[#0038a8]" />
-              <span className="w-1/2 h-full bg-[#ce1126]" />
-            </span>
-            #1 VA Training Platform in the Philippines
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            The VA Learning Platform Built for Everyone
           </span>
           <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05]">
             Launch Your VA Career.{" "}
-            <span className="bg-gradient-to-r from-fuchsia-300 to-cyan-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-fuchsia-200 to-cyan-100 bg-clip-text text-transparent">
               Master 9 In-Demand Niches.
             </span>
           </h1>
-          <p className="mt-5 text-lg text-violet-100/90 max-w-xl">
+          <p className="mt-5 text-lg text-white/90 max-w-xl">
             Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying VA specializations —
             now at <span className="line-through opacity-70">₱899</span>{" "}
             <span className="font-bold text-white">₱399 only!</span>
           </p>
-          <p className="mt-3 text-sm text-violet-100/80 max-w-xl">
-            🌏 Open to aspiring VAs everywhere — no nationality restrictions.
+          <p className="mt-3 text-sm text-white/85 max-w-xl inline-flex items-center gap-2">
+            <Globe className="h-4 w-4 align-middle shrink-0" aria-hidden="true" />
+            <span>Open to aspiring VAs everywhere — no nationality restrictions.</span>
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
@@ -308,7 +349,7 @@ function Hero() {
 
         {/* product preview */}
         <div className="reveal relative">
-          <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-fuchsia-400/30 via-violet-400/20 to-cyan-300/30 blur-2xl" />
+          <div className="absolute -inset-6 rounded-[2rem] bg-white/10 blur-2xl" />
           <div
             className="relative animate-float rounded-2xl bg-white shadow-2xl shadow-black/40 overflow-hidden border border-white/20"
             style={{ transform: "rotateY(-6deg) rotateX(3deg)", transformStyle: "preserve-3d" }}
@@ -327,12 +368,28 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">Social Media Manager</span></span>
+            🎓 <span>Now Learning: <span className="text-violet-700">{current.name}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
           </div>
         </div>
+      </div>
+
+      {/* progress dots */}
+      <div className="relative mt-10 flex items-center justify-center gap-2">
+        {HERO_CYCLE.map((n, i) => (
+          <span
+            key={n.name}
+            aria-label={n.name}
+            className="rounded-full bg-white transition-all duration-[400ms] ease-out"
+            style={{
+              width: i === idx ? 10 : 7,
+              height: i === idx ? 10 : 7,
+              opacity: i === idx ? 1 : 0.35,
+            }}
+          />
+        ))}
       </div>
     </section>
   );
