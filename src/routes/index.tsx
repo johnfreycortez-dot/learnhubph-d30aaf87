@@ -4,7 +4,7 @@ import {
   BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
   Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
   CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight,
+  Star, X, ArrowRight, Globe,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -252,38 +252,79 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
   );
 }
 
+const HERO_CYCLE: { name: string; from: string; to: string }[] = [
+  { name: "Social Media Manager", from: "#4c1d95", to: "#6d28d9" },
+  { name: "General VA", from: "#0d7377", to: "#14a085" },
+  { name: "Admin Assistant", from: "#3d6b4f", to: "#5a8a6a" },
+  { name: "Graphic Designer", from: "#9b2d4f", to: "#d45f7a" },
+  { name: "Bookkeeping VA", from: "#1e4d78", to: "#4a7fa5" },
+  { name: "E-Commerce VA", from: "#8a4a10", to: "#c47c2e" },
+  { name: "Operations Assistant", from: "#1e3a7a", to: "#4a72b8" },
+  { name: "Customer Support", from: "#8a2020", to: "#e07070" },
+  { name: "Appointment Setter", from: "#4a2080", to: "#8b6abf" },
+];
+
 function Hero() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % HERO_CYCLE.length), 10000);
+    return () => clearInterval(id);
+  }, []);
+  const current = HERO_CYCLE[idx];
   return (
-    <section id="top" className="relative overflow-hidden pt-28 pb-20 sm:pt-32 sm:pb-28">
-      {/* gradient bg */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2e1065] via-[#4c1d95] to-[#7c3aed]" />
+    <section id="top" className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32">
+      {/* animated gradient bg */}
+      <div
+        className="absolute inset-0 transition-[background] duration-[1200ms] ease-in-out"
+        style={{ background: `linear-gradient(135deg, ${current.from} 0%, ${current.to} 100%)` }}
+      />
       {/* blobs */}
-      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-fuchsia-500/30 blur-3xl animate-blob" />
-      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-violet-400/25 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
-      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-purple-300/20 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" />
+      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
+      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+
+      {/* watermark niche name */}
+      <div
+        key={current.name}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center px-4"
+        style={{ animation: "fade-up 1s ease-out both" }}
+      >
+        <span
+          className="font-black text-white text-center whitespace-nowrap select-none"
+          style={{
+            opacity: 0.12,
+            fontSize: "clamp(80px, 12vw, 160px)",
+            fontWeight: 900,
+            letterSpacing: "-2px",
+            lineHeight: 1,
+          }}
+        >
+          {current.name}
+        </span>
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div className="reveal">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold text-white">
-            <span aria-hidden="true" className="inline-flex h-4 w-6 overflow-hidden rounded-[3px] ring-1 ring-white/30">
-              <span className="w-1/2 h-full bg-[#0038a8]" />
-              <span className="w-1/2 h-full bg-[#ce1126]" />
-            </span>
-            #1 VA Training Platform in the Philippines
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            The VA Learning Platform Built for Everyone
           </span>
           <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05]">
             Launch Your VA Career.{" "}
-            <span className="bg-gradient-to-r from-fuchsia-300 to-cyan-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-fuchsia-200 to-cyan-100 bg-clip-text text-transparent">
               Master 9 In-Demand Niches.
             </span>
           </h1>
-          <p className="mt-5 text-lg text-violet-100/90 max-w-xl">
+          <p className="mt-5 text-lg text-white/90 max-w-xl">
             Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying VA specializations —
             now at <span className="line-through opacity-70">₱899</span>{" "}
             <span className="font-bold text-white">₱399 only!</span>
           </p>
-          <p className="mt-3 text-sm text-violet-100/80 max-w-xl">
-            🌏 Open to aspiring VAs everywhere — no nationality restrictions.
+          <p className="mt-3 text-sm text-white/85 max-w-xl inline-flex items-center gap-2">
+            <Globe className="h-4 w-4 align-middle shrink-0" aria-hidden="true" />
+            <span>Open to aspiring VAs everywhere — no nationality restrictions.</span>
           </p>
 
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
@@ -308,7 +349,7 @@ function Hero() {
 
         {/* product preview */}
         <div className="reveal relative">
-          <div className="absolute -inset-6 rounded-[2rem] bg-gradient-to-tr from-fuchsia-400/30 via-violet-400/20 to-cyan-300/30 blur-2xl" />
+          <div className="absolute -inset-6 rounded-[2rem] bg-white/10 blur-2xl" />
           <div
             className="relative animate-float rounded-2xl bg-white shadow-2xl shadow-black/40 overflow-hidden border border-white/20"
             style={{ transform: "rotateY(-6deg) rotateX(3deg)", transformStyle: "preserve-3d" }}
@@ -327,12 +368,28 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">Social Media Manager</span></span>
+            🎓 <span>Now Learning: <span className="text-violet-700">{current.name}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
           </div>
         </div>
+      </div>
+
+      {/* progress dots */}
+      <div className="relative mt-10 flex items-center justify-center gap-2">
+        {HERO_CYCLE.map((n, i) => (
+          <span
+            key={n.name}
+            aria-label={n.name}
+            className="rounded-full bg-white transition-all duration-[400ms] ease-out"
+            style={{
+              width: i === idx ? 10 : 7,
+              height: i === idx ? 10 : 7,
+              opacity: i === idx ? 1 : 0.35,
+            }}
+          />
+        ))}
       </div>
     </section>
   );
@@ -369,7 +426,7 @@ type Niche = {
   short: string;
   img: { url: string };
   daily: string;
-  tasks: string[];
+  back: string;
   modules: { title: string; lessons: string[] }[];
 };
 
@@ -378,108 +435,216 @@ const NICHES: Niche[] = [
     title: "Social Media Manager",
     short: "Manage social accounts, create content, and grow audiences for clients worldwide.",
     img: nicheSocial,
-    daily: "Plan, publish and analyze posts across Facebook, Instagram, TikTok and LinkedIn.",
-    tasks: ["Build monthly content calendars", "Design graphics in Canva", "Reply to DMs and comments"],
+    back: "#6d28d9",
+    daily: "Plan, create, and analyze social content across Facebook, Instagram, TikTok, and LinkedIn to help clients grow their audience.",
     modules: [
-      { title: "Foundations of Social Media", lessons: ["Platforms & audience research", "Brand voice & tone", "Content pillars"] },
-      { title: "Content Creation & Scheduling", lessons: ["Canva for VAs", "Writing captions that convert", "Scheduling with Meta & Buffer"] },
-      { title: "Growth & Reporting", lessons: ["Community management", "Hashtag & trend strategy", "Monthly performance reports"] },
+      { title: "Foundations of Social Media Management", lessons: [
+        "What is Social Media Management?",
+        "The VA Freelancer Mindset",
+        "Understanding Your Ideal Client",
+      ] },
+      { title: "Content Creation & Scheduling", lessons: [
+        "Building a Content Calendar",
+        "Canva for Social Media Graphics",
+        "Scheduling with Buffer & Meta Suite",
+      ] },
+      { title: "Analytics, Reporting & Client Management", lessons: [
+        "Reading Social Media Insights",
+        "Creating Client Reports",
+        "Setting Up & Closing a Client Project",
+      ] },
     ],
   },
   {
     title: "General VA",
     short: "Master the core VA skills every client needs — admin, research, inbox, and more.",
     img: nicheGeneral,
-    daily: "Handle a mix of admin, inbox, and research tasks that keep a business running.",
-    tasks: ["Inbox and calendar management", "Data entry and web research", "Travel and meeting prep"],
+    back: "#0d7377",
+    daily: "Handle the day-to-day admin, research, and inbox work that keeps small businesses running smoothly.",
     modules: [
-      { title: "VA Essentials", lessons: ["Client onboarding", "Tools of the trade", "Time & task management"] },
-      { title: "Daily Admin Workflows", lessons: ["Inbox zero systems", "Calendar & scheduling", "Data entry & research"] },
-      { title: "Client Communication", lessons: ["Professional email writing", "Handling feedback", "Weekly reports"] },
+      { title: "VA Foundations", lessons: [
+        "What Do Clients Really Need from a VA?",
+        "Time Management & Work-from-Home Habits",
+        "Setting Up Your VA Workspace",
+      ] },
+      { title: "Core VA Tools", lessons: [
+        "Google Workspace Essentials",
+        "Trello, Asana & Project Management Tools",
+        "Communication Tools: Slack, Zoom & Email",
+      ] },
+      { title: "Getting Clients", lessons: [
+        "Building Your VA Portfolio",
+        "Where to Find Clients (OnlineJobs, Upwork)",
+        "Writing a Winning Proposal",
+      ] },
     ],
   },
   {
     title: "Admin Assistant",
     short: "Organize schedules, manage documents, coordinate tasks, and support busy executives.",
     img: nicheAdmin,
-    daily: "Keep executives on time and organized with airtight systems and file management.",
-    tasks: ["Manage cloud drives and files", "Coordinate schedules and meetings", "Prepare reports and slides"],
+    back: "#5a8a6a",
+    daily: "Keep executives organized with calendars, documents, reports, and airtight admin systems.",
     modules: [
-      { title: "Executive Support Basics", lessons: ["The EA mindset", "Confidentiality & trust", "Daily briefings"] },
-      { title: "Systems & Documentation", lessons: ["Google Workspace mastery", "File & folder structures", "Meeting notes & minutes"] },
-      { title: "Coordination & Reporting", lessons: ["Cross-team scheduling", "Slide & report prep", "Travel coordination"] },
+      { title: "Admin Fundamentals", lessons: [
+        "Admin VA Role & Responsibilities",
+        "Calendar & Schedule Management",
+        "File Organization & Cloud Storage",
+      ] },
+      { title: "Professional Communication", lessons: [
+        "Professional Email Writing",
+        "Creating Reports & Documents",
+        "Meeting Minutes & Action Items",
+      ] },
+      { title: "Advanced Admin Skills", lessons: [
+        "Automating Tasks with Make.com & Zapier",
+        "Data Entry & Spreadsheet Management",
+        "SOP Writing for Admin Processes",
+      ] },
     ],
   },
   {
     title: "Graphic Designer",
     short: "Create eye-catching visuals, branding assets, and marketing materials using Canva & Adobe.",
     img: nicheDesigner,
-    daily: "Turn ideas into on-brand visuals for social, ads and marketing collateral.",
-    tasks: ["Design social graphics and reels covers", "Create brand kits and templates", "Edit product mockups"],
+    back: "#d45f7a",
+    daily: "Turn ideas into on-brand visuals — social posts, ads, and pitch decks — using Canva and Adobe.",
     modules: [
-      { title: "Design Fundamentals", lessons: ["Color, type & layout", "Working with briefs", "Brand identity basics"] },
-      { title: "Canva & Adobe Workflows", lessons: ["Canva Pro power tools", "Photoshop for VAs", "Illustrator essentials"] },
-      { title: "Client-Ready Deliverables", lessons: ["Social media kits", "Ads & thumbnails", "Handing off assets"] },
+      { title: "Design Foundations", lessons: [
+        "Design Fundamentals: Color, Font & Layout",
+        "Canva Deep Dive: Templates & Brand Kit",
+        "Exporting & Delivering Design Files",
+      ] },
+      { title: "Content & Social Media Design", lessons: [
+        "Social Media Post Design",
+        "Stories, Reels Covers & Thumbnails",
+        "Ads Creatives & Promotional Banners",
+      ] },
+      { title: "Client-Ready Design Work", lessons: [
+        "Building a Brand Kit for a Client",
+        "Presentation & Pitch Deck Design",
+        "Pricing & Packaging Your Design Services",
+      ] },
     ],
   },
   {
     title: "Bookkeeping VA",
     short: "Handle bookkeeping, invoicing, payroll support, and financial reporting for clients.",
     img: nicheBooks,
-    daily: "Track transactions and keep the books tidy in QuickBooks or Xero.",
-    tasks: ["Categorize expenses and reconcile accounts", "Send invoices and follow ups", "Prepare monthly reports"],
+    back: "#4a7fa5",
+    daily: "Track transactions, reconcile accounts, and deliver clear financial reports for busy business owners.",
     modules: [
-      { title: "Bookkeeping Foundations", lessons: ["Accounting basics", "Chart of accounts", "Bookkeeping cycle"] },
-      { title: "QuickBooks & Xero", lessons: ["Setting up QuickBooks", "Xero essentials", "Bank reconciliation"] },
-      { title: "Reporting & Payroll", lessons: ["Invoicing & AR follow-up", "Payroll support", "Monthly financial reports"] },
+      { title: "Accounting Basics", lessons: [
+        "Accounting Basics for Non-Accountants",
+        "Chart of Accounts & Transaction Coding",
+        "Reconciling Accounts & Bank Statements",
+      ] },
+      { title: "Client Financial Tasks", lessons: [
+        "Creating & Sending Invoices",
+        "Expense Tracking & Categorization",
+        "Payroll Support Basics",
+      ] },
+      { title: "Bookkeeping Tools", lessons: [
+        "QuickBooks Online Basics",
+        "Wave Accounting Essentials",
+        "Generating Financial Reports for Clients",
+      ] },
     ],
   },
   {
     title: "E-Commerce VA",
     short: "Manage product listings, orders, customer support, and inventory on Shopify & Amazon.",
     img: nicheEcom,
-    daily: "Run the day-to-day of an online store from listings to fulfillment.",
-    tasks: ["Create and optimize product listings", "Process orders and returns", "Update inventory and pricing"],
+    back: "#c47c2e",
+    daily: "Run online stores end-to-end — listings, orders, inventory, and customers — on Shopify and Amazon.",
     modules: [
-      { title: "E-Commerce Foundations", lessons: ["Shopify vs Amazon", "Store anatomy", "Product research"] },
-      { title: "Listings & Inventory", lessons: ["Writing product listings", "SEO for products", "Inventory & pricing"] },
-      { title: "Orders & Support", lessons: ["Order fulfillment flow", "Returns & refunds", "Customer support scripts"] },
+      { title: "Ecommerce Foundations", lessons: [
+        "The Ecommerce VA Role Explained",
+        "Shopify Store Navigation & Settings",
+        "Amazon Seller Central Overview",
+      ] },
+      { title: "Product & Inventory Management", lessons: [
+        "Writing Product Descriptions That Sell",
+        "Product Photo Guidelines & Basic Editing",
+        "Inventory Tracking & Stock Alerts",
+      ] },
+      { title: "Orders, Customers & Suppliers", lessons: [
+        "Processing Orders & Handling Returns",
+        "Customer Messaging & Review Management",
+        "Working with Suppliers & Logistics",
+      ] },
     ],
   },
   {
     title: "Operations Assistant",
     short: "Streamline processes, manage teams, build SOPs, and run day-to-day operations.",
     img: nicheOps,
-    daily: "Design the systems that let a small team scale without chaos.",
-    tasks: ["Write and maintain SOPs", "Coordinate remote teams", "Track KPIs and workflows"],
+    back: "#4a72b8",
+    daily: "Design the systems, SOPs, and workflows that let small teams scale without chaos.",
     modules: [
-      { title: "Ops Foundations", lessons: ["The ops mindset", "Mapping workflows", "Tools stack overview"] },
-      { title: "SOPs & Automation", lessons: ["Writing clear SOPs", "Task management systems", "Basic automations"] },
-      { title: "Team & KPI Management", lessons: ["Coordinating remote teams", "Tracking KPIs", "Weekly ops reviews"] },
+      { title: "Operations Fundamentals", lessons: [
+        "What Operations Management Actually Means",
+        "Identifying Bottlenecks & Inefficiencies",
+        "Tools of the Trade: ClickUp, Monday & Notion",
+      ] },
+      { title: "SOPs & Process Design", lessons: [
+        "Writing Your First SOP",
+        "Process Mapping & Workflow Diagrams",
+        "Building a Team Knowledge Base",
+      ] },
+      { title: "Team & Performance Management", lessons: [
+        "Onboarding Remote Team Members",
+        "Setting KPIs & Tracking Performance",
+        "Running Productive Team Meetings",
+      ] },
     ],
   },
   {
     title: "Customer Support Specialist",
     short: "Deliver exceptional support via chat, email, and calls.",
     img: nicheSupport,
-    daily: "Be the friendly, fast voice customers rely on across every channel.",
-    tasks: ["Answer tickets in Zendesk / Intercom", "Handle refunds and escalations", "Write help center articles"],
+    back: "#e07070",
+    daily: "Deliver friendly, fast support over chat, email, and phone — turning customers into loyal fans.",
     modules: [
-      { title: "Support Fundamentals", lessons: ["CX mindset", "Tone & empathy", "Ticket lifecycle"] },
-      { title: "Tools & Channels", lessons: ["Zendesk basics", "Intercom & live chat", "Email & phone support"] },
-      { title: "Escalations & Docs", lessons: ["Refunds & escalations", "Writing help articles", "CSAT & QA"] },
+      { title: "Customer Service Foundations", lessons: [
+        "The Golden Rules of Customer Service",
+        "Customer Empathy & Active Listening",
+        "Using Helpdesk Tools: Zendesk & Freshdesk",
+      ] },
+      { title: "Handling Customer Interactions", lessons: [
+        "Handling Email Tickets Professionally",
+        "Live Chat Best Practices",
+        "Phone Support & Call Etiquette",
+      ] },
+      { title: "Difficult Situations & Escalations", lessons: [
+        "De-escalating Angry Customers",
+        "Refunds, Replacements & Policy Enforcement",
+        "When and How to Escalate to a Supervisor",
+      ] },
     ],
   },
   {
     title: "Appointment Setter",
     short: "Master outreach, objection handling, and booking qualified appointments.",
     img: nicheAppt,
-    daily: "Fill your client's calendar with qualified sales calls.",
-    tasks: ["Outbound DMs, emails and cold calls", "Qualify leads with scripts", "Book calls on the sales team's calendar"],
+    back: "#8b6abf",
+    daily: "Fill your client's calendar with qualified sales calls through outreach, follow-up, and CRM work.",
     modules: [
-      { title: "Outreach Foundations", lessons: ["ICP & lead research", "Cold email frameworks", "DM & LinkedIn outreach"] },
-      { title: "Scripts & Objections", lessons: ["Discovery scripts", "Handling objections", "Qualifying leads"] },
-      { title: "Booking & Follow-up", lessons: ["Calendar tools", "Follow-up sequences", "Handoff to sales"] },
+      { title: "Appointment Setting Foundations", lessons: [
+        "What is Appointment Setting?",
+        "Target Market Research & Lead Lists",
+        "Cold Email & LinkedIn Outreach Basics",
+      ] },
+      { title: "Outreach & Objection Handling", lessons: [
+        "Building an Effective Outreach Script",
+        "Handling Common Objections",
+        "Follow-Up Sequences That Convert",
+      ] },
+      { title: "Tools & Reporting", lessons: [
+        "Using Calendly & Scheduling Tools",
+        "CRM Basics: HubSpot & GoHighLevel",
+        "Reporting Your Appointment Setting Results",
+      ] },
     ],
   },
 ];
@@ -518,22 +683,27 @@ function FlipCard({ niche }: { niche: Niche }) {
           </div>
         </div>
         {/* back */}
-        <div className="flip-face flip-back rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col overflow-y-auto">
-          <h3 className="text-lg font-bold">{niche.title}</h3>
-          <p className="mt-2 text-sm text-violet-100 leading-relaxed">{niche.daily}</p>
-          <ul className="mt-3 space-y-1.5 text-sm text-white/90 flex-1">
-            {niche.tasks.map((t) => (
-              <li key={t} className="flex gap-2">
-                <CheckCircle2 className="h-4 w-4 text-fuchsia-300 shrink-0 mt-0.5" />
-                <span>{t}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-3 flex items-center justify-between gap-2">
-            <span className="inline-flex items-center rounded-full bg-white/15 border border-white/25 px-2.5 py-1 text-[11px] font-semibold">
+        <div
+          className="flip-face flip-back rounded-2xl text-white shadow-lg p-6 flex flex-col justify-between overflow-hidden"
+          style={{ backgroundColor: niche.back }}
+        >
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-black leading-tight">{niche.title}</h3>
+            <p className="mt-4 text-sm text-white/90 leading-relaxed">{niche.daily}</p>
+            <span className="mt-5 inline-flex items-center rounded-full bg-white/20 border border-white/30 px-3 py-1 text-[11px] font-bold tracking-wide">
               3 Modules · 9 Lessons
             </span>
-            <span className="text-xs font-semibold text-white/90 inline-flex items-center gap-1">
+          </div>
+          <div className="mt-6 flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); go(); }}
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
+              style={{ color: niche.back }}
+            >
+              Get Started <ArrowRight className="h-4 w-4" />
+            </button>
+            <span className="text-xs font-semibold text-white/85 inline-flex items-center gap-1">
               ↻ Tap to flip back
             </span>
           </div>
@@ -1039,12 +1209,6 @@ function Footer({
           <div className="flex flex-col gap-1">
             <span className="text-white font-extrabold text-lg">
               LearnHub <span className="text-violet-400">PH</span>
-            </span>
-            <span className="text-sm text-slate-400">
-              Contact us:{" "}
-              <a href="mailto:johnfreycortez@gmail.com" className="text-violet-300 hover:text-white transition-colors">
-                johnfreycortez@gmail.com
-              </a>
             </span>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
