@@ -1385,7 +1385,7 @@ function Pricing() {
           <div className="relative mt-8">
             <button
               type="button"
-              onClick={go}
+              onClick={goToLogin}
               className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white text-violet-700 px-8 py-4 text-base font-bold shadow-xl shadow-black/30 hover:bg-violet-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-300 transition-all"
             >
               Get Started Now <ArrowRight className="h-5 w-5" />
