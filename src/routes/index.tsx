@@ -26,6 +26,9 @@ const CTA_URL =
 const go = () => {
   window.location.href = CTA_URL;
 };
+const goToLogin = () => {
+  window.location.href = "/login";
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
