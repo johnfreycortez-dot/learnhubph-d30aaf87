@@ -1747,6 +1747,7 @@ function Landing() {
         <WhatYouGet />
         <Certificate />
         <Pricing />
+        <FAQ />
         <Testimonials />
         <FinalCTA />
       </main>
