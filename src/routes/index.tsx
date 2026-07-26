@@ -683,22 +683,27 @@ function FlipCard({ niche }: { niche: Niche }) {
           </div>
         </div>
         {/* back */}
-        <div className="flip-face flip-back rounded-2xl bg-gradient-to-br from-violet-700 to-purple-800 text-white shadow-lg p-6 flex flex-col overflow-y-auto">
-          <h3 className="text-lg font-bold">{niche.title}</h3>
-          <p className="mt-2 text-sm text-violet-100 leading-relaxed">{niche.daily}</p>
-          <ul className="mt-3 space-y-1.5 text-sm text-white/90 flex-1">
-            {niche.tasks.map((t) => (
-              <li key={t} className="flex gap-2">
-                <CheckCircle2 className="h-4 w-4 text-fuchsia-300 shrink-0 mt-0.5" />
-                <span>{t}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-3 flex items-center justify-between gap-2">
-            <span className="inline-flex items-center rounded-full bg-white/15 border border-white/25 px-2.5 py-1 text-[11px] font-semibold">
+        <div
+          className="flip-face flip-back rounded-2xl text-white shadow-lg p-6 flex flex-col justify-between overflow-hidden"
+          style={{ backgroundColor: niche.back }}
+        >
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-black leading-tight">{niche.title}</h3>
+            <p className="mt-4 text-sm text-white/90 leading-relaxed">{niche.daily}</p>
+            <span className="mt-5 inline-flex items-center rounded-full bg-white/20 border border-white/30 px-3 py-1 text-[11px] font-bold tracking-wide">
               3 Modules · 9 Lessons
             </span>
-            <span className="text-xs font-semibold text-white/90 inline-flex items-center gap-1">
+          </div>
+          <div className="mt-6 flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); go(); }}
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
+              style={{ color: niche.back }}
+            >
+              Get Started <ArrowRight className="h-4 w-4" />
+            </button>
+            <span className="text-xs font-semibold text-white/85 inline-flex items-center gap-1">
               ↻ Tap to flip back
             </span>
           </div>
