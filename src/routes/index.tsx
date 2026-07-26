@@ -376,72 +376,156 @@ const HERO_ORDER: string[] = [
 
 function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayIndex, setDisplayIndex] = useState(0); // watermark text lags for fade-out
+  // Two-layer gradient crossfade
+  const [layerAGradient, setLayerAGradient] = useState(NICHE_COLORS[HERO_ORDER[0]].gradient);
+  const [layerBGradient, setLayerBGradient] = useState(NICHE_COLORS[HERO_ORDER[0]].gradient);
+  const [layerAOpacity, setLayerAOpacity] = useState(1);
+  const [layerBOpacity, setLayerBOpacity] = useState(0);
+  const aIsCurrentRef = useRef(true);
+  // Watermark text lags behind for fade-out
+  const [displayIndex, setDisplayIndex] = useState(0);
   const [wmVisible, setWmVisible] = useState(true);
+  const intervalRef = useRef<number | null>(null);
+
   const reduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  useEffect(() => {
-    if (reduced) return;
-    const id = window.setInterval(() => {
-      setCurrentIndex((i) => (i + 1) % HERO_ORDER.length);
-    }, 10000);
-    return () => window.clearInterval(id);
-  }, [reduced]);
-
-  // watermark crossfade on niche change
-  useEffect(() => {
+  const goToIndex = (nextIdx: number) => {
+    const nextGradient = NICHE_COLORS[HERO_ORDER[nextIdx]].gradient;
+    // Crossfade: whichever layer is currently visible fades out, the other takes new gradient and fades in
+    if (aIsCurrentRef.current) {
+      setLayerBGradient(nextGradient);
+      // next frame trigger transition
+      requestAnimationFrame(() => {
+        setLayerAOpacity(0);
+        setLayerBOpacity(1);
+      });
+    } else {
+      setLayerAGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerBOpacity(0);
+        setLayerAOpacity(1);
+      });
+    }
+    aIsCurrentRef.current = !aIsCurrentRef.current;
+    setCurrentIndex(nextIdx);
+    // Watermark fade
     setWmVisible(false);
-    const t1 = window.setTimeout(() => {
-      setDisplayIndex(currentIndex);
+    window.setTimeout(() => {
+      setDisplayIndex(nextIdx);
       setWmVisible(true);
     }, 400);
-    return () => window.clearTimeout(t1);
+  };
+
+  const startInterval = () => {
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+    intervalRef.current = window.setInterval(() => {
+      setCurrentIndex((i) => {
+        const next = (i + 1) % HERO_ORDER.length;
+        // Call goToIndex-like without recursion via state
+        return next;
+      });
+    }, 10000);
+  };
+
+  // Drive crossfade when currentIndex changes via interval
+  const lastAppliedRef = useRef(0);
+  useEffect(() => {
+    if (currentIndex === lastAppliedRef.current) return;
+    const nextIdx = currentIndex;
+    lastAppliedRef.current = nextIdx;
+    const nextGradient = NICHE_COLORS[HERO_ORDER[nextIdx]].gradient;
+    if (aIsCurrentRef.current) {
+      setLayerBGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerAOpacity(0);
+        setLayerBOpacity(1);
+      });
+    } else {
+      setLayerAGradient(nextGradient);
+      requestAnimationFrame(() => {
+        setLayerBOpacity(0);
+        setLayerAOpacity(1);
+      });
+    }
+    aIsCurrentRef.current = !aIsCurrentRef.current;
+    setWmVisible(false);
+    const t = window.setTimeout(() => {
+      setDisplayIndex(nextIdx);
+      setWmVisible(true);
+    }, 400);
+    return () => window.clearTimeout(t);
   }, [currentIndex]);
 
-  const jumpTo = (i: number) => setCurrentIndex(i);
+  useEffect(() => {
+    if (reduced) return;
+    startInterval();
+    return () => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+    };
+  }, [reduced]);
+
+  const jumpTo = (i: number) => {
+    if (i === currentIndex) return;
+    setCurrentIndex(i);
+    if (!reduced) startInterval(); // reset timer
+  };
 
   const activeName = HERO_ORDER[currentIndex];
-  const activeColor = NICHE_COLORS[activeName];
   const displayName = HERO_ORDER[displayIndex];
   const displayCaps = NICHE_COLORS[displayName].caps;
+
+  const layerBaseStyle = {
+    position: "absolute" as const,
+    inset: 0,
+    backgroundSize: "200% 200%",
+    backgroundPosition: "0% 50%",
+    transition: "opacity 1.5s ease-in-out",
+    animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
+    pointerEvents: "none" as const,
+  };
 
   return (
     <section
       id="top"
       className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32"
-      style={{
-        backgroundImage: activeColor.gradient,
-        backgroundSize: "300% 300%",
-        backgroundPosition: "0% 50%",
-        transition: "background-image 1.5s ease",
-        animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
-      }}
+      style={{ backgroundColor: "#2e1065" }}
     >
-      {/* blobs */}
-      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" />
-      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
-      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
+      {/* Gradient crossfade layers */}
+      <div
+        aria-hidden="true"
+        style={{ ...layerBaseStyle, backgroundImage: layerAGradient, opacity: layerAOpacity, zIndex: 0 }}
+      />
+      <div
+        aria-hidden="true"
+        style={{ ...layerBaseStyle, backgroundImage: layerBGradient, opacity: layerBOpacity, zIndex: 0 }}
+      />
 
-      {/* watermark niche name — bottom-left, cropped, behind everything */}
+      {/* blobs */}
+      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" style={{ zIndex: 1 }} />
+      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s", zIndex: 1 }} />
+      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s", zIndex: 1 }} />
+
+      {/* watermark niche name — bottom-left, cropped */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 2 }}
       >
         <span
           style={{
             position: "absolute",
-            bottom: "-20px",
+            bottom: "-15px",
             left: "-10px",
-            fontSize: "18vw",
+            fontSize: "clamp(60px, 8vw, 110px)",
             fontWeight: 900,
-            color: "rgba(255,255,255,0.07)",
-            letterSpacing: "-0.04em",
-            lineHeight: 0.85,
+            color: "rgba(255,255,255,0.05)",
+            letterSpacing: "-3px",
+            lineHeight: 1,
             whiteSpace: "nowrap",
             userSelect: "none",
+            pointerEvents: "none",
             opacity: wmVisible ? 1 : 0,
             transition: "opacity 0.4s ease",
           }}
@@ -531,16 +615,17 @@ function Hero() {
               type="button"
               aria-label={`Show ${n}`}
               onClick={() => jumpTo(i)}
-              className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
               style={{
                 width: isActive ? 24 : 8,
                 height: 8,
+                borderRadius: 4,
                 backgroundColor: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
-                transition: "width 0.4s ease, background-color 0.4s ease",
+                transition: "all 0.4s ease",
                 border: 0,
                 padding: 0,
                 cursor: "pointer",
               }}
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
             />
           );
         })}
@@ -548,6 +633,7 @@ function Hero() {
     </section>
   );
 }
+
 
 
 function FeatureStrip() {
