@@ -183,7 +183,7 @@ function Nav() {
         <div className="flex items-center gap-2 justify-self-end">
           <button
             type="button"
-            onClick={go}
+            onClick={goToLogin}
             className={`hidden sm:inline-flex items-center rounded-xl border px-4 py-2 text-sm font-semibold transition-all active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 ${
               scrolled
                 ? "border-violet-300 text-violet-700 hover:bg-violet-50"
@@ -192,7 +192,7 @@ function Nav() {
           >
             Sign In
           </button>
-          <CTAButton className="!px-4 !py-2">
+          <CTAButton className="!px-4 !py-2" onClick={goToLogin}>
             Get Started <ArrowRight className="h-4 w-4" />
           </CTAButton>
         </div>
