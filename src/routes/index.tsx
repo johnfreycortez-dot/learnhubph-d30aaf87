@@ -4,7 +4,7 @@ import {
   BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
   Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
   CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight, Globe,
+  Star, X, ArrowRight, Globe, RefreshCw,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -265,47 +265,82 @@ const HERO_CYCLE: { name: string; from: string; to: string }[] = [
 ];
 
 function Hero() {
-  const [idx, setIdx] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState<number | null>(null);
+  const [fading, setFading] = useState(false);
+  const currentIndexRef = useRef(0);
+  const fadingRef = useRef(false);
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % HERO_CYCLE.length), 10000);
-    return () => clearInterval(id);
+    let crossfadeTimer = 0;
+    const id = window.setInterval(() => {
+      if (fadingRef.current) return;
+      const next = (currentIndexRef.current + 1) % HERO_CYCLE.length;
+      fadingRef.current = true;
+      setActiveIndex(next);
+      setNextIndex(next);
+      setFading(true);
+      crossfadeTimer = window.setTimeout(() => {
+        currentIndexRef.current = next;
+        fadingRef.current = false;
+        setCurrentIndex(next);
+        setNextIndex(null);
+        setFading(false);
+      }, 800);
+    }, 10000);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(crossfadeTimer);
+    };
   }, []);
-  const current = HERO_CYCLE[idx];
+
+  const active = HERO_CYCLE[activeIndex];
+  const current = HERO_CYCLE[currentIndex];
+  const next = nextIndex === null ? null : HERO_CYCLE[nextIndex];
+  const watermarkStyle = {
+    position: "absolute" as const,
+    bottom: "-20px",
+    left: "-10px",
+    fontSize: "clamp(100px, 14vw, 180px)",
+    fontWeight: 900,
+    color: "rgba(255, 255, 255, 0.08)",
+    letterSpacing: "-4px",
+    lineHeight: 1,
+    pointerEvents: "none" as const,
+    userSelect: "none" as const,
+    whiteSpace: "nowrap" as const,
+    zIndex: 0,
+  };
+
   return (
-    <section id="top" className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32">
-      {/* animated gradient bg */}
-      <div
-        className="absolute inset-0 transition-[background] duration-[1200ms] ease-in-out"
-        style={{ background: `linear-gradient(135deg, ${current.from} 0%, ${current.to} 100%)` }}
-      />
+    <section
+      id="top"
+      className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32"
+      style={{
+        background: `linear-gradient(135deg, ${active.from} 0%, ${active.to} 100%)`,
+        transition: "background 1.2s ease",
+      }}
+    >
       {/* blobs */}
       <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" />
       <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
       <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
 
       {/* watermark niche name */}
-      <div
-        key={current.name}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 flex items-center justify-center px-4"
-        style={{ animation: "fade-up 1s ease-out both" }}
-      >
-        <span
-          className="font-black text-white text-center whitespace-nowrap select-none"
-          style={{
-            opacity: 0.12,
-            fontSize: "clamp(80px, 12vw, 160px)",
-            fontWeight: 900,
-            letterSpacing: "-2px",
-            lineHeight: 1,
-          }}
-        >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+        <span style={{ ...watermarkStyle, opacity: fading ? 0 : 1, transition: "opacity 0.8s ease" }}>
           {current.name}
         </span>
+        {next && (
+          <span style={{ ...watermarkStyle, opacity: fading ? 1 : 0, transition: "opacity 0.8s ease" }}>
+            {next.name}
+          </span>
+        )}
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
         <div className="reveal">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 backdrop-blur px-3 py-1.5 text-xs font-semibold text-white">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
@@ -368,7 +403,7 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">{current.name}</span></span>
+            🎓 <span>Now Learning: <span className="text-violet-700">{active.name}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
@@ -377,16 +412,16 @@ function Hero() {
       </div>
 
       {/* progress dots */}
-      <div className="relative mt-10 flex items-center justify-center gap-2">
+      <div className="relative z-10 mt-10 flex items-center justify-center gap-2">
         {HERO_CYCLE.map((n, i) => (
           <span
             key={n.name}
             aria-label={n.name}
-            className="rounded-full bg-white transition-all duration-[400ms] ease-out"
+            className="rounded-full transition-all duration-[400ms] ease-out"
             style={{
-              width: i === idx ? 10 : 7,
-              height: i === idx ? 10 : 7,
-              opacity: i === idx ? 1 : 0.35,
+              width: i === activeIndex ? 10 : 7,
+              height: i === activeIndex ? 10 : 7,
+              backgroundColor: i === activeIndex ? "#ffffff" : "rgba(255,255,255,0.35)",
             }}
           />
         ))}
@@ -436,7 +471,7 @@ const NICHES: Niche[] = [
     short: "Manage social accounts, create content, and grow audiences for clients worldwide.",
     img: nicheSocial,
     back: "#6d28d9",
-    daily: "Plan, create, and analyze social content across Facebook, Instagram, TikTok, and LinkedIn to help clients grow their audience.",
+    daily: "Manage social accounts, create content strategies, schedule posts, and report results to clients.",
     modules: [
       { title: "Foundations of Social Media Management", lessons: [
         "What is Social Media Management?",
@@ -460,7 +495,7 @@ const NICHES: Niche[] = [
     short: "Master the core VA skills every client needs — admin, research, inbox, and more.",
     img: nicheGeneral,
     back: "#0d7377",
-    daily: "Handle the day-to-day admin, research, and inbox work that keeps small businesses running smoothly.",
+    daily: "Handle research, admin tasks, inbox management, and client coordination as a well-rounded VA.",
     modules: [
       { title: "VA Foundations", lessons: [
         "What Do Clients Really Need from a VA?",
@@ -483,8 +518,8 @@ const NICHES: Niche[] = [
     title: "Admin Assistant",
     short: "Organize schedules, manage documents, coordinate tasks, and support busy executives.",
     img: nicheAdmin,
-    back: "#5a8a6a",
-    daily: "Keep executives organized with calendars, documents, reports, and airtight admin systems.",
+    back: "#3d6b4f",
+    daily: "Organize schedules, manage files, write professional emails, and automate admin workflows.",
     modules: [
       { title: "Admin Fundamentals", lessons: [
         "Admin VA Role & Responsibilities",
@@ -507,8 +542,8 @@ const NICHES: Niche[] = [
     title: "Graphic Designer",
     short: "Create eye-catching visuals, branding assets, and marketing materials using Canva & Adobe.",
     img: nicheDesigner,
-    back: "#d45f7a",
-    daily: "Turn ideas into on-brand visuals — social posts, ads, and pitch decks — using Canva and Adobe.",
+    back: "#9b2d4f",
+    daily: "Create social media graphics, brand kits, pitch decks, and ad creatives using Canva and Adobe tools.",
     modules: [
       { title: "Design Foundations", lessons: [
         "Design Fundamentals: Color, Font & Layout",
@@ -531,8 +566,8 @@ const NICHES: Niche[] = [
     title: "Bookkeeping VA",
     short: "Handle bookkeeping, invoicing, payroll support, and financial reporting for clients.",
     img: nicheBooks,
-    back: "#4a7fa5",
-    daily: "Track transactions, reconcile accounts, and deliver clear financial reports for busy business owners.",
+    back: "#1e4d78",
+    daily: "Handle invoicing, expense tracking, bank reconciliation, and generate financial reports for clients.",
     modules: [
       { title: "Accounting Basics", lessons: [
         "Accounting Basics for Non-Accountants",
@@ -555,8 +590,8 @@ const NICHES: Niche[] = [
     title: "E-Commerce VA",
     short: "Manage product listings, orders, customer support, and inventory on Shopify & Amazon.",
     img: nicheEcom,
-    back: "#c47c2e",
-    daily: "Run online stores end-to-end — listings, orders, inventory, and customers — on Shopify and Amazon.",
+    back: "#8a4a10",
+    daily: "Manage Shopify and Amazon stores, write product listings, track inventory, and handle customer orders.",
     modules: [
       { title: "Ecommerce Foundations", lessons: [
         "The Ecommerce VA Role Explained",
@@ -579,8 +614,8 @@ const NICHES: Niche[] = [
     title: "Operations Assistant",
     short: "Streamline processes, manage teams, build SOPs, and run day-to-day operations.",
     img: nicheOps,
-    back: "#4a72b8",
-    daily: "Design the systems, SOPs, and workflows that let small teams scale without chaos.",
+    back: "#1e3a7a",
+    daily: "Map workflows, write SOPs, onboard team members, and track KPIs across remote operations.",
     modules: [
       { title: "Operations Fundamentals", lessons: [
         "What Operations Management Actually Means",
@@ -603,8 +638,8 @@ const NICHES: Niche[] = [
     title: "Customer Support Specialist",
     short: "Deliver exceptional support via chat, email, and calls.",
     img: nicheSupport,
-    back: "#e07070",
-    daily: "Deliver friendly, fast support over chat, email, and phone — turning customers into loyal fans.",
+    back: "#8a2020",
+    daily: "Handle tickets, live chat, phone support, and de-escalate difficult customer situations professionally.",
     modules: [
       { title: "Customer Service Foundations", lessons: [
         "The Golden Rules of Customer Service",
@@ -627,8 +662,8 @@ const NICHES: Niche[] = [
     title: "Appointment Setter",
     short: "Master outreach, objection handling, and booking qualified appointments.",
     img: nicheAppt,
-    back: "#8b6abf",
-    daily: "Fill your client's calendar with qualified sales calls through outreach, follow-up, and CRM work.",
+    back: "#4a2080",
+    daily: "Research leads, send cold outreach, handle objections, and book qualified appointments for clients.",
     modules: [
       { title: "Appointment Setting Foundations", lessons: [
         "What is Appointment Setting?",
@@ -650,61 +685,108 @@ const NICHES: Niche[] = [
 ];
 
 function FlipCard({ niche }: { niche: Niche }) {
-  const [flipped, setFlipped] = useState(false);
-  const toggle = () => setFlipped((f) => !f);
+  const [isFlipped, setIsFlipped] = useState(false);
   return (
     <div
-      className={`flip-card reveal cursor-pointer group ${flipped ? "is-flipped" : ""}`}
-      style={{ minHeight: "480px" }}
-      onClick={toggle}
+      className="reveal group"
+      style={{ perspective: "1000px", width: "100%", height: "380px" }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          toggle();
+          setIsFlipped((flipped) => !flipped);
         }
       }}
       role="button"
       tabIndex={0}
-      aria-pressed={flipped}
-      aria-label={`${niche.title} — tap to ${flipped ? "flip back" : "learn more"}`}
+      aria-pressed={isFlipped}
+      aria-label={`${niche.title} — click to ${isFlipped ? "flip back" : "learn more"}`}
     >
-      <div className="flip-inner" style={{ minHeight: "480px" }}>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+          transition: "transform 0.7s ease",
+          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          cursor: "pointer",
+        }}
+        onClick={() => setIsFlipped((flipped) => !flipped)}
+      >
         {/* front */}
-        <div className="flip-face rounded-2xl bg-white border border-violet-100 shadow-sm overflow-hidden flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300">
-          <div className="w-full bg-white overflow-hidden" style={{ aspectRatio: "6 / 5" }}>
+        <div
+          className="rounded-2xl bg-white border border-violet-100 shadow-sm overflow-hidden flex flex-col transition-all group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-violet-500/10 group-hover:border-violet-300"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
+        >
+          <div className="w-full bg-white overflow-hidden shrink-0" style={{ height: "210px" }}>
             <img src={niche.img.url} alt={niche.title} className="w-full h-full object-cover block" loading="lazy" />
           </div>
-          <div className="p-5 flex flex-col flex-1">
+          <div className="p-5 flex flex-col flex-1 min-h-0">
             <h3 className="text-lg font-bold text-slate-900">{niche.title}</h3>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{niche.short}</p>
-            <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1">
-              👆 Tap to learn more
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1 overflow-hidden">{niche.short}</p>
+            <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1.5">
+              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+              Click to flip →
             </span>
           </div>
         </div>
         {/* back */}
         <div
-          className="flip-face flip-back rounded-2xl text-white shadow-lg p-6 flex flex-col justify-between overflow-hidden"
-          style={{ backgroundColor: niche.back }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            background: niche.back,
+            borderRadius: "16px",
+            padding: "28px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            boxShadow: "0 24px 60px rgba(15, 23, 42, 0.22)",
+            overflow: "hidden",
+          }}
         >
           <div>
-            <h3 className="text-2xl sm:text-3xl font-black leading-tight">{niche.title}</h3>
-            <p className="mt-4 text-sm text-white/90 leading-relaxed">{niche.daily}</p>
-            <span className="mt-5 inline-flex items-center rounded-full bg-white/20 border border-white/30 px-3 py-1 text-[11px] font-bold tracking-wide">
+            <h3 style={{ color: "white", fontSize: "22px", fontWeight: 800, lineHeight: 1.15 }}>{niche.title}</h3>
+            <p style={{ marginTop: "22px", color: "white", fontSize: "14px", opacity: 0.9, lineHeight: 1.65 }}>
+              {niche.daily}
+            </p>
+            <span
+              style={{
+                marginTop: "22px",
+                display: "inline-flex",
+                alignItems: "center",
+                borderRadius: "999px",
+                background: "rgba(255,255,255,0.18)",
+                border: "1px solid rgba(255,255,255,0.28)",
+                color: "rgba(255,255,255,0.7)",
+                padding: "6px 12px",
+                fontSize: "11px",
+                fontWeight: 800,
+              }}
+            >
               3 Modules · 9 Lessons
             </span>
           </div>
-          <div className="mt-6 flex items-center justify-between gap-2">
+          <div>
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); go(); }}
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
-              style={{ color: niche.back }}
+              className="inline-flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
+              style={{ color: niche.back, borderRadius: "10px" }}
             >
-              Get Started <ArrowRight className="h-4 w-4" />
+              Enroll Now <ArrowRight className="h-4 w-4" />
             </button>
-            <span className="text-xs font-semibold text-white/85 inline-flex items-center gap-1">
-              ↻ Tap to flip back
+            <span className="mt-3 text-xs font-semibold text-white/85 inline-flex w-full items-center justify-center gap-1.5">
+              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+              Click to flip back
             </span>
           </div>
         </div>
