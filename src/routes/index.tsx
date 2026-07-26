@@ -362,63 +362,61 @@ const NICHE_COLORS: Record<string, NicheColor> = {
   },
 };
 
+const HERO_ORDER: string[] = [
+  "Social Media Manager",
+  "General VA",
+  "Admin Assistant",
+  "Graphic Designer",
+  "Bookkeeping VA",
+  "E-Commerce VA",
+  "Operations Assistant",
+  "Customer Support Specialist",
+  "Appointment Setter",
+];
+
 function Hero() {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState<number | null>(null);
-  const [fading, setFading] = useState(false);
-  const currentIndexRef = useRef(0);
-  const fadingRef = useRef(false);
+  const [displayIndex, setDisplayIndex] = useState(0); // watermark text lags for fade-out
+  const [wmVisible, setWmVisible] = useState(true);
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let crossfadeTimer = 0;
+    if (reduced) return;
     const id = window.setInterval(() => {
-      if (fadingRef.current) return;
-      const next = (currentIndexRef.current + 1) % HERO_CYCLE.length;
-      fadingRef.current = true;
-      setActiveIndex(next);
-      setNextIndex(next);
-      setFading(true);
-      crossfadeTimer = window.setTimeout(() => {
-        currentIndexRef.current = next;
-        fadingRef.current = false;
-        setCurrentIndex(next);
-        setNextIndex(null);
-        setFading(false);
-      }, 800);
+      setCurrentIndex((i) => (i + 1) % HERO_ORDER.length);
     }, 10000);
-    return () => {
-      window.clearInterval(id);
-      window.clearTimeout(crossfadeTimer);
-    };
-  }, []);
+    return () => window.clearInterval(id);
+  }, [reduced]);
 
-  const active = HERO_CYCLE[activeIndex];
-  const current = HERO_CYCLE[currentIndex];
-  const next = nextIndex === null ? null : HERO_CYCLE[nextIndex];
-  const watermarkStyle = {
-    position: "absolute" as const,
-    bottom: "-20px",
-    left: "-10px",
-    fontSize: "clamp(100px, 14vw, 180px)",
-    fontWeight: 900,
-    color: "rgba(255, 255, 255, 0.08)",
-    letterSpacing: "-4px",
-    lineHeight: 1,
-    pointerEvents: "none" as const,
-    userSelect: "none" as const,
-    whiteSpace: "nowrap" as const,
-    zIndex: 0,
-  };
+  // watermark crossfade on niche change
+  useEffect(() => {
+    setWmVisible(false);
+    const t1 = window.setTimeout(() => {
+      setDisplayIndex(currentIndex);
+      setWmVisible(true);
+    }, 400);
+    return () => window.clearTimeout(t1);
+  }, [currentIndex]);
+
+  const jumpTo = (i: number) => setCurrentIndex(i);
+
+  const activeName = HERO_ORDER[currentIndex];
+  const activeColor = NICHE_COLORS[activeName];
+  const displayName = HERO_ORDER[displayIndex];
+  const displayCaps = NICHE_COLORS[displayName].caps;
 
   return (
     <section
       id="top"
       className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32"
       style={{
-        background: `linear-gradient(135deg, ${active.from} 0%, ${active.to} 100%)`,
-        transition: "background 1.2s ease",
+        backgroundImage: activeColor.gradient,
+        backgroundSize: "300% 300%",
+        backgroundPosition: "0% 50%",
+        transition: "background-image 1.5s ease",
+        animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
       }}
     >
       {/* blobs */}
@@ -426,16 +424,30 @@ function Hero() {
       <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
       <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
 
-      {/* watermark niche name */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
-        <span style={{ ...watermarkStyle, opacity: fading ? 0 : 1, transition: "opacity 0.8s ease" }}>
-          {current.name}
+      {/* watermark niche name — bottom-left, cropped, behind everything */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ zIndex: 0 }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            bottom: "-20px",
+            left: "-10px",
+            fontSize: "18vw",
+            fontWeight: 900,
+            color: "rgba(255,255,255,0.07)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.85,
+            whiteSpace: "nowrap",
+            userSelect: "none",
+            opacity: wmVisible ? 1 : 0,
+            transition: "opacity 0.4s ease",
+          }}
+        >
+          {displayCaps}
         </span>
-        {next && (
-          <span style={{ ...watermarkStyle, opacity: fading ? 1 : 0, transition: "opacity 0.8s ease" }}>
-            {next.name}
-          </span>
-        )}
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
@@ -501,7 +513,7 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">{active.name}</span></span>
+            🎓 <span>Now Learning: <span className="text-violet-700">{activeName}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
@@ -509,24 +521,34 @@ function Hero() {
         </div>
       </div>
 
-      {/* progress dots */}
+      {/* progress dots — clickable */}
       <div className="relative z-10 mt-10 flex items-center justify-center gap-2">
-        {HERO_CYCLE.map((n, i) => (
-          <span
-            key={n.name}
-            aria-label={n.name}
-            className="rounded-full transition-all duration-[400ms] ease-out"
-            style={{
-              width: i === activeIndex ? 10 : 7,
-              height: i === activeIndex ? 10 : 7,
-              backgroundColor: i === activeIndex ? "#ffffff" : "rgba(255,255,255,0.35)",
-            }}
-          />
-        ))}
+        {HERO_ORDER.map((n, i) => {
+          const isActive = i === currentIndex;
+          return (
+            <button
+              key={n}
+              type="button"
+              aria-label={`Show ${n}`}
+              onClick={() => jumpTo(i)}
+              className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              style={{
+                width: isActive ? 24 : 8,
+                height: 8,
+                backgroundColor: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
+                transition: "width 0.4s ease, background-color 0.4s ease",
+                border: 0,
+                padding: 0,
+                cursor: "pointer",
+              }}
+            />
+          );
+        })}
       </div>
     </section>
   );
 }
+
 
 function FeatureStrip() {
   const items = [
