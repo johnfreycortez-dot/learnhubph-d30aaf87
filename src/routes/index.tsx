@@ -26,6 +26,9 @@ const CTA_URL =
 const go = () => {
   window.location.href = CTA_URL;
 };
+const goToLogin = () => {
+  window.location.href = "/login";
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -181,7 +184,7 @@ function Nav() {
         <div className="flex items-center gap-2 justify-self-end">
           <button
             type="button"
-            onClick={go}
+            onClick={goToLogin}
             className={`hidden sm:inline-flex items-center rounded-xl border px-4 py-2 text-sm font-semibold transition-all active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 ${
               scrolled
                 ? "border-violet-300 text-violet-700 hover:bg-violet-50"
@@ -190,7 +193,7 @@ function Nav() {
           >
             Sign In
           </button>
-          <CTAButton className="!px-4 !py-2">
+          <CTAButton className="!px-4 !py-2" onClick={goToLogin}>
             Get Started <ArrowRight className="h-4 w-4" />
           </CTAButton>
         </div>
@@ -564,7 +567,7 @@ function Hero() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <CTAButton className="!px-6 !py-3.5 !text-base">
+            <CTAButton className="!px-6 !py-3.5 !text-base" onClick={goToLogin}>
               Get Started <ArrowRight className="h-5 w-5" />
             </CTAButton>
             <a
@@ -1382,7 +1385,7 @@ function Pricing() {
           <div className="relative mt-8">
             <button
               type="button"
-              onClick={go}
+              onClick={goToLogin}
               className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white text-violet-700 px-8 py-4 text-base font-bold shadow-xl shadow-black/30 hover:bg-violet-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-300 transition-all"
             >
               Get Started Now <ArrowRight className="h-5 w-5" />
