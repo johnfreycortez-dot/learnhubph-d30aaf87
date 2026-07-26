@@ -566,7 +566,7 @@ function Hero() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <CTAButton className="!px-6 !py-3.5 !text-base">
+            <CTAButton className="!px-6 !py-3.5 !text-base" onClick={goToLogin}>
               Get Started <ArrowRight className="h-5 w-5" />
             </CTAButton>
             <a
