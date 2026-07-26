@@ -1210,12 +1210,6 @@ function Footer({
             <span className="text-white font-extrabold text-lg">
               LearnHub <span className="text-violet-400">PH</span>
             </span>
-            <span className="text-sm text-slate-400">
-              Contact us:{" "}
-              <a href="mailto:johnfreycortez@gmail.com" className="text-violet-300 hover:text-white transition-colors">
-                johnfreycortez@gmail.com
-              </a>
-            </span>
           </div>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <button
