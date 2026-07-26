@@ -252,17 +252,115 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
   );
 }
 
-const HERO_CYCLE: { name: string; from: string; to: string }[] = [
-  { name: "Social Media Manager", from: "#4c1d95", to: "#6d28d9" },
-  { name: "General VA", from: "#0d7377", to: "#14a085" },
-  { name: "Admin Assistant", from: "#3d6b4f", to: "#5a8a6a" },
-  { name: "Graphic Designer", from: "#9b2d4f", to: "#d45f7a" },
-  { name: "Bookkeeping VA", from: "#1e4d78", to: "#4a7fa5" },
-  { name: "E-Commerce VA", from: "#8a4a10", to: "#c47c2e" },
-  { name: "Operations Assistant", from: "#1e3a7a", to: "#4a72b8" },
-  { name: "Customer Support", from: "#8a2020", to: "#e07070" },
-  { name: "Appointment Setter", from: "#4a2080", to: "#8b6abf" },
-];
+// Shared niche data — used by Hero cycle AND flip cards
+type NicheColor = {
+  caps: string;      // watermark all-caps short name
+  gradient: string;  // 4-stop diagonal gradient
+  accent: string;    // solid accent color (button text on white)
+  description: string;
+  skills: string[];
+};
+const NICHE_COLORS: Record<string, NicheColor> = {
+  "Social Media Manager": {
+    caps: "SOCIAL MEDIA",
+    gradient: "linear-gradient(135deg, #3b0764, #7c3aed, #a855f7, #6d28d9)",
+    accent: "#7c3aed",
+    description: "As a Social Media Manager VA, you'll learn to build and run social media accounts for clients from scratch. You'll create content calendars, design graphics, write captions, schedule posts, and deliver monthly performance reports — everything a client needs to grow their brand online.",
+    skills: [
+      "Plan and schedule content across Facebook, Instagram, TikTok and LinkedIn",
+      "Design on-brand graphics and write captions that drive engagement",
+      "Read analytics and present performance results to clients professionally",
+    ],
+  },
+  "General VA": {
+    caps: "GENERAL VA",
+    gradient: "linear-gradient(135deg, #042f2e, #0d9488, #14b8a6, #0f766e)",
+    accent: "#0d9488",
+    description: "As a General VA, you'll become the go-to support person every remote business owner needs. You'll master the tools, communication skills, and workflows that let you hit the ground running from day one — and attract your first paying client faster than you think.",
+    skills: [
+      "Manage emails, calendars, research tasks and day-to-day admin work",
+      "Use Google Workspace, Trello, Asana, Slack and Zoom confidently",
+      "Build a portfolio and write proposals that win clients on Upwork and OnlineJobs",
+    ],
+  },
+  "Admin Assistant": {
+    caps: "ADMIN",
+    gradient: "linear-gradient(135deg, #052e16, #16a34a, #4ade80, #15803d)",
+    accent: "#16a34a",
+    description: "As an Admin Assistant VA, you'll handle the behind-the-scenes work that keeps businesses running smoothly. From organizing files and writing professional emails to automating repetitive tasks — you'll be indispensable to any remote team that hires you.",
+    skills: [
+      "Manage calendars, schedules, files and cloud storage systems",
+      "Write professional emails, meeting minutes and client-ready documents",
+      "Automate workflows using Make.com and Zapier to save clients hours every week",
+    ],
+  },
+  "Graphic Designer": {
+    caps: "DESIGN",
+    gradient: "linear-gradient(135deg, #4c0519, #e11d48, #fb7185, #be123c)",
+    accent: "#e11d48",
+    description: "As a Graphic Designer VA, you'll create professional visual content for clients using Canva and Adobe tools — no design degree required. You'll deliver everything from social media graphics to full brand kits, ad creatives, and pitch decks that impress.",
+    skills: [
+      "Master color, typography and layout fundamentals for professional-quality output",
+      "Design social posts, stories, ad creatives, thumbnails and presentation decks",
+      "Build complete brand kits and confidently package and price your design services",
+    ],
+  },
+  "Bookkeeping VA": {
+    caps: "BOOKKEEPING",
+    gradient: "linear-gradient(135deg, #172554, #2563eb, #60a5fa, #1d4ed8)",
+    accent: "#2563eb",
+    description: "As a Bookkeeping VA, you'll handle the financial admin that every business owner dreads doing themselves. You'll manage invoices, track expenses, reconcile accounts, and generate reports using QuickBooks and Wave — no accounting degree needed.",
+    skills: [
+      "Code transactions, reconcile accounts and manage expense categories accurately",
+      "Create and send invoices, track payments and support basic payroll tasks",
+      "Generate clear financial reports for clients using QuickBooks Online and Wave",
+    ],
+  },
+  "E-Commerce VA": {
+    caps: "E-COMMERCE",
+    gradient: "linear-gradient(135deg, #431407, #ea580c, #fb923c, #c2410c)",
+    accent: "#ea580c",
+    description: "As an E-Commerce VA, you'll manage online stores end-to-end for clients selling on Shopify and Amazon. You'll handle product listings, inventory, customer orders, supplier coordination, and review management — keeping the store running without the owner.",
+    skills: [
+      "Navigate Shopify and Amazon Seller Central and manage store settings confidently",
+      "Write product descriptions that sell and maintain accurate inventory records",
+      "Process orders, handle returns, respond to customers and coordinate with suppliers",
+    ],
+  },
+  "Operations Assistant": {
+    caps: "OPERATIONS",
+    gradient: "linear-gradient(135deg, #1e1b4b, #4f46e5, #818cf8, #4338ca)",
+    accent: "#4f46e5",
+    description: "As an Operations Assistant VA, you'll help businesses run more efficiently by mapping workflows, eliminating bottlenecks, and building the systems remote teams rely on daily. You'll become the person who makes sure everything actually gets done.",
+    skills: [
+      "Use ClickUp, Monday.com and Notion to manage projects and team tasks",
+      "Write clear SOPs and process maps that any team member can follow",
+      "Onboard remote team members, track KPIs and run productive team meetings",
+    ],
+  },
+  "Customer Support Specialist": {
+    caps: "SUPPORT",
+    gradient: "linear-gradient(135deg, #450a0a, #dc2626, #f87171, #b91c1c)",
+    accent: "#dc2626",
+    description: "As a Customer Support Specialist VA, you'll handle every type of customer interaction with professionalism and empathy. From email tickets and live chat to phone calls and angry customer de-escalation — you'll be the voice clients trust to protect their brand.",
+    skills: [
+      "Use Zendesk and Freshdesk to manage tickets, chats and support queues",
+      "Handle refunds, replacements and policy enforcement with confidence",
+      "De-escalate difficult customers and know exactly when and how to escalate issues",
+    ],
+  },
+  "Appointment Setter": {
+    caps: "APPOINTMENTS",
+    gradient: "linear-gradient(135deg, #2e1065, #7c3aed, #c084fc, #6d28d9)",
+    accent: "#7c3aed",
+    description: "As an Appointment Setter VA, you'll generate qualified leads and fill your client's calendar with booked calls. You'll learn cold outreach, objection handling, follow-up sequences, and CRM tools — the exact skills high-paying sales-focused clients hire for.",
+    skills: [
+      "Research target leads, build lead lists and craft outreach messages that get replies",
+      "Handle common objections confidently and follow up with sequences that convert",
+      "Use Calendly, HubSpot and GoHighLevel to manage bookings and track results",
+    ],
+  },
+};
 
 function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
