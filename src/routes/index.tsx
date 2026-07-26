@@ -134,8 +134,6 @@ function CTAButton({
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
-  const goToLogin = () => navigate({ to: "/login" });
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
