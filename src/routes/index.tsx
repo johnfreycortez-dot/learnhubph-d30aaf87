@@ -4,7 +4,7 @@ import {
   BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
   Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
   CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight,
+  Star, X, ArrowRight, Globe,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
