@@ -1051,42 +1051,8 @@ function FlipCard({ niche }: { niche: Niche }) {
                 </ul>
               </div>
 
-              {/* stats row */}
-              <div
-                style={{
-                  position: "relative",
-                  zIndex: 1,
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gap: 0,
-                  textAlign: "center",
-                  marginTop: "auto",
-                }}
-              >
-                {[
-                  { Icon: BookOpen, n: "3", l: "Modules" },
-                  { Icon: GraduationCap, n: "9", l: "Lessons" },
-                  { Icon: Award, n: "1", l: "Certificate" },
-                ].map((s, i) => (
-                  <div
-                    key={s.l}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "2px",
-                      borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.20)",
-                      padding: "0 4px",
-                    }}
-                  >
-                    <s.Icon size={14} aria-hidden="true" />
-                    <span style={{ fontWeight: 800, fontSize: "16px", lineHeight: 1.1 }}>{s.n}</span>
-                    <span style={{ opacity: 0.6, fontSize: "10px" }}>{s.l}</span>
-                  </div>
-                ))}
-              </div>
 
-              {/* CTA */}
+
               <div style={{ position: "relative", zIndex: 1 }}>
                 <button
                   type="button"
