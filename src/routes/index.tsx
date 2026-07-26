@@ -4,7 +4,7 @@ import {
   BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
   Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
   CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight, Globe, RefreshCw,
+  Star, X, ArrowRight, Globe, RefreshCw, Check, GraduationCap,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -252,75 +252,171 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
   );
 }
 
-const HERO_CYCLE: { name: string; from: string; to: string }[] = [
-  { name: "Social Media Manager", from: "#4c1d95", to: "#6d28d9" },
-  { name: "General VA", from: "#0d7377", to: "#14a085" },
-  { name: "Admin Assistant", from: "#3d6b4f", to: "#5a8a6a" },
-  { name: "Graphic Designer", from: "#9b2d4f", to: "#d45f7a" },
-  { name: "Bookkeeping VA", from: "#1e4d78", to: "#4a7fa5" },
-  { name: "E-Commerce VA", from: "#8a4a10", to: "#c47c2e" },
-  { name: "Operations Assistant", from: "#1e3a7a", to: "#4a72b8" },
-  { name: "Customer Support", from: "#8a2020", to: "#e07070" },
-  { name: "Appointment Setter", from: "#4a2080", to: "#8b6abf" },
+// Shared niche data — used by Hero cycle AND flip cards
+type NicheColor = {
+  caps: string;      // watermark all-caps short name
+  gradient: string;  // 4-stop diagonal gradient
+  accent: string;    // solid accent color (button text on white)
+  description: string;
+  skills: string[];
+};
+const NICHE_COLORS: Record<string, NicheColor> = {
+  "Social Media Manager": {
+    caps: "SOCIAL MEDIA",
+    gradient: "linear-gradient(135deg, #3b0764, #7c3aed, #a855f7, #6d28d9)",
+    accent: "#7c3aed",
+    description: "As a Social Media Manager VA, you'll learn to build and run social media accounts for clients from scratch. You'll create content calendars, design graphics, write captions, schedule posts, and deliver monthly performance reports — everything a client needs to grow their brand online.",
+    skills: [
+      "Plan and schedule content across Facebook, Instagram, TikTok and LinkedIn",
+      "Design on-brand graphics and write captions that drive engagement",
+      "Read analytics and present performance results to clients professionally",
+    ],
+  },
+  "General VA": {
+    caps: "GENERAL VA",
+    gradient: "linear-gradient(135deg, #042f2e, #0d9488, #14b8a6, #0f766e)",
+    accent: "#0d9488",
+    description: "As a General VA, you'll become the go-to support person every remote business owner needs. You'll master the tools, communication skills, and workflows that let you hit the ground running from day one — and attract your first paying client faster than you think.",
+    skills: [
+      "Manage emails, calendars, research tasks and day-to-day admin work",
+      "Use Google Workspace, Trello, Asana, Slack and Zoom confidently",
+      "Build a portfolio and write proposals that win clients on Upwork and OnlineJobs",
+    ],
+  },
+  "Admin Assistant": {
+    caps: "ADMIN",
+    gradient: "linear-gradient(135deg, #052e16, #16a34a, #4ade80, #15803d)",
+    accent: "#16a34a",
+    description: "As an Admin Assistant VA, you'll handle the behind-the-scenes work that keeps businesses running smoothly. From organizing files and writing professional emails to automating repetitive tasks — you'll be indispensable to any remote team that hires you.",
+    skills: [
+      "Manage calendars, schedules, files and cloud storage systems",
+      "Write professional emails, meeting minutes and client-ready documents",
+      "Automate workflows using Make.com and Zapier to save clients hours every week",
+    ],
+  },
+  "Graphic Designer": {
+    caps: "DESIGN",
+    gradient: "linear-gradient(135deg, #4c0519, #e11d48, #fb7185, #be123c)",
+    accent: "#e11d48",
+    description: "As a Graphic Designer VA, you'll create professional visual content for clients using Canva and Adobe tools — no design degree required. You'll deliver everything from social media graphics to full brand kits, ad creatives, and pitch decks that impress.",
+    skills: [
+      "Master color, typography and layout fundamentals for professional-quality output",
+      "Design social posts, stories, ad creatives, thumbnails and presentation decks",
+      "Build complete brand kits and confidently package and price your design services",
+    ],
+  },
+  "Bookkeeping VA": {
+    caps: "BOOKKEEPING",
+    gradient: "linear-gradient(135deg, #172554, #2563eb, #60a5fa, #1d4ed8)",
+    accent: "#2563eb",
+    description: "As a Bookkeeping VA, you'll handle the financial admin that every business owner dreads doing themselves. You'll manage invoices, track expenses, reconcile accounts, and generate reports using QuickBooks and Wave — no accounting degree needed.",
+    skills: [
+      "Code transactions, reconcile accounts and manage expense categories accurately",
+      "Create and send invoices, track payments and support basic payroll tasks",
+      "Generate clear financial reports for clients using QuickBooks Online and Wave",
+    ],
+  },
+  "E-Commerce VA": {
+    caps: "E-COMMERCE",
+    gradient: "linear-gradient(135deg, #431407, #ea580c, #fb923c, #c2410c)",
+    accent: "#ea580c",
+    description: "As an E-Commerce VA, you'll manage online stores end-to-end for clients selling on Shopify and Amazon. You'll handle product listings, inventory, customer orders, supplier coordination, and review management — keeping the store running without the owner.",
+    skills: [
+      "Navigate Shopify and Amazon Seller Central and manage store settings confidently",
+      "Write product descriptions that sell and maintain accurate inventory records",
+      "Process orders, handle returns, respond to customers and coordinate with suppliers",
+    ],
+  },
+  "Operations Assistant": {
+    caps: "OPERATIONS",
+    gradient: "linear-gradient(135deg, #1e1b4b, #4f46e5, #818cf8, #4338ca)",
+    accent: "#4f46e5",
+    description: "As an Operations Assistant VA, you'll help businesses run more efficiently by mapping workflows, eliminating bottlenecks, and building the systems remote teams rely on daily. You'll become the person who makes sure everything actually gets done.",
+    skills: [
+      "Use ClickUp, Monday.com and Notion to manage projects and team tasks",
+      "Write clear SOPs and process maps that any team member can follow",
+      "Onboard remote team members, track KPIs and run productive team meetings",
+    ],
+  },
+  "Customer Support Specialist": {
+    caps: "SUPPORT",
+    gradient: "linear-gradient(135deg, #450a0a, #dc2626, #f87171, #b91c1c)",
+    accent: "#dc2626",
+    description: "As a Customer Support Specialist VA, you'll handle every type of customer interaction with professionalism and empathy. From email tickets and live chat to phone calls and angry customer de-escalation — you'll be the voice clients trust to protect their brand.",
+    skills: [
+      "Use Zendesk and Freshdesk to manage tickets, chats and support queues",
+      "Handle refunds, replacements and policy enforcement with confidence",
+      "De-escalate difficult customers and know exactly when and how to escalate issues",
+    ],
+  },
+  "Appointment Setter": {
+    caps: "APPOINTMENTS",
+    gradient: "linear-gradient(135deg, #2e1065, #7c3aed, #c084fc, #6d28d9)",
+    accent: "#7c3aed",
+    description: "As an Appointment Setter VA, you'll generate qualified leads and fill your client's calendar with booked calls. You'll learn cold outreach, objection handling, follow-up sequences, and CRM tools — the exact skills high-paying sales-focused clients hire for.",
+    skills: [
+      "Research target leads, build lead lists and craft outreach messages that get replies",
+      "Handle common objections confidently and follow up with sequences that convert",
+      "Use Calendly, HubSpot and GoHighLevel to manage bookings and track results",
+    ],
+  },
+};
+
+const HERO_ORDER: string[] = [
+  "Social Media Manager",
+  "General VA",
+  "Admin Assistant",
+  "Graphic Designer",
+  "Bookkeeping VA",
+  "E-Commerce VA",
+  "Operations Assistant",
+  "Customer Support Specialist",
+  "Appointment Setter",
 ];
 
 function Hero() {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState<number | null>(null);
-  const [fading, setFading] = useState(false);
-  const currentIndexRef = useRef(0);
-  const fadingRef = useRef(false);
+  const [displayIndex, setDisplayIndex] = useState(0); // watermark text lags for fade-out
+  const [wmVisible, setWmVisible] = useState(true);
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let crossfadeTimer = 0;
+    if (reduced) return;
     const id = window.setInterval(() => {
-      if (fadingRef.current) return;
-      const next = (currentIndexRef.current + 1) % HERO_CYCLE.length;
-      fadingRef.current = true;
-      setActiveIndex(next);
-      setNextIndex(next);
-      setFading(true);
-      crossfadeTimer = window.setTimeout(() => {
-        currentIndexRef.current = next;
-        fadingRef.current = false;
-        setCurrentIndex(next);
-        setNextIndex(null);
-        setFading(false);
-      }, 800);
+      setCurrentIndex((i) => (i + 1) % HERO_ORDER.length);
     }, 10000);
-    return () => {
-      window.clearInterval(id);
-      window.clearTimeout(crossfadeTimer);
-    };
-  }, []);
+    return () => window.clearInterval(id);
+  }, [reduced]);
 
-  const active = HERO_CYCLE[activeIndex];
-  const current = HERO_CYCLE[currentIndex];
-  const next = nextIndex === null ? null : HERO_CYCLE[nextIndex];
-  const watermarkStyle = {
-    position: "absolute" as const,
-    bottom: "-20px",
-    left: "-10px",
-    fontSize: "clamp(100px, 14vw, 180px)",
-    fontWeight: 900,
-    color: "rgba(255, 255, 255, 0.08)",
-    letterSpacing: "-4px",
-    lineHeight: 1,
-    pointerEvents: "none" as const,
-    userSelect: "none" as const,
-    whiteSpace: "nowrap" as const,
-    zIndex: 0,
-  };
+  // watermark crossfade on niche change
+  useEffect(() => {
+    setWmVisible(false);
+    const t1 = window.setTimeout(() => {
+      setDisplayIndex(currentIndex);
+      setWmVisible(true);
+    }, 400);
+    return () => window.clearTimeout(t1);
+  }, [currentIndex]);
+
+  const jumpTo = (i: number) => setCurrentIndex(i);
+
+  const activeName = HERO_ORDER[currentIndex];
+  const activeColor = NICHE_COLORS[activeName];
+  const displayName = HERO_ORDER[displayIndex];
+  const displayCaps = NICHE_COLORS[displayName].caps;
 
   return (
     <section
       id="top"
       className="relative overflow-hidden pt-28 pb-24 sm:pt-32 sm:pb-32"
       style={{
-        background: `linear-gradient(135deg, ${active.from} 0%, ${active.to} 100%)`,
-        transition: "background 1.2s ease",
+        backgroundImage: activeColor.gradient,
+        backgroundSize: "300% 300%",
+        backgroundPosition: "0% 50%",
+        transition: "background-image 1.5s ease",
+        animation: reduced ? undefined : "gradientShift 8s ease-in-out infinite",
       }}
     >
       {/* blobs */}
@@ -328,16 +424,30 @@ function Hero() {
       <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
       <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s" }} />
 
-      {/* watermark niche name */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
-        <span style={{ ...watermarkStyle, opacity: fading ? 0 : 1, transition: "opacity 0.8s ease" }}>
-          {current.name}
+      {/* watermark niche name — bottom-left, cropped, behind everything */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ zIndex: 0 }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            bottom: "-20px",
+            left: "-10px",
+            fontSize: "18vw",
+            fontWeight: 900,
+            color: "rgba(255,255,255,0.07)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.85,
+            whiteSpace: "nowrap",
+            userSelect: "none",
+            opacity: wmVisible ? 1 : 0,
+            transition: "opacity 0.4s ease",
+          }}
+        >
+          {displayCaps}
         </span>
-        {next && (
-          <span style={{ ...watermarkStyle, opacity: fading ? 1 : 0, transition: "opacity 0.8s ease" }}>
-            {next.name}
-          </span>
-        )}
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
@@ -403,7 +513,7 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">{active.name}</span></span>
+            🎓 <span>Now Learning: <span className="text-violet-700">{activeName}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
@@ -411,24 +521,34 @@ function Hero() {
         </div>
       </div>
 
-      {/* progress dots */}
+      {/* progress dots — clickable */}
       <div className="relative z-10 mt-10 flex items-center justify-center gap-2">
-        {HERO_CYCLE.map((n, i) => (
-          <span
-            key={n.name}
-            aria-label={n.name}
-            className="rounded-full transition-all duration-[400ms] ease-out"
-            style={{
-              width: i === activeIndex ? 10 : 7,
-              height: i === activeIndex ? 10 : 7,
-              backgroundColor: i === activeIndex ? "#ffffff" : "rgba(255,255,255,0.35)",
-            }}
-          />
-        ))}
+        {HERO_ORDER.map((n, i) => {
+          const isActive = i === currentIndex;
+          return (
+            <button
+              key={n}
+              type="button"
+              aria-label={`Show ${n}`}
+              onClick={() => jumpTo(i)}
+              className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              style={{
+                width: isActive ? 24 : 8,
+                height: 8,
+                backgroundColor: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
+                transition: "width 0.4s ease, background-color 0.4s ease",
+                border: 0,
+                padding: 0,
+                cursor: "pointer",
+              }}
+            />
+          );
+        })}
       </div>
     </section>
   );
 }
+
 
 function FeatureStrip() {
   const items = [
@@ -689,7 +809,7 @@ function FlipCard({ niche }: { niche: Niche }) {
   return (
     <div
       className="reveal group"
-      style={{ perspective: "1000px", width: "100%", height: "380px" }}
+      style={{ perspective: "1000px", width: "100%", minHeight: "380px", height: "460px" }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -736,60 +856,194 @@ function FlipCard({ niche }: { niche: Niche }) {
           </div>
         </div>
         {/* back */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            background: niche.back,
-            borderRadius: "16px",
-            padding: "28px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            boxShadow: "0 24px 60px rgba(15, 23, 42, 0.22)",
-            overflow: "hidden",
-          }}
-        >
-          <div>
-            <h3 style={{ color: "white", fontSize: "22px", fontWeight: 800, lineHeight: 1.15 }}>{niche.title}</h3>
-            <p style={{ marginTop: "22px", color: "white", fontSize: "14px", opacity: 0.9, lineHeight: 1.65 }}>
-              {niche.daily}
-            </p>
-            <span
+        {(() => {
+          const meta = NICHE_COLORS[niche.title];
+          const gradient = meta?.gradient ?? `linear-gradient(135deg, ${niche.back}, ${niche.back})`;
+          const accent = meta?.accent ?? niche.back;
+          const description = meta?.description ?? niche.daily;
+          const skills = meta?.skills ?? [];
+          return (
+            <div
               style={{
-                marginTop: "22px",
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: "999px",
-                background: "rgba(255,255,255,0.18)",
-                border: "1px solid rgba(255,255,255,0.28)",
-                color: "rgba(255,255,255,0.7)",
-                padding: "6px 12px",
-                fontSize: "11px",
-                fontWeight: 800,
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                transform: "rotateY(180deg)",
+                backgroundImage: gradient,
+                backgroundSize: "300% 300%",
+                backgroundPosition: "0% 50%",
+                animation: "gradientShift 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,0.20)",
+                padding: "22px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "14px",
+                overflow: "hidden",
+                color: "white",
               }}
             >
-              3 Modules · 9 Lessons
-            </span>
-          </div>
-          <div>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); go(); }}
-              className="inline-flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-bold shadow-md hover:bg-white/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
-              style={{ color: niche.back, borderRadius: "10px" }}
-            >
-              Enroll Now <ArrowRight className="h-4 w-4" />
-            </button>
-            <span className="mt-3 text-xs font-semibold text-white/85 inline-flex w-full items-center justify-center gap-1.5">
-              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-              Click to flip back
-            </span>
-          </div>
-        </div>
+              {/* decorative orbs */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "-40px",
+                  right: "-40px",
+                  width: "160px",
+                  height: "160px",
+                  borderRadius: "9999px",
+                  background: "rgba(255,255,255,0.15)",
+                  filter: "blur(40px)",
+                  animation: "orbFloat1 9s ease-in-out infinite",
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  bottom: "-50px",
+                  left: "-40px",
+                  width: "180px",
+                  height: "180px",
+                  borderRadius: "9999px",
+                  background: "rgba(255,255,255,0.12)",
+                  filter: "blur(40px)",
+                  animation: "orbFloat2 10s ease-in-out infinite",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* header */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <h3 style={{ fontSize: "18px", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>{niche.title}</h3>
+                <span
+                  style={{
+                    display: "inline-block",
+                    marginTop: "6px",
+                    background: "rgba(255,255,255,0.15)",
+                    color: "white",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    padding: "3px 10px",
+                    borderRadius: "9999px",
+                  }}
+                >
+                  VA Specialization
+                </span>
+              </div>
+
+              {/* description */}
+              <p style={{ position: "relative", zIndex: 1, margin: 0, fontSize: "13px", lineHeight: 1.6, opacity: 0.9 }}>
+                {description}
+              </p>
+
+              {/* skills */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    opacity: 0.6,
+                    marginBottom: "8px",
+                    fontWeight: 700,
+                  }}
+                >
+                  What You'll Learn
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
+                  {skills.map((s) => (
+                    <li key={s} style={{ display: "flex", gap: "8px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5, opacity: 0.9 }}>
+                      <Check size={12} style={{ marginTop: "4px", flexShrink: 0 }} aria-hidden="true" />
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* stats row */}
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 0,
+                  textAlign: "center",
+                  marginTop: "auto",
+                }}
+              >
+                {[
+                  { Icon: BookOpen, n: "3", l: "Modules" },
+                  { Icon: GraduationCap, n: "9", l: "Lessons" },
+                  { Icon: Award, n: "1", l: "Certificate" },
+                ].map((s, i) => (
+                  <div
+                    key={s.l}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "2px",
+                      borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.20)",
+                      padding: "0 4px",
+                    }}
+                  >
+                    <s.Icon size={14} aria-hidden="true" />
+                    <span style={{ fontWeight: 800, fontSize: "16px", lineHeight: 1.1 }}>{s.n}</span>
+                    <span style={{ opacity: 0.6, fontSize: "10px" }}>{s.l}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); go(); }}
+                  className="active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
+                  style={{
+                    display: "inline-flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    background: "white",
+                    color: accent,
+                    fontWeight: 700,
+                    fontSize: "14px",
+                    height: "44px",
+                    borderRadius: "10px",
+                    border: 0,
+                    cursor: "pointer",
+                  }}
+                >
+                  Enroll Now <ArrowRight size={16} />
+                </button>
+                <span
+                  style={{
+                    marginTop: "8px",
+                    display: "inline-flex",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    color: "rgba(255,255,255,0.55)",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <RefreshCw size={12} aria-hidden="true" />
+                  Click to flip back
+                </span>
+              </div>
+            </div>
+          );
+        })()}
+
       </div>
     </div>
   );
