@@ -8,8 +8,12 @@ import {
   ClipboardCheck,
   FileCheck2,
   Play,
+  Plus,
   Search,
+  Trash2,
+  X,
 } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { StudentShell } from "@/components/StudentShell";
@@ -104,22 +108,85 @@ function lessonMetaCount(lessons: Lesson[], keys: string[]) {
   return lessons.reduce((sum, lesson) => sum + countFrom(lesson, keys), 0);
 }
 
+// ── To-do list (stored locally per browser — there's no backend endpoint for
+// this yet, so items won't sync across devices until one is added) ──
+type TodoItem = { id: string; text: string; done?: boolean };
+type TodoMap = Record<string, TodoItem[]>; // key: YYYY-MM-DD
+
+const TODO_STORAGE_KEY = "lhph_todos";
+
+function loadTodos(): TodoMap {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(TODO_STORAGE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveTodos(todos: TodoMap) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(todos));
+}
+
+function dateKey(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
+
+// ── Dashboard data cache so returning to /dashboard renders instantly with
+// last-known data instead of a full-screen spinner every single time; a
+// fresh copy is still fetched quietly in the background on every mount. ──
+type DashboardData = {
+  modules: Niche[];
+  progress: Record<string, boolean>;
+  thumbMap: Record<string, string>;
+  studentName: string;
+  photoUrl: string;
+  unread: number;
+  notifications: Notif[];
+};
+let dashboardCache: DashboardData | null = null;
+
 function DashboardPage() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!dashboardCache);
   const [error, setError] = useState("");
-  const [modules, setModules] = useState<Niche[]>([]);
-  const [progress, setProgress] = useState<Record<string, boolean>>({});
-  const [thumbMap, setThumbMap] = useState<Record<string, string>>({});
-  const [studentName, setStudentName] = useState("");
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [unread, setUnread] = useState(0);
-  const [notifications, setNotifications] = useState<Notif[]>([]);
+  const [modules, setModules] = useState<Niche[]>(dashboardCache?.modules || []);
+  const [progress, setProgress] = useState<Record<string, boolean>>(dashboardCache?.progress || {});
+  const [thumbMap, setThumbMap] = useState<Record<string, string>>(dashboardCache?.thumbMap || {});
+  const [studentName, setStudentName] = useState(dashboardCache?.studentName || "");
+  const [photoUrl, setPhotoUrl] = useState(dashboardCache?.photoUrl || "");
+  const [unread, setUnread] = useState(dashboardCache?.unread || 0);
+  const [notifications, setNotifications] = useState<Notif[]>(dashboardCache?.notifications || []);
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
   const [search, setSearch] = useState("");
+  const [todos, setTodos] = useState<TodoMap>(() => loadTodos());
+  const [activeDate, setActiveDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    saveTodos(todos);
+  }, [todos]);
+
+  function addTodo(date: Date, text: string) {
+    const key = dateKey(date);
+    const item: TodoItem = { id: `${Date.now()}`, text };
+    setTodos((prev) => ({ ...prev, [key]: [...(prev[key] || []), item] }));
+  }
+
+  function toggleTodo(key: string, id: string) {
+    setTodos((prev) => ({
+      ...prev,
+      [key]: (prev[key] || []).map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
+    }));
+  }
+
+  function removeTodo(key: string, id: string) {
+    setTodos((prev) => ({ ...prev, [key]: (prev[key] || []).filter((t) => t.id !== id) }));
+  }
 
   async function load() {
-    setLoading(true);
+    // Only block the whole page with a spinner if we have nothing cached yet.
+    if (!dashboardCache) setLoading(true);
     setError("");
     try {
       const token = getToken();
@@ -128,15 +195,25 @@ function DashboardPage() {
         gasCall("getNotifications", token),
         gasCall("getUserByTokenPublic", token),
       ]);
-      setModules(courseRes?.modules || []);
-      setProgress(courseRes?.progress || {});
-      setThumbMap(courseRes?.thumbnailMap || {});
-      setUnread(notifRes?.unread || 0);
-      setNotifications(notifRes?.items || []);
-      setStudentName(userRes?.user?.name || "Student");
-      setPhotoUrl(userRes?.user?.profilePhotoUrl || "");
+      const fresh: DashboardData = {
+        modules: courseRes?.modules || [],
+        progress: courseRes?.progress || {},
+        thumbMap: courseRes?.thumbnailMap || {},
+        unread: notifRes?.unread || 0,
+        notifications: notifRes?.items || [],
+        studentName: userRes?.user?.name || "Student",
+        photoUrl: userRes?.user?.profilePhotoUrl || "",
+      };
+      dashboardCache = fresh;
+      setModules(fresh.modules);
+      setProgress(fresh.progress);
+      setThumbMap(fresh.thumbMap);
+      setUnread(fresh.unread);
+      setNotifications(fresh.notifications);
+      setStudentName(fresh.studentName);
+      setPhotoUrl(fresh.photoUrl);
     } catch {
-      setError("Failed to load dashboard data.");
+      if (!dashboardCache) setError("Failed to load dashboard data.");
     } finally {
       setLoading(false);
     }
@@ -230,7 +307,7 @@ function DashboardPage() {
     if (!q) return rows;
     return rows.filter((r) => r.title.toLowerCase().includes(q));
   }, [rows, search]);
-  const upcoming = useMemo(() => buildUpcoming(notifications, rows), [notifications, rows]);
+  const upcoming = useMemo(() => buildUpcoming(notifications, rows, todos), [notifications, rows, todos]);
 
   function openLesson(lessonId: string, nicheTitle?: string) {
     navigate({
@@ -238,6 +315,15 @@ function DashboardPage() {
       params: { lessonId },
       state: { modules, niche: nicheTitle, tab: "courses" } as any,
     });
+  }
+
+  function handleUpcomingOpen(id: string) {
+    if (id.startsWith("todo::")) {
+      const [, key, todoId] = id.split("::");
+      toggleTodo(key, todoId);
+      return;
+    }
+    openLesson(id);
   }
 
   function resume(row: CourseRow | null = featured) {
@@ -307,40 +393,36 @@ function DashboardPage() {
             <p className="mt-1 text-xs font-semibold text-gray-400">
               A quick read on where you stand across every niche you're enrolled in.
             </p>
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[720px] border-collapse text-left">
-                <thead>
-                  <tr className="text-[11px] font-bold text-gray-300">
-                    <th className="w-8 px-2 py-3">#</th>
-                    <th className="px-2 py-3">Course Name</th>
-                    <th className="px-2 py-3">Progress</th>
-                    <th className="px-2 py-3">Lessons / Assignments / Tests</th>
-                    <th className="px-2 py-3 text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {filteredRows.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-2 py-10 text-center text-sm text-gray-400">
-                        No courses found.
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredRows.map((row, index) => (
-                      <ProgressReportRow key={row.id} index={index + 1} row={row} thumbMap={thumbMap} />
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+            {filteredRows.length === 0 ? (
+              <p className="mt-6 py-10 text-center text-sm text-gray-400">No courses found.</p>
+            ) : (
+              <ProgressBarChart rows={filteredRows} />
+            )}
           </section>
         </section>
 
         <aside className="space-y-6">
-          <CalendarWidget weekStart={weekStart} onPrev={() => setWeekStart(addDays(weekStart, -7))} onNext={() => setWeekStart(addDays(weekStart, 7))} />
-          <UpcomingWidget items={upcoming} onOpen={(id) => openLesson(id)} />
+          <CalendarWidget
+            weekStart={weekStart}
+            onPrev={() => setWeekStart(addDays(weekStart, -7))}
+            onNext={() => setWeekStart(addDays(weekStart, 7))}
+            todos={todos}
+            onDayClick={(day) => setActiveDate(day)}
+          />
+          <UpcomingWidget items={upcoming} onOpen={handleUpcomingOpen} />
         </aside>
       </div>
+
+      {activeDate && (
+        <DayTodoModal
+          date={activeDate}
+          items={todos[dateKey(activeDate)] || []}
+          onAdd={(text) => addTodo(activeDate, text)}
+          onToggle={(id) => toggleTodo(dateKey(activeDate), id)}
+          onRemove={(id) => removeTodo(dateKey(activeDate), id)}
+          onClose={() => setActiveDate(null)}
+        />
+      )}
     </StudentShell>
   );
 }
@@ -383,45 +465,35 @@ function MiniDonut({ pct }: { pct: number }) {
   );
 }
 
-function StatusBadge({ pct }: { pct: number }) {
-  if (pct >= 100) {
-    return <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">Completed</span>;
-  }
-  if (pct > 0) {
-    return <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600">In Progress</span>;
-  }
-  return <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500">Not Started</span>;
-}
-
-function ProgressReportRow({ index, row, thumbMap }: { index: number; row: CourseRow; thumbMap: Record<string, string> }) {
+function ProgressBarChart({ rows }: { rows: CourseRow[] }) {
+  const data = rows.map((row) => ({
+    name: row.title,
+    pct: row.pct,
+    fill: row.tint,
+    detail: `${row.completedLessons}/${row.lessonCount} lessons · ${row.completedAssignments}/${row.assignmentCount} assignments · ${row.completedTests}/${row.testCount} tests`,
+  }));
+  const height = Math.max(220, data.length * 54);
   return (
-    <tr className="text-sm">
-      <td className="px-2 py-4 text-xs font-bold text-gray-300">{index}</td>
-      <td className="px-2 py-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <CourseIcon row={row} thumbMap={thumbMap} size="sm" />
-          <span className="max-w-[240px] truncate font-bold text-gray-700">{row.title}</span>
-        </div>
-      </td>
-      <td className="px-2 py-4">
-        <div className="flex items-center gap-3">
-          <div className="h-1.5 w-36 overflow-hidden rounded-full bg-sky-100">
-            <div className="h-full rounded-full bg-purple-600" style={{ width: `${row.pct}%` }} />
-          </div>
-          <span className="text-xs font-bold text-gray-400">{row.pct}%</span>
-        </div>
-      </td>
-      <td className="px-2 py-4">
-        <div className="flex items-center gap-3">
-          <Meta icon={<BookOpen size={13} />} value={`${row.completedLessons}/${row.lessonCount}`} />
-          <Meta icon={<ClipboardCheck size={13} />} value={`${row.completedAssignments}/${row.assignmentCount}`} />
-          <Meta icon={<FileCheck2 size={13} />} value={`${row.completedTests}/${row.testCount}`} />
-        </div>
-      </td>
-      <td className="px-2 py-4 text-right">
-        <StatusBadge pct={row.pct} />
-      </td>
-    </tr>
+    <div className="mt-4" style={{ width: "100%", height }}>
+      <ResponsiveContainer>
+        <BarChart data={data} layout="vertical" margin={{ left: 8, right: 32, top: 8, bottom: 8 }}>
+          <CartesianGrid horizontal={false} stroke="#f3e8ff" />
+          <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+          <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 12, fontWeight: 700, fill: "#374151" }} axisLine={false} tickLine={false} />
+          <Tooltip
+            formatter={(_value: number, _key: string, entry: any) => [entry?.payload?.detail || "", "Progress"]}
+            labelFormatter={(label) => label}
+            contentStyle={{ borderRadius: 12, border: "1px solid #f3e8ff", fontSize: 12 }}
+          />
+          <Bar dataKey="pct" radius={[0, 8, 8, 0]} barSize={18}>
+            {data.map((d, i) => (
+              <Cell key={i} fill={d.fill} />
+            ))}
+            <LabelList dataKey="pct" position="right" formatter={(v: number) => `${v}%`} style={{ fontSize: 11, fontWeight: 700, fill: "#6b7280" }} />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -439,7 +511,19 @@ function addDays(date: Date, days: number) {
   return d;
 }
 
-function CalendarWidget({ weekStart, onPrev, onNext }: { weekStart: Date; onPrev: () => void; onNext: () => void }) {
+function CalendarWidget({
+  weekStart,
+  onPrev,
+  onNext,
+  todos,
+  onDayClick,
+}: {
+  weekStart: Date;
+  onPrev: () => void;
+  onNext: () => void;
+  todos: TodoMap;
+  onDayClick: (day: Date) => void;
+}) {
   const days = Array.from({ length: 35 }, (_, i) => addDays(weekStart, i));
   const today = new Date();
   const month = weekStart.toLocaleDateString(undefined, { month: "long", year: "numeric" });
@@ -457,16 +541,33 @@ function CalendarWidget({ weekStart, onPrev, onNext }: { weekStart: Date; onPrev
         </div>
       </div>
       <p className="mt-1 text-xs font-bold text-gray-300">{month}</p>
+      <p className="mt-1 text-[11px] font-semibold text-gray-300">Tap a date to add a to-do</p>
       <div className="mt-5 grid grid-cols-7 gap-y-4 text-center text-xs font-bold text-gray-400">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
           <span key={d}>{d}</span>
         ))}
         {days.map((day) => {
           const isToday = day.toDateString() === today.toDateString();
+          const hasTodos = (todos[dateKey(day)] || []).length > 0;
           return (
-            <span key={day.toISOString()} className={`mx-auto grid h-8 w-8 place-items-center rounded-full ${isToday ? "bg-purple-700 text-white" : "text-gray-400"}`}>
-              {day.getDate()}
-            </span>
+            <button
+              type="button"
+              key={day.toISOString()}
+              onClick={() => onDayClick(day)}
+              className="relative mx-auto grid h-8 w-8 place-items-center"
+              aria-label={`Add to-do for ${day.toLocaleDateString()}`}
+            >
+              <span
+                className={`grid h-8 w-8 place-items-center rounded-full transition-colors ${
+                  isToday ? "bg-purple-700 text-white" : "text-gray-400 hover:bg-purple-50 hover:text-purple-700"
+                }`}
+              >
+                {day.getDate()}
+              </span>
+              {hasTodos && (
+                <span className={`absolute bottom-0.5 h-1.5 w-1.5 rounded-full ${isToday ? "bg-white" : "bg-indigo-500"}`} />
+              )}
+            </button>
           );
         })}
       </div>
@@ -474,9 +575,99 @@ function CalendarWidget({ weekStart, onPrev, onNext }: { weekStart: Date; onPrev
   );
 }
 
+function DayTodoModal({
+  date,
+  items,
+  onAdd,
+  onToggle,
+  onRemove,
+  onClose,
+}: {
+  date: Date;
+  items: TodoItem[];
+  onAdd: (text: string) => void;
+  onToggle: (id: string) => void;
+  onRemove: (id: string) => void;
+  onClose: () => void;
+}) {
+  const [draft, setDraft] = useState("");
+
+  function submit() {
+    const text = draft.trim();
+    if (!text) return;
+    onAdd(text);
+    setDraft("");
+  }
+
+  return (
+    <div className="fixed inset-0 z-[9997] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-lg font-black text-gray-900">
+              {date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
+            </h3>
+            <p className="text-xs font-semibold text-gray-400">Add a to-do for this date</p>
+          </div>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600" aria-label="Close">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            placeholder="e.g. Finish Module 2 quiz"
+            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-purple-500"
+          />
+          <button type="button" onClick={submit} className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-purple-700 text-white hover:bg-purple-800" aria-label="Add to-do">
+            <Plus size={18} />
+          </button>
+        </div>
+
+        <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto">
+          {items.length === 0 ? (
+            <p className="py-4 text-center text-sm text-gray-400">No to-dos for this date yet.</p>
+          ) : (
+            items.map((item) => (
+              <li key={item.id} className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2">
+                <input type="checkbox" checked={!!item.done} onChange={() => onToggle(item.id)} className="h-4 w-4 accent-purple-700" />
+                <span className={`flex-1 text-sm font-medium ${item.done ? "text-gray-400 line-through" : "text-gray-700"}`}>{item.text}</span>
+                <button type="button" onClick={() => onRemove(item.id)} className="text-gray-300 hover:text-red-500" aria-label="Remove to-do">
+                  <Trash2 size={15} />
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 type UpcomingItem = { id: string; title: string; label: string; date: Date; tone: string };
 
-function buildUpcoming(notifications: Notif[], rows: CourseRow[]): UpcomingItem[] {
+function buildUpcoming(notifications: Notif[], rows: CourseRow[], todos: TodoMap): UpcomingItem[] {
+  const fromTodos = Object.entries(todos).flatMap(([key, items]) =>
+    items
+      .filter((item) => !item.done)
+      .map((item) => {
+        const date = parseDate(key);
+        if (!date) return null;
+        return {
+          id: `todo::${key}::${item.id}`,
+          title: item.text,
+          label: "To-do",
+          date,
+          tone: "bg-indigo-500",
+        } satisfies UpcomingItem;
+      })
+      .filter((item): item is UpcomingItem => Boolean(item)),
+  );
+
   const fromNotifications = notifications
     .map((n, index) => {
       const date = parseDate(n.createdAt || "");
@@ -508,7 +699,7 @@ function buildUpcoming(notifications: Notif[], rows: CourseRow[]): UpcomingItem[
       .filter((item): item is UpcomingItem => Boolean(item)),
   );
 
-  return [...fromLessons, ...fromNotifications]
+  return [...fromTodos, ...fromLessons, ...fromNotifications]
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(0, 5);
 }

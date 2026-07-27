@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { BookOpen, BriefcaseBusiness, CalendarDays, Headphones, Palette, ShoppingCart, Settings2, ShieldCheck, WalletCards, type LucideIcon } from "lucide-react";
+import { BookOpen, BriefcaseBusiness, CalendarDays, ChevronRight, Headphones, Palette, ShoppingCart, Settings2, ShieldCheck, WalletCards, type LucideIcon } from "lucide-react";
 import { gasCall } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { StudentShell } from "@/components/StudentShell";
