@@ -23,7 +23,7 @@ import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as PendingRouteImport } from './routes/pending'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
-import { Route as CoursesNicheIdRouteImport } from './routes/courses.$nicheId'
+import { Route as CoursesNicheIdRouteImport } from './routes/courses_.$nicheId'
 import { Route as LessonLessonIdRouteImport } from './routes/lesson.$lessonId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -97,9 +97,9 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesNicheIdRoute = CoursesNicheIdRouteImport.update({
-  id: '/$nicheId',
-  path: '/$nicheId',
-  getParentRoute: () => CoursesRoute,
+  id: '/courses/$nicheId',
+  path: '/courses/$nicheId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LessonLessonIdRoute = LessonLessonIdRouteImport.update({
   id: '/lesson/$lessonId',
@@ -111,7 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
-  '/courses': typeof CoursesRouteWithChildren
+  '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
@@ -129,7 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
-  '/courses': typeof CoursesRouteWithChildren
+  '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
@@ -148,7 +148,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
-  '/courses': typeof CoursesRouteWithChildren
+  '/courses': typeof CoursesRoute
   '/dashboard': typeof DashboardRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
@@ -223,7 +223,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CertificatesRoute: typeof CertificatesRoute
   ConfirmRoute: typeof ConfirmRoute
-  CoursesRoute: typeof CoursesRouteWithChildren
+  CoursesRoute: typeof CoursesRoute
   DashboardRoute: typeof DashboardRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRoute
@@ -234,6 +234,7 @@ export interface RootRouteChildren {
   PendingRoute: typeof PendingRoute
   SettingsRoute: typeof SettingsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  CoursesNicheIdRoute: typeof CoursesNicheIdRoute
   LessonLessonIdRoute: typeof LessonLessonIdRoute
 }
 
@@ -339,10 +340,10 @@ declare module '@tanstack/react-router' {
     }
     '/courses/$nicheId': {
       id: '/courses/$nicheId'
-      path: '/$nicheId'
+      path: '/courses/$nicheId'
       fullPath: '/courses/$nicheId'
       preLoaderRoute: typeof CoursesNicheIdRouteImport
-      parentRoute: typeof CoursesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/lesson/$lessonId': {
       id: '/lesson/$lessonId'
@@ -354,22 +355,11 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface CoursesRouteChildren {
-  CoursesNicheIdRoute: typeof CoursesNicheIdRoute
-}
-
-const CoursesRouteChildren: CoursesRouteChildren = {
-  CoursesNicheIdRoute: CoursesNicheIdRoute,
-}
-
-const CoursesRouteWithChildren =
-  CoursesRoute._addFileChildren(CoursesRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CertificatesRoute: CertificatesRoute,
   ConfirmRoute: ConfirmRoute,
-  CoursesRoute: CoursesRouteWithChildren,
+  CoursesRoute: CoursesRoute,
   DashboardRoute: DashboardRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRoute,
@@ -380,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   PendingRoute: PendingRoute,
   SettingsRoute: SettingsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  CoursesNicheIdRoute: CoursesNicheIdRoute,
   LessonLessonIdRoute: LessonLessonIdRoute,
 }
 export const routeTree = rootRouteImport
