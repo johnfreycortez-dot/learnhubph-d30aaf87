@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Award,
+  Bell,
   BookOpen,
   ChevronDown,
   HelpCircle,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import { clearToken } from "@/lib/api";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { useStudentIdentity } from "@/hooks/useStudentIdentity";
 
 type NavItem = { to: string; label: string; icon: ReactNode; match?: string[] };
 
@@ -29,6 +31,7 @@ export function StudentShell({
   children,
   studentName,
   photoUrl,
+  unread,
   title,
 }: {
   children: ReactNode;
@@ -42,6 +45,15 @@ export function StudentShell({
   const [confirmingLogout, setConfirmingLogout] = useState(false);
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const identity = useStudentIdentity();
+
+  // A page can pass its own studentName/photoUrl/unread (e.g. Dashboard,
+  // or Settings right after a save) to reflect changes instantly. Any page
+  // that doesn't pass these falls back to the shared identity hook, so
+  // every page shows the same real name/photo instead of a generic "Student".
+  const name = studentName ?? identity.name;
+  const photo = photoUrl ?? identity.photoUrl;
+  const unreadCount = unread ?? identity.unread;
 
   function logout() {
     clearToken();
@@ -52,7 +64,7 @@ export function StudentShell({
     return (item.match || []).some((m) => path === m || path.startsWith(m + "/"));
   }
 
-  const initials = (studentName || "Student")
+  const initials = (name || "Student")
     .split(" ")
     .map((p) => p[0])
     .filter(Boolean)
@@ -61,11 +73,11 @@ export function StudentShell({
     .toUpperCase();
 
   function Avatar() {
-    if (photoUrl) {
+    if (photo) {
       return (
         <img
-          src={photoUrl}
-          alt={studentName || "Profile photo"}
+          src={photo}
+          alt={name || "Profile photo"}
           className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full object-cover"
         />
       );
@@ -170,6 +182,16 @@ export function StudentShell({
               >
                 <MessageSquare size={18} />
               </Link>
+              <Link
+                to="/notifications"
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700"
+                aria-label="Notifications"
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+                )}
+              </Link>
               <div className="relative">
                 <button
                   type="button"
@@ -178,7 +200,7 @@ export function StudentShell({
                 >
                   <Avatar />
                   <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">
-                    {studentName || "Student"}
+                    {name || "Student"}
                   </span>
                   <ChevronDown size={16} className="hidden text-gray-400 sm:block" />
                 </button>
