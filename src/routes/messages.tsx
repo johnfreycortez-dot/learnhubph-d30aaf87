@@ -1,18 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { CheckCircle, MessageSquare, Send } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Clock, MessageSquare, Plus, Send, X } from "lucide-react";
 import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { StudentShell } from "@/components/StudentShell";
 import { Spinner } from "@/components/Spinner";
+import { useToast } from "@/components/Toast";
 
 export const Route = createFileRoute("/messages")({
   head: () => ({
     meta: [
       { title: "Messages — LearnHub PH" },
-      { name: "description", content: "Send messages to your instructor." },
+      { name: "description", content: "Send messages to your instructor and read replies." },
       { property: "og:title", content: "Messages — LearnHub PH" },
-      { property: "og:description", content: "Send messages to your instructor." },
+      { property: "og:description", content: "Send messages to your instructor and read replies." },
     ],
   }),
   component: () => (
@@ -22,40 +23,210 @@ export const Route = createFileRoute("/messages")({
   ),
 });
 
+interface SentMessage {
+  id: string;
+  subject: string;
+  body: string;
+  sentAt: string;
+}
+
+type Notif = { notifId: string; type: string; title: string; body: string; createdAt: string; read: boolean };
+
+const STORE_KEY = "lhph_messages";
+
+function loadMessages(): SentMessage[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STORE_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMessages(list: SentMessage[]) {
+  window.localStorage.setItem(STORE_KEY, JSON.stringify(list));
+}
+
+function fmt(d: string) {
+  const date = new Date(d);
+  return isNaN(date.getTime()) ? d : date.toLocaleString();
+}
+
 function MessagesPage() {
-  const [tab, setTab] = useState<"send" | "replies">("send");
+  const { showToast } = useToast();
+  const [messages, setMessages] = useState<SentMessage[]>([]);
+  const [replies, setReplies] = useState<Notif[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const list = loadMessages();
+    setMessages(list);
+    setSelectedId(list[0]?.id ?? null);
+    (async () => {
+      try {
+        const res = await gasCall("getNotifications", getToken());
+        if (res?.ok) setReplies((res.items || []).filter((i: Notif) => i.type === "reply"));
+      } catch {
+        /* ignore */
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const sorted = useMemo(
+    () => messages.slice().sort((a, b) => (a.sentAt < b.sentAt ? 1 : -1)),
+    [messages],
+  );
+
+  function replyFor(m: SentMessage) {
+    return replies.find((r) => (r.title || "").toLowerCase().includes(m.subject.toLowerCase()));
+  }
+
+  const selected = sorted.find((m) => m.id === selectedId) || null;
+
+  function onSent(msg: SentMessage) {
+    const next = [msg, ...messages];
+    setMessages(next);
+    saveMessages(next);
+    setSelectedId(msg.id);
+    setModalOpen(false);
+    showToast("Message sent! We'll reply to your email.", "success");
+  }
+
   return (
     <StudentShell>
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-2">
-          <MessageSquare size={24} className="text-purple-600" />
-          <h1 className="text-2xl font-extrabold">Messages</h1>
-        </div>
-        <div className="mt-4 flex gap-2 border-b border-gray-200">
-          {(["send", "replies"] as const).map((t) => (
+      <div className="rounded-2xl bg-white shadow-sm overflow-hidden flex flex-col lg:flex-row min-h-[520px]">
+        <div className="w-full lg:w-[320px] border-b lg:border-b-0 lg:border-r border-gray-100 flex-shrink-0">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100">
+            <h1 className="text-lg font-extrabold">Messages</h1>
             <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-4 py-2 text-sm font-semibold ${
-                tab === t ? "border-b-2 border-purple-600 text-purple-700" : "text-gray-500"
-              }`}
+              onClick={() => setModalOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-3 py-2"
             >
-              {t === "send" ? "Send Message" : "Replies"}
+              <Plus size={16} /> New Message
             </button>
-          ))}
+          </div>
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <Spinner />
+            </div>
+          ) : sorted.length === 0 ? (
+            <p className="p-4 text-sm text-gray-400">No messages yet</p>
+          ) : (
+            <ul className="max-h-[420px] overflow-y-auto">
+              {sorted.map((m) => {
+                const rep = replyFor(m);
+                const active = m.id === selectedId;
+                return (
+                  <li key={m.id}>
+                    <button
+                      onClick={() => setSelectedId(m.id)}
+                      className={`w-full text-left px-4 py-3 border-b border-gray-50 ${
+                        active ? "border-l-4 border-l-purple-600 bg-purple-50" : "hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="font-semibold text-sm text-gray-900 truncate">{m.subject}</span>
+                        <span className="text-[10px] text-gray-400 flex-shrink-0">
+                          {new Date(m.sentAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500 truncate">{m.body}</p>
+                      <span
+                        className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                          rep ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {rep ? "Replied" : "Awaiting Reply"}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
-        <div className="mt-6">{tab === "send" ? <SendForm /> : <RepliesInfo />}</div>
+
+        <div className="flex-1 p-6">
+          {!selected ? (
+            <div className="h-full flex flex-col items-center justify-center text-center py-16">
+              <MessageSquare size={48} className={sorted.length ? "text-gray-200" : "text-gray-300"} />
+              {sorted.length ? (
+                <p className="mt-3 text-sm text-gray-500">Select a message to view the thread</p>
+              ) : (
+                <>
+                  <p className="mt-3 text-sm font-semibold text-gray-600">No messages yet</p>
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="mt-3 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-5 py-2.5"
+                  >
+                    Send your first message
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">{selected.subject}</h2>
+              <p className="text-xs text-gray-400">{fmt(selected.sentAt)}</p>
+
+              <div className="mt-6 space-y-6">
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-gray-400 mb-1">You</span>
+                  <div className="bg-purple-600 text-white rounded-2xl rounded-tr-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
+                    {selected.body}
+                  </div>
+                </div>
+
+                {(() => {
+                  const rep = replyFor(selected);
+                  if (rep) {
+                    return (
+                      <div className="flex flex-col items-start">
+                        <span className="text-xs text-gray-400 mb-1">
+                          LearnHub PH Support · {fmt(rep.createdAt)}
+                        </span>
+                        <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
+                          {rep.body}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="mx-auto max-w-sm rounded-2xl bg-gray-50 border border-gray-100 p-5 text-center">
+                      <Clock size={20} className="text-amber-400 mx-auto" />
+                      <p className="mt-2 text-sm font-semibold text-gray-700">Waiting for a reply...</p>
+                      <p className="text-xs text-gray-500">We usually reply within 24 hours.</p>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {modalOpen && <NewMessageModal onClose={() => setModalOpen(false)} onSent={onSent} />}
     </StudentShell>
   );
 }
 
-function SendForm() {
+function NewMessageModal({
+  onClose,
+  onSent,
+}: {
+  onClose: () => void;
+  onSent: (m: SentMessage) => void;
+}) {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [sent, setSent] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,8 +234,11 @@ function SendForm() {
     setLoading(true);
     try {
       const res = await gasCall("sendMessage", getToken(), subject, body);
-      if (res.ok) setSent(true);
-      else setError(res.msg || "Failed to send message");
+      if (res?.ok) {
+        onSent({ id: Date.now().toString(), subject, body, sentAt: new Date().toISOString() });
+      } else {
+        setError(res?.msg || "Failed to send message");
+      }
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -72,67 +246,55 @@ function SendForm() {
     }
   }
 
-  if (sent) {
-    return (
-      <div className="rounded-2xl bg-green-50 border border-green-200 p-6 text-center">
-        <CheckCircle className="text-green-500 mx-auto" size={48} />
-        <p className="mt-3 font-semibold text-green-800">Message sent!</p>
-        <p className="mt-1 text-sm text-green-700">We'll reply to your registered email address.</p>
-        <button
-          onClick={() => {
-            setSent(false);
-            setSubject("");
-            setBody("");
-          }}
-          className="mt-4 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold px-5 py-2.5"
-        >
-          Send Another
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={submit} className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subject</label>
-        <input
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          required
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-500"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          required
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 min-h-[120px] outline-none focus:ring-2 focus:ring-purple-500"
-        />
-      </div>
-      {error && <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 text-sm">{error}</div>}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-70 text-white font-semibold px-5 py-2.5 inline-flex items-center justify-center gap-2"
-      >
-        {loading ? <Spinner size="sm" className="border-white" /> : <Send size={18} />} Send Message
-      </button>
-    </form>
-  );
-}
-
-function RepliesInfo() {
-  return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <MessageSquare size={24} className="text-purple-600" />
-      <h2 className="mt-3 text-lg font-bold">How Replies Work</h2>
-      <p className="mt-2 text-sm text-gray-600">
-        Admin replies are sent directly to your registered email address. You'll receive an email notification when John
-        Frey replies to your message.
-      </p>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+      <form onSubmit={submit} className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-bold text-gray-900">New Message</h3>
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-700" aria-label="Close">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="mt-4 space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Subject</label>
+            <input
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              required
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              required
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 min-h-[120px] outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          {error && (
+            <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 text-sm">{error}</div>
+          )}
+        </div>
+        <div className="mt-5 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2.5 text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="rounded-xl bg-purple-700 hover:bg-purple-800 disabled:opacity-70 text-white font-semibold px-4 py-2.5 text-sm inline-flex items-center gap-2"
+          >
+            {loading ? <Spinner size="sm" className="border-white" /> : <Send size={16} />} Send Message
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
