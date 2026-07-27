@@ -218,10 +218,10 @@
   html { scroll-behavior: auto; }
 }
 @keyframes learnhub-ph-glow {
-  0%, 100% { background-position: 0% 50%; filter: drop-shadow(0 0 4px #8b5cf6); }
-  25% { background-position: 35% 50%; filter: drop-shadow(0 0 7px #f4a261); }
-  50% { background-position: 70% 50%; filter: drop-shadow(0 0 7px #2dd4bf); }
-  75% { background-position: 100% 50%; filter: drop-shadow(0 0 7px #fb923c); }
+  0%, 100% { background-position: 0% 50%; text-shadow: 0 0 6px rgba(139, 92, 246, 0.55); }
+  25% { background-position: 35% 50%; text-shadow: 0 0 8px rgba(244, 162, 97, 0.55); }
+  50% { background-position: 70% 50%; text-shadow: 0 0 8px rgba(45, 212, 191, 0.55); }
+  75% { background-position: 100% 50%; text-shadow: 0 0 8px rgba(251, 146, 60, 0.55); }
 }
 
 .learnhub-ph-glow {
