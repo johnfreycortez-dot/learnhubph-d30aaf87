@@ -97,8 +97,6 @@ export function StudentShell({
             <p className="truncate text-lg font-black leading-none">
               LearnHub{" "}
               <span className="learnhub-ph-glow">PH</span>
-                PH
-              </span>
             </p>
             <p className="truncate text-[11px] font-semibold text-gray-400">Student LMS</p>
           </div>
