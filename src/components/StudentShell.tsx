@@ -3,7 +3,6 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Award,
   BookOpen,
-  Bell,
   ChevronDown,
   HelpCircle,
   LayoutDashboard,
@@ -30,7 +29,6 @@ export function StudentShell({
   children,
   studentName,
   photoUrl,
-  unread = 0,
   title,
 }: {
   children: ReactNode;
@@ -98,7 +96,7 @@ export function StudentShell({
           <div className="min-w-0">
             <p className="truncate text-lg font-black leading-none">
               LearnHub{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
+              <span className="learnhub-ph-glow">PH</span>
                 PH
               </span>
             </p>
@@ -175,16 +173,6 @@ export function StudentShell({
               >
                 <MessageSquare size={18} />
               </Link>
-              <Link
-                to="/notifications"
-                className="relative grid h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700"
-                aria-label="Notifications"
-              >
-                <Bell size={18} />
-                {unread > 0 && (
-                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
-                )}
-              </Link>
               <div className="relative">
                 <button
                   type="button"
@@ -207,11 +195,11 @@ export function StudentShell({
                     />
                     <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
                       <Link
-                        to="/settings"
+                        to="/notifications"
                         onClick={() => setMenuOpen(false)}
                         className="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700"
                       >
-                        Settings
+                        Notifications
                       </Link>
                       <button
                         type="button"

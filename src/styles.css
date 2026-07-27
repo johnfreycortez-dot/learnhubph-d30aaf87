@@ -217,4 +217,19 @@
   }
   html { scroll-behavior: auto; }
 }
+@keyframes learnhub-ph-glow {
+  0%, 100% { background-position: 0% 50%; filter: drop-shadow(0 0 4px #8b5cf6); }
+  25% { background-position: 35% 50%; filter: drop-shadow(0 0 7px #f4a261); }
+  50% { background-position: 70% 50%; filter: drop-shadow(0 0 7px #2dd4bf); }
+  75% { background-position: 100% 50%; filter: drop-shadow(0 0 7px #fb923c); }
+}
 
+.learnhub-ph-glow {
+  display: inline-block;
+  background: linear-gradient(90deg, #6d28d9, #8b5cf6, #0d7377, #f4a261, #7c3aed, #fb923c, #6d28d9);
+  background-size: 350% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: learnhub-ph-glow 5s ease-in-out infinite;
+}
