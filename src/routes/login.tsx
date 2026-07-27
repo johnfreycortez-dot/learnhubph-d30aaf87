@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ShieldCheck, X } from "lucide-react";
 import { gasCall, saveToken, getToken } from "@/lib/api";
 import { Spinner } from "@/components/Spinner";
+import { AdminPinEntry } from "@/components/AdminPinEntry";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -17,7 +18,9 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState<"signin" | "signup">("signin");
+  const [adminOpen, setAdminOpen] = useState(false);
 
   return (
     <div
@@ -45,7 +48,35 @@ function LoginPage() {
         </div>
 
         <div className="mt-6">{tab === "signin" ? <SignInForm /> : <SignUpForm />}</div>
+
+        <button
+          type="button"
+          onClick={() => setAdminOpen(true)}
+          className="mx-auto mt-6 flex items-center gap-1.5 text-xs font-semibold text-gray-400 transition-colors hover:text-purple-700"
+        >
+          <ShieldCheck size={14} /> Admin Access
+        </button>
       </div>
+
+      {adminOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setAdminOpen(false)}
+              className="absolute -right-2 -top-2 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-gray-600 shadow-lg hover:text-gray-900"
+              aria-label="Close admin PIN"
+            >
+              <X size={18} />
+            </button>
+            <AdminPinEntry
+              title="Admin Access"
+              subtitle="Enter your 6-digit PIN"
+              onSuccess={() => navigate({ to: "/admin/dashboard", replace: true })}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
