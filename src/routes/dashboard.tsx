@@ -707,7 +707,7 @@ function toneFor(type: string) {
   return "bg-purple-500";
 }
 
-function UpcomingWidget({ items }: { items: UpcomingItem[] }) {
+function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (id: string) => void }) {
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <h2 className="text-lg font-black">Upcoming</h2>
@@ -716,17 +716,23 @@ function UpcomingWidget({ items }: { items: UpcomingItem[] }) {
       ) : (
         <ul className="mt-4 divide-y divide-gray-50">
           {items.map((item) => (
-            <li key={item.id} className="grid grid-cols-[42px_minmax(0,1fr)] gap-3 py-3">
-              <div className="rounded-xl bg-gray-50 py-2 text-center">
-                <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
-                <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
-                <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
-                  <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
-                </p>
-              </div>
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(item.id)}
+                className="grid w-full grid-cols-[42px_minmax(0,1fr)] gap-3 rounded-xl py-3 text-left hover:bg-purple-50/60"
+              >
+                <div className="rounded-xl bg-gray-50 py-2 text-center">
+                  <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
+                  <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                    <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
+                  </p>
+                </div>
+              </button>
             </li>
           ))}
         </ul>
