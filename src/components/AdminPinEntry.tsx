@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle, Lock } from "lucide-react";
 import { gasCall } from "@/lib/api";
 
@@ -19,13 +19,15 @@ export function AdminPinEntry({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  useEffect(() => {
+    if (pin.length !== 6 || loading || success) return;
+    const timer = window.setTimeout(() => void submit(pin), 120);
+    return () => window.clearTimeout(timer);
+  }, [pin, loading, success]);
+
   function press(digit: string) {
     if (loading || success || pin.length >= 6) return;
-    const next = pin + digit;
-    setPin(next);
-    if (next.length === 6) {
-      window.setTimeout(() => void submit(next), 120);
-    }
+    setPin((current) => (current.length >= 6 ? current : current + digit));
   }
 
   function backspace() {
