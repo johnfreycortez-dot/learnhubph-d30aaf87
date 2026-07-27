@@ -59,12 +59,12 @@ function LoginPage() {
       </div>
 
       {adminOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[100] flex animate-in fade-in items-center justify-center bg-gray-950/70 p-4 backdrop-blur-md duration-200">
           <div className="relative">
             <button
               type="button"
               onClick={() => setAdminOpen(false)}
-              className="absolute -right-2 -top-2 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-gray-600 shadow-lg hover:text-gray-900"
+              className="absolute -right-3 -top-3 z-20 grid h-9 w-9 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-lg transition-colors hover:text-gray-900"
               aria-label="Close admin PIN"
             >
               <X size={18} />
