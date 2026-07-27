@@ -261,7 +261,7 @@ function DashboardPage() {
     navigate({
       to: "/lesson/$lessonId",
       params: { lessonId: row.firstOpenLesson.LessonID },
-      state: { modules, niche: row.title, tab: "courses" } as never,
+      state: { modules, niche: row.title, tab: "courses" } as any,
     });
   }
 
