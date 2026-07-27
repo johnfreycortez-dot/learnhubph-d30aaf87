@@ -17,7 +17,6 @@ import {
   Play,
   Search,
   Settings,
-  User,
   X,
 } from "lucide-react";
 import { clearToken, gasCall, getToken } from "@/lib/api";
