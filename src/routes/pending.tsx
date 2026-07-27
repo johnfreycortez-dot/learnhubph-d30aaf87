@@ -26,9 +26,13 @@ function PendingPage() {
   const [countdown, setCountdown] = useState(10);
   const [approved, setApproved] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [checking, setChecking] = useState(false);
+  const [flash, setFlash] = useState("");
   const intervalRef = useRef<number | null>(null);
 
   const check = useCallback(async () => {
+    setChecking(true);
+    setFlash("");
     try {
       const res = await gasCall("checkPaymentStatus", getToken());
       if (res.status === "approved") {
@@ -42,13 +46,19 @@ function PendingPage() {
         navigate({ to: "/login" });
         return true;
       }
+      setFlash("Still pending...");
+      setTimeout(() => setFlash(""), 2000);
     } catch {
-      /* ignore, keep polling */
+      setFlash("Couldn't check right now. Try again.");
+      setTimeout(() => setFlash(""), 2000);
+    } finally {
+      setChecking(false);
     }
     setCountdown(10);
     setProgress(0);
     return false;
   }, [navigate]);
+
 
   useEffect(() => {
     intervalRef.current = window.setInterval(() => {
