@@ -600,7 +600,7 @@ function Hero() {
             />
           </div>
           <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            🎓 <span>Now Learning: <span className="text-violet-700">{activeName}</span></span>
+            <GraduationCap className="h-4 w-4 text-violet-600" /> <span>Now Learning: <span className="text-violet-700">{activeName}</span></span>
           </div>
           <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed

@@ -97,8 +97,6 @@ export function StudentShell({
             <p className="truncate text-lg font-black leading-none">
               LearnHub{" "}
               <span className="learnhub-ph-glow">PH</span>
-                PH
-              </span>
             </p>
             <p className="truncate text-[11px] font-semibold text-gray-400">Student LMS</p>
           </div>
@@ -134,8 +132,7 @@ export function StudentShell({
 
         <div className="space-y-2 border-t border-gray-100 px-4 py-5">
           <Link
-            to="/help"
-            hash="faq"
+            to="/faq"
             onClick={() => setSidebarOpen(false)}
             className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700"
           >
