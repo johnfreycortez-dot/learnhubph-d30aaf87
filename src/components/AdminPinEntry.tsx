@@ -69,14 +69,14 @@ export function AdminPinEntry({
   }
 
   return (
-    <div className="relative w-full max-w-[272px] animate-in fade-in zoom-in-95 duration-200">
+    <div className="relative w-full max-w-[320px] animate-in fade-in zoom-in-95 duration-200">
       {/* ambient glow */}
       <div
         aria-hidden
-        className="absolute -inset-4 rounded-[30px] bg-gradient-to-br from-purple-600 via-fuchsia-500 to-indigo-600 opacity-50 blur-2xl"
+        className="absolute -inset-4 rounded-[34px] bg-gradient-to-br from-purple-600 via-fuchsia-500 to-indigo-600 opacity-50 blur-2xl"
       />
       <div
-        className="relative overflow-hidden rounded-[22px] border border-white/10 p-5 text-center"
+        className="relative overflow-hidden rounded-[26px] border border-white/10 px-8 pb-7 pt-7 text-center"
         style={{
           background: "linear-gradient(165deg, #2a1f4d 0%, #1b1436 45%, #100b22 100%)",
           boxShadow:
@@ -91,21 +91,21 @@ export function AdminPinEntry({
 
         <div className="relative">
           <div
-            className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white ring-1 ring-white/20"
+            className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white ring-1 ring-white/20"
             style={{ boxShadow: "0 8px 16px -4px rgba(139,92,246,0.6), inset 0 1px 0 rgba(255,255,255,0.35)" }}
           >
-            <ShieldCheck size={20} strokeWidth={2.25} />
+            <ShieldCheck size={22} strokeWidth={2.25} />
           </div>
           <h1 className="mt-3 text-base font-black tracking-tight text-white">{title}</h1>
           <p className="mt-0.5 text-[11px] font-semibold text-white/40">{subtitle}</p>
 
-          <div className={`mt-4 flex justify-center gap-1.5 ${shake ? "animate-shake" : ""}`}>
+          <div className={`mt-5 flex justify-center gap-2 ${shake ? "animate-shake" : ""}`}>
             {Array.from({ length: 6 }).map((_, i) => {
               const filled = i < pin.length;
               return (
                 <span
                   key={i}
-                  className={`h-2 w-2 rounded-full border transition-all duration-150 ${
+                  className={`h-2.5 w-2.5 rounded-full border transition-all duration-150 ${
                     success
                       ? "scale-110 border-green-400 bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.75)]"
                       : error
@@ -131,7 +131,7 @@ export function AdminPinEntry({
             )}
           </div>
 
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-5 grid grid-cols-3 justify-items-center gap-x-6 gap-y-4">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
               <KeypadButton key={n} onClick={() => press(String(n))} disabled={loading || success}>
                 {n}
@@ -142,11 +142,11 @@ export function AdminPinEntry({
               0
             </KeypadButton>
             <KeypadButton onClick={backspace} disabled={loading || success} aria-label="Backspace">
-              <Delete size={15} />
+              <Delete size={17} />
             </KeypadButton>
           </div>
 
-          <p className="mt-4 flex items-center justify-center gap-1 text-[9px] font-semibold text-white/25">
+          <p className="mt-6 flex items-center justify-center gap-1 text-[9px] font-semibold text-white/25">
             <ShieldCheck size={10} /> Secured admin session
           </p>
         </div>
