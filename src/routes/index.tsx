@@ -121,7 +121,7 @@ function CTAButton({
   return (
     <button
       type="button"
-      onClick={onClick ?? go}
+      onClick={onClick ?? goToLogin}
       aria-label={ariaLabel}
       className={`${base} ${styles} ${className}`}
     >
@@ -1211,7 +1211,7 @@ function Curriculum() {
             </div>
 
             <div className="mt-6">
-              <CTAButton>Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" /></CTAButton>
+              <CTAButton onClick={goToLogin}>Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" /></CTAButton>
             </div>
           </div>
         </div>
@@ -1322,7 +1322,7 @@ function Certificate() {
             Earn a shareable certificate for every niche you complete — perfect for LinkedIn and Upwork.
           </p>
           <div className="mt-6">
-            <CTAButton>Start earning yours <ArrowRight className="h-4 w-4" /></CTAButton>
+            <CTAButton onClick={goToLogin}>Start earning yours <ArrowRight className="h-4 w-4" /></CTAButton>
           </div>
         </div>
         <div className="reveal">
@@ -1584,7 +1584,7 @@ function FinalCTA() {
         <div className="mt-8">
           <button
             type="button"
-            onClick={go}
+            onClick={goToLogin}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-violet-700 px-8 py-4 text-base font-bold shadow-xl shadow-black/30 hover:bg-violet-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-300 transition-all"
           >
             Create Your Free Account <ArrowRight className="h-5 w-5" />
