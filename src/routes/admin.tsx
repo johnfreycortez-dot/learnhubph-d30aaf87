@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Lock } from "lucide-react";
+import { Lock, CheckCircle } from "lucide-react";
 import { gasCall } from "@/lib/api";
 
 export const Route = createFileRoute("/admin")({
@@ -22,9 +22,10 @@ function AdminLogin() {
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   function press(digit: string) {
-    if (loading || pin.length >= 6) return;
+    if (loading || success || pin.length >= 6) return;
     const next = pin + digit;
     setPin(next);
     if (next.length === 6) {
@@ -33,6 +34,7 @@ function AdminLogin() {
   }
 
   function backspace() {
+    if (success) return;
     setPin((p) => p.slice(0, -1));
   }
 
@@ -43,7 +45,8 @@ function AdminLogin() {
       const res = await gasCall("adminLogin", fullPin);
       if (res.ok) {
         sessionStorage.setItem("lhph_admin", "true");
-        navigate({ to: "/admin/dashboard" });
+        setSuccess(true);
+        setTimeout(() => navigate({ to: "/admin/dashboard" }), 800);
       } else {
         fail();
       }
@@ -75,14 +78,24 @@ function AdminLogin() {
           {Array.from({ length: 6 }).map((_, i) => (
             <span
               key={i}
-              className={`h-3.5 w-3.5 rounded-full ${
-                i < pin.length ? "bg-purple-500" : "border-2 border-gray-600"
+              className={`h-3.5 w-3.5 rounded-full transition-colors ${
+                success
+                  ? "bg-green-500"
+                  : i < pin.length
+                    ? "bg-purple-500"
+                    : "border-2 border-gray-600"
               }`}
             />
           ))}
         </div>
 
+        {success && (
+          <p className="mt-3 text-sm text-green-400 inline-flex items-center justify-center gap-1.5">
+            <CheckCircle size={16} className="text-green-400" /> PIN Correct — Redirecting...
+          </p>
+        )}
         {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+
 
         <div className="mt-6 grid grid-cols-3 gap-3">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (

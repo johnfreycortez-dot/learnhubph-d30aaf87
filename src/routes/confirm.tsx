@@ -39,7 +39,8 @@ function ConfirmPage() {
         if (res.ok) {
           if (res.user?.token) saveToken(res.user.token);
           setState("ok");
-          setTimeout(() => navigate({ to: "/payment" }), 1500);
+          setTimeout(() => navigate({ to: "/payment" }), 2000);
+
         } else {
           setState("fail");
         }
@@ -68,7 +69,9 @@ function ConfirmPage() {
           <>
             <CheckCircle className="text-green-500 mx-auto" size={64} />
             <h2 className="mt-3 text-xl font-bold text-gray-900">Email Confirmed!</h2>
-            <p className="mt-2 text-sm text-gray-600">Redirecting you to complete your payment...</p>
+            <p className="mt-2 text-sm text-gray-600">Your access token has been sent to your email.</p>
+            <p className="mt-1 text-xs text-gray-400">Redirecting you to complete your payment...</p>
+
           </>
         )}
         {state === "fail" && (

@@ -1059,7 +1059,7 @@ function FlipCard({ niche }: { niche: Niche }) {
               <div style={{ position: "relative", zIndex: 1 }}>
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); go(); }}
+                  onClick={(e) => { e.stopPropagation(); goToLogin(); }}
                   className="active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
                   style={{
                     display: "inline-flex",
