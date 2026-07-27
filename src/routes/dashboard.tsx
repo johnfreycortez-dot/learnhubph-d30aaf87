@@ -1,26 +1,18 @@
-import { createFileRoute, Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   AlertCircle,
-  Bell,
   BookOpen,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
   FileCheck2,
-  HelpCircle,
-  LayoutDashboard,
-  LogOut,
-  Menu,
-  MessageSquare,
   Play,
   Search,
-  Settings,
-  X,
 } from "lucide-react";
-import { clearToken, gasCall, getToken } from "@/lib/api";
+import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
+import { StudentShell } from "@/components/StudentShell";
 import { Spinner } from "@/components/Spinner";
 
 export const Route = createFileRoute("/dashboard")({
@@ -112,36 +104,19 @@ function lessonMetaCount(lessons: Lesson[], keys: string[]) {
   return lessons.reduce((sum, lesson) => sum + countFrom(lesson, keys), 0);
 }
 
-function initials(name: string) {
-  return (name || "Student")
-    .split(" ")
-    .map((p) => p[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
 function DashboardPage() {
   const navigate = useNavigate();
-  const loc = useLocation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [modules, setModules] = useState<Niche[]>([]);
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [thumbMap, setThumbMap] = useState<Record<string, string>>({});
   const [studentName, setStudentName] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [unread, setUnread] = useState(0);
   const [notifications, setNotifications] = useState<Notif[]>([]);
-  const [tab, setTab] = useState<"active" | "completed">("active");
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if ((loc.state as { tab?: string } | undefined)?.tab === "courses") setTab("active");
-  }, [loc.state]);
 
   async function load() {
     setLoading(true);
@@ -159,6 +134,7 @@ function DashboardPage() {
       setUnread(notifRes?.unread || 0);
       setNotifications(notifRes?.items || []);
       setStudentName(userRes?.user?.name || "Student");
+      setPhotoUrl(userRes?.user?.profilePhotoUrl || "");
     } catch {
       setError("Failed to load dashboard data.");
     } finally {
@@ -254,7 +230,6 @@ function DashboardPage() {
     if (!q) return rows;
     return rows.filter((r) => r.title.toLowerCase().includes(q));
   }, [rows, search]);
-  const visibleRows = filteredRows.filter((row) => (tab === "active" ? row.pct < 100 : row.pct >= 100));
   const upcoming = useMemo(() => buildUpcoming(notifications, rows), [notifications, rows]);
 
   function openLesson(lessonId: string, nicheTitle?: string) {
@@ -263,11 +238,6 @@ function DashboardPage() {
       params: { lessonId },
       state: { modules, niche: nicheTitle, tab: "courses" } as any,
     });
-  }
-
-  function logout() {
-    clearToken();
-    navigate({ to: "/" });
   }
 
   function resume(row: CourseRow | null = featured) {
@@ -305,54 +275,12 @@ function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f7fb] text-gray-950">
-      {mobileOpen && <button className="fixed inset-0 z-40 bg-gray-950/40 lg:hidden" onClick={() => setMobileOpen(false)} aria-label="Close menu" />}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[246px] flex-col border-r border-gray-100 bg-white shadow-sm transition-transform lg:translate-x-0 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-6">
-          <div className="flex min-w-0 items-center gap-2">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-purple-700 text-sm font-black text-white">LH</span>
-            <div className="min-w-0">
-              <p className="truncate text-lg font-black leading-none">LearnHub PH</p>
-              <p className="truncate text-[11px] font-semibold text-gray-400">Student LMS</p>
-            </div>
-          </div>
-          <button type="button" onClick={() => setMobileOpen(false)} className="lg:hidden" aria-label="Close sidebar">
-            <X size={18} />
-          </button>
-        </div>
-
-        <nav className="flex-1 space-y-2 px-4">
-          <SideLink to="/dashboard" active icon={<LayoutDashboard size={18} />} label="Dashboard" onNavigate={() => setMobileOpen(false)} />
-          <SideLink to="/dashboard" icon={<BookOpen size={18} />} label="Courses" onNavigate={() => { setMobileOpen(false); setTab("active"); }} />
-          <SideLink to="/certificates" icon={<FileCheck2 size={18} />} label="Chapter" onNavigate={() => setMobileOpen(false)} />
-          <SideLink to="/messages" icon={<HelpCircle size={18} />} label="Help" onNavigate={() => setMobileOpen(false)} />
-          <SideLink to="/notifications" icon={<Settings size={18} />} label="Settings" onNavigate={() => setMobileOpen(false)} />
-        </nav>
-
-        <div className="space-y-2 border-t border-gray-100 px-4 py-5">
-          <a href="/#faq" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700">
-            <HelpCircle size={18} /> FAQ
-          </a>
-          <button type="button" onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-red-50 hover:text-red-600">
-            <LogOut size={18} /> Logout
-          </button>
-        </div>
-      </aside>
-
-      <div className="lg:pl-[246px]">
-        <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
-          <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 lg:grid-cols-[220px_minmax(240px,1fr)_auto]">
-            <div className="flex min-w-0 items-center gap-3">
-              <button type="button" onClick={() => setMobileOpen(true)} className="grid h-10 w-10 place-items-center rounded-xl bg-gray-50 lg:hidden" aria-label="Open menu">
-                <Menu size={20} />
-              </button>
-              <h1 className="truncate text-xl font-black sm:text-2xl">Dashboard</h1>
-            </div>
-            <label className="mx-auto hidden w-full max-w-md items-center gap-2 rounded-2xl bg-gray-50 px-4 py-3 text-gray-400 md:flex">
+    <StudentShell studentName={studentName} photoUrl={photoUrl} unread={unread} title="Dashboard">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <section className="min-w-0 space-y-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div />
+            <label className="flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
               <Search size={18} className="shrink-0 text-purple-500" />
               <input
                 value={search}
@@ -361,168 +289,59 @@ function DashboardPage() {
                 placeholder="Search courses..."
               />
             </label>
-            <div className="flex shrink-0 items-center gap-3">
-              <Link to="/messages" className="hidden h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700 sm:grid" aria-label="Messages">
-                <MessageSquare size={18} />
-              </Link>
-              <Link to="/notifications" className="relative grid h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700" aria-label="Notifications">
-                <Bell size={18} />
-                {unread > 0 && <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />}
-              </Link>
-              <div className="relative">
-                <button type="button" onClick={() => setMenuOpen((v) => !v)} className="flex min-w-0 items-center gap-2 rounded-full p-1 hover:bg-gray-50">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-sm font-black text-purple-700">{initials(studentName)}</span>
-                  <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">{studentName || "Student"}</span>
-                  <ChevronDown size={16} className="hidden text-gray-400 sm:block" />
-                </button>
-                {menuOpen && (
-                  <>
-                    <button type="button" aria-label="Close menu" className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
-                      <Link to="/certificates" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700">My Certificates</Link>
-                      <Link to="/notifications" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700">Notifications</Link>
-                      <button type="button" onClick={() => { setMenuOpen(false); logout(); }} className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50">Logout</button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
           </div>
-        </header>
 
-        <main className="grid gap-6 p-4 sm:p-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:p-8">
-          <section className="min-w-0 space-y-6">
-            <FeaturedCourse row={featured} thumbMap={thumbMap} onResume={() => resume(featured)} />
+          <FeaturedCourse row={featured} thumbMap={thumbMap} onResume={() => resume(featured)} />
 
-            <section>
-              <h2 className="text-lg font-black">Status</h2>
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
-                <button type="button" onClick={() => { setTab("active"); setSearch(""); }} className="text-left">
-                  <StatusCard icon={<BookOpen size={20} />} title="Lessons" value={totals.completedLessons} total={totals.lessonCount} pct={totals.lessonPct} tone="bg-amber-50 text-orange-500" />
-                </button>
-                <Link to="/notifications" className="text-left">
-                  <StatusCard icon={<ClipboardCheck size={20} />} title="Assignments" value={totals.completedAssignments} total={totals.assignmentCount} pct={totals.assignmentPct} tone="bg-rose-50 text-rose-500" />
-                </Link>
-                <Link to="/certificates" className="text-left">
-                  <StatusCard icon={<FileCheck2 size={20} />} title="Tests" value={totals.completedTests} total={totals.testCount} pct={totals.testPct} tone="bg-emerald-50 text-emerald-500" />
-                </Link>
-              </div>
-            </section>
-
-            <section className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-                <h2 className="truncate text-lg font-black">My Courses</h2>
-                <div className="flex rounded-xl bg-gray-50 p-1 text-xs font-bold">
-                  <button type="button" onClick={() => setTab("active")} className={`rounded-lg px-3 py-2 ${tab === "active" ? "bg-purple-100 text-purple-700" : "text-gray-400"}`}>
-                    Active
-                  </button>
-                  <button type="button" onClick={() => setTab("completed")} className={`rounded-lg px-3 py-2 ${tab === "completed" ? "bg-purple-100 text-purple-700" : "text-gray-400"}`}>
-                    Completed
-                  </button>
-                </div>
-              </div>
-              <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[720px] border-collapse text-left">
-                  <thead>
-                    <tr className="text-[11px] font-bold text-gray-300">
-                      <th className="w-8 px-2 py-3">#</th>
-                      <th className="px-2 py-3">Course Name</th>
-                      <th className="px-2 py-3">Completed</th>
-                      <th className="px-2 py-3">Status</th>
-                      <th className="px-2 py-3 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {visibleRows.length === 0 ? (
-                      <tr>
-                        <td colSpan={5} className="px-2 py-10 text-center text-sm text-gray-400">
-                          No {tab} courses found.
-                        </td>
-                      </tr>
-                    ) : (
-                      visibleRows.map((row, index) => (
-                        <CourseTableRow key={row.id} index={index + 1} row={row} thumbMap={thumbMap} onResume={() => resume(row)} />
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+          <section>
+            <h2 className="text-lg font-black">Status</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-3">
+              <StatusCard icon={<BookOpen size={20} />} title="Lessons" value={totals.completedLessons} total={totals.lessonCount} pct={totals.lessonPct} tone="bg-amber-50 text-orange-500" />
+              <StatusCard icon={<ClipboardCheck size={20} />} title="Assignments" value={totals.completedAssignments} total={totals.assignmentCount} pct={totals.assignmentPct} tone="bg-rose-50 text-rose-500" />
+              <StatusCard icon={<FileCheck2 size={20} />} title="Tests" value={totals.completedTests} total={totals.testCount} pct={totals.testPct} tone="bg-emerald-50 text-emerald-500" />
+            </div>
           </section>
 
-          <aside className="space-y-6">
-            <CalendarWidget weekStart={weekStart} onPrev={() => setWeekStart(addDays(weekStart, -7))} onNext={() => setWeekStart(addDays(weekStart, 7))} />
-            <UpcomingWidget items={upcoming} onOpen={(id) => openLesson(id)} />
-          </aside>
-        </main>
+          <section className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
+            <h2 className="truncate text-lg font-black">My Progress</h2>
+            <p className="mt-1 text-xs font-semibold text-gray-400">
+              A quick read on where you stand across every niche you're enrolled in.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full min-w-[720px] border-collapse text-left">
+                <thead>
+                  <tr className="text-[11px] font-bold text-gray-300">
+                    <th className="w-8 px-2 py-3">#</th>
+                    <th className="px-2 py-3">Course Name</th>
+                    <th className="px-2 py-3">Progress</th>
+                    <th className="px-2 py-3">Lessons / Assignments / Tests</th>
+                    <th className="px-2 py-3 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {filteredRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-2 py-10 text-center text-sm text-gray-400">
+                        No courses found.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredRows.map((row, index) => (
+                      <ProgressReportRow key={row.id} index={index + 1} row={row} thumbMap={thumbMap} />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <aside className="space-y-6">
+          <CalendarWidget weekStart={weekStart} onPrev={() => setWeekStart(addDays(weekStart, -7))} onNext={() => setWeekStart(addDays(weekStart, 7))} />
+          <UpcomingWidget items={upcoming} onOpen={(id) => openLesson(id)} />
+        </aside>
       </div>
-    </div>
-  );
-}
-
-function SideLink({ to, active, icon, label, onNavigate }: { to: string; active?: boolean; icon: ReactNode; label: string; onNavigate?: () => void }) {
-  return (
-    <Link
-      to={to}
-      onClick={onNavigate}
-      className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold ${active ? "bg-purple-700 text-white shadow-lg shadow-purple-200" : "text-gray-500 hover:bg-gray-50 hover:text-purple-700"}`}
-    >
-      {icon} {label}
-    </Link>
-  );
-}
-
-function pct(done: number, total: number) {
-  return total ? Math.round((done / total) * 100) : 0;
-}
-
-function SideButton({ active, icon, label, onClick }: { active?: boolean; icon: ReactNode; label: string; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold ${active ? "bg-purple-700 text-white shadow-lg shadow-purple-200" : "text-gray-500 hover:bg-gray-50 hover:text-purple-700"}`}
-    >
-      {icon} {label}
-    </button>
-  );
-}
-
-function CourseIcon({ row, thumbMap, size = "md" }: { row: CourseRow; thumbMap: Record<string, string>; size?: "sm" | "md" | "lg" }) {
-  const firstThumb = row.lessons.map((lesson) => thumbMap[lesson.LessonID]).find(Boolean);
-  const src = thumbUrl(firstThumb);
-  const dims = size === "lg" ? "h-12 w-12" : size === "sm" ? "h-10 w-10" : "h-11 w-11";
-  return (
-    <span className={`grid ${dims} shrink-0 place-items-center overflow-hidden rounded-xl text-xs font-black text-white`} style={{ background: row.tint }}>
-      {src ? <img src={src} alt={`${row.title} thumbnail`} loading="lazy" className="h-full w-full object-cover" /> : row.title.slice(0, 2).toUpperCase()}
-    </span>
-  );
-}
-
-function FeaturedCourse({ row, thumbMap, onResume }: { row: CourseRow | null; thumbMap: Record<string, string>; onResume: () => void }) {
-  if (!row) {
-    return <div className="rounded-2xl bg-white p-5 text-sm text-gray-400 shadow-sm">No courses available yet.</div>;
-  }
-  return (
-    <section className="grid gap-4 rounded-2xl bg-white p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
-      <div className="flex min-w-0 items-center gap-4">
-        <CourseIcon row={row} thumbMap={thumbMap} size="lg" />
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-gray-700">{row.title}</p>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
-            <div className="h-full rounded-full bg-purple-600 transition-all" style={{ width: `${row.pct}%` }} />
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-wrap items-center gap-4 sm:justify-end">
-        <Meta icon={<BookOpen size={14} />} value={row.lessonCount} />
-        <Meta icon={<ClipboardCheck size={14} />} value={row.assignmentCount} />
-        <Meta icon={<FileCheck2 size={14} />} value={row.testCount} />
-        <button type="button" onClick={onResume} className="inline-flex items-center gap-2 rounded-xl bg-purple-50 px-4 py-2.5 text-sm font-bold text-purple-700 hover:bg-purple-100">
-          <Play size={16} /> Resume
-        </button>
-      </div>
-    </section>
+    </StudentShell>
   );
 }
 
@@ -564,7 +383,17 @@ function MiniDonut({ pct }: { pct: number }) {
   );
 }
 
-function CourseTableRow({ index, row, thumbMap, onResume }: { index: number; row: CourseRow; thumbMap: Record<string, string>; onResume: () => void }) {
+function StatusBadge({ pct }: { pct: number }) {
+  if (pct >= 100) {
+    return <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">Completed</span>;
+  }
+  if (pct > 0) {
+    return <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-600">In Progress</span>;
+  }
+  return <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500">Not Started</span>;
+}
+
+function ProgressReportRow({ index, row, thumbMap }: { index: number; row: CourseRow; thumbMap: Record<string, string> }) {
   return (
     <tr className="text-sm">
       <td className="px-2 py-4 text-xs font-bold text-gray-300">{index}</td>
@@ -584,15 +413,13 @@ function CourseTableRow({ index, row, thumbMap, onResume }: { index: number; row
       </td>
       <td className="px-2 py-4">
         <div className="flex items-center gap-3">
-          <Meta icon={<BookOpen size={13} />} value={row.lessonCount} />
-          <Meta icon={<ClipboardCheck size={13} />} value={row.assignmentCount} />
-          <Meta icon={<FileCheck2 size={13} />} value={row.testCount} />
+          <Meta icon={<BookOpen size={13} />} value={`${row.completedLessons}/${row.lessonCount}`} />
+          <Meta icon={<ClipboardCheck size={13} />} value={`${row.completedAssignments}/${row.assignmentCount}`} />
+          <Meta icon={<FileCheck2 size={13} />} value={`${row.completedTests}/${row.testCount}`} />
         </div>
       </td>
       <td className="px-2 py-4 text-right">
-        <button type="button" onClick={onResume} className="rounded-xl bg-gray-50 px-3 py-2 text-xs font-bold text-purple-700 hover:bg-purple-50">
-          Resume
-        </button>
+        <StatusBadge pct={row.pct} />
       </td>
     </tr>
   );
@@ -737,6 +564,48 @@ function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (id:
           ))}
         </ul>
       )}
+    </section>
+  );
+}
+
+function pct(done: number, total: number) {
+  return total ? Math.round((done / total) * 100) : 0;
+}
+
+function CourseIcon({ row, thumbMap, size = "md" }: { row: CourseRow; thumbMap: Record<string, string>; size?: "sm" | "md" | "lg" }) {
+  const firstThumb = row.lessons.map((lesson) => thumbMap[lesson.LessonID]).find(Boolean);
+  const src = thumbUrl(firstThumb);
+  const dims = size === "lg" ? "h-12 w-12" : size === "sm" ? "h-10 w-10" : "h-11 w-11";
+  return (
+    <span className={`grid ${dims} shrink-0 place-items-center overflow-hidden rounded-xl text-xs font-black text-white`} style={{ background: row.tint }}>
+      {src ? <img src={src} alt={`${row.title} thumbnail`} loading="lazy" className="h-full w-full object-cover" /> : row.title.slice(0, 2).toUpperCase()}
+    </span>
+  );
+}
+
+function FeaturedCourse({ row, thumbMap, onResume }: { row: CourseRow | null; thumbMap: Record<string, string>; onResume: () => void }) {
+  if (!row) {
+    return <div className="rounded-2xl bg-white p-5 text-sm text-gray-400 shadow-sm">No courses available yet.</div>;
+  }
+  return (
+    <section className="grid gap-4 rounded-2xl bg-white p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
+      <div className="flex min-w-0 items-center gap-4">
+        <CourseIcon row={row} thumbMap={thumbMap} size="lg" />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-bold text-gray-700">{row.title}</p>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
+            <div className="h-full rounded-full bg-purple-600 transition-all" style={{ width: `${row.pct}%` }} />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center gap-4 sm:justify-end">
+        <Meta icon={<BookOpen size={14} />} value={row.lessonCount} />
+        <Meta icon={<ClipboardCheck size={14} />} value={row.assignmentCount} />
+        <Meta icon={<FileCheck2 size={14} />} value={row.testCount} />
+        <button type="button" onClick={onResume} className="inline-flex items-center gap-2 rounded-xl bg-purple-50 px-4 py-2.5 text-sm font-bold text-purple-700 hover:bg-purple-100">
+          <Play size={16} /> Resume
+        </button>
+      </div>
     </section>
   );
 }
