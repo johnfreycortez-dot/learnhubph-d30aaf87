@@ -40,10 +40,12 @@ function LessonPage() {
     setError("");
     try {
       const res = await gasCall("getLesson", getToken(), lessonId);
-      if (!res?.ok) throw new Error(res?.msg || "Lesson unavailable");
+      console.info("[LearnHub PH] getLesson response", { lessonId, res });
+      if (res?.error) throw new Error(res.error);
+      if (!res?.lesson) throw new Error("Lesson unavailable. Please try again.");
       setLesson(res.lesson);
     } catch (e: any) {
-      setError(e?.message || "Failed to load lesson.");
+      setError(e?.message || "Couldn't reach the server. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
