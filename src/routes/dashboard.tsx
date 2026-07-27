@@ -130,7 +130,14 @@ function saveTodos(todos: TodoMap) {
 }
 
 function dateKey(d: Date) {
-  return d.toISOString().slice(0, 10);
+  // Build the key from LOCAL date parts, not toISOString() (which converts to
+  // UTC and rolls the date back a day for anyone ahead of UTC, e.g. Manila
+  // UTC+8). This was causing a to-do added for "Tue, Jul 28" to be stored
+  // and shown under "Jul 27" instead.
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 // ── Dashboard data cache so returning to /dashboard renders instantly with
@@ -530,7 +537,7 @@ function CalendarWidget({
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-        <h2 className="text-lg font-black">Status</h2>
+        <h2 className="text-lg font-black">Calendar</h2>
         <div className="flex items-center gap-1">
           <button type="button" onClick={onPrev} className="grid h-8 w-8 place-items-center rounded-full text-purple-600 hover:bg-purple-50" aria-label="Previous week">
             <ChevronLeft size={18} />
@@ -655,7 +662,7 @@ function buildUpcoming(notifications: Notif[], rows: CourseRow[], todos: TodoMap
     items
       .filter((item) => !item.done)
       .map((item) => {
-        const date = parseDate(key);
+        const date = parseDateKey(key);
         if (!date) return null;
         return {
           id: `todo::${key}::${item.id}`,
@@ -707,6 +714,15 @@ function buildUpcoming(notifications: Notif[], rows: CourseRow[], todos: TodoMap
 function parseDate(value: string) {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? null : date;
+}
+
+// Parses a "YYYY-MM-DD" key (as produced by dateKey) back into a LOCAL Date
+// at midnight. `new Date("YYYY-MM-DD")` parses as UTC midnight, which rolls
+// the day back for anyone west of UTC — this avoids that.
+function parseDateKey(key: string) {
+  const [y, m, d] = key.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
 }
 
 function labelFor(type: string) {
