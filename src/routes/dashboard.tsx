@@ -17,7 +17,6 @@ import {
   Play,
   Search,
   Settings,
-  User,
   X,
 } from "lucide-react";
 import { clearToken, gasCall, getToken } from "@/lib/api";
@@ -137,6 +136,8 @@ function DashboardPage() {
   const [tab, setTab] = useState<"active" | "completed">("active");
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if ((loc.state as { tab?: string } | undefined)?.tab === "courses") setTab("active");
@@ -248,8 +249,21 @@ function DashboardPage() {
   }, [rows]);
 
   const featured = rows.find((row) => row.pct < 100 && row.firstOpenLesson) || rows[0] || null;
-  const visibleRows = rows.filter((row) => (tab === "active" ? row.pct < 100 : row.pct >= 100));
+  const filteredRows = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter((r) => r.title.toLowerCase().includes(q));
+  }, [rows, search]);
+  const visibleRows = filteredRows.filter((row) => (tab === "active" ? row.pct < 100 : row.pct >= 100));
   const upcoming = useMemo(() => buildUpcoming(notifications, rows), [notifications, rows]);
+
+  function openLesson(lessonId: string, nicheTitle?: string) {
+    navigate({
+      to: "/lesson/$lessonId",
+      params: { lessonId },
+      state: { modules, niche: nicheTitle, tab: "courses" } as any,
+    });
+  }
 
   function logout() {
     clearToken();
@@ -312,20 +326,16 @@ function DashboardPage() {
         </div>
 
         <nav className="flex-1 space-y-2 px-4">
-          <SideButton active icon={<LayoutDashboard size={18} />} label="Dashboard" onClick={() => setTab("active")} />
-          <SideButton icon={<BookOpen size={18} />} label="Courses" onClick={() => setTab("active")} />
-          <SideButton icon={<FileCheck2 size={18} />} label="Chapter" onClick={() => setTab("active")} />
-          <Link to="/messages" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700">
-            <HelpCircle size={18} /> Help
-          </Link>
-          <Link to="/notifications" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700">
-            <Settings size={18} /> Settings
-          </Link>
+          <SideLink to="/dashboard" active icon={<LayoutDashboard size={18} />} label="Dashboard" onNavigate={() => setMobileOpen(false)} />
+          <SideLink to="/dashboard" icon={<BookOpen size={18} />} label="Courses" onNavigate={() => { setMobileOpen(false); setTab("active"); }} />
+          <SideLink to="/certificates" icon={<FileCheck2 size={18} />} label="Chapter" onNavigate={() => setMobileOpen(false)} />
+          <SideLink to="/messages" icon={<HelpCircle size={18} />} label="Help" onNavigate={() => setMobileOpen(false)} />
+          <SideLink to="/notifications" icon={<Settings size={18} />} label="Settings" onNavigate={() => setMobileOpen(false)} />
         </nav>
 
         <div className="space-y-2 border-t border-gray-100 px-4 py-5">
           <a href="/#faq" className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700">
-            <MessageSquare size={18} /> FAQ
+            <HelpCircle size={18} /> FAQ
           </a>
           <button type="button" onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-red-50 hover:text-red-600">
             <LogOut size={18} /> Logout
@@ -344,7 +354,12 @@ function DashboardPage() {
             </div>
             <label className="mx-auto hidden w-full max-w-md items-center gap-2 rounded-2xl bg-gray-50 px-4 py-3 text-gray-400 md:flex">
               <Search size={18} className="shrink-0 text-purple-500" />
-              <input className="w-full bg-transparent text-sm outline-none placeholder:text-gray-400" placeholder="Search here..." />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                placeholder="Search courses..."
+              />
             </label>
             <div className="flex shrink-0 items-center gap-3">
               <Link to="/messages" className="hidden h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700 sm:grid" aria-label="Messages">
@@ -354,10 +369,22 @@ function DashboardPage() {
                 <Bell size={18} />
                 {unread > 0 && <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />}
               </Link>
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-sm font-black text-purple-700">{initials(studentName)}</span>
-                <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">{studentName || "Student"}</span>
-                <ChevronDown size={16} className="hidden text-gray-400 sm:block" />
+              <div className="relative">
+                <button type="button" onClick={() => setMenuOpen((v) => !v)} className="flex min-w-0 items-center gap-2 rounded-full p-1 hover:bg-gray-50">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-sm font-black text-purple-700">{initials(studentName)}</span>
+                  <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">{studentName || "Student"}</span>
+                  <ChevronDown size={16} className="hidden text-gray-400 sm:block" />
+                </button>
+                {menuOpen && (
+                  <>
+                    <button type="button" aria-label="Close menu" className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                    <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+                      <Link to="/certificates" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700">My Certificates</Link>
+                      <Link to="/notifications" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700">Notifications</Link>
+                      <button type="button" onClick={() => { setMenuOpen(false); logout(); }} className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50">Logout</button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -370,30 +397,15 @@ function DashboardPage() {
             <section>
               <h2 className="text-lg font-black">Status</h2>
               <div className="mt-4 grid gap-4 md:grid-cols-3">
-                <StatusCard
-                  icon={<BookOpen size={20} />}
-                  title="Lessons"
-                  value={totals.completedLessons}
-                  total={totals.lessonCount}
-                  pct={totals.lessonPct}
-                  tone="bg-amber-50 text-orange-500"
-                />
-                <StatusCard
-                  icon={<ClipboardCheck size={20} />}
-                  title="Assignments"
-                  value={totals.completedAssignments}
-                  total={totals.assignmentCount}
-                  pct={totals.assignmentPct}
-                  tone="bg-rose-50 text-rose-500"
-                />
-                <StatusCard
-                  icon={<FileCheck2 size={20} />}
-                  title="Tests"
-                  value={totals.completedTests}
-                  total={totals.testCount}
-                  pct={totals.testPct}
-                  tone="bg-emerald-50 text-emerald-500"
-                />
+                <button type="button" onClick={() => { setTab("active"); setSearch(""); }} className="text-left">
+                  <StatusCard icon={<BookOpen size={20} />} title="Lessons" value={totals.completedLessons} total={totals.lessonCount} pct={totals.lessonPct} tone="bg-amber-50 text-orange-500" />
+                </button>
+                <Link to="/notifications" className="text-left">
+                  <StatusCard icon={<ClipboardCheck size={20} />} title="Assignments" value={totals.completedAssignments} total={totals.assignmentCount} pct={totals.assignmentPct} tone="bg-rose-50 text-rose-500" />
+                </Link>
+                <Link to="/certificates" className="text-left">
+                  <StatusCard icon={<FileCheck2 size={20} />} title="Tests" value={totals.completedTests} total={totals.testCount} pct={totals.testPct} tone="bg-emerald-50 text-emerald-500" />
+                </Link>
               </div>
             </section>
 
@@ -440,11 +452,23 @@ function DashboardPage() {
 
           <aside className="space-y-6">
             <CalendarWidget weekStart={weekStart} onPrev={() => setWeekStart(addDays(weekStart, -7))} onNext={() => setWeekStart(addDays(weekStart, 7))} />
-            <UpcomingWidget items={upcoming} />
+            <UpcomingWidget items={upcoming} onOpen={(id) => openLesson(id)} />
           </aside>
         </main>
       </div>
     </div>
+  );
+}
+
+function SideLink({ to, active, icon, label, onNavigate }: { to: string; active?: boolean; icon: ReactNode; label: string; onNavigate?: () => void }) {
+  return (
+    <Link
+      to={to}
+      onClick={onNavigate}
+      className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold ${active ? "bg-purple-700 text-white shadow-lg shadow-purple-200" : "text-gray-500 hover:bg-gray-50 hover:text-purple-700"}`}
+    >
+      {icon} {label}
+    </Link>
   );
 }
 
@@ -683,7 +707,7 @@ function toneFor(type: string) {
   return "bg-purple-500";
 }
 
-function UpcomingWidget({ items }: { items: UpcomingItem[] }) {
+function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (id: string) => void }) {
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <h2 className="text-lg font-black">Upcoming</h2>
@@ -692,17 +716,23 @@ function UpcomingWidget({ items }: { items: UpcomingItem[] }) {
       ) : (
         <ul className="mt-4 divide-y divide-gray-50">
           {items.map((item) => (
-            <li key={item.id} className="grid grid-cols-[42px_minmax(0,1fr)] gap-3 py-3">
-              <div className="rounded-xl bg-gray-50 py-2 text-center">
-                <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
-                <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
-                <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
-                  <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
-                </p>
-              </div>
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(item.id)}
+                className="grid w-full grid-cols-[42px_minmax(0,1fr)] gap-3 rounded-xl py-3 text-left hover:bg-purple-50/60"
+              >
+                <div className="rounded-xl bg-gray-50 py-2 text-center">
+                  <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
+                  <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                    <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
+                  </p>
+                </div>
+              </button>
             </li>
           ))}
         </ul>

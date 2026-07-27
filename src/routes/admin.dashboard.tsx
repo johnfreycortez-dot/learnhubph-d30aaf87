@@ -47,8 +47,8 @@ function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
 
   function logout() {
-    sessionStorage.removeItem("lhph_admin");
-    navigate({ to: "/" });
+    if (typeof window !== "undefined") window.sessionStorage.removeItem("lhph_admin");
+    navigate({ to: "/login" });
   }
 
   return (
