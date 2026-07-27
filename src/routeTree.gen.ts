@@ -14,6 +14,7 @@ import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfirmRouteImport } from './routes/confirm'
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -44,6 +45,11 @@ const MessagesRoute = MessagesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConfirmRoute = ConfirmRouteImport.update({
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -95,6 +102,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -109,6 +117,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/certificates': typeof CertificatesRoute
   '/confirm': typeof ConfirmRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/certificates'
     | '/confirm'
+    | '/dashboard'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/certificates'
     | '/confirm'
+    | '/dashboard'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/certificates'
     | '/confirm'
+    | '/dashboard'
     | '/login'
     | '/messages'
     | '/notifications'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CertificatesRoute: typeof CertificatesRoute
   ConfirmRoute: typeof ConfirmRoute
+  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/confirm': {
@@ -269,6 +289,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   CertificatesRoute: CertificatesRoute,
   ConfirmRoute: ConfirmRoute,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
