@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, AlertCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle, Lock } from "lucide-react";
 import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { Spinner } from "@/components/Spinner";
@@ -30,6 +30,7 @@ function LessonPage() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [locked, setLocked] = useState(false);
   const [lesson, setLesson] = useState<any>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
@@ -38,9 +39,15 @@ function LessonPage() {
   async function load() {
     setLoading(true);
     setError("");
+    setLocked(false);
     try {
       const res = await gasCall("getLesson", getToken(), lessonId);
       console.info("[LearnHub PH] getLesson response", { lessonId, res });
+      if (res?.locked) {
+        setLocked(true);
+        setError(res.error || "Complete the previous lesson first.");
+        return;
+      }
       if (res?.error) throw new Error(res.error);
       if (!res?.lesson) throw new Error("Lesson unavailable. Please try again.");
       setLesson(res.lesson);
@@ -77,6 +84,21 @@ function LessonPage() {
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
   }, [lessonId, showToast]);
+
+  if (locked) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center">
+        <Lock className="text-gray-400" size={48} />
+        <p className="mt-3 max-w-sm text-gray-700">{error}</p>
+        <button
+          onClick={() => navigate({ to: "/courses" })}
+          className="mt-3 rounded-xl bg-purple-700 hover:bg-purple-800 px-5 py-2.5 text-sm font-semibold text-white"
+        >
+          Back to Courses
+        </button>
+      </div>
+    );
+  }
 
   if (error) {
     return (
