@@ -111,14 +111,27 @@ function PendingPage() {
           />
         </div>
 
-        {!approved && (
-          <button
-            onClick={check}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl border-2 border-purple-600 text-purple-700 hover:bg-purple-50 font-semibold px-5 py-2.5"
-          >
-            <RefreshCw size={18} /> Check Now
-          </button>
+        {flash && !approved && (
+          <p className="mt-3 text-sm font-semibold text-amber-600">{flash}</p>
         )}
+
+        {!approved && (
+          <div className="mt-6 flex flex-col items-center gap-2">
+            <button
+              onClick={() => check()}
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-purple-600 text-purple-700 hover:bg-purple-50 font-semibold px-5 py-2.5"
+            >
+              {checking ? <Spinner size="sm" /> : <RefreshCw size={18} />} Check Now
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs text-gray-400 hover:text-gray-600 underline"
+            >
+              Already confirmed your email? Click here to refresh
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
