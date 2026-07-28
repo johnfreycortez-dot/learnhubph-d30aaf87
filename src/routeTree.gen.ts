@@ -22,6 +22,8 @@ import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PaymentRouteImport } from './routes/payment'
 import { Route as PendingRouteImport } from './routes/pending'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TourRouteImport } from './routes/tour'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as CoursesNicheIdRouteImport } from './routes/courses_.$nicheId'
 import { Route as LessonLessonIdRouteImport } from './routes/lesson.$lessonId'
@@ -91,13 +93,23 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TourRoute = TourRouteImport.update({
+  id: '/tour',
+  path: '/tour',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesNicheIdRoute = CoursesNicheIdRouteImport.update({
-  id: '/courses/$nicheId',
+  id: '/courses_/$nicheId',
   path: '/courses/$nicheId',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -121,6 +133,8 @@ export interface FileRoutesByFullPath {
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/courses/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
@@ -139,6 +153,8 @@ export interface FileRoutesByTo {
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/courses/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
@@ -158,8 +174,10 @@ export interface FileRoutesById {
   '/payment': typeof PaymentRoute
   '/pending': typeof PendingRoute
   '/settings': typeof SettingsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/courses/$nicheId': typeof CoursesNicheIdRoute
+  '/courses_/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
 export interface FileRouteTypes {
@@ -178,6 +196,8 @@ export interface FileRouteTypes {
     | '/payment'
     | '/pending'
     | '/settings'
+    | '/sitemap.xml'
+    | '/tour'
     | '/admin/dashboard'
     | '/courses/$nicheId'
     | '/lesson/$lessonId'
@@ -196,6 +216,8 @@ export interface FileRouteTypes {
     | '/payment'
     | '/pending'
     | '/settings'
+    | '/sitemap.xml'
+    | '/tour'
     | '/admin/dashboard'
     | '/courses/$nicheId'
     | '/lesson/$lessonId'
@@ -214,8 +236,10 @@ export interface FileRouteTypes {
     | '/payment'
     | '/pending'
     | '/settings'
+    | '/sitemap.xml'
+    | '/tour'
     | '/admin/dashboard'
-    | '/courses/$nicheId'
+    | '/courses_/$nicheId'
     | '/lesson/$lessonId'
   fileRoutesById: FileRoutesById
 }
@@ -233,6 +257,8 @@ export interface RootRouteChildren {
   PaymentRoute: typeof PaymentRoute
   PendingRoute: typeof PendingRoute
   SettingsRoute: typeof SettingsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TourRoute: typeof TourRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   CoursesNicheIdRoute: typeof CoursesNicheIdRoute
   LessonLessonIdRoute: typeof LessonLessonIdRoute
@@ -331,6 +357,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tour': {
+      id: '/tour'
+      path: '/tour'
+      fullPath: '/tour'
+      preLoaderRoute: typeof TourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -338,8 +378,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/courses/$nicheId': {
-      id: '/courses/$nicheId'
+    '/courses_/$nicheId': {
+      id: '/courses_/$nicheId'
       path: '/courses/$nicheId'
       fullPath: '/courses/$nicheId'
       preLoaderRoute: typeof CoursesNicheIdRouteImport
@@ -369,6 +409,8 @@ const rootRouteChildren: RootRouteChildren = {
   PaymentRoute: PaymentRoute,
   PendingRoute: PendingRoute,
   SettingsRoute: SettingsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TourRoute: TourRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   CoursesNicheIdRoute: CoursesNicheIdRoute,
   LessonLessonIdRoute: LessonLessonIdRoute,

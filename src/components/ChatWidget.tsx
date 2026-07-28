@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, Send, X, Sparkles, Headphones, Loader2, MessageSquareText } from "lucide-react";
+import { MessageCircle, Send, X, Sparkles, Headphones, Loader2, MessageSquareText, Mail } from "lucide-react";
 import { gasCall, getToken } from "@/lib/api";
 import { isLiveSupportOpen } from "@/lib/businessHours";
 
@@ -128,16 +128,21 @@ const MAX_TYPE_MS = 1800; // cap so long answers don't take forever to appear
 let nextId = 1;
 
 // ---- Live support ----------------------------------------------------------
-// "off"     — normal FAQ chat, no live session in play.
-// "waiting" — requestLiveSupport succeeded, session is "pending" server-side.
-// "active"  — an admin accepted the session; two-way chat is live (polling).
-// "closed"  — the admin ended the conversation; one-time notice, then back to "off".
-type LiveSupportPhase = "off" | "waiting" | "active" | "closed";
+// "off"         — normal FAQ chat, no live session in play.
+// "waiting"     — requestLiveSupport succeeded, session is "pending" server-side.
+// "active"      — an admin accepted the session; two-way chat is live (polling).
+// "closed"      — the admin ended the conversation; one-time notice, then back to "off".
+// "unavailable" — admin clicked "I am Busy" on this request, or 2 minutes
+//                 passed with nobody accepting it; one-time notice, then off.
+type LiveSupportPhase = "off" | "waiting" | "active" | "closed" | "unavailable";
 type LiveMessage = { sender: "student" | "admin"; body: string; sentAt: string };
 
 const LIVE_SUPPORT_STORAGE_KEY = "lhph_live_support_session";
 const WAITING_POLL_MS = 4000;
 const ACTIVE_POLL_MS = 3000;
+// If nobody accepts a pending request within this window, stop waiting and
+// show the "no live support available" message instead of spinning forever.
+const WAITING_TIMEOUT_MS = 2 * 60 * 1000;
 
 function readStoredSessionId(): string | null {
   if (typeof window === "undefined") return null;
@@ -197,6 +202,9 @@ export function ChatWidget() {
           else if (res.status === "closed") {
             setLivePhase("closed");
             persistSessionId(null);
+          } else if (res.status === "declined") {
+            setLivePhase("unavailable");
+            persistSessionId(null);
           } else {
             setLivePhase("waiting");
           }
@@ -230,6 +238,9 @@ export function ChatWidget() {
           else if (res.status === "closed") {
             setLivePhase("closed");
             persistSessionId(null);
+          } else if (res.status === "declined") {
+            setLivePhase("unavailable");
+            persistSessionId(null);
           }
         }
       } catch {
@@ -245,6 +256,22 @@ export function ChatWidget() {
       clearInterval(id);
     };
   }, [open, liveSessionId, livePhase]);
+
+  // 2-minute "nobody's picking this up" timeout. Starts counting the moment
+  // a session enters "waiting" and is cleared the moment it leaves that
+  // phase for any reason (accepted, declined, closed, widget reset). This is
+  // a client-side fallback only — it changes what THIS student sees, but
+  // doesn't remove the request from the admin's pending list server-side.
+  // Ideally the backend also expires pending sessions after 2 minutes so
+  // stale requests don't pile up in the admin panel.
+  useEffect(() => {
+    if (livePhase !== "waiting") return;
+    const timer = window.setTimeout(() => {
+      setLivePhase((current) => (current === "waiting" ? "unavailable" : current));
+      persistSessionId(null);
+    }, WAITING_TIMEOUT_MS);
+    return () => window.clearTimeout(timer);
+  }, [livePhase, liveSessionId]);
 
   useEffect(() => {
     liveListRef.current?.scrollTo({ top: liveListRef.current.scrollHeight, behavior: "smooth" });
@@ -443,7 +470,7 @@ export function ChatWidget() {
                 the FAQ bot. Collapses into a status line once a session
                 exists. */}
             <div className="mt-2.5 border-t border-white/10 pt-2.5">
-              {livePhase === "off" || livePhase === "closed" ? (
+              {livePhase === "off" || livePhase === "closed" || livePhase === "unavailable" ? (
                 <button
                   type="button"
                   onClick={() => handleTalkToHuman()}
@@ -581,6 +608,40 @@ export function ChatWidget() {
                 type="button"
                 onClick={backToFaq}
                 className="mt-1 rounded-full bg-purple-700 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-purple-800"
+              >
+                Back to FAQ
+              </button>
+            </div>
+          )}
+
+          {livePhase === "unavailable" && (
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-gray-50 px-6 text-center">
+              <div className="grid h-14 w-14 place-items-center rounded-full bg-amber-50 text-amber-600">
+                <Headphones size={24} />
+              </div>
+              <p className="text-sm font-bold text-gray-800">No live support available at the moment.</p>
+              <p className="text-xs font-medium text-gray-400">
+                Please send us a message via email, or tap the message icon at the top right of your dashboard.
+              </p>
+              <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+                <a
+                  href="mailto:johnfreycortez@gmail.com"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-bold text-gray-700 transition-colors hover:bg-gray-100"
+                >
+                  <Mail size={13} /> Email us
+                </a>
+                <Link
+                  to="/messages"
+                  onClick={backToFaq}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-purple-700 px-3.5 py-1.5 text-xs font-bold text-white transition-colors hover:bg-purple-800"
+                >
+                  <MessageSquareText size={14} /> Go to Messages
+                </Link>
+              </div>
+              <button
+                type="button"
+                onClick={backToFaq}
+                className="mt-1 text-xs font-bold text-gray-400 underline hover:text-gray-600"
               >
                 Back to FAQ
               </button>

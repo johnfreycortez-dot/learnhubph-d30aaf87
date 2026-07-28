@@ -22,6 +22,9 @@ const go = () => {
 const goToLogin = () => {
   window.location.href = "/login";
 };
+const goToTour = () => {
+  window.location.href = "/tour";
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -176,6 +179,17 @@ function Nav() {
           ))}
         </nav>
         <div className="flex items-center gap-2 justify-self-end">
+          <button
+            type="button"
+            onClick={goToTour}
+            className={`hidden sm:inline-flex items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-semibold transition-all active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 ${
+              scrolled
+                ? "border-violet-300 text-violet-700 hover:bg-violet-50"
+                : "border-white/40 text-white hover:bg-white/10"
+            }`}
+          >
+            <RouteIcon className="h-4 w-4" /> Tour Me
+          </button>
           <button
             type="button"
             onClick={goToLogin}
@@ -564,6 +578,13 @@ function Hero() {
             <CTAButton className="!px-6 !py-3.5 !text-base" onClick={goToLogin}>
               Get Started <ArrowRight className="h-5 w-5" />
             </CTAButton>
+            <button
+              type="button"
+              onClick={goToTour}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition"
+            >
+              <RouteIcon className="h-4 w-4" /> Tour Me
+            </button>
             <a
               href="#curriculum"
               className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/5 backdrop-blur px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/15 transition"

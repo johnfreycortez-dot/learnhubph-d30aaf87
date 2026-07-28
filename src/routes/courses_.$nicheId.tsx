@@ -16,7 +16,7 @@ function thumbUrl(id?: string) {
   return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w200` : null;
 }
 
-export const Route = createFileRoute("/courses/$nicheId")({
+export const Route = createFileRoute("/courses_/$nicheId")({
   loader: async ({ params }) => {
     const niches: NicheRow[] = (await gasCall("getNiches").catch(() => [])) || [];
     const nicheRow = niches.find((n) => n.NicheID === params.nicheId);

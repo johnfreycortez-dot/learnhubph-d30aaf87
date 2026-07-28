@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Headphones, MessageCircleMore, Send } from "lucide-react";
+import { Headphones, MessageCircleMore, Send, UserX } from "lucide-react";
 import { gasCall } from "@/lib/api";
 import { Drawer } from "@/components/Drawer";
 import { ConfirmModal } from "@/components/ConfirmModal";
@@ -30,6 +30,7 @@ export default function LiveSupportTab() {
   const active = q.data?.active || [];
 
   const [accepting, setAccepting] = useState<string | null>(null);
+  const [declining, setDeclining] = useState<string | null>(null);
   const [openThread, setOpenThread] = useState<LiveSupportRow | null>(null);
 
   async function accept(sessionId: string) {
@@ -46,6 +47,27 @@ export default function LiveSupportTab() {
       showToast("Something went wrong.", "error");
     } finally {
       setAccepting(null);
+    }
+  }
+
+  // "I am Busy" — declines a single pending request. The student sees this
+  // as "no live support available" right away, instead of waiting out the
+  // 2-minute auto-timeout. Backend action: adminDeclineLiveSupport(sessionId)
+  // should set that session's status to "declined".
+  async function decline(sessionId: string) {
+    setDeclining(sessionId);
+    try {
+      const res = await gasCall("adminDeclineLiveSupport", sessionId);
+      if (res.ok) {
+        showToast("Marked this request as unavailable.", "info");
+        q.reload();
+      } else {
+        showToast(res.msg || "Failed to update request.", "error");
+      }
+    } catch {
+      showToast("Something went wrong.", "error");
+    } finally {
+      setDeclining(null);
     }
   }
 
@@ -84,13 +106,22 @@ export default function LiveSupportTab() {
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => accept(r.sessionId)}
-                      disabled={accepting === r.sessionId}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-purple-700 px-4 py-2 text-xs font-bold text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-60"
-                    >
-                      <Headphones size={14} /> {accepting === r.sessionId ? "Accepting…" : "Accept"}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => decline(r.sessionId)}
+                        disabled={accepting === r.sessionId || declining === r.sessionId}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-600 shadow-sm transition-colors hover:bg-gray-50 disabled:opacity-60"
+                      >
+                        <UserX size={14} /> {declining === r.sessionId ? "Updating…" : "I am Busy"}
+                      </button>
+                      <button
+                        onClick={() => accept(r.sessionId)}
+                        disabled={accepting === r.sessionId || declining === r.sessionId}
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-purple-700 px-4 py-2 text-xs font-bold text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-60"
+                      >
+                        <Headphones size={14} /> {accepting === r.sessionId ? "Accepting…" : "Accept"}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
