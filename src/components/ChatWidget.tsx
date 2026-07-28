@@ -109,7 +109,10 @@ function findBestMatch(message: string, kb: FaqEntry[]): FaqEntry | null {
 }
 
 // ---- Widget ---------------------------------------------------------------
-type ChatMessage = { id: number; role: "bot" | "user"; content: ReactNode };
+type ChatMessage = { id: number; role: "bot" | "user"; content: ReactNode; typing?: boolean };
+
+const FALLBACK_TEXT =
+  "I'm not sure about that — please contact LearnHub PH for help: johnfreycortez@gmail.com";
 
 const FALLBACK_MESSAGE: ReactNode = (
   <>
@@ -119,6 +122,15 @@ const FALLBACK_MESSAGE: ReactNode = (
     </a>
   </>
 );
+
+// Two-stage "alive" effect: a brief bouncing-dots "thinking" pause, then the
+// reply is revealed character-by-character like it's being typed live.
+// Tune these if it feels too slow/fast — MIN/MAX_THINK_MS is randomized so
+// every reply doesn't pause for an identical amount of time.
+const MIN_THINK_MS = 500;
+const MAX_THINK_MS = 1100;
+const TYPE_MS_PER_CHAR = 16;
+const MAX_TYPE_MS = 1800; // cap so long answers don't take forever to appear
 
 let nextId = 1;
 
@@ -134,9 +146,15 @@ export function ChatWidget() {
   const [input, setInput] = useState("");
   const [kbLoading, setKbLoading] = useState(false);
   const [kbError, setKbError] = useState(false);
-  const [thinking, setThinking] = useState(false);
+  // "thinking" = dots bubble showing, before we've committed to a reply.
+  // "typing" = a reply bubble exists and is being revealed char-by-char.
+  const [phase, setPhase] = useState<"idle" | "thinking" | "typing">("idle");
   const listRef = useRef<HTMLDivElement>(null);
   const kbRef = useRef<FaqEntry[] | null>(kbCache);
+  const mountedRef = useRef(true);
+  useEffect(() => () => { mountedRef.current = false; }, []);
+
+  const busy = phase !== "idle";
 
   // Load the knowledge base once, the first time the widget is opened.
   useEffect(() => {
@@ -153,41 +171,59 @@ export function ChatWidget() {
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, thinking]);
+  }, [messages, phase]);
 
-  function pushMessage(role: ChatMessage["role"], content: ReactNode) {
-    setMessages((prev) => [...prev, { id: nextId++, role, content }]);
+  function pushMessage(role: ChatMessage["role"], content: ReactNode, typing = false) {
+    const id = nextId++;
+    setMessages((prev) => [...prev, { id, role, content, typing }]);
+    return id;
+  }
+
+  // Reveals `text` into the message with the given id, a chunk of characters
+  // at a time, then swaps in `finalContent` once fully revealed (so links —
+  // like the mailto in the fallback — become clickable only at the end).
+  async function typeOutMessage(id: number, text: string, finalContent: ReactNode) {
+    const totalMs = Math.min(text.length * TYPE_MS_PER_CHAR, MAX_TYPE_MS);
+    const stepMs = Math.max(12, totalMs / Math.max(text.length, 1));
+    for (let i = 1; i <= text.length; i++) {
+      if (!mountedRef.current) return;
+      await new Promise((r) => setTimeout(r, stepMs));
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text.slice(0, i) } : m)));
+    }
+    if (!mountedRef.current) return;
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: finalContent, typing: false } : m)));
   }
 
   async function handleSend(e?: React.FormEvent) {
     e?.preventDefault();
     const question = input.trim();
-    if (!question || thinking) return;
+    if (!question || busy) return;
     setInput("");
     pushMessage("user", question);
-    setThinking(true);
+    setPhase("thinking");
 
-    // Small delay so the reply doesn't feel like it's just teleporting in —
-    // matching itself is instant since it's all client-side.
-    await new Promise((r) => setTimeout(r, 350));
+    // Brief "reading the question" pause before the bot starts replying.
+    const thinkMs = MIN_THINK_MS + Math.random() * (MAX_THINK_MS - MIN_THINK_MS);
+    await new Promise((r) => setTimeout(r, thinkMs));
+    if (!mountedRef.current) return;
 
     const kb = kbRef.current || [];
-    if (kbError && kb.length === 0) {
-      pushMessage("bot", FALLBACK_MESSAGE);
-      setThinking(false);
-      return;
-    }
+    const noKb = kbError && kb.length === 0;
+    const match = noKb ? null : findBestMatch(question, kb);
 
-    const match = findBestMatch(question, kb);
-    if (match) {
-      pushMessage("bot", match.answer);
-    } else {
-      pushMessage("bot", FALLBACK_MESSAGE);
+    if (!match && !noKb) {
       // Fire-and-forget — don't block the UI on this, and the backend
       // already fails silently if it can't resolve the token to an email.
       void gasCall("logUnmatchedQuestion", question, getToken()).catch(() => {});
     }
-    setThinking(false);
+
+    const answerText = match ? match.answer : FALLBACK_TEXT;
+    const finalContent = match ? match.answer : FALLBACK_MESSAGE;
+
+    setPhase("typing");
+    const id = pushMessage("bot", "", true);
+    await typeOutMessage(id, answerText, finalContent);
+    if (mountedRef.current) setPhase("idle");
   }
 
   return (
@@ -225,10 +261,13 @@ export function ChatWidget() {
                   }`}
                 >
                   {m.content}
+                  {m.typing && (
+                    <span className="ml-0.5 inline-block h-3.5 w-[2px] animate-pulse bg-purple-400 align-middle" />
+                  )}
                 </div>
               </div>
             ))}
-            {(thinking || kbLoading) && (
+            {(phase === "thinking" || kbLoading) && (
               <div className="flex justify-start">
                 <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm border border-gray-100 bg-white px-3.5 py-3 shadow-sm">
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-300 [animation-delay:-0.3s]" />
@@ -249,7 +288,7 @@ export function ChatWidget() {
             />
             <button
               type="submit"
-              disabled={!input.trim() || thinking}
+              disabled={!input.trim() || busy}
               aria-label="Send"
               className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-700 text-white transition-colors hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
