@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { AlertCircle, Search } from "lucide-react";
 import { Spinner } from "@/components/Spinner";
 import { useGasQuery } from "@/hooks/useGasQuery";
+import type { UseQueryOptions } from "@tanstack/react-query";
 
 /**
  * Same {data, loading, error, reload} shape the old local `useAsync` hook
@@ -11,9 +12,16 @@ import { useGasQuery } from "@/hooks/useGasQuery";
  * read "adminGetStats" and now share one request), automatic retries on a
  * flaky connection, and background refetch instead of a fresh network call
  * on every mount.
+ *
+ * `options` passes straight through to react-query — e.g. pass
+ * `{ refetchInterval: 5000 }` for a tab that needs to poll (Live Support).
  */
-export function useAdminQuery<T = any>(action: string, params: any[] = []) {
-  const q = useGasQuery<T>(action, params);
+export function useAdminQuery<T = any>(
+  action: string,
+  params: any[] = [],
+  options?: Omit<UseQueryOptions<T>, "queryKey" | "queryFn">,
+) {
+  const q = useGasQuery<T>(action, params, options);
   return {
     data: (q.data ?? null) as T | null,
     loading: q.isLoading,

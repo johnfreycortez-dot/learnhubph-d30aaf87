@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { lazy, Suspense, useState, type ReactNode } from "react";
 import {
   LayoutDashboard, Clock, Users, TrendingUp, Award, MessageSquare, BookOpen, Settings,
-  LogOut, Menu, Bell, ChevronDown, ShieldCheck, X,
+  LogOut, Menu, Bell, ChevronDown, ShieldCheck, X, Headphones,
 } from "lucide-react";
 import { clearAdminToken } from "@/lib/api";
 import { AdminGuard } from "@/components/AdminGuard";
@@ -20,6 +20,7 @@ const StudentsTab = lazy(() => import("@/components/admin/StudentsTab"));
 const ProgressTab = lazy(() => import("@/components/admin/ProgressTab"));
 const CertsTab = lazy(() => import("@/components/admin/CertsTab"));
 const MessagesTab = lazy(() => import("@/components/admin/MessagesTab"));
+const LiveSupportTab = lazy(() => import("@/components/admin/LiveSupportTab"));
 const CoursesTab = lazy(() => import("@/components/admin/CoursesTab"));
 const SettingsTab = lazy(() => import("@/components/admin/SettingsTab"));
 
@@ -40,7 +41,7 @@ export const Route = createFileRoute("/admin/dashboard")({
   ),
 });
 
-type Tab = "overview" | "pending" | "students" | "progress" | "certs" | "messages" | "courses" | "settings";
+type Tab = "overview" | "pending" | "students" | "progress" | "certs" | "messages" | "livesupport" | "courses" | "settings";
 
 type NavItem = { key: Tab; label: string; icon: ReactNode };
 type NavGroup = { label: string; items: NavItem[] };
@@ -63,6 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
     label: "Content",
     items: [
       { key: "messages", label: "Messages", icon: <MessageSquare size={18} /> },
+      { key: "livesupport", label: "Live Support", icon: <Headphones size={18} /> },
       { key: "courses", label: "Courses", icon: <BookOpen size={18} /> },
     ],
   },
@@ -276,6 +278,7 @@ function AdminDashboard() {
             {tab === "progress" && <ProgressTab />}
             {tab === "certs" && <CertsTab />}
             {tab === "messages" && <MessagesTab />}
+            {tab === "livesupport" && <LiveSupportTab />}
             {tab === "courses" && <CoursesTab />}
             {tab === "settings" && <SettingsTab />}
           </Suspense>
