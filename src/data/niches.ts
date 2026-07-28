@@ -21,7 +21,7 @@ export type Niche = {
   modules: { title: string; lessons: string[] }[];
 };
 
-export const NICHES: Niche[] = [
+const NICHES: Niche[] = [
   {
     title: "Social Media Manager",
     short: "Manage social accounts, create content, and grow audiences for clients worldwide.",
