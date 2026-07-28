@@ -16,7 +16,7 @@ function thumbUrl(id?: string) {
   return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w200` : null;
 }
 
-export const Route = createFileRoute("/courses/$nicheId")({
+export const Route = createFileRoute("/courses_/$nicheId")({
   loader: async ({ params }) => {
     const niches: NicheRow[] = (await gasCall("getNiches").catch(() => [])) || [];
     const nicheRow = niches.find((n) => n.NicheID === params.nicheId);
@@ -195,8 +195,8 @@ function CourseDetail() {
                 !search.trim() || lesson.Title?.toLowerCase().includes(search.trim().toLowerCase()),
               ),
             }))
-            .filter(({ lessons }) => lessons.length > 0)
-            .map(({ module, index, lessons }) => (
+            .filter(({ lessons }: { lessons: any[] }) => lessons.length > 0)
+            .map(({ module, index, lessons }: { module: any; index: number; lessons: any[] }) => (
             <section key={module.ModuleID} className="rounded-2xl bg-white p-5 shadow-sm">
               <h3 className="font-black">Module {index + 1}: {module.Title}</h3>
               <div className="mt-3 divide-y">
