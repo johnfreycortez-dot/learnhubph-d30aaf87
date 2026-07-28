@@ -4,29 +4,40 @@ import {
   Award,
   Bell,
   BookOpen,
+  BriefcaseBusiness,
+  CalendarDays,
   Camera,
+  CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Circle,
   ClipboardCheck,
   Compass,
   Download,
   FileCheck2,
+  Headphones,
   HelpCircle,
   LayoutDashboard,
   Lock,
   LogOut,
   Menu,
   MessageSquare,
+  Palette,
+  Play,
+  PlayCircle,
   Plus,
   Save,
   Search,
   Send,
   Settings,
-  Sparkles,
+  Settings2,
+  ShieldCheck,
+  ShoppingCart,
   Trash2,
-  TrendingUp,
+  WalletCards,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import {
   Bar,
@@ -104,15 +115,29 @@ const NICHE_TINT = [
   "#4a2080",
 ];
 
+// Same category icon per niche, in the same order, as the live /courses page.
+const NICHE_ICONS: LucideIcon[] = [
+  CalendarDays,
+  BriefcaseBusiness,
+  ShieldCheck,
+  Palette,
+  WalletCards,
+  ShoppingCart,
+  Settings2,
+  Headphones,
+  CalendarDays,
+];
+
+function nicheIcon(index: number): LucideIcon {
+  return NICHE_ICONS[index % NICHE_ICONS.length] || BookOpen;
+}
+
 const FAKE_NAME = "Juan Dela Cruz";
 const FAKE_EMAIL = "juan.delacruz@example.com";
 const TOTAL_LESSONS = NICHES.reduce(
   (sum, n) => sum + n.modules.reduce((s, m) => s + m.lessons.length, 0),
   0,
 );
-const FAKE_COMPLETED_LESSONS = 8;
-const FAKE_CERTIFICATES = 1;
-const FAKE_OVERALL_PCT = Math.round((FAKE_COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
 
 const FAKE_NOTIFICATIONS = [
   {
@@ -203,7 +228,7 @@ function TourPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [view, setView] = useState<ViewKey>("dashboard");
-  const [expanded, setExpanded] = useState<number | null>(0);
+  const [coursesIndex, setCoursesIndex] = useState<number | null>(null);
   const [lockedModalOpen, setLockedModalOpen] = useState(false);
   const [lockedTitle, setLockedTitle] = useState("");
   const [notifs, setNotifs] = useState(FAKE_NOTIFICATIONS);
@@ -412,16 +437,25 @@ function TourPage() {
         <main className="p-4 sm:p-6 lg:p-8">
           {view === "dashboard" && (
             <DashboardView
-              expanded={expanded}
-              setExpanded={setExpanded}
               onLockedLesson={openLocked}
               weekStart={weekStart}
               setWeekStart={setWeekStart}
               todos={todos}
               onDayClick={setActiveDate}
+              notifs={notifs}
+              onOpenCourses={(index) => {
+                setCoursesIndex(index);
+                goToView("courses");
+              }}
             />
           )}
-          {view === "courses" && <CoursesView onLockedLesson={openLocked} />}
+          {view === "courses" && (
+            <CoursesView
+              onLockedLesson={openLocked}
+              activeIndex={coursesIndex}
+              onSelectIndex={setCoursesIndex}
+            />
+          )}
           {view === "certificates" && <CertificatesView onLockedCertificate={openLocked} />}
           {view === "settings" && <SettingsView onLockedAction={openLocked} />}
           {view === "messages" && <MessagesView onLockedSend={openLocked} />}
@@ -500,103 +534,110 @@ function TourPage() {
 
 /* ------------------------- Dashboard view ------------------------- */
 
+type DashRow = {
+  title: string;
+  index: number;
+  pct: number;
+  lessonCount: number;
+  completedLessons: number;
+  tint: string;
+};
+
 function DashboardView({
-  expanded,
-  setExpanded,
   onLockedLesson,
   weekStart,
   setWeekStart,
   todos,
   onDayClick,
+  onOpenCourses,
+  notifs,
 }: {
-  expanded: number | null;
-  setExpanded: (fn: (cur: number | null) => number | null) => void;
   onLockedLesson: (title: string) => void;
   weekStart: Date;
   setWeekStart: (d: Date) => void;
   todos: TodoMap;
   onDayClick: (d: Date) => void;
+  onOpenCourses: (index: number) => void;
+  notifs: typeof FAKE_NOTIFICATIONS;
 }) {
   const [search, setSearch] = useState("");
-  const filteredNiches = NICHES.filter((n) => n.title.toLowerCase().includes(search.toLowerCase()));
 
-  const rows = NICHES.map((n, i) => ({
-    name: n.title,
-    pct: fakeNichePct(i),
-    fill: NICHE_TINT[i % NICHE_TINT.length],
-  }));
+  const rows: DashRow[] = NICHES.map((n, i) => {
+    const lessonCount = n.modules.reduce((s, m) => s + m.lessons.length, 0);
+    const pct = fakeNichePct(i);
+    return {
+      title: n.title,
+      index: i,
+      pct,
+      lessonCount,
+      completedLessons: Math.round((pct / 100) * lessonCount),
+      tint: NICHE_TINT[i % NICHE_TINT.length],
+    };
+  });
+
+  const totals = rows.reduce(
+    (acc, r) => ({
+      lessonCount: acc.lessonCount + r.lessonCount,
+      completedLessons: acc.completedLessons + r.completedLessons,
+    }),
+    { lessonCount: 0, completedLessons: 0 },
+  );
+  const lessonPct = totals.lessonCount ? Math.round((totals.completedLessons / totals.lessonCount) * 100) : 0;
+
+  const featured = rows.find((r) => r.pct < 100) || rows[0];
+  const filteredRows = search.trim()
+    ? rows.filter((r) => r.title.toLowerCase().includes(search.trim().toLowerCase()))
+    : rows;
+
+  const upcoming = useMemo(() => buildTourUpcoming(notifs, todos), [notifs, todos]);
 
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
       <section className="min-w-0 space-y-6">
-        <p className="text-sm font-semibold text-gray-500">
-          Welcome back, {FAKE_NAME.split(" ")[0]}! 👋 This is a live preview — everything on this
-          page works the same way it will once you sign up.
-        </p>
-
-        <label className="flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
-          <Search size={18} className="shrink-0 text-purple-500" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
-            placeholder="Search courses..."
-          />
-        </label>
-
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <StatCard icon={<BookOpen size={16} />} label="Niches Enrolled" value={NICHES.length} />
-          <StatCard
-            icon={<TrendingUp size={16} />}
-            label="Lessons Completed"
-            value={`${FAKE_COMPLETED_LESSONS}/${TOTAL_LESSONS}`}
-          />
-          <StatCard
-            icon={<Award size={16} />}
-            label="Certificates Earned"
-            value={FAKE_CERTIFICATES}
-          />
-          <StatCard
-            icon={<Sparkles size={16} />}
-            label="Overall Progress"
-            value={`${FAKE_OVERALL_PCT}%`}
-          />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm font-semibold text-gray-500">
+            Welcome back, {FAKE_NAME.split(" ")[0]}! 👋 This is a live preview — everything on this
+            page works the same way it will once you sign up.
+          </p>
+          <label className="flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
+            <Search size={18} className="shrink-0 text-purple-500" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+              placeholder="Search courses..."
+            />
+          </label>
         </div>
+
+        <FeaturedCourse row={featured} onResume={() => onOpenCourses(featured.index)} />
+
+        <section>
+          <h2 className="text-lg font-black">Status</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <StatusCard
+              icon={<BookOpen size={20} />}
+              title="Lessons"
+              value={totals.completedLessons}
+              total={totals.lessonCount}
+              pct={lessonPct}
+              tone="bg-amber-50 text-orange-500"
+            />
+            <StatusCard icon={<ClipboardCheck size={20} />} title="Assignments" value={0} total={0} pct={0} tone="bg-rose-50 text-rose-500" />
+            <StatusCard icon={<FileCheck2 size={20} />} title="Tests" value={0} total={0} pct={0} tone="bg-emerald-50 text-emerald-500" />
+          </div>
+        </section>
 
         <section className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
           <h2 className="truncate text-lg font-black">My Progress</h2>
           <p className="mt-1 text-xs font-semibold text-gray-400">
             A quick read on where you stand across every niche you're enrolled in.
           </p>
-          <ProgressBarChart rows={rows} />
-        </section>
-
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-black">Your Courses</h2>
-            <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
-              Preview only — sign up to unlock lessons
-            </span>
-          </div>
-
-          <div className="mt-4 space-y-3">
-            {filteredNiches.map((niche) => {
-              const i = NICHES.indexOf(niche);
-              return (
-                <NicheCard
-                  key={niche.title}
-                  niche={niche}
-                  index={i}
-                  isOpen={expanded === i}
-                  onToggle={() => setExpanded((cur) => (cur === i ? null : i))}
-                  onLockedLesson={onLockedLesson}
-                />
-              );
-            })}
-            {filteredNiches.length === 0 && (
-              <p className="py-6 text-center text-sm text-gray-400">No courses match "{search}".</p>
-            )}
-          </div>
+          {filteredRows.length === 0 ? (
+            <p className="mt-6 text-center text-sm text-gray-400">No niches match "{search}".</p>
+          ) : (
+            <ProgressBarChart rows={filteredRows.map((r) => ({ name: r.title, pct: r.pct, fill: r.tint }))} />
+          )}
         </section>
       </section>
 
@@ -608,26 +649,169 @@ function DashboardView({
           todos={todos}
           onDayClick={onDayClick}
         />
+        <UpcomingWidget items={upcoming} onOpen={(id) => onLockedLesson(id)} />
       </aside>
     </div>
   );
 }
 
-function StatCard({
+function CourseIcon({ row, size = "md" }: { row: DashRow; size?: "sm" | "md" | "lg" }) {
+  const dims = size === "lg" ? "h-12 w-12" : size === "sm" ? "h-10 w-10" : "h-11 w-11";
+  return (
+    <span
+      className={`grid ${dims} shrink-0 place-items-center overflow-hidden rounded-xl text-xs font-black text-white`}
+      style={{ background: row.tint }}
+    >
+      {row.title.slice(0, 2).toUpperCase()}
+    </span>
+  );
+}
+
+function FeaturedCourse({ row, onResume }: { row: DashRow; onResume: () => void }) {
+  return (
+    <section className="grid gap-4 rounded-2xl bg-white p-4 shadow-sm sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
+      <div className="flex min-w-0 items-center gap-4">
+        <CourseIcon row={row} size="lg" />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-bold text-gray-700">{row.title}</p>
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
+            <div className="h-full rounded-full bg-purple-600 transition-all" style={{ width: `${row.pct}%` }} />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center gap-4 sm:justify-end">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-400">
+          <BookOpen size={14} /> {row.lessonCount}
+        </span>
+        <button
+          type="button"
+          onClick={onResume}
+          className="inline-flex items-center gap-2 rounded-xl bg-purple-50 px-4 py-2.5 text-sm font-bold text-purple-700 hover:bg-purple-100"
+        >
+          <Play size={16} /> Resume
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function StatusCard({
   icon,
-  label,
+  title,
   value,
+  total,
+  pct,
+  tone,
 }: {
   icon: ReactNode;
-  label: string;
-  value: string | number;
+  title: string;
+  value: number;
+  total: number;
+  pct: number;
+  tone: string;
 }) {
   return (
-    <div className="rounded-2xl bg-white p-4 shadow-sm">
-      <div className="flex items-center gap-2 text-purple-700">{icon}</div>
-      <p className="mt-2 text-xl font-black text-gray-900">{value}</p>
-      <p className="text-xs font-semibold text-gray-400">{label}</p>
+    <div className="relative overflow-hidden rounded-2xl bg-white p-5 shadow-sm">
+      <div className={`grid h-11 w-11 place-items-center rounded-2xl ${tone}`}>{icon}</div>
+      <div className="mt-4 text-3xl font-black text-gray-900">{String(value).padStart(2, "0")}</div>
+      <p className="text-sm font-bold text-gray-600">{title}</p>
+      <p className="mt-1 text-xs text-gray-400">of {total} completed</p>
+      <div className="absolute right-5 top-5">
+        <MiniDonut pct={pct} />
+      </div>
     </div>
+  );
+}
+
+function MiniDonut({ pct }: { pct: number }) {
+  const size = 46;
+  const stroke = 6;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="relative h-[46px] w-[46px]">
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} stroke="#f3e8ff" strokeWidth={stroke} fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke="#c084fc"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          fill="none"
+          strokeDasharray={c}
+          strokeDashoffset={c - (c * pct) / 100}
+        />
+      </svg>
+      <span className="absolute inset-0 grid place-items-center text-[10px] font-black text-purple-500">{pct}%</span>
+    </div>
+  );
+}
+
+type UpcomingItem = { id: string; title: string; label: string; date: Date; tone: string };
+
+function buildTourUpcoming(notifs: typeof FAKE_NOTIFICATIONS, todos: TodoMap): UpcomingItem[] {
+  const fromTodos = Object.entries(todos).flatMap(([key, items]) =>
+    items
+      .filter((item) => !item.done)
+      .map((item) => {
+        const date = parseDateKey(key);
+        if (!date) return null;
+        return { id: `todo::${key}::${item.id}`, title: item.text, label: "To-do", date, tone: "bg-indigo-500" } satisfies UpcomingItem;
+      })
+      .filter((item): item is UpcomingItem => Boolean(item)),
+  );
+
+  const today = new Date();
+  const fromNotifs = notifs.map((n, i) => ({
+    id: `notif-${n.id}`,
+    title: n.title,
+    label: n.type === "payment" ? "Payment" : n.type === "quiz" ? "Test" : "Message",
+    date: addDays(today, i),
+    tone: n.type === "payment" ? "bg-amber-500" : n.type === "quiz" ? "bg-emerald-500" : "bg-sky-500",
+  }));
+
+  return [...fromTodos, ...fromNotifs].sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, 5);
+}
+
+function parseDateKey(key: string) {
+  const [y, m, d] = key.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
+}
+
+function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (title: string) => void }) {
+  return (
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
+      <h2 className="text-lg font-black">Upcoming</h2>
+      {items.length === 0 ? (
+        <p className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm font-medium text-gray-400">Nothing on the horizon yet.</p>
+      ) : (
+        <ul className="mt-4 divide-y divide-gray-50">
+          {items.map((item) => (
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(item.title)}
+                className="grid w-full grid-cols-[42px_minmax(0,1fr)] gap-3 rounded-xl py-3 text-left hover:bg-purple-50/60"
+              >
+                <div className="rounded-xl bg-gray-50 py-2 text-center">
+                  <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
+                  <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
+                  <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                    <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
+                  </p>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
 
@@ -853,135 +1037,77 @@ function DayTodoModal({
   );
 }
 
-function NicheCard({
-  niche,
-  index,
-  isOpen,
-  onToggle,
-  onLockedLesson,
-}: {
-  niche: Niche;
-  index: number;
-  isOpen: boolean;
-  onToggle: () => void;
-  onLockedLesson: (title: string) => void;
-}) {
-  const pct = fakeNichePct(index);
-  const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
-
-  return (
-    <div className="overflow-hidden rounded-2xl border border-gray-100">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex w-full items-center justify-between gap-3 bg-white p-4 text-left hover:bg-gray-50/60"
-      >
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xs font-black text-white"
-            style={{ background: niche.back }}
-          >
-            {niche.title.slice(0, 2).toUpperCase()}
-          </span>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-gray-900">{niche.title}</p>
-            <div className="mt-1.5 flex items-center gap-2">
-              <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full rounded-full bg-purple-600" style={{ width: `${pct}%` }} />
-              </div>
-              <span className="text-[11px] font-bold text-gray-400">
-                {pct}% · {lessonCount} lessons
-              </span>
-            </div>
-          </div>
-        </div>
-        <ChevronDown
-          size={18}
-          className={`shrink-0 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {isOpen && (
-        <div className="space-y-3 border-t border-gray-100 bg-gray-50/60 p-4">
-          {niche.modules.map((module) => (
-            <div key={module.title}>
-              <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-gray-400">
-                {module.title}
-              </p>
-              <ul className="space-y-1.5">
-                {module.lessons.map((lesson) => (
-                  <li key={lesson}>
-                    <button
-                      type="button"
-                      onClick={() => onLockedLesson(lesson)}
-                      className="flex w-full items-center justify-between gap-2 rounded-xl bg-white px-3.5 py-2.5 text-left text-sm font-semibold text-gray-500 shadow-sm hover:bg-gray-50"
-                    >
-                      <span className="flex min-w-0 items-center gap-2">
-                        <Lock size={13} className="shrink-0 text-gray-300" />
-                        <span className="truncate">{lesson}</span>
-                      </span>
-                      <ChevronRight size={14} className="shrink-0 text-gray-300" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ------------------------- Courses view ------------------------- */
 
-function CoursesView({ onLockedLesson }: { onLockedLesson: (title: string) => void }) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+function CoursesView({
+  onLockedLesson,
+  activeIndex,
+  onSelectIndex,
+}: {
+  onLockedLesson: (title: string) => void;
+  activeIndex: number | null;
+  onSelectIndex: (index: number | null) => void;
+}) {
+  const [search, setSearch] = useState("");
 
   if (activeIndex !== null) {
     return (
       <NicheDetail
         niche={NICHES[activeIndex]}
         index={activeIndex}
-        onBack={() => setActiveIndex(null)}
+        onBack={() => onSelectIndex(null)}
         onLockedLesson={onLockedLesson}
       />
     );
   }
 
+  const filtered = NICHES.filter(
+    (n) => !search.trim() || n.title.toLowerCase().includes(search.trim().toLowerCase()) || n.short.toLowerCase().includes(search.trim().toLowerCase()),
+  );
+
   return (
-    <div>
-      <p className="text-sm font-semibold text-gray-500">
-        Browse every niche below — open one to see its full curriculum.
-      </p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {NICHES.map((niche, i) => {
-          const pct = fakeNichePct(i);
-          const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
+    <div className="max-w-6xl">
+      <h2 className="text-2xl font-black">Choose a learning path</h2>
+      <p className="mt-1 text-sm text-gray-500">Explore every VA specialization and start learning at your own pace.</p>
+
+      <div className="relative mt-5 max-w-sm">
+        <Search size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search courses..."
+          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm outline-none focus:border-purple-400"
+        />
+      </div>
+
+      <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((niche) => {
+          const i = NICHES.indexOf(niche);
+          const Icon = nicheIcon(i);
           return (
-            <button
-              key={niche.title}
-              type="button"
-              onClick={() => setActiveIndex(i)}
-              className="rounded-2xl bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md"
-            >
-              <span
-                className="grid h-12 w-12 place-items-center rounded-xl text-sm font-black text-white"
-                style={{ background: niche.back }}
-              >
-                {niche.title.slice(0, 2).toUpperCase()}
-              </span>
-              <p className="mt-3 truncate text-sm font-bold text-gray-900">{niche.title}</p>
-              <p className="mt-1 line-clamp-2 text-xs text-gray-500">{niche.short}</p>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full rounded-full bg-purple-600" style={{ width: `${pct}%` }} />
+            <article key={niche.title} className="rounded-2xl bg-white p-5 shadow-sm">
+              <div className="flex items-start justify-between">
+                <span
+                  className="grid h-12 w-12 place-items-center rounded-2xl"
+                  style={{ backgroundColor: `${niche.back}18`, color: niche.back }}
+                >
+                  <Icon size={24} strokeWidth={2.25} />
+                </span>
+                <BookOpen className="text-purple-600" />
               </div>
-              <span className="mt-1.5 block text-[11px] font-bold text-gray-400">
-                {pct}% · {lessonCount} lessons
-              </span>
-            </button>
+              <h3 className="mt-5 font-black">{niche.title}</h3>
+              <p className="mt-2 min-h-10 text-sm leading-6 text-gray-500">{niche.short}</p>
+              <button
+                type="button"
+                onClick={() => onSelectIndex(i)}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 py-2.5 text-sm font-bold text-white hover:bg-purple-800"
+              >
+                View course <ChevronRight size={16} />
+              </button>
+            </article>
           );
         })}
+        {filtered.length === 0 && <p className="col-span-full text-sm text-gray-500">No courses match "{search}".</p>}
       </div>
     </div>
   );
@@ -1000,70 +1126,89 @@ function NicheDetail({
 }) {
   const [search, setSearch] = useState("");
   const pct = fakeNichePct(index);
-  const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
-  const completedCount = Math.round((pct / 100) * lessonCount);
+  const allLessons = niche.modules.flatMap((m) => m.lessons);
+  const lessonCount = allLessons.length;
+  const completedCount = Math.min(lessonCount, Math.round((pct / 100) * lessonCount));
+  // First `completedCount` lessons (in order) are done, the very next one is
+  // unlocked, and everything after that is locked — same rule the real
+  // course page uses (complete the previous lesson to unlock the next).
+  const doneSet = new Set(allLessons.slice(0, completedCount));
+  const nextLesson = allLessons[completedCount];
   const q = search.trim().toLowerCase();
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={onBack}
-        className="inline-flex items-center gap-1.5 text-sm font-bold text-purple-700 hover:underline"
-      >
+    <div className="mx-auto max-w-4xl">
+      <button type="button" onClick={onBack} className="inline-flex items-center gap-2 text-sm font-bold text-purple-700 hover:underline">
         <ChevronLeft size={16} /> All courses
       </button>
 
-      <div className="mt-4 rounded-2xl bg-white p-5 shadow-sm sm:p-6">
-        <span className="rounded-full bg-violet-100 px-2.5 py-1 text-[11px] font-black text-violet-700">
-          YOUR LEARNING PATH
-        </span>
-        <h2 className="mt-3 text-2xl font-black text-gray-900">{niche.title}</h2>
-        <p className="mt-1 text-sm font-semibold text-gray-400">
+      <section className="mt-5 rounded-2xl bg-white p-6 shadow-sm">
+        <p className="text-sm font-bold text-purple-600">YOUR LEARNING PATH</p>
+        <h2 className="mt-2 text-3xl font-black">{niche.title}</h2>
+        <p className="mt-2 text-sm text-gray-500">
           {completedCount} of {lessonCount} lessons completed
         </p>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100">
-          <div className="h-full rounded-full bg-purple-600" style={{ width: `${pct}%` }} />
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-purple-100">
+          <div className="h-full rounded-full bg-purple-700" style={{ width: `${pct}%` }} />
         </div>
-      </div>
+      </section>
 
-      <label className="mt-5 flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
-        <Search size={18} className="shrink-0 text-purple-500" />
+      <div className="relative mt-6 max-w-sm">
+        <Search size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
           placeholder="Search lessons..."
+          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm outline-none focus:border-purple-400"
         />
-      </label>
+      </div>
 
-      <div className="mt-5 space-y-5">
-        {niche.modules.map((module) => {
-          const lessons = module.lessons.filter((l) => !q || l.toLowerCase().includes(q));
-          if (lessons.length === 0) return null;
-          return (
-            <div key={module.title} className="rounded-2xl bg-white p-5 shadow-sm">
-              <h3 className="text-sm font-black text-gray-900">{module.title}</h3>
-              <ul className="mt-3 space-y-2">
-                {lessons.map((lesson) => (
-                  <li key={lesson}>
+      <div className="mt-6 space-y-4">
+        {niche.modules
+          .map((module, mi) => ({
+            module,
+            mi,
+            lessons: module.lessons.filter((l) => !q || l.toLowerCase().includes(q)),
+          }))
+          .filter(({ lessons }) => lessons.length > 0)
+          .map(({ module, mi, lessons }) => (
+            <section key={module.title} className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="font-black">
+                Module {mi + 1}: {module.title}
+              </h3>
+              <div className="mt-3 divide-y">
+                {lessons.map((lesson) => {
+                  const done = doneSet.has(lesson);
+                  const unlocked = done || lesson === nextLesson;
+                  return (
                     <button
+                      key={lesson}
                       type="button"
+                      title={unlocked ? undefined : "Complete the previous lesson to unlock"}
                       onClick={() => onLockedLesson(lesson)}
-                      className="flex w-full items-center justify-between gap-2 rounded-xl bg-gray-50 px-3.5 py-2.5 text-left text-sm font-semibold text-gray-600 hover:bg-gray-100"
+                      className={`flex w-full items-center gap-3 py-3 text-left ${unlocked ? "hover:text-purple-700" : "cursor-not-allowed opacity-50"}`}
                     >
-                      <span className="flex min-w-0 items-center gap-2">
-                        <Lock size={13} className="shrink-0 text-gray-300" />
-                        <span className="truncate">{lesson}</span>
+                      {done ? (
+                        <CheckCircle2 size={19} className="shrink-0 text-emerald-500" />
+                      ) : unlocked ? (
+                        <Circle size={19} className="shrink-0 text-gray-300" />
+                      ) : (
+                        <Lock size={17} className="shrink-0 text-gray-300" />
+                      )}
+                      <span
+                        className="grid h-11 w-16 shrink-0 place-items-center overflow-hidden rounded-lg text-white"
+                        style={{ background: niche.back }}
+                      >
+                        <PlayCircle size={18} />
                       </span>
-                      <ChevronRight size={14} className="shrink-0 text-gray-300" />
+                      <span className="flex-1 text-sm font-semibold">{lesson}</span>
+                      {unlocked ? <PlayCircle size={18} className="shrink-0" /> : <Lock size={16} className="shrink-0 text-gray-300" />}
                     </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
+                  );
+                })}
+              </div>
+            </section>
+          ))}
       </div>
     </div>
   );
