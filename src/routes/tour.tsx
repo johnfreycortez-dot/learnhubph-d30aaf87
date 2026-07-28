@@ -132,8 +132,8 @@ function nicheIcon(index: number): LucideIcon {
   return NICHE_ICONS[index % NICHE_ICONS.length] || BookOpen;
 }
 
-const FAKE_NAME = "Juan Dela Cruz";
-const FAKE_EMAIL = "juan.delacruz@example.com";
+const FAKE_NAME = "Albert Johanson Jr.";
+const FAKE_EMAIL = "albert.johanson@learnhub.com";
 const TOTAL_LESSONS = NICHES.reduce(
   (sum, n) => sum + n.modules.reduce((s, m) => s + m.lessons.length, 0),
   0,
@@ -152,7 +152,7 @@ const FAKE_NOTIFICATIONS = [
     id: "n2",
     type: "reply",
     title: "New reply from support",
-    body: "Hi Juan, thanks for your question — all 9 niches unlock the moment your payment is verified, no waiting per niche.",
+    body: "Hi Albert, thanks for your question — all 9 niches unlock the moment your payment is verified, no waiting per niche.",
     time: "1 day ago",
     read: false,
   },
