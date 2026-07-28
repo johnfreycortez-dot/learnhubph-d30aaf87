@@ -174,7 +174,7 @@ const FAKE_THREAD = [
   },
   {
     sender: "admin" as const,
-    body: "Hi Juan! Nope — all 9 niches unlock right away. Learn in whichever order fits your goals.",
+    body: "Hi Albert! Nope — all 9 niches unlock right away. Learn in whichever order fits your goals.",
     time: "Jul 20, 11:02 AM",
   },
 ];
