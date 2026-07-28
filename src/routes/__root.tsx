@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastProvider } from "../components/Toast";
+import { jsonLdScript, organizationJsonLd, SITE_URL } from "../lib/seo";
+import logoAsset from "../assets/learnhub-logo.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -89,6 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
+    scripts: [jsonLdScript(organizationJsonLd(`${SITE_URL}${logoAsset.url}`))],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },

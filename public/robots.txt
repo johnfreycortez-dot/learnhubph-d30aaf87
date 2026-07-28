@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://learnhubph.lovable.app/sitemap.xml

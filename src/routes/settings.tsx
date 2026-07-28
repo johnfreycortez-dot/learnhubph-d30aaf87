@@ -119,7 +119,7 @@ function SettingsPage() {
         <section className="mt-6 rounded-2xl bg-white p-6 shadow-sm">
           <div className="flex items-center gap-5">
             {photo ? (
-              <img src={photo} className="h-20 w-20 rounded-full object-cover" alt="Profile" />
+              <img src={photo} loading="lazy" className="h-20 w-20 rounded-full object-cover" alt="Profile" />
             ) : (
               <span className="grid h-20 w-20 place-items-center rounded-full bg-purple-100 text-xl font-black text-purple-700">
                 {initial}

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { clearToken } from "@/lib/api";
 import { ConfirmModal } from "@/components/ConfirmModal";
+import { ChatWidget } from "@/components/ChatWidget";
 import { useStudentIdentity } from "@/hooks/useStudentIdentity";
 
 type NavItem = { to: string; label: string; icon: ReactNode; match?: string[] };
@@ -250,6 +251,8 @@ export function StudentShell({
         onConfirm={logout}
         onCancel={() => setConfirmingLogout(false)}
       />
+
+      <ChatWidget />
     </div>
   );
 }

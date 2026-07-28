@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, Delete, ShieldCheck } from "lucide-react";
-import { gasCall } from "@/lib/api";
-
-const ADMIN_FLAG_KEY = "lhph_admin";
+import { gasCall, saveAdminToken } from "@/lib/api";
 
 type AdminPinEntryProps = {
   title?: string;
@@ -44,13 +42,16 @@ export function AdminPinEntry({
     setError("");
     try {
       const result = await gasCall("adminLogin", fullPin);
-      if (result?.ok === true) {
-        window.sessionStorage.setItem(ADMIN_FLAG_KEY, "true");
+      if (result?.ok === true && result?.token) {
+        saveAdminToken(result.token, result.expiresAt);
         setSuccess(true);
         await Promise.resolve(onSuccess());
         return;
       }
-      fail("Incorrect PIN");
+      // ok:true with no token means the backend hasn't been updated to the
+      // new signed-token contract yet — treat it as a failure rather than
+      // silently granting an unauthenticated session.
+      fail(result?.ok === true ? "Server did not return a session token." : "Incorrect PIN");
     } catch {
       fail("Unable to verify PIN. Please try again.");
     } finally {

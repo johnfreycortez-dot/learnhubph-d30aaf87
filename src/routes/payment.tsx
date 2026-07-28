@@ -140,7 +140,7 @@ function PaymentPage() {
             {tab === "gcash" ? (
               <>
                 {assets?.gcashQrUrl && (
-                  <img src={assets.gcashQrUrl} alt="GCash QR" className="mx-auto max-w-[220px] rounded-lg" />
+                  <img src={assets.gcashQrUrl} alt="GCash QR" loading="lazy" className="mx-auto max-w-[220px] rounded-lg" />
                 )}
                 <p className="mt-2 font-bold">John Frey Cortez</p>
                 <p className="text-sm text-gray-600">09603083284</p>
@@ -148,7 +148,7 @@ function PaymentPage() {
             ) : (
               <>
                 {assets?.bpiQrUrl && (
-                  <img src={assets.bpiQrUrl} alt="BPI QR" className="mx-auto max-w-[220px] rounded-lg" />
+                  <img src={assets.bpiQrUrl} alt="BPI QR" loading="lazy" className="mx-auto max-w-[220px] rounded-lg" />
                 )}
                 <p className="mt-2 font-bold">John Frey Cortez</p>
                 <p className="text-sm text-gray-600">0819143362</p>
