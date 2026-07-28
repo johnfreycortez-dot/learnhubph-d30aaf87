@@ -1,23 +1,47 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   Award,
+  Bell,
   BookOpen,
+  Camera,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
+  ClipboardCheck,
   Compass,
-  GraduationCap,
+  Download,
+  FileCheck2,
+  HelpCircle,
+  LayoutDashboard,
   Lock,
   LogOut,
   Menu,
   MessageSquare,
+  Plus,
+  Save,
+  Search,
+  Send,
   Settings,
   Sparkles,
+  Trash2,
   TrendingUp,
   X,
 } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  LabelList,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { NICHES, type Niche } from "../data/niches";
 import { canonicalLink } from "../lib/seo";
+import { ChatWidget } from "../components/ChatWidget";
 
 export const Route = createFileRoute("/tour")({
   head: () => ({
@@ -25,7 +49,8 @@ export const Route = createFileRoute("/tour")({
       { title: "Take a Tour — LearnHub PH" },
       {
         name: "description",
-        content: "Preview the LearnHub PH student dashboard — see all 9 VA niches and 81 real lesson topics before you sign up.",
+        content:
+          "Preview the real LearnHub PH student dashboard — browse all 9 VA niches and 81 real lesson topics, try the chatbot, and explore every page before you sign up.",
       },
       { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: "Take a Tour — LearnHub PH" },
@@ -41,11 +66,22 @@ const goToLogin = () => {
   window.location.href = "/login";
 };
 
-const NAV = [
-  { label: "Dashboard", icon: <GraduationCap size={18} />, active: true },
-  { label: "Courses", icon: <BookOpen size={18} />, active: false },
-  { label: "My Certificates", icon: <Award size={18} />, active: false },
-  { label: "Settings", icon: <Settings size={18} />, active: false },
+type ViewKey = "dashboard" | "courses" | "certificates" | "settings" | "messages" | "notifications";
+
+const VIEW_TITLE: Record<ViewKey, string> = {
+  dashboard: "Dashboard",
+  courses: "Courses",
+  certificates: "My Certificates",
+  settings: "Settings",
+  messages: "Messages",
+  notifications: "Notifications",
+};
+
+const NAV: { key: ViewKey; label: string; icon: ReactNode }[] = [
+  { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> },
+  { key: "courses", label: "Courses", icon: <BookOpen size={18} /> },
+  { key: "certificates", label: "My Certificates", icon: <Award size={18} /> },
+  { key: "settings", label: "Settings", icon: <Settings size={18} /> },
 ];
 
 // Fake, believable-but-not-real per-student numbers. Deterministic per niche
@@ -56,31 +92,157 @@ function fakeNichePct(index: number) {
   return pattern[index] ?? 0;
 }
 
+const NICHE_TINT = [
+  "#7c3aed",
+  "#0d7377",
+  "#3d6b4f",
+  "#9b2d4f",
+  "#1e4d78",
+  "#8a4a10",
+  "#1e3a7a",
+  "#8a2020",
+  "#4a2080",
+];
+
 const FAKE_NAME = "Juan Dela Cruz";
-const TOTAL_LESSONS = NICHES.reduce((sum, n) => sum + n.modules.reduce((s, m) => s + m.lessons.length, 0), 0);
+const FAKE_EMAIL = "juan.delacruz@example.com";
+const TOTAL_LESSONS = NICHES.reduce(
+  (sum, n) => sum + n.modules.reduce((s, m) => s + m.lessons.length, 0),
+  0,
+);
 const FAKE_COMPLETED_LESSONS = 8;
 const FAKE_CERTIFICATES = 1;
 const FAKE_OVERALL_PCT = Math.round((FAKE_COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
 
+const FAKE_NOTIFICATIONS = [
+  {
+    id: "n1",
+    type: "quiz",
+    title: "Quiz passed!",
+    body: 'You scored 90% on "What is Social Media Management?" — nice work.',
+    time: "2 hours ago",
+    read: false,
+  },
+  {
+    id: "n2",
+    type: "reply",
+    title: "New reply from support",
+    body: "Hi Juan, thanks for your question — all 9 niches unlock the moment your payment is verified, no waiting per niche.",
+    time: "1 day ago",
+    read: false,
+  },
+  {
+    id: "n3",
+    type: "payment",
+    title: "Payment verified",
+    body: "Your ₱399 lifetime access has been confirmed. Welcome aboard!",
+    time: "3 days ago",
+    read: true,
+  },
+];
+
+const FAKE_THREAD = [
+  {
+    sender: "student" as const,
+    body: "Hi! Do I need to finish one niche before starting another?",
+    time: "Jul 20, 10:14 AM",
+  },
+  {
+    sender: "admin" as const,
+    body: "Hi Juan! Nope — all 9 niches unlock right away. Learn in whichever order fits your goals.",
+    time: "Jul 20, 11:02 AM",
+  },
+];
+
+function initialsOf(name: string) {
+  return name
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .toUpperCase();
+}
+
+// ── Local to-do list (same self-contained, localStorage-only pattern as the
+// real dashboard — no backend involved either way, so this works exactly
+// the same in the tour as it does for a real, signed-up student). ──
+type TodoItem = { id: string; text: string; done?: boolean };
+type TodoMap = Record<string, TodoItem[]>;
+const TOUR_TODO_KEY = "lhph_tour_todos";
+
+function loadTodos(): TodoMap {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(TOUR_TODO_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+function saveTodos(todos: TodoMap) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(TOUR_TODO_KEY, JSON.stringify(todos));
+}
+function dateKey(d: Date) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+function startOfWeek(date: Date) {
+  const d = new Date(date);
+  d.setDate(d.getDate() - d.getDay());
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+function addDays(date: Date, days: number) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
 function TourPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [view, setView] = useState<ViewKey>("dashboard");
   const [expanded, setExpanded] = useState<number | null>(0);
   const [lockedModalOpen, setLockedModalOpen] = useState(false);
-  const [lockedLessonTitle, setLockedLessonTitle] = useState("");
+  const [lockedTitle, setLockedTitle] = useState("");
+  const [notifs, setNotifs] = useState(FAKE_NOTIFICATIONS);
+  const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
+  const [todos, setTodos] = useState<TodoMap>(() => loadTodos());
+  const [activeDate, setActiveDate] = useState<Date | null>(null);
 
   function openLocked(title: string) {
-    setLockedLessonTitle(title);
+    setLockedTitle(title);
     setLockedModalOpen(true);
   }
 
-  const initials = useMemo(
-    () =>
-      FAKE_NAME.split(" ")
-        .map((p) => p[0])
-        .join("")
-        .toUpperCase(),
-    [],
-  );
+  function goToView(key: ViewKey) {
+    setView(key);
+    setSidebarOpen(false);
+    setMenuOpen(false);
+  }
+
+  function updateTodos(next: TodoMap) {
+    setTodos(next);
+    saveTodos(next);
+  }
+  function addTodo(date: Date, text: string) {
+    const key = dateKey(date);
+    const item: TodoItem = { id: `${Date.now()}`, text };
+    updateTodos({ ...todos, [key]: [...(todos[key] || []), item] });
+  }
+  function toggleTodo(key: string, id: string) {
+    updateTodos({
+      ...todos,
+      [key]: (todos[key] || []).map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
+    });
+  }
+  function removeTodo(key: string, id: string) {
+    updateTodos({ ...todos, [key]: (todos[key] || []).filter((t) => t.id !== id) });
+  }
+
+  const initials = useMemo(() => initialsOf(FAKE_NAME), []);
+  const unreadCount = notifs.filter((n) => !n.read).length;
 
   return (
     <div className="min-h-screen bg-[#f6f7fb] text-gray-950">
@@ -96,7 +258,10 @@ function TourPage() {
         >
           Get Started — ₱399 <span className="hidden sm:inline">lifetime access</span>
         </button>
-        <a href="/" className="text-[11px] font-semibold text-purple-100 underline hover:text-white sm:text-xs">
+        <a
+          href="/"
+          className="text-[11px] font-semibold text-purple-100 underline hover:text-white sm:text-xs"
+        >
           Exit Tour
         </a>
       </div>
@@ -121,7 +286,12 @@ function TourPage() {
             </p>
             <p className="truncate text-[11px] font-semibold text-gray-400">Demo Dashboard</p>
           </div>
-          <button type="button" onClick={() => setSidebarOpen(false)} className="lg:hidden" aria-label="Close sidebar">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden"
+            aria-label="Close sidebar"
+          >
             <X size={18} />
           </button>
         </div>
@@ -129,11 +299,11 @@ function TourPage() {
         <nav className="flex-1 space-y-2 px-4">
           {NAV.map((n) => (
             <button
-              key={n.label}
+              key={n.key}
               type="button"
-              onClick={() => (n.active ? undefined : openLocked(n.label))}
+              onClick={() => goToView(n.key)}
               className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold ${
-                n.active
+                view === n.key
                   ? "bg-purple-700 text-white shadow-lg shadow-purple-200"
                   : "text-gray-500 hover:bg-gray-50 hover:text-purple-700"
               }`}
@@ -144,6 +314,12 @@ function TourPage() {
         </nav>
 
         <div className="space-y-2 border-t border-gray-100 px-4 py-5">
+          <a
+            href="/help"
+            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-purple-700"
+          >
+            <HelpCircle size={18} /> Help
+          </a>
           <button
             type="button"
             onClick={() => (window.location.href = "/")}
@@ -166,70 +342,97 @@ function TourPage() {
               >
                 <Menu size={20} />
               </button>
-              <h1 className="truncate text-xl font-black sm:text-2xl">Dashboard</h1>
+              <h1 className="truncate text-xl font-black sm:text-2xl">{VIEW_TITLE[view]}</h1>
             </div>
             <div className="flex shrink-0 items-center gap-3">
               <button
                 type="button"
-                onClick={() => openLocked("Messages")}
+                onClick={() => goToView("messages")}
                 className="hidden h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700 sm:grid"
-                aria-label="Messages (locked in demo)"
+                aria-label="Messages"
               >
                 <MessageSquare size={18} />
               </button>
-              <div className="flex items-center gap-2 rounded-full p-1">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-sm font-black text-purple-700">
-                  {initials}
-                </span>
-                <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">
-                  {FAKE_NAME}
-                </span>
+              <button
+                type="button"
+                onClick={() => goToView("notifications")}
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-purple-700"
+                aria-label="Notifications"
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+                )}
+              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen((v) => !v)}
+                  className="flex min-w-0 items-center gap-2 rounded-full p-1 hover:bg-gray-50"
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-sm font-black text-purple-700">
+                    {initials}
+                  </span>
+                  <span className="hidden max-w-[120px] truncate text-sm font-bold text-gray-700 sm:inline">
+                    {FAKE_NAME}
+                  </span>
+                  <ChevronDown size={16} className="hidden text-gray-400 sm:block" />
+                </button>
+                {menuOpen && (
+                  <>
+                    <button
+                      type="button"
+                      className="fixed inset-0 z-40"
+                      aria-label="Close menu"
+                      onClick={() => setMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+                      <button
+                        type="button"
+                        onClick={() => goToView("notifications")}
+                        className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700"
+                      >
+                        Notifications
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => (window.location.href = "/")}
+                        className="block w-full px-4 py-2.5 text-left text-sm font-semibold text-red-600 hover:bg-red-50"
+                      >
+                        Exit Tour
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </header>
 
         <main className="p-4 sm:p-6 lg:p-8">
-          <p className="mb-6 text-sm font-semibold text-gray-500">
-            Welcome back, {FAKE_NAME.split(" ")[0]}! 👋 Here's a sample of what your real dashboard looks like.
-          </p>
-
-          {/* Fake stat cards */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <StatCard icon={<BookOpen size={16} />} label="Niches Enrolled" value={NICHES.length} />
-            <StatCard icon={<TrendingUp size={16} />} label="Lessons Completed" value={`${FAKE_COMPLETED_LESSONS}/${TOTAL_LESSONS}`} />
-            <StatCard icon={<Award size={16} />} label="Certificates Earned" value={FAKE_CERTIFICATES} />
-            <StatCard icon={<Sparkles size={16} />} label="Overall Progress" value={`${FAKE_OVERALL_PCT}%`} />
-          </div>
-
-          {/* Courses list — real niche/lesson titles, locked */}
-          <section className="mt-8 rounded-2xl bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-black">Your Courses</h2>
-              <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
-                Preview only — sign up to unlock
-              </span>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              {NICHES.map((niche, i) => (
-                <NicheCard
-                  key={niche.title}
-                  niche={niche}
-                  index={i}
-                  isOpen={expanded === i}
-                  onToggle={() => setExpanded((cur) => (cur === i ? null : i))}
-                  onLockedLesson={openLocked}
-                />
-              ))}
-            </div>
-          </section>
+          {view === "dashboard" && (
+            <DashboardView
+              expanded={expanded}
+              setExpanded={setExpanded}
+              onLockedLesson={openLocked}
+              weekStart={weekStart}
+              setWeekStart={setWeekStart}
+              todos={todos}
+              onDayClick={setActiveDate}
+            />
+          )}
+          {view === "courses" && <CoursesView onLockedLesson={openLocked} />}
+          {view === "certificates" && <CertificatesView onLockedCertificate={openLocked} />}
+          {view === "settings" && <SettingsView onLockedAction={openLocked} />}
+          {view === "messages" && <MessagesView onLockedSend={openLocked} />}
+          {view === "notifications" && <NotificationsView notifs={notifs} setNotifs={setNotifs} />}
 
           <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl bg-purple-700 p-6 text-center text-white sm:flex-row sm:justify-between sm:text-left">
             <div>
               <p className="text-base font-black">Like what you see?</p>
               <p className="text-sm text-purple-100">
-                Get lifetime access to all {NICHES.length} niches and {TOTAL_LESSONS} lessons for a one-time ₱399.
+                Get lifetime access to all {NICHES.length} niches and {TOTAL_LESSONS} lessons for a
+                one-time ₱399.
               </p>
             </div>
             <button
@@ -243,6 +446,17 @@ function TourPage() {
         </main>
       </div>
 
+      {activeDate && (
+        <DayTodoModal
+          date={activeDate}
+          items={todos[dateKey(activeDate)] || []}
+          onAdd={(text) => addTodo(activeDate, text)}
+          onToggle={(id) => toggleTodo(dateKey(activeDate), id)}
+          onRemove={(id) => removeTodo(dateKey(activeDate), id)}
+          onClose={() => setActiveDate(null)}
+        />
+      )}
+
       {lockedModalOpen && (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-gray-950/50 px-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
@@ -251,8 +465,9 @@ function TourPage() {
             </div>
             <h3 className="mt-4 text-base font-black text-gray-900">This is locked in the demo</h3>
             <p className="mt-1.5 text-sm text-gray-500">
-              {lockedLessonTitle ? `"${lockedLessonTitle}" is` : "This"} part of full access. Sign up for lifetime
-              access (₱399 one-time) to unlock every lesson, quiz, and certificate.
+              {lockedTitle ? `"${lockedTitle}" is` : "This"} part of full access. Sign up for
+              lifetime access (₱399 one-time) to unlock every lesson, quiz, certificate, and message
+              with your instructor.
             </p>
             <div className="mt-5 flex flex-col gap-2">
               <button
@@ -273,16 +488,367 @@ function TourPage() {
           </div>
         </div>
       )}
+
+      {/* Real chatbot + live-support widget — fully explorable. FAQ answers
+          are backed by the same public knowledge base real students use;
+          "Talk to a Human" naturally requires a real account, exactly like
+          it would after sign-up. */}
+      <ChatWidget />
     </div>
   );
 }
 
-function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) {
+/* ------------------------- Dashboard view ------------------------- */
+
+function DashboardView({
+  expanded,
+  setExpanded,
+  onLockedLesson,
+  weekStart,
+  setWeekStart,
+  todos,
+  onDayClick,
+}: {
+  expanded: number | null;
+  setExpanded: (fn: (cur: number | null) => number | null) => void;
+  onLockedLesson: (title: string) => void;
+  weekStart: Date;
+  setWeekStart: (d: Date) => void;
+  todos: TodoMap;
+  onDayClick: (d: Date) => void;
+}) {
+  const [search, setSearch] = useState("");
+  const filteredNiches = NICHES.filter((n) => n.title.toLowerCase().includes(search.toLowerCase()));
+
+  const rows = NICHES.map((n, i) => ({
+    name: n.title,
+    pct: fakeNichePct(i),
+    fill: NICHE_TINT[i % NICHE_TINT.length],
+  }));
+
+  return (
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+      <section className="min-w-0 space-y-6">
+        <p className="text-sm font-semibold text-gray-500">
+          Welcome back, {FAKE_NAME.split(" ")[0]}! 👋 This is a live preview — everything on this
+          page works the same way it will once you sign up.
+        </p>
+
+        <label className="flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
+          <Search size={18} className="shrink-0 text-purple-500" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+            placeholder="Search courses..."
+          />
+        </label>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatCard icon={<BookOpen size={16} />} label="Niches Enrolled" value={NICHES.length} />
+          <StatCard
+            icon={<TrendingUp size={16} />}
+            label="Lessons Completed"
+            value={`${FAKE_COMPLETED_LESSONS}/${TOTAL_LESSONS}`}
+          />
+          <StatCard
+            icon={<Award size={16} />}
+            label="Certificates Earned"
+            value={FAKE_CERTIFICATES}
+          />
+          <StatCard
+            icon={<Sparkles size={16} />}
+            label="Overall Progress"
+            value={`${FAKE_OVERALL_PCT}%`}
+          />
+        </div>
+
+        <section className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
+          <h2 className="truncate text-lg font-black">My Progress</h2>
+          <p className="mt-1 text-xs font-semibold text-gray-400">
+            A quick read on where you stand across every niche you're enrolled in.
+          </p>
+          <ProgressBarChart rows={rows} />
+        </section>
+
+        <section className="rounded-2xl bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-black">Your Courses</h2>
+            <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700">
+              Preview only — sign up to unlock lessons
+            </span>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {filteredNiches.map((niche) => {
+              const i = NICHES.indexOf(niche);
+              return (
+                <NicheCard
+                  key={niche.title}
+                  niche={niche}
+                  index={i}
+                  isOpen={expanded === i}
+                  onToggle={() => setExpanded((cur) => (cur === i ? null : i))}
+                  onLockedLesson={onLockedLesson}
+                />
+              );
+            })}
+            {filteredNiches.length === 0 && (
+              <p className="py-6 text-center text-sm text-gray-400">No courses match "{search}".</p>
+            )}
+          </div>
+        </section>
+      </section>
+
+      <aside className="space-y-6">
+        <CalendarWidget
+          weekStart={weekStart}
+          onPrev={() => setWeekStart(addDays(weekStart, -7))}
+          onNext={() => setWeekStart(addDays(weekStart, 7))}
+          todos={todos}
+          onDayClick={onDayClick}
+        />
+      </aside>
+    </div>
+  );
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string | number;
+}) {
   return (
     <div className="rounded-2xl bg-white p-4 shadow-sm">
       <div className="flex items-center gap-2 text-purple-700">{icon}</div>
       <p className="mt-2 text-xl font-black text-gray-900">{value}</p>
       <p className="text-xs font-semibold text-gray-400">{label}</p>
+    </div>
+  );
+}
+
+function ProgressBarChart({ rows }: { rows: { name: string; pct: number; fill: string }[] }) {
+  const height = Math.max(220, rows.length * 54);
+  return (
+    <div className="mt-4" style={{ width: "100%", height }}>
+      <ResponsiveContainer>
+        <BarChart data={rows} layout="vertical" margin={{ left: 8, right: 32, top: 8, bottom: 8 }}>
+          <CartesianGrid horizontal={false} stroke="#f3e8ff" />
+          <XAxis
+            type="number"
+            domain={[0, 100]}
+            tickFormatter={(v) => `${v}%`}
+            tick={{ fontSize: 11, fill: "#9ca3af" }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis
+            type="category"
+            dataKey="name"
+            width={150}
+            tick={{ fontSize: 12, fontWeight: 700, fill: "#374151" }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <Tooltip
+            formatter={(value: number) => [`${value}%`, "Progress"]}
+            labelFormatter={(label) => label}
+            contentStyle={{ borderRadius: 12, border: "1px solid #f3e8ff", fontSize: 12 }}
+          />
+          <Bar dataKey="pct" radius={[0, 8, 8, 0]} barSize={18}>
+            {rows.map((d, i) => (
+              <Cell key={i} fill={d.fill} />
+            ))}
+            <LabelList
+              dataKey="pct"
+              position="right"
+              formatter={(v: number) => `${v}%`}
+              style={{ fontSize: 11, fontWeight: 700, fill: "#6b7280" }}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function CalendarWidget({
+  weekStart,
+  onPrev,
+  onNext,
+  todos,
+  onDayClick,
+}: {
+  weekStart: Date;
+  onPrev: () => void;
+  onNext: () => void;
+  todos: TodoMap;
+  onDayClick: (day: Date) => void;
+}) {
+  const days = Array.from({ length: 35 }, (_, i) => addDays(weekStart, i));
+  const today = new Date();
+  const month = weekStart.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  return (
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        <h2 className="text-lg font-black">Calendar</h2>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={onPrev}
+            className="grid h-8 w-8 place-items-center rounded-full text-purple-600 hover:bg-purple-50"
+            aria-label="Previous week"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            className="grid h-8 w-8 place-items-center rounded-full text-purple-600 hover:bg-purple-50"
+            aria-label="Next week"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+      <p className="mt-1 text-xs font-bold text-gray-300">{month}</p>
+      <p className="mt-1 text-[11px] font-semibold text-gray-300">Tap a date to add a to-do</p>
+      <div className="mt-5 grid grid-cols-7 gap-y-4 text-center text-xs font-bold text-gray-400">
+        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
+          <span key={d}>{d}</span>
+        ))}
+        {days.map((day) => {
+          const isToday = day.toDateString() === today.toDateString();
+          const hasTodos = (todos[dateKey(day)] || []).length > 0;
+          return (
+            <button
+              type="button"
+              key={day.toISOString()}
+              onClick={() => onDayClick(day)}
+              className="relative mx-auto grid h-8 w-8 place-items-center"
+              aria-label={`Add to-do for ${day.toLocaleDateString()}`}
+            >
+              <span
+                className={`grid h-8 w-8 place-items-center rounded-full transition-colors ${
+                  isToday
+                    ? "bg-purple-700 text-white"
+                    : "text-gray-400 hover:bg-purple-50 hover:text-purple-700"
+                }`}
+              >
+                {day.getDate()}
+              </span>
+              {hasTodos && (
+                <span
+                  className={`absolute bottom-0.5 h-1.5 w-1.5 rounded-full ${isToday ? "bg-white" : "bg-indigo-500"}`}
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function DayTodoModal({
+  date,
+  items,
+  onAdd,
+  onToggle,
+  onRemove,
+  onClose,
+}: {
+  date: Date;
+  items: TodoItem[];
+  onAdd: (text: string) => void;
+  onToggle: (id: string) => void;
+  onRemove: (id: string) => void;
+  onClose: () => void;
+}) {
+  const [draft, setDraft] = useState("");
+  function submit() {
+    const text = draft.trim();
+    if (!text) return;
+    onAdd(text);
+    setDraft("");
+  }
+  return (
+    <div className="fixed inset-0 z-[9997] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-lg font-black text-gray-900">
+              {date.toLocaleDateString(undefined, {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+              })}
+            </h3>
+            <p className="text-xs font-semibold text-gray-400">Add a to-do for this date</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+            aria-label="Close"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            placeholder="e.g. Finish Module 2 quiz"
+            className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-purple-500"
+          />
+          <button
+            type="button"
+            onClick={submit}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-purple-700 text-white hover:bg-purple-800"
+            aria-label="Add to-do"
+          >
+            <Plus size={18} />
+          </button>
+        </div>
+
+        <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto">
+          {items.length === 0 ? (
+            <p className="py-4 text-center text-sm text-gray-400">No to-dos for this date yet.</p>
+          ) : (
+            items.map((item) => (
+              <li key={item.id} className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2">
+                <input
+                  type="checkbox"
+                  checked={!!item.done}
+                  onChange={() => onToggle(item.id)}
+                  className="h-4 w-4 accent-purple-700"
+                />
+                <span
+                  className={`flex-1 text-sm font-medium ${item.done ? "text-gray-400 line-through" : "text-gray-700"}`}
+                >
+                  {item.text}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onRemove(item.id)}
+                  className="text-gray-300 hover:text-red-500"
+                  aria-label="Remove to-do"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -329,14 +895,19 @@ function NicheCard({
             </div>
           </div>
         </div>
-        <ChevronDown size={18} className={`shrink-0 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown
+          size={18}
+          className={`shrink-0 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       {isOpen && (
         <div className="space-y-3 border-t border-gray-100 bg-gray-50/60 p-4">
           {niche.modules.map((module) => (
             <div key={module.title}>
-              <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-gray-400">{module.title}</p>
+              <p className="mb-1.5 text-[11px] font-bold uppercase tracking-wide text-gray-400">
+                {module.title}
+              </p>
               <ul className="space-y-1.5">
                 {module.lessons.map((lesson) => (
                   <li key={lesson}>
@@ -358,6 +929,388 @@ function NicheCard({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ------------------------- Courses view ------------------------- */
+
+function CoursesView({ onLockedLesson }: { onLockedLesson: (title: string) => void }) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  if (activeIndex !== null) {
+    return (
+      <NicheDetail
+        niche={NICHES[activeIndex]}
+        index={activeIndex}
+        onBack={() => setActiveIndex(null)}
+        onLockedLesson={onLockedLesson}
+      />
+    );
+  }
+
+  return (
+    <div>
+      <p className="text-sm font-semibold text-gray-500">
+        Browse every niche below — open one to see its full curriculum.
+      </p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {NICHES.map((niche, i) => {
+          const pct = fakeNichePct(i);
+          const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
+          return (
+            <button
+              key={niche.title}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              className="rounded-2xl bg-white p-5 text-left shadow-sm transition-shadow hover:shadow-md"
+            >
+              <span
+                className="grid h-12 w-12 place-items-center rounded-xl text-sm font-black text-white"
+                style={{ background: niche.back }}
+              >
+                {niche.title.slice(0, 2).toUpperCase()}
+              </span>
+              <p className="mt-3 truncate text-sm font-bold text-gray-900">{niche.title}</p>
+              <p className="mt-1 line-clamp-2 text-xs text-gray-500">{niche.short}</p>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-gray-100">
+                <div className="h-full rounded-full bg-purple-600" style={{ width: `${pct}%` }} />
+              </div>
+              <span className="mt-1.5 block text-[11px] font-bold text-gray-400">
+                {pct}% · {lessonCount} lessons
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function NicheDetail({
+  niche,
+  index,
+  onBack,
+  onLockedLesson,
+}: {
+  niche: Niche;
+  index: number;
+  onBack: () => void;
+  onLockedLesson: (title: string) => void;
+}) {
+  const [search, setSearch] = useState("");
+  const pct = fakeNichePct(index);
+  const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
+  const completedCount = Math.round((pct / 100) * lessonCount);
+  const q = search.trim().toLowerCase();
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={onBack}
+        className="inline-flex items-center gap-1.5 text-sm font-bold text-purple-700 hover:underline"
+      >
+        <ChevronLeft size={16} /> All courses
+      </button>
+
+      <div className="mt-4 rounded-2xl bg-white p-5 shadow-sm sm:p-6">
+        <span className="rounded-full bg-violet-100 px-2.5 py-1 text-[11px] font-black text-violet-700">
+          YOUR LEARNING PATH
+        </span>
+        <h2 className="mt-3 text-2xl font-black text-gray-900">{niche.title}</h2>
+        <p className="mt-1 text-sm font-semibold text-gray-400">
+          {completedCount} of {lessonCount} lessons completed
+        </p>
+        <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100">
+          <div className="h-full rounded-full bg-purple-600" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+
+      <label className="mt-5 flex w-full items-center gap-2 rounded-2xl bg-white px-4 py-3 text-gray-400 shadow-sm sm:w-80">
+        <Search size={18} className="shrink-0 text-purple-500" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+          placeholder="Search lessons..."
+        />
+      </label>
+
+      <div className="mt-5 space-y-5">
+        {niche.modules.map((module) => {
+          const lessons = module.lessons.filter((l) => !q || l.toLowerCase().includes(q));
+          if (lessons.length === 0) return null;
+          return (
+            <div key={module.title} className="rounded-2xl bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-black text-gray-900">{module.title}</h3>
+              <ul className="mt-3 space-y-2">
+                {lessons.map((lesson) => (
+                  <li key={lesson}>
+                    <button
+                      type="button"
+                      onClick={() => onLockedLesson(lesson)}
+                      className="flex w-full items-center justify-between gap-2 rounded-xl bg-gray-50 px-3.5 py-2.5 text-left text-sm font-semibold text-gray-600 hover:bg-gray-100"
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        <Lock size={13} className="shrink-0 text-gray-300" />
+                        <span className="truncate">{lesson}</span>
+                      </span>
+                      <ChevronRight size={14} className="shrink-0 text-gray-300" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------- Certificates view ------------------------- */
+
+function CertificatesView({
+  onLockedCertificate,
+}: {
+  onLockedCertificate: (title: string) => void;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-gray-500">
+        Complete all lessons in a niche to earn your certificate.
+      </p>
+      <div className="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {NICHES.map((niche, i) => {
+          const pct = fakeNichePct(i);
+          const lessonCount = niche.modules.reduce((s, m) => s + m.lessons.length, 0);
+          const done = Math.round((pct / 100) * lessonCount);
+          const complete = pct === 100;
+          return (
+            <div key={niche.title} className="rounded-2xl bg-white p-5 shadow-sm">
+              <div className="flex items-center gap-2">
+                <BookOpen size={20} className="text-purple-600" />
+                <h3 className="font-bold">{niche.title}</h3>
+              </div>
+              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                <div className="h-full bg-purple-600" style={{ width: `${pct}%` }} />
+              </div>
+              <p className="mt-2 text-xs text-gray-500">
+                {done} / {lessonCount} lessons completed
+              </p>
+              {complete ? (
+                <>
+                  <span className="mt-3 inline-block rounded-full bg-green-100 px-2 py-1 text-xs font-bold text-green-700">
+                    Completed
+                  </span>
+                  <button
+                    onClick={() => onLockedCertificate(`${niche.title} Certificate`)}
+                    className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 font-semibold text-white hover:bg-green-700"
+                  >
+                    <Download size={18} /> Download Certificate
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="mt-3 text-xs text-gray-500">
+                    {lessonCount - done} lessons remaining
+                  </p>
+                  <button
+                    onClick={() => onLockedCertificate(`${niche.title} Certificate`)}
+                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gray-100 px-4 py-2.5 font-semibold text-gray-500 hover:bg-gray-200"
+                  >
+                    <Lock size={18} /> Certificate Locked
+                  </button>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------- Settings view ------------------------- */
+
+function SettingsView({ onLockedAction }: { onLockedAction: (title: string) => void }) {
+  const [name, setName] = useState(FAKE_NAME);
+  const initials = initialsOf(name || FAKE_NAME);
+
+  return (
+    <div className="max-w-xl">
+      <div className="rounded-2xl bg-white p-6 shadow-sm">
+        <h2 className="text-sm font-black text-gray-900">Profile</h2>
+        <div className="mt-4 flex items-center gap-4">
+          <div className="relative">
+            <span className="grid h-16 w-16 place-items-center rounded-full bg-purple-100 text-lg font-black text-purple-700">
+              {initials}
+            </span>
+            <button
+              type="button"
+              onClick={() => onLockedAction("Change Profile Photo")}
+              className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full bg-purple-700 text-white shadow-sm hover:bg-purple-800"
+              aria-label="Change photo"
+            >
+              <Camera size={13} />
+            </button>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-900">{name || FAKE_NAME}</p>
+            <p className="text-xs text-gray-400">{FAKE_EMAIL}</p>
+          </div>
+        </div>
+
+        <label className="mt-6 block text-xs font-bold text-gray-500">Display Name</label>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="mt-1.5 w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm outline-none focus:border-purple-500"
+        />
+
+        <label className="mt-4 block text-xs font-bold text-gray-500">Email</label>
+        <input
+          value={FAKE_EMAIL}
+          disabled
+          className="mt-1.5 w-full rounded-xl border border-gray-100 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-400"
+        />
+
+        <button
+          type="button"
+          onClick={() => onLockedAction("Save Profile Changes")}
+          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-purple-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-purple-800"
+        >
+          <Save size={16} /> Save Changes
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------- Messages view ------------------------- */
+
+function MessagesView({ onLockedSend }: { onLockedSend: (title: string) => void }) {
+  const [draft, setDraft] = useState("");
+
+  function attemptSend(e?: React.FormEvent) {
+    e?.preventDefault();
+    onLockedSend("Send a Message");
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <div className="flex h-[520px] flex-col overflow-hidden rounded-2xl bg-white shadow-sm">
+        <div className="border-b border-gray-100 px-5 py-4">
+          <p className="text-sm font-black text-gray-900">Conversation with LearnHub PH Support</p>
+          <p className="text-xs text-gray-400">
+            Sample conversation — sign up to message your instructor directly.
+          </p>
+        </div>
+        <div className="flex-1 space-y-3 overflow-y-auto bg-gray-50 px-4 py-4">
+          {FAKE_THREAD.map((m, i) => (
+            <div
+              key={i}
+              className={`flex ${m.sender === "student" ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  m.sender === "student"
+                    ? "rounded-br-sm bg-purple-700 text-white"
+                    : "rounded-bl-sm border border-gray-100 bg-white text-gray-700 shadow-sm"
+                }`}
+              >
+                {m.body}
+                <div
+                  className={`mt-1 text-[10px] ${m.sender === "student" ? "text-purple-200" : "text-gray-300"}`}
+                >
+                  {m.time}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <form
+          onSubmit={attemptSend}
+          className="flex items-center gap-2 border-t border-gray-100 bg-white p-3"
+        >
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="Type a message…"
+            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <button
+            type="submit"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-700 text-white hover:bg-purple-800"
+            aria-label="Send"
+          >
+            <Send size={16} />
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------- Notifications view ------------------------- */
+
+function NotificationsView({
+  notifs,
+  setNotifs,
+}: {
+  notifs: typeof FAKE_NOTIFICATIONS;
+  setNotifs: (fn: (prev: typeof FAKE_NOTIFICATIONS) => typeof FAKE_NOTIFICATIONS) => void;
+}) {
+  function markRead(id: string) {
+    setNotifs((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }
+
+  const unread = notifs.filter((n) => !n.read).length;
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <div className="flex items-center gap-2">
+        <Bell size={20} className="text-purple-600" />
+        <h2 className="text-lg font-black">Notifications</h2>
+        {unread > 0 && (
+          <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+            {unread} new
+          </span>
+        )}
+      </div>
+      <ul className="mt-5 space-y-3">
+        {notifs.map((n) => (
+          <li key={n.id}>
+            <button
+              type="button"
+              onClick={() => markRead(n.id)}
+              className={`flex w-full gap-3 rounded-xl border-l-4 p-4 text-left shadow-sm ${
+                n.type === "payment"
+                  ? "border-green-500"
+                  : n.type === "quiz"
+                    ? "border-purple-500"
+                    : "border-blue-500"
+              } ${n.read ? "bg-white" : "bg-purple-50"}`}
+            >
+              {n.type === "payment" ? (
+                <ClipboardCheck size={20} className="mt-0.5 shrink-0 text-purple-600" />
+              ) : n.type === "quiz" ? (
+                <FileCheck2 size={20} className="mt-0.5 shrink-0 text-purple-600" />
+              ) : (
+                <MessageSquare size={20} className="mt-0.5 shrink-0 text-purple-600" />
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-bold text-gray-900">{n.title}</p>
+                  <span className="shrink-0 text-[10px] text-gray-400">{n.time}</span>
+                </div>
+                <p className="mt-1 text-sm text-gray-600">{n.body}</p>
+              </div>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

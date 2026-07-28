@@ -1,10 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  BookOpen, Layout, Layers, Smartphone, Award, Users, Sparkles,
-  Trophy, Route as RouteIcon, MessagesSquare, Zap, Plug,
-  CheckCircle2, ClipboardCheck, LineChart, ShieldCheck, Mail,
-  Star, X, ArrowRight, Globe, RefreshCw, Check, GraduationCap, ChevronDown,
+  BookOpen,
+  Layout,
+  Layers,
+  Smartphone,
+  Award,
+  Users,
+  Sparkles,
+  Trophy,
+  Route as RouteIcon,
+  MessagesSquare,
+  Zap,
+  Plug,
+  CheckCircle2,
+  ClipboardCheck,
+  LineChart,
+  ShieldCheck,
+  Mail,
+  Star,
+  X,
+  ArrowRight,
+  Globe,
+  RefreshCw,
+  Check,
+  GraduationCap,
+  ChevronDown,
+  Headphones,
+  Bot,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -112,8 +135,7 @@ function CTAButton({
       "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40 hover:brightness-110",
     outline:
       "border border-violet-300 text-violet-700 bg-white hover:bg-violet-50 hover:border-violet-500",
-    "ghost-white":
-      "border border-white/40 text-white bg-white/10 backdrop-blur hover:bg-white/20",
+    "ghost-white": "border border-white/40 text-white bg-white/10 backdrop-blur hover:bg-white/20",
   }[variant];
   return (
     <button
@@ -169,9 +191,7 @@ function Nav() {
               key={href}
               href={href}
               className={`text-sm font-medium transition-colors ${
-                scrolled
-                  ? "text-slate-700 hover:text-violet-700"
-                  : "text-white/85 hover:text-white"
+                scrolled ? "text-slate-700 hover:text-violet-700" : "text-white/85 hover:text-white"
               }`}
             >
               {label}
@@ -231,7 +251,17 @@ function LogoMark({ className = "" }: { className?: string }) {
   );
 }
 
-function Stat({ value, suffix = "", label, badge }: { value: number | string; suffix?: string; label: string; badge?: string }) {
+function Stat({
+  value,
+  suffix = "",
+  label,
+  badge,
+}: {
+  value: number | string;
+  suffix?: string;
+  label: string;
+  badge?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -248,7 +278,10 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
   const isNum = typeof value === "number";
   const n = useCountUp(isNum ? (value as number) : 0, inView && isNum);
   return (
-    <div ref={ref} className="rounded-2xl bg-white/10 border border-white/15 backdrop-blur px-4 py-4 sm:px-5 sm:py-5 text-left relative overflow-hidden">
+    <div
+      ref={ref}
+      className="rounded-2xl bg-white/10 border border-white/15 backdrop-blur px-4 py-4 sm:px-5 sm:py-5 text-left relative overflow-hidden"
+    >
       <div className="text-2xl sm:text-3xl font-black text-white leading-none flex items-baseline gap-1">
         {isNum ? n.toLocaleString() : value}
         {suffix && <span className="text-lg text-violet-200">{suffix}</span>}
@@ -265,9 +298,9 @@ function Stat({ value, suffix = "", label, badge }: { value: number | string; su
 
 // Shared niche data — used by Hero cycle AND flip cards
 type NicheColor = {
-  caps: string;      // watermark all-caps short name
-  gradient: string;  // 4-stop diagonal gradient
-  accent: string;    // solid accent color (button text on white)
+  caps: string; // watermark all-caps short name
+  gradient: string; // 4-stop diagonal gradient
+  accent: string; // solid accent color (button text on white)
   description: string;
   skills: string[];
 };
@@ -276,7 +309,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "SOCIAL MEDIA",
     gradient: "linear-gradient(135deg, #3b0764, #7c3aed, #a855f7, #6d28d9)",
     accent: "#7c3aed",
-    description: "As a Social Media Manager VA, you'll learn to build and run social media accounts for clients from scratch. You'll create content calendars, design graphics, write captions, schedule posts, and deliver monthly performance reports — everything a client needs to grow their brand online.",
+    description:
+      "As a Social Media Manager VA, you'll learn to build and run social media accounts for clients from scratch. You'll create content calendars, design graphics, write captions, schedule posts, and deliver monthly performance reports — everything a client needs to grow their brand online.",
     skills: [
       "Plan and schedule content across Facebook, Instagram, TikTok and LinkedIn",
       "Design on-brand graphics and write captions that drive engagement",
@@ -287,7 +321,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "GENERAL VA",
     gradient: "linear-gradient(135deg, #042f2e, #0d9488, #14b8a6, #0f766e)",
     accent: "#0d9488",
-    description: "As a General VA, you'll become the go-to support person every remote business owner needs. You'll master the tools, communication skills, and workflows that let you hit the ground running from day one — and attract your first paying client faster than you think.",
+    description:
+      "As a General VA, you'll become the go-to support person every remote business owner needs. You'll master the tools, communication skills, and workflows that let you hit the ground running from day one — and attract your first paying client faster than you think.",
     skills: [
       "Manage emails, calendars, research tasks and day-to-day admin work",
       "Use Google Workspace, Trello, Asana, Slack and Zoom confidently",
@@ -298,7 +333,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "ADMIN",
     gradient: "linear-gradient(135deg, #052e16, #16a34a, #4ade80, #15803d)",
     accent: "#16a34a",
-    description: "As an Admin Assistant VA, you'll handle the behind-the-scenes work that keeps businesses running smoothly. From organizing files and writing professional emails to automating repetitive tasks — you'll be indispensable to any remote team that hires you.",
+    description:
+      "As an Admin Assistant VA, you'll handle the behind-the-scenes work that keeps businesses running smoothly. From organizing files and writing professional emails to automating repetitive tasks — you'll be indispensable to any remote team that hires you.",
     skills: [
       "Manage calendars, schedules, files and cloud storage systems",
       "Write professional emails, meeting minutes and client-ready documents",
@@ -309,7 +345,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "DESIGN",
     gradient: "linear-gradient(135deg, #4c0519, #e11d48, #fb7185, #be123c)",
     accent: "#e11d48",
-    description: "As a Graphic Designer VA, you'll create professional visual content for clients using Canva and Adobe tools — no design degree required. You'll deliver everything from social media graphics to full brand kits, ad creatives, and pitch decks that impress.",
+    description:
+      "As a Graphic Designer VA, you'll create professional visual content for clients using Canva and Adobe tools — no design degree required. You'll deliver everything from social media graphics to full brand kits, ad creatives, and pitch decks that impress.",
     skills: [
       "Master color, typography and layout fundamentals for professional-quality output",
       "Design social posts, stories, ad creatives, thumbnails and presentation decks",
@@ -320,7 +357,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "BOOKKEEPING",
     gradient: "linear-gradient(135deg, #172554, #2563eb, #60a5fa, #1d4ed8)",
     accent: "#2563eb",
-    description: "As a Bookkeeping VA, you'll handle the financial admin that every business owner dreads doing themselves. You'll manage invoices, track expenses, reconcile accounts, and generate reports using QuickBooks and Wave — no accounting degree needed.",
+    description:
+      "As a Bookkeeping VA, you'll handle the financial admin that every business owner dreads doing themselves. You'll manage invoices, track expenses, reconcile accounts, and generate reports using QuickBooks and Wave — no accounting degree needed.",
     skills: [
       "Code transactions, reconcile accounts and manage expense categories accurately",
       "Create and send invoices, track payments and support basic payroll tasks",
@@ -331,7 +369,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "E-COMMERCE",
     gradient: "linear-gradient(135deg, #431407, #ea580c, #fb923c, #c2410c)",
     accent: "#ea580c",
-    description: "As an E-Commerce VA, you'll manage online stores end-to-end for clients selling on Shopify and Amazon. You'll handle product listings, inventory, customer orders, supplier coordination, and review management — keeping the store running without the owner.",
+    description:
+      "As an E-Commerce VA, you'll manage online stores end-to-end for clients selling on Shopify and Amazon. You'll handle product listings, inventory, customer orders, supplier coordination, and review management — keeping the store running without the owner.",
     skills: [
       "Navigate Shopify and Amazon Seller Central and manage store settings confidently",
       "Write product descriptions that sell and maintain accurate inventory records",
@@ -342,7 +381,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "OPERATIONS",
     gradient: "linear-gradient(135deg, #1e1b4b, #4f46e5, #818cf8, #4338ca)",
     accent: "#4f46e5",
-    description: "As an Operations Assistant VA, you'll help businesses run more efficiently by mapping workflows, eliminating bottlenecks, and building the systems remote teams rely on daily. You'll become the person who makes sure everything actually gets done.",
+    description:
+      "As an Operations Assistant VA, you'll help businesses run more efficiently by mapping workflows, eliminating bottlenecks, and building the systems remote teams rely on daily. You'll become the person who makes sure everything actually gets done.",
     skills: [
       "Use ClickUp, Monday.com and Notion to manage projects and team tasks",
       "Write clear SOPs and process maps that any team member can follow",
@@ -353,7 +393,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "SUPPORT",
     gradient: "linear-gradient(135deg, #450a0a, #dc2626, #f87171, #b91c1c)",
     accent: "#dc2626",
-    description: "As a Customer Support Specialist VA, you'll handle every type of customer interaction with professionalism and empathy. From email tickets and live chat to phone calls and angry customer de-escalation — you'll be the voice clients trust to protect their brand.",
+    description:
+      "As a Customer Support Specialist VA, you'll handle every type of customer interaction with professionalism and empathy. From email tickets and live chat to phone calls and angry customer de-escalation — you'll be the voice clients trust to protect their brand.",
     skills: [
       "Use Zendesk and Freshdesk to manage tickets, chats and support queues",
       "Handle refunds, replacements and policy enforcement with confidence",
@@ -364,7 +405,8 @@ const NICHE_COLORS: Record<string, NicheColor> = {
     caps: "APPOINTMENTS",
     gradient: "linear-gradient(135deg, #2e1065, #7c3aed, #c084fc, #6d28d9)",
     accent: "#7c3aed",
-    description: "As an Appointment Setter VA, you'll generate qualified leads and fill your client's calendar with booked calls. You'll learn cold outreach, objection handling, follow-up sequences, and CRM tools — the exact skills high-paying sales-focused clients hire for.",
+    description:
+      "As an Appointment Setter VA, you'll generate qualified leads and fill your client's calendar with booked calls. You'll learn cold outreach, objection handling, follow-up sequences, and CRM tools — the exact skills high-paying sales-focused clients hire for.",
     skills: [
       "Research target leads, build lead lists and craft outreach messages that get replies",
       "Handle common objections confidently and follow up with sequences that convert",
@@ -399,8 +441,7 @@ function Hero() {
   const intervalRef = useRef<number | null>(null);
 
   const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const goToIndex = (nextIdx: number) => {
     const nextGradient = NICHE_COLORS[HERO_ORDER[nextIdx]].gradient;
@@ -506,17 +547,36 @@ function Hero() {
       {/* Gradient crossfade layers */}
       <div
         aria-hidden="true"
-        style={{ ...layerBaseStyle, backgroundImage: layerAGradient, opacity: layerAOpacity, zIndex: 0 }}
+        style={{
+          ...layerBaseStyle,
+          backgroundImage: layerAGradient,
+          opacity: layerAOpacity,
+          zIndex: 0,
+        }}
       />
       <div
         aria-hidden="true"
-        style={{ ...layerBaseStyle, backgroundImage: layerBGradient, opacity: layerBOpacity, zIndex: 0 }}
+        style={{
+          ...layerBaseStyle,
+          backgroundImage: layerBGradient,
+          opacity: layerBOpacity,
+          zIndex: 0,
+        }}
       />
 
       {/* blobs */}
-      <div className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob" style={{ zIndex: 1 }} />
-      <div className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-6s", zIndex: 1 }} />
-      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob" style={{ animationDelay: "-12s", zIndex: 1 }} />
+      <div
+        className="absolute -top-24 -left-16 h-96 w-96 rounded-full bg-white/10 blur-3xl animate-blob"
+        style={{ zIndex: 1 }}
+      />
+      <div
+        className="absolute top-40 -right-16 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl animate-blob"
+        style={{ animationDelay: "-6s", zIndex: 1 }}
+      />
+      <div
+        className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl animate-blob"
+        style={{ animationDelay: "-12s", zIndex: 1 }}
+      />
 
       {/* watermark niche name — bottom-left, cropped */}
       <div
@@ -558,8 +618,8 @@ function Hero() {
             </span>
           </h1>
           <p className="mt-5 text-lg text-white/90 max-w-xl">
-            Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying VA specializations —
-            now at <span className="line-through opacity-70">₱899</span>{" "}
+            Get lifetime access to 81 expert lessons, quizzes, and certificates across 9 high-paying
+            VA specializations — now at <span className="line-through opacity-70">₱899</span>{" "}
             <span className="font-bold text-white">₱399 only!</span>
           </p>
           <p className="mt-3 text-sm text-white/85 max-w-xl inline-flex items-center gap-2">
@@ -605,7 +665,9 @@ function Hero() {
               <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
               <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-              <span className="ml-3 text-[10px] text-slate-500 font-medium">learnhubph.lovable.app</span>
+              <span className="ml-3 text-[10px] text-slate-500 font-medium">
+                learnhubph.lovable.app
+              </span>
             </div>
             <img
               src={dashAsset.url}
@@ -614,10 +676,19 @@ function Hero() {
               loading="eager"
             />
           </div>
-          <div className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-2s" }}>
-            <GraduationCap className="h-4 w-4 text-violet-600" /> <span>Now Learning: <span className="text-violet-700">{activeName}</span></span>
+          <div
+            className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float"
+            style={{ animationDelay: "-2s" }}
+          >
+            <GraduationCap className="h-4 w-4 text-violet-600" />{" "}
+            <span>
+              Now Learning: <span className="text-violet-700">{activeName}</span>
+            </span>
           </div>
-          <div className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float" style={{ animationDelay: "-4s" }}>
+          <div
+            className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float"
+            style={{ animationDelay: "-4s" }}
+          >
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
           </div>
         </div>
@@ -651,8 +722,6 @@ function Hero() {
     </section>
   );
 }
-
-
 
 function FeatureStrip() {
   const items = [
@@ -720,11 +789,18 @@ function FlipCard({ niche }: { niche: Niche }) {
           }}
         >
           <div className="w-full bg-white overflow-hidden shrink-0" style={{ height: "210px" }}>
-            <img src={niche.img.url} alt={niche.title} className="w-full h-full object-cover block" loading="lazy" />
+            <img
+              src={niche.img.url}
+              alt={niche.title}
+              className="w-full h-full object-cover block"
+              loading="lazy"
+            />
           </div>
           <div className="p-5 flex flex-col flex-1 min-h-0">
             <h3 className="text-lg font-bold text-slate-900">{niche.title}</h3>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1 overflow-hidden">{niche.short}</p>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed flex-1 overflow-hidden">
+              {niche.short}
+            </p>
             <span className="mt-3 text-xs font-semibold text-violet-600 inline-flex items-center gap-1.5">
               <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
               Click to flip →
@@ -734,7 +810,8 @@ function FlipCard({ niche }: { niche: Niche }) {
         {/* back */}
         {(() => {
           const meta = NICHE_COLORS[niche.title];
-          const gradient = meta?.gradient ?? `linear-gradient(135deg, ${niche.back}, ${niche.back})`;
+          const gradient =
+            meta?.gradient ?? `linear-gradient(135deg, ${niche.back}, ${niche.back})`;
           const accent = meta?.accent ?? niche.back;
           const description = meta?.description ?? niche.daily;
           const skills = meta?.skills ?? [];
@@ -749,7 +826,8 @@ function FlipCard({ niche }: { niche: Niche }) {
                 backgroundImage: gradient,
                 backgroundSize: "300% 300%",
                 backgroundPosition: "0% 50%",
-                animation: "gradientShift 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite",
+                animation:
+                  "gradientShift 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite",
                 borderRadius: "16px",
                 border: "1px solid rgba(255,255,255,0.20)",
                 padding: "24px",
@@ -795,7 +873,9 @@ function FlipCard({ niche }: { niche: Niche }) {
 
               {/* header */}
               <div style={{ position: "relative", zIndex: 1 }}>
-                <h3 style={{ fontSize: "18px", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>{niche.title}</h3>
+                <h3 style={{ fontSize: "18px", fontWeight: 800, lineHeight: 1.2, margin: 0 }}>
+                  {niche.title}
+                </h3>
                 <span
                   style={{
                     display: "inline-block",
@@ -813,7 +893,16 @@ function FlipCard({ niche }: { niche: Niche }) {
               </div>
 
               {/* description */}
-              <p style={{ position: "relative", zIndex: 1, margin: 0, fontSize: "13px", lineHeight: 1.6, opacity: 0.9 }}>
+              <p
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  margin: 0,
+                  fontSize: "13px",
+                  lineHeight: 1.6,
+                  opacity: 0.9,
+                }}
+              >
                 {description}
               </p>
 
@@ -831,22 +920,46 @@ function FlipCard({ niche }: { niche: Niche }) {
                 >
                   What You'll Learn
                 </div>
-                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
+                <ul
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    listStyle: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
                   {skills.map((s) => (
-                    <li key={s} style={{ display: "flex", gap: "8px", alignItems: "flex-start", fontSize: "13px", lineHeight: 1.5, opacity: 0.9 }}>
-                      <Check size={12} style={{ marginTop: "4px", flexShrink: 0 }} aria-hidden="true" />
+                    <li
+                      key={s}
+                      style={{
+                        display: "flex",
+                        gap: "8px",
+                        alignItems: "flex-start",
+                        fontSize: "13px",
+                        lineHeight: 1.5,
+                        opacity: 0.9,
+                      }}
+                    >
+                      <Check
+                        size={12}
+                        style={{ marginTop: "4px", flexShrink: 0 }}
+                        aria-hidden="true"
+                      />
                       <span>{s}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-
-
               <div style={{ position: "relative", zIndex: 1 }}>
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); goToLogin(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToLogin();
+                  }}
                   className="active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 transition"
                   style={{
                     display: "inline-flex",
@@ -886,7 +999,6 @@ function FlipCard({ niche }: { niche: Niche }) {
             </div>
           );
         })()}
-
       </div>
     </div>
   );
@@ -904,7 +1016,8 @@ function Niches() {
             Everything You Need to Land High-Paying VA Clients
           </h2>
           <p className="mt-4 text-slate-600">
-            One payment of ₱399 (was ₱899, 55% OFF) unlocks all 9 specializations — with lessons, quizzes and certificates for each.
+            One payment of ₱399 (was ₱899, 55% OFF) unlocks all 9 specializations — with lessons,
+            quizzes and certificates for each.
           </p>
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -987,7 +1100,9 @@ function Curriculum() {
                       <li key={l} className="flex items-start gap-2 text-sm text-slate-700">
                         <CheckCircle2 className="h-4 w-4 text-violet-500 shrink-0 mt-0.5" />
                         <span>
-                          <span className="text-slate-400 text-xs mr-1">Lesson {mi * 3 + li + 1}.</span>
+                          <span className="text-slate-400 text-xs mr-1">
+                            Lesson {mi * 3 + li + 1}.
+                          </span>
                           {l}
                         </span>
                       </li>
@@ -998,7 +1113,9 @@ function Curriculum() {
             </div>
 
             <div className="mt-6">
-              <CTAButton onClick={goToLogin}>Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" /></CTAButton>
+              <CTAButton onClick={goToLogin}>
+                Unlock all 9 niches — ₱399 <ArrowRight className="h-4 w-4" />
+              </CTAButton>
             </div>
           </div>
         </div>
@@ -1009,21 +1126,92 @@ function Curriculum() {
 
 /* ------- features ------- */
 
-
 function Features() {
   const items = [
-    { icon: BookOpen, label: "Course Management", tint: "from-violet-500 to-purple-600" },
-    { icon: Layout, label: "Intuitive User Interface", tint: "from-fuchsia-500 to-pink-500" },
-    { icon: Layers, label: "Blended Learning", tint: "from-indigo-500 to-violet-600" },
-    { icon: Smartphone, label: "Mobile Learning", tint: "from-cyan-500 to-blue-500" },
-    { icon: Award, label: "Certification", tint: "from-amber-500 to-orange-500" },
-    { icon: Users, label: "User Management", tint: "from-emerald-500 to-teal-500" },
-    { icon: Sparkles, label: "Customization", tint: "from-pink-500 to-rose-500" },
-    { icon: Trophy, label: "Gamification", tint: "from-yellow-500 to-amber-500" },
-    { icon: RouteIcon, label: "Personalised Learning Paths", tint: "from-purple-600 to-fuchsia-600" },
-    { icon: MessagesSquare, label: "Social Learning Tools", tint: "from-sky-500 to-indigo-500" },
-    { icon: Zap, label: "Automation", tint: "from-orange-500 to-red-500" },
-    { icon: Plug, label: "Integrations", tint: "from-teal-500 to-cyan-500" },
+    {
+      icon: BookOpen,
+      label: "Course Management",
+      tint: "from-violet-500 to-purple-600",
+      desc: "Structured niches, modules, and lessons that keep every learner on a clear path to mastery.",
+    },
+    {
+      icon: Layout,
+      label: "Intuitive User Interface",
+      tint: "from-fuchsia-500 to-pink-500",
+      desc: "Clean, distraction-free screens so students spend their time learning, not figuring out the app.",
+    },
+    {
+      icon: Layers,
+      label: "Blended Learning",
+      tint: "from-indigo-500 to-violet-600",
+      desc: "Video, text, and hands-on practice combined for lessons that actually stick.",
+    },
+    {
+      icon: Smartphone,
+      label: "Mobile Learning",
+      tint: "from-cyan-500 to-blue-500",
+      desc: "A fully responsive dashboard, so students can learn on their phone between shifts or commutes.",
+    },
+    {
+      icon: Award,
+      label: "Certification",
+      tint: "from-amber-500 to-orange-500",
+      desc: "Auto-generated certificates the moment a niche is completed — proof clients can trust.",
+    },
+    {
+      icon: Users,
+      label: "User Management",
+      tint: "from-emerald-500 to-teal-500",
+      desc: "Effortless enrollment, access control, and student records, all in one place.",
+    },
+    {
+      icon: Sparkles,
+      label: "Customization",
+      tint: "from-pink-500 to-rose-500",
+      desc: "Branded colors, badges, and layouts that make the platform feel like your own.",
+    },
+    {
+      icon: Trophy,
+      label: "Gamification",
+      tint: "from-yellow-500 to-amber-500",
+      desc: "Progress bars, streaks, and milestones that keep students motivated to finish what they start.",
+    },
+    {
+      icon: RouteIcon,
+      label: "Personalised Learning Paths",
+      tint: "from-purple-600 to-fuchsia-600",
+      desc: "Sequential unlocking keeps each student on the right lesson at the right time, at their own pace.",
+    },
+    {
+      icon: MessagesSquare,
+      label: "Social Learning Tools",
+      tint: "from-sky-500 to-indigo-500",
+      desc: "Built-in messaging keeps students and instructors connected throughout the course.",
+    },
+    {
+      icon: Zap,
+      label: "Automation",
+      tint: "from-orange-500 to-red-500",
+      desc: "Enrollment, unlocking, notifications, and certificates all run themselves in the background.",
+    },
+    {
+      icon: Plug,
+      label: "Integrations",
+      tint: "from-teal-500 to-cyan-500",
+      desc: "Works with the tools you already use, so nothing needs to be rebuilt from scratch.",
+    },
+    {
+      icon: Headphones,
+      label: "Live Support (9AM–9PM Weekdays)",
+      tint: "from-green-500 to-emerald-600",
+      desc: "A real team member is just a click away, Monday to Friday, whenever students need extra help.",
+    },
+    {
+      icon: Bot,
+      label: "AI Chatbot",
+      tint: "from-blue-600 to-indigo-700",
+      desc: "Instant answers on pricing, courses, and certificates — day or night, no waiting required.",
+    },
   ];
   return (
     <section id="features" className="py-20 sm:py-28 bg-white">
@@ -1033,10 +1221,11 @@ function Features() {
             Platform Features
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
-            Top 12 LMS Features
+            Top 14 LMS Features
           </h2>
           <p className="mt-3 text-slate-600">
-            A learning experience built for modern Filipino freelancers — beautiful, mobile-friendly and easy to use.
+            A learning experience built for modern Filipino freelancers — beautiful, mobile-friendly
+            and easy to use.
           </p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -1045,12 +1234,14 @@ function Features() {
               key={it.label}
               className="reveal rounded-2xl bg-white border border-slate-200 p-6 flex items-center gap-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-500/10 hover:border-violet-300"
             >
-              <div className={`grid place-items-center h-14 w-14 rounded-2xl bg-gradient-to-br ${it.tint} text-white shadow-md shrink-0`}>
+              <div
+                className={`grid place-items-center h-14 w-14 rounded-2xl bg-gradient-to-br ${it.tint} text-white shadow-md shrink-0`}
+              >
                 <it.icon className="h-7 w-7" />
               </div>
               <div>
                 <div className="font-bold text-slate-900">{it.label}</div>
-                <div className="text-xs text-slate-500 mt-0.5">Built in, no setup needed</div>
+                <div className="text-xs text-slate-500 mt-0.5">{it.desc}</div>
               </div>
             </div>
           ))}
@@ -1062,23 +1253,50 @@ function Features() {
 
 function WhatYouGet() {
   const items = [
-    { icon: BookOpen, label: "81 Full-Length Lessons", desc: "Step-by-step video and text lessons across every niche." },
-    { icon: ClipboardCheck, label: "Quiz After Every Lesson", desc: "Reinforce what you learn with 243 practice questions." },
-    { icon: Award, label: "Completion Certificates", desc: "Get a certificate for every niche you finish." },
-    { icon: LineChart, label: "Progress Tracking", desc: "See how far you've come across all 9 niches." },
-    { icon: ShieldCheck, label: "Secure Token Login", desc: "Passwordless, safe access to your learning." },
+    {
+      icon: BookOpen,
+      label: "81 Full-Length Lessons",
+      desc: "Step-by-step video and text lessons across every niche.",
+    },
+    {
+      icon: ClipboardCheck,
+      label: "Quiz After Every Lesson",
+      desc: "Reinforce what you learn with 243 practice questions.",
+    },
+    {
+      icon: Award,
+      label: "Completion Certificates",
+      desc: "Get a certificate for every niche you finish.",
+    },
+    {
+      icon: LineChart,
+      label: "Progress Tracking",
+      desc: "See how far you've come across all 9 niches.",
+    },
+    {
+      icon: ShieldCheck,
+      label: "Secure Token Login",
+      desc: "Passwordless, safe access to your learning.",
+    },
     { icon: Mail, label: "Email Support", desc: "Real humans ready when you need a hand." },
   ];
   return (
     <section className="py-20 sm:py-28 bg-[#f8f6ff]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto reveal">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">What You Get</h2>
-          <p className="mt-3 text-slate-600">Everything's included in the ₱399 all-access pass — forever.</p>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            What You Get
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Everything's included in the ₱399 all-access pass — forever.
+          </p>
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2">
           {items.map((it) => (
-            <div key={it.label} className="reveal rounded-2xl bg-white border border-violet-100 p-6 flex gap-4 hover:-translate-y-0.5 hover:shadow-lg transition-all">
+            <div
+              key={it.label}
+              className="reveal rounded-2xl bg-white border border-violet-100 p-6 flex gap-4 hover:-translate-y-0.5 hover:shadow-lg transition-all"
+            >
               <div className="grid place-items-center h-12 w-12 rounded-xl bg-gradient-to-br from-violet-600 to-purple-700 text-white shrink-0">
                 <it.icon className="h-6 w-6" />
               </div>
@@ -1106,10 +1324,13 @@ function Certificate() {
             Real Certificates You Can Show Off
           </h2>
           <p className="mt-4 text-slate-600 max-w-lg">
-            Earn a shareable certificate for every niche you complete — perfect for LinkedIn and Upwork.
+            Earn a shareable certificate for every niche you complete — perfect for LinkedIn and
+            Upwork.
           </p>
           <div className="mt-6">
-            <CTAButton onClick={goToLogin}>Start earning yours <ArrowRight className="h-4 w-4" /></CTAButton>
+            <CTAButton onClick={goToLogin}>
+              Start earning yours <ArrowRight className="h-4 w-4" />
+            </CTAButton>
           </div>
         </div>
         <div className="reveal">
@@ -1177,7 +1398,9 @@ function Pricing() {
             >
               Get Started Now <ArrowRight className="h-5 w-5" />
             </button>
-            <p className="mt-3 text-xs text-violet-100/80">Instant access · GCash & BPI Bank Transfer</p>
+            <p className="mt-3 text-xs text-violet-100/80">
+              Instant access · GCash & BPI Bank Transfer
+            </p>
           </div>
         </div>
       </div>
@@ -1212,16 +1435,46 @@ const TESTIMONIALS = [
 ];
 
 const FAQS: { q: string; a: string }[] = [
-  { q: "How do I access the course after payment?", a: "Once your GCash payment or Bank transfer is verified by our team, you'll receive an email with your personal access token. Use that token along with your registered email to log in at learnhubph.lovable.app. Access is granted within 24 hours of payment confirmation." },
-  { q: "Is this really a one-time payment?", a: "Yes — you pay ₱399 once and get lifetime access to all 9 VA niches, 81 lessons, 243 quiz questions, and 9 completion certificates. No monthly fees, no renewals, no hidden charges." },
-  { q: "Do I need prior experience to enroll?", a: "No experience needed at all. LearnHub PH is designed for complete beginners who want to start a VA career. The lessons start from the basics and build up to real, client-ready skills step by step." },
-  { q: "Can I take all 9 niches or just one?", a: "You get access to all 9 niches with your single payment. You can start with any niche you want, learn at your own pace, and complete as many as you like. Most students pick one niche to focus on first and expand from there." },
-  { q: "How do I earn my certificate?", a: "Complete all 9 lessons in a niche and pass the quizzes at the end of each lesson. Once you finish all requirements for a niche, your certificate is automatically generated and available to download from your dashboard." },
-  { q: "What payment methods do you accept?", a: "We currently accept GCash payments & BPI Bank transfer only. After signing up, you'll receive our GCash details and instructions on how to submit your proof of payment for verification." },
-  { q: "How long does it take to finish a niche?", a: "Each niche has 9 lessons across 3 modules. Most students complete a single niche in 3 to 7 days depending on their pace. There are no deadlines — you can go as fast or as slow as you need." },
-  { q: "What if I have a question or need help?", a: "You can reach us through the Messages section inside the platform after logging in, or by emailing us directly. Our team typically responds within 24 hours on business days." },
-  { q: "Is LearnHub PH only for Filipinos?", a: "LearnHub PH was built with Filipino VAs in mind but is open to anyone who wants to build a VA career. The content is in English and the skills taught are applicable to working with international clients worldwide." },
-  { q: "Are the certificates recognized by employers?", a: "LearnHub PH certificates demonstrate that you have completed structured training in a specific VA niche. While they are not government-accredited, they serve as strong portfolio proof of your skills — especially when applying on platforms like Upwork, OnlineJobs.ph, and LinkedIn." },
+  {
+    q: "How do I access the course after payment?",
+    a: "Once your GCash payment or Bank transfer is verified by our team, you'll receive an email with your personal access token. Use that token along with your registered email to log in at learnhubph.lovable.app. Access is granted within 24 hours of payment confirmation.",
+  },
+  {
+    q: "Is this really a one-time payment?",
+    a: "Yes — you pay ₱399 once and get lifetime access to all 9 VA niches, 81 lessons, 243 quiz questions, and 9 completion certificates. No monthly fees, no renewals, no hidden charges.",
+  },
+  {
+    q: "Do I need prior experience to enroll?",
+    a: "No experience needed at all. LearnHub PH is designed for complete beginners who want to start a VA career. The lessons start from the basics and build up to real, client-ready skills step by step.",
+  },
+  {
+    q: "Can I take all 9 niches or just one?",
+    a: "You get access to all 9 niches with your single payment. You can start with any niche you want, learn at your own pace, and complete as many as you like. Most students pick one niche to focus on first and expand from there.",
+  },
+  {
+    q: "How do I earn my certificate?",
+    a: "Complete all 9 lessons in a niche and pass the quizzes at the end of each lesson. Once you finish all requirements for a niche, your certificate is automatically generated and available to download from your dashboard.",
+  },
+  {
+    q: "What payment methods do you accept?",
+    a: "We currently accept GCash payments & BPI Bank transfer only. After signing up, you'll receive our GCash details and instructions on how to submit your proof of payment for verification.",
+  },
+  {
+    q: "How long does it take to finish a niche?",
+    a: "Each niche has 9 lessons across 3 modules. Most students complete a single niche in 3 to 7 days depending on their pace. There are no deadlines — you can go as fast or as slow as you need.",
+  },
+  {
+    q: "What if I have a question or need help?",
+    a: "You can reach us through the Messages section inside the platform after logging in, or by emailing us directly. Our team typically responds within 24 hours on business days.",
+  },
+  {
+    q: "Is LearnHub PH only for Filipinos?",
+    a: "LearnHub PH was built with Filipino VAs in mind but is open to anyone who wants to build a VA career. The content is in English and the skills taught are applicable to working with international clients worldwide.",
+  },
+  {
+    q: "Are the certificates recognized by employers?",
+    a: "LearnHub PH certificates demonstrate that you have completed structured training in a specific VA niche. While they are not government-accredited, they serve as strong portfolio proof of your skills — especially when applying on platforms like Upwork, OnlineJobs.ph, and LinkedIn.",
+  },
 ];
 
 function FAQ() {
@@ -1313,12 +1566,13 @@ function FAQ() {
 }
 
 function Testimonials() {
-
   return (
     <section id="reviews" className="py-20 sm:py-28 bg-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto reveal">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">Student Stories</h2>
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+            Student Stories
+          </h2>
           <p className="mt-3 text-slate-600">Real Filipino VAs who leveled up with LearnHub PH.</p>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -1335,7 +1589,9 @@ function Testimonials() {
               </div>
               <p className="mt-4 text-slate-700 leading-relaxed">"{t.quote}"</p>
               <div className="mt-5 flex items-center gap-3">
-                <div className={`grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br ${t.color} text-white font-black`}>
+                <div
+                  className={`grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br ${t.color} text-white font-black`}
+                >
                   {t.name
                     .split(" ")
                     .map((s) => s[0])
@@ -1360,7 +1616,10 @@ function FinalCTA() {
     <section className="py-16 sm:py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#4c1d95] via-[#6d28d9] to-[#7c3aed]" />
       <div className="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-fuchsia-400/30 blur-3xl animate-blob" />
-      <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-cyan-300/20 blur-3xl animate-blob" style={{ animationDelay: "-8s" }} />
+      <div
+        className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-cyan-300/20 blur-3xl animate-blob"
+        style={{ animationDelay: "-8s" }}
+      />
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 text-center reveal">
         <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
           Ready to Start Your VA Journey?
@@ -1476,13 +1735,7 @@ function DocModal({
   );
 }
 
-function Footer({
-  onPrivacy,
-  onTerms,
-}: {
-  onPrivacy: () => void;
-  onTerms: () => void;
-}) {
+function Footer({ onPrivacy, onTerms }: { onPrivacy: () => void; onTerms: () => void }) {
   return (
     <footer className="bg-slate-950 text-slate-400 py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -1507,7 +1760,10 @@ function Footer({
             >
               Terms &amp; Conditions
             </button>
-            <a href="mailto:johnfreycortez@gmail.com" className="hover:text-white transition-colors">
+            <a
+              href="mailto:johnfreycortez@gmail.com"
+              className="hover:text-white transition-colors"
+            >
               Contact
             </a>
           </nav>
