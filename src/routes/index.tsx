@@ -1761,7 +1761,7 @@ function Footer({ onPrivacy, onTerms }: { onPrivacy: () => void; onTerms: () => 
               Terms &amp; Conditions
             </button>
             <a
-              href="mailto:johnfreycortez@gmail.com"
+              href="mailto:learnhubph@proton.me"
               className="hover:text-white transition-colors"
             >
               Contact

@@ -114,7 +114,7 @@ function findBestMatch(message: string, kb: FaqEntry[]): FaqEntry | null {
 type ChatMessage = { id: number; role: "bot" | "user"; content: ReactNode; typing?: boolean };
 
 const FALLBACK_TEXT =
-  "I'm not sure about that — please contact LearnHub PH for help: johnfreycortez@gmail.com";
+  "I'm not sure about that — please contact LearnHub PH for help: learnhubph@proton.me";
 
 // Two-stage "alive" effect: a brief bouncing-dots "thinking" pause, then the
 // reply is revealed character-by-character like it's being typed live.
@@ -414,8 +414,8 @@ export function ChatWidget() {
     ) : (
       <>
         I'm not sure about that — please contact LearnHub PH for help:{" "}
-        <a href="mailto:johnfreycortez@gmail.com" className="font-semibold text-purple-700 underline">
-          johnfreycortez@gmail.com
+        <a href="mailto:learnhubph@proton.me" className="font-semibold text-purple-700 underline">
+          learnhubph@proton.me
         </a>
         <div className="mt-2.5">
           <button
@@ -625,7 +625,7 @@ export function ChatWidget() {
               </p>
               <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
                 <a
-                  href="mailto:johnfreycortez@gmail.com"
+                  href="mailto:learnhubph@proton.me"
                   className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-bold text-gray-700 transition-colors hover:bg-gray-100"
                 >
                   <Mail size={13} /> Email us
