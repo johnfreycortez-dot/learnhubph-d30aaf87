@@ -273,6 +273,21 @@ html.dark .text-gray-400 { color: #9ca0ad !important; }
 html.dark .text-gray-300 { color: #7d8090 !important; }
 html.dark .text-black { color: #f3f4f6 !important; }
 
+/* Slate scale (used heavily by landing page) */
+html.dark .text-slate-950,
+html.dark .text-slate-900,
+html.dark .text-slate-800 { color: #f3f4f6 !important; }
+html.dark .text-slate-700 { color: #e5e7eb !important; }
+html.dark .text-slate-600 { color: #cbd0da !important; }
+html.dark .text-slate-500 { color: #a8adba !important; }
+html.dark .text-slate-400 { color: #9096a3 !important; }
+html.dark .text-slate-300 { color: #7d8090 !important; }
+html.dark .bg-slate-100 { background-color: #22222f !important; }
+html.dark .bg-slate-50 { background-color: #1b1b26 !important; }
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300 { border-color: rgba(255, 255, 255, 0.08) !important; }
+
 /* Borders */
 html.dark .border-gray-100,
 html.dark .border-gray-200,
