@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CheckCircle, ShieldCheck, X } from "lucide-react";
-import { gasCall, saveToken, getToken } from "@/lib/api";
+import { gasCall, saveToken } from "@/lib/api";
 import { Spinner } from "@/components/Spinner";
 import { AdminPinEntry } from "@/components/AdminPinEntry";
 import { DocModal, LEGAL_DOCS } from "@/components/DocModal";
@@ -106,7 +106,16 @@ function SignInForm() {
       const res = await gasCall("getUserByTokenPublic", token.trim());
       if (res.ok) {
         saveToken(res.user.token);
-        navigate({ to: res.user.verified ? "/dashboard" : "/payment" });
+        // Three possible states: verified -> dashboard; payment submitted but
+        // still awaiting admin review -> pending screen; never paid -> payment
+        // form. Previously this only checked `verified`, so anyone mid-review
+        // got bounced back to /payment and asked to pay again.
+        const dest = res.user.verified
+          ? "/dashboard"
+          : res.user.paymentSubmitted
+          ? "/pending"
+          : "/payment";
+        navigate({ to: dest });
       } else {
         setError(res.msg || "Invalid token");
       }
@@ -226,10 +235,15 @@ function SignUpForm() {
     setConfirmMsg("");
     setChecking(true);
     try {
-      const res = await gasCall("getUserByTokenPublic", getToken());
-      if (res?.ok && res.user?.emailConfirmed) {
-        if (res.user.token) saveToken(res.user.token);
-        navigate({ to: "/payment" });
+      // At this point in the flow no token has been saved to this browser
+      // yet — a token only gets saved on whichever tab/device actually opens
+      // the confirmation link from the email. So we can't check "am I
+      // confirmed?" by token here; we have to ask by the email just used to
+      // sign up (`done`), which is the one thing this tab actually knows.
+      const res = await gasCall("getConfirmStatusByEmail", done);
+      if (res?.ok && res.confirmed) {
+        if (res.user?.token) saveToken(res.user.token);
+        navigate({ to: res.user?.paymentSubmitted ? "/pending" : "/payment" });
       } else {
         setConfirmMsg("Your email hasn't been confirmed yet. Please check your inbox.");
       }
