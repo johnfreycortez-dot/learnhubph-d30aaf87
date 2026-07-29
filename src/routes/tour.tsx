@@ -13,7 +13,6 @@ import {
   ChevronRight,
   Circle,
   ClipboardCheck,
-  Compass,
   Download,
   FileCheck2,
   Headphones,
@@ -271,26 +270,6 @@ function TourPage() {
 
   return (
     <div className="min-h-screen bg-[#f6f7fb] text-gray-950">
-      {/* Demo mode banner */}
-      <div className="sticky top-0 z-40 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-purple-700 px-4 py-2 text-center text-xs font-bold text-white sm:text-sm">
-        <span className="inline-flex items-center gap-1.5">
-          <Compass size={14} /> You're previewing a demo — everything here is sample data.
-        </span>
-        <button
-          type="button"
-          onClick={goToLogin}
-          className="rounded-full bg-white px-3 py-1 text-[11px] font-black text-purple-700 hover:bg-purple-50 sm:text-xs"
-        >
-          Get Started — ₱399 <span className="hidden sm:inline">lifetime access</span>
-        </button>
-        <a
-          href="/"
-          className="text-[11px] font-semibold text-purple-100 underline hover:text-white sm:text-xs"
-        >
-          Exit Tour
-        </a>
-      </div>
-
       {sidebarOpen && (
         <button
           type="button"
@@ -301,8 +280,8 @@ function TourPage() {
       )}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex w-[246px] flex-col border-r border-gray-100 bg-white shadow-sm transition-transform lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0 top-[76px]" : "-translate-x-full top-[76px]"
-        } lg:top-[38px]`}
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-6">
           <div className="min-w-0">
@@ -356,7 +335,7 @@ function TourPage() {
       </aside>
 
       <div className="lg:pl-[246px]">
-        <header className="sticky top-[38px] z-30 border-b border-gray-100 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <button
@@ -469,13 +448,18 @@ function TourPage() {
                 one-time ₱399.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={goToLogin}
-              className="shrink-0 rounded-xl bg-white px-5 py-2.5 text-sm font-black text-purple-700 hover:bg-purple-50"
-            >
-              Get Started Now
-            </button>
+            <div className="flex shrink-0 flex-col items-center gap-2 sm:items-end">
+              <button
+                type="button"
+                onClick={goToLogin}
+                className="rounded-xl bg-white px-5 py-2.5 text-sm font-black text-purple-700 hover:bg-purple-50"
+              >
+                Get Started Now
+              </button>
+              <a href="/" className="text-xs font-semibold text-purple-100 underline hover:text-white">
+                Exit Tour
+              </a>
+            </div>
           </div>
         </main>
       </div>
