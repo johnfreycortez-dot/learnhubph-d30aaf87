@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastProvider } from "../components/Toast";
+import { ThemeProvider } from "../lib/theme";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { jsonLdScript, organizationJsonLd, SITE_URL } from "../lib/seo";
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 
@@ -128,10 +130,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <ThemeToggle />
+        </ToastProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

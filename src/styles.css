@@ -233,3 +233,71 @@
   color: transparent;
   animation: learnhub-ph-glow 5s ease-in-out infinite;
 }
+
+/*
+ * Dark-mode overrides.
+ *
+ * Most of this app was authored with hardcoded light utility classes
+ * (bg-white, text-gray-950, bg-[#f6f7fb], border-gray-100, etc.) rather
+ * than semantic tokens. When the user opts into dark mode (either via
+ * the manual toggle or via the automatic PHT schedule), these rules
+ * remap the most common patterns to sensible dark equivalents so every
+ * page — landing, login, dashboards, admin — reads correctly on dark.
+ * Purple brand colors are intentionally left alone.
+ */
+html.dark body,
+html.dark {
+  background-color: #0b0b12;
+  color: #f3f4f6;
+  color-scheme: dark;
+}
+
+/* Backgrounds */
+html.dark .bg-white { background-color: #14141c !important; }
+html.dark .bg-white\/90 { background-color: rgba(20, 20, 28, 0.85) !important; }
+html.dark .bg-white\/80 { background-color: rgba(20, 20, 28, 0.8) !important; }
+html.dark .bg-gray-50 { background-color: #1b1b26 !important; }
+html.dark .bg-gray-100 { background-color: #22222f !important; }
+html.dark .bg-\[\#f6f7fb\] { background-color: #0b0b12 !important; }
+html.dark .bg-\[\#f8f6ff\] { background-color: #14101f !important; }
+html.dark .bg-purple-50 { background-color: rgba(124, 58, 237, 0.15) !important; }
+
+/* Text */
+html.dark .text-gray-950,
+html.dark .text-gray-900,
+html.dark .text-gray-800 { color: #f3f4f6 !important; }
+html.dark .text-gray-700 { color: #e5e7eb !important; }
+html.dark .text-gray-600 { color: #d1d5db !important; }
+html.dark .text-gray-500 { color: #b6b8c1 !important; }
+html.dark .text-gray-400 { color: #9ca0ad !important; }
+html.dark .text-gray-300 { color: #7d8090 !important; }
+html.dark .text-black { color: #f3f4f6 !important; }
+
+/* Borders */
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300 { border-color: rgba(255, 255, 255, 0.08) !important; }
+html.dark .divide-y > * + * { border-top-color: rgba(255, 255, 255, 0.08) !important; }
+html.dark .ring-white { --tw-ring-color: rgba(20, 20, 28, 1) !important; }
+
+/* Inputs */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1b1b26;
+  color: #f3f4f6;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder { color: #7d8090; }
+
+/* Shadows read weirdly on dark; soften them */
+html.dark .shadow-sm,
+html.dark .shadow,
+html.dark .shadow-md,
+html.dark .shadow-lg,
+html.dark .shadow-xl { box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.6) !important; }
+
+/* Preserve intentional colored buttons/gradients — no override for
+ * bg-purple-*, bg-red-*, bg-green-*, from-*, to-*, etc. */
+
