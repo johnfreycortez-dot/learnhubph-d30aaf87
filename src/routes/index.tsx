@@ -28,11 +28,28 @@ import {
   ChevronDown,
   Headphones,
   Bot,
+  LayoutDashboard,
+  ClipboardList,
+  PlayCircle,
+  Settings,
+  HelpCircle,
+  MonitorPlay,
+  Rocket,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 import certAsset from "../assets/learnhub-cert.png.asset.json";
 import devicesMockup from "../assets/learnhub-devices-mockup.png";
+import shotDashboard from "../assets/screenshot-dashboard.png";
+import shotCourses from "../assets/screenshot-courses.png";
+import shotLessons from "../assets/screenshot-lessons.png";
+import shotCertificates from "../assets/screenshot-certificates.png";
+import shotSettings from "../assets/screenshot-settings.png";
+import shotChatbot from "../assets/screenshot-chatbot.png";
+import shotHelp from "../assets/screenshot-help.png";
+import shotHomepage from "../assets/screenshot-homepage.png";
+import shotCurriculum from "../assets/screenshot-curriculum.png";
+import shotBadge from "../assets/screenshot-badge.png";
 import { NICHES, type Niche } from "../data/niches";
 import { canonicalLink } from "../lib/seo";
 
@@ -1017,6 +1034,146 @@ function Niches() {
   );
 }
 
+/* ------- platform screenshot showcase ------- */
+
+const PLATFORM_SHOTS: {
+  name: string;
+  desc: string;
+  icon: typeof LayoutDashboard;
+  src: string;
+}[] = [
+  {
+    name: "Dashboard",
+    desc: "Track lessons, progress and upcoming activity at a glance.",
+    icon: LayoutDashboard,
+    src: shotDashboard,
+  },
+  {
+    name: "Courses",
+    desc: "Browse all 9 VA learning paths and jump right in.",
+    icon: BookOpen,
+    src: shotCourses,
+  },
+  {
+    name: "Lessons",
+    desc: "Work through modules and mark lessons complete as you go.",
+    icon: PlayCircle,
+    src: shotLessons,
+  },
+  {
+    name: "My Certificates",
+    desc: "Earn a downloadable certificate for every niche you finish.",
+    icon: Award,
+    src: shotCertificates,
+  },
+  {
+    name: "Account Settings",
+    desc: "Manage your profile and account details in one place.",
+    icon: Settings,
+    src: shotSettings,
+  },
+  {
+    name: "Live Chat Support",
+    desc: "Get instant answers from the LearnHub PH support bot.",
+    icon: Bot,
+    src: shotChatbot,
+  },
+  {
+    name: "Help Center",
+    desc: "Guides, FAQs and support whenever you need a hand.",
+    icon: HelpCircle,
+    src: shotHelp,
+  },
+  {
+    name: "Homepage",
+    desc: "The landing page where your VA journey begins.",
+    icon: Rocket,
+    src: shotHomepage,
+  },
+  {
+    name: "Course Curriculum",
+    desc: "Preview every module and lesson before you enroll.",
+    icon: ClipboardList,
+    src: shotCurriculum,
+  },
+  {
+    name: "Progress Widget",
+    desc: "A quick peek at what you're currently learning.",
+    icon: MonitorPlay,
+    src: shotBadge,
+  },
+];
+
+function ScreenshotShowcase() {
+  return (
+    <div className="mt-16">
+      <div className="text-center max-w-2xl mx-auto reveal">
+        <span className="inline-flex items-center rounded-full bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1.5">
+          Live Platform Preview
+        </span>
+        <h3 className="mt-4 text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
+          A Closer Look at LearnHub PH
+        </h3>
+        <p className="mt-3 text-slate-600">
+          From your first login to your final certificate — here's every screen you'll use along
+          the way.
+        </p>
+      </div>
+
+      <div
+        className="mt-10 flex gap-6 overflow-x-auto pb-6 px-1 snap-x snap-mandatory scroll-smooth [-webkit-overflow-scrolling:touch]"
+        style={{ scrollbarWidth: "thin" }}
+      >
+        {PLATFORM_SHOTS.map((shot, i) => {
+          const Icon = shot.icon;
+          return (
+            <div
+              key={shot.name}
+              className="reveal snap-start shrink-0 w-[280px] sm:w-[340px]"
+              style={{ animationDelay: `${(i % 5) * 0.1}s` }}
+            >
+              <div
+                className="animate-float"
+                style={{ animationDelay: `${-(i % 6)}s`, animationDuration: "7s" }}
+              >
+                <div className="relative rounded-2xl border border-violet-100 bg-white shadow-xl shadow-violet-900/5 overflow-hidden hover:shadow-2xl hover:shadow-violet-900/10 hover:-translate-y-1 transition-all duration-300">
+                  {/* browser chrome */}
+                  <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#f8f6ff] border-b border-violet-100">
+                    <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                    <span className="ml-2 truncate rounded-md bg-white border border-violet-100 px-2 py-0.5 text-[10px] text-slate-400">
+                      learnhubph.com
+                    </span>
+                  </div>
+                  {/* screenshot */}
+                  <div className="relative h-44 sm:h-52 bg-[#f1f0fb] overflow-hidden">
+                    <img
+                      src={shot.src}
+                      alt={`${shot.name} screenshot`}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover object-top"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/50 to-transparent" />
+                  </div>
+                </div>
+                {/* floating name badge */}
+                <div className="relative z-10 -mt-4 ml-4 inline-flex items-center gap-2 rounded-xl bg-white shadow-lg border border-violet-100 px-3 py-2 text-xs font-bold text-slate-800">
+                  <span className="grid place-items-center h-6 w-6 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white shrink-0">
+                    <Icon className="h-3.5 w-3.5" />
+                  </span>
+                  {shot.name}
+                </div>
+              </div>
+              <p className="mt-3 px-1 text-xs text-slate-500 leading-relaxed">{shot.desc}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /* ------- curriculum ------- */
 
 function Curriculum() {
@@ -1106,6 +1263,8 @@ function Curriculum() {
             </div>
           </div>
         </div>
+
+        <ScreenshotShowcase />
       </div>
     </section>
   );
