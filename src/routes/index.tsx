@@ -32,7 +32,7 @@ import {
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 import certAsset from "../assets/learnhub-cert.png.asset.json";
-import dashAsset from "../assets/learnhub-dashboard.jpg.asset.json";
+import devicesMockup from "../assets/learnhub-devices-mockup.png";
 import { NICHES, type Niche } from "../data/niches";
 import { canonicalLink } from "../lib/seo";
 
@@ -657,25 +657,12 @@ function Hero() {
         {/* product preview */}
         <div className="reveal relative">
           <div className="absolute -inset-6 rounded-[2rem] bg-white/10 blur-2xl" />
-          <div
-            className="relative animate-float rounded-2xl bg-white shadow-2xl shadow-black/40 overflow-hidden border border-white/20"
-            style={{ transform: "rotateY(-6deg) rotateX(3deg)", transformStyle: "preserve-3d" }}
-          >
-            <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 border-b border-slate-200">
-              <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-              <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
-              <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-              <span className="ml-3 text-[10px] text-slate-500 font-medium">
-                learnhubph.lovable.app
-              </span>
-            </div>
-            <img
-              src={dashAsset.url}
-              alt="LearnHub PH dashboard preview"
-              className="block w-full h-auto"
-              loading="eager"
-            />
-          </div>
+          <img
+            src={devicesMockup}
+            alt="LearnHub PH shown on laptop, tablet, and phone"
+            className="relative block w-full h-auto animate-float"
+            loading="eager"
+          />
           <div
             className="absolute -top-4 -left-4 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float"
             style={{ animationDelay: "-2s" }}
@@ -686,7 +673,7 @@ function Hero() {
             </span>
           </div>
           <div
-            className="absolute -bottom-4 -right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float"
+            className="absolute bottom-8 right-2 rounded-xl bg-white shadow-xl border border-violet-100 px-3 py-2 text-xs font-semibold text-slate-800 flex items-center gap-2 animate-float"
             style={{ animationDelay: "-4s" }}
           >
             <CheckCircle2 className="h-4 w-4 text-green-500" /> 1 Lesson Completed
