@@ -4,6 +4,7 @@ import { CheckCircle, ShieldCheck, X } from "lucide-react";
 import { gasCall, saveToken, getToken } from "@/lib/api";
 import { Spinner } from "@/components/Spinner";
 import { AdminPinEntry } from "@/components/AdminPinEntry";
+import { DocModal, LEGAL_DOCS } from "@/components/DocModal";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -214,6 +215,13 @@ function SignUpForm() {
   const [checking, setChecking] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState("");
 
+  // Legal docs: user must open (and thus have the chance to read) both the
+  // Terms and the Privacy Policy before the "I agree" checkbox unlocks.
+  const [docModal, setDocModal] = useState<"terms" | "privacy" | null>(null);
+  const [viewedTerms, setViewedTerms] = useState(false);
+  const [viewedPrivacy, setViewedPrivacy] = useState(false);
+  const canAgree = viewedTerms && viewedPrivacy;
+
   async function checkConfirmed() {
     setConfirmMsg("");
     setChecking(true);
@@ -260,6 +268,10 @@ function SignUpForm() {
             We've sent a confirmation link to <strong>{done}</strong>. Click it to activate your account.{" "}
             <strong>If you don't see it in your inbox within a few minutes, please check your Spam or Junk folder.</strong>
           </p>
+          <p className="mt-2 text-xs text-green-700/80">
+            You'll also get a copy of our Terms &amp; Conditions and Privacy Policy by email, and your
+            access token as soon as your email is confirmed.
+          </p>
         </div>
         <button
           type="button"
@@ -300,15 +312,46 @@ function SignUpForm() {
           className="w-full rounded-xl border border-gray-200 px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-500"
         />
       </div>
-      <label className="flex items-start gap-2 text-sm text-gray-700">
-        <input
-          type="checkbox"
-          checked={tnc}
-          onChange={(e) => setTnc(e.target.checked)}
-          className="mt-1 h-4 w-4 accent-purple-600"
-        />
-        <span>I agree to the Terms and Conditions</span>
-      </label>
+      <div>
+        <label className="flex items-start gap-2 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            checked={tnc}
+            disabled={!canAgree}
+            onChange={(e) => setTnc(e.target.checked)}
+            className="mt-1 h-4 w-4 accent-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <span>
+            I agree to the{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setDocModal("terms");
+                setViewedTerms(true);
+              }}
+              className="font-semibold text-purple-700 underline underline-offset-2 hover:text-purple-800"
+            >
+              Terms and Conditions
+            </button>{" "}
+            and{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setDocModal("privacy");
+                setViewedPrivacy(true);
+              }}
+              className="font-semibold text-purple-700 underline underline-offset-2 hover:text-purple-800"
+            >
+              Privacy Policy
+            </button>
+          </span>
+        </label>
+        {!canAgree && (
+          <p className="mt-1.5 pl-6 text-xs text-gray-400">
+            Please open and review both documents above — the checkbox unlocks once you have.
+          </p>
+        )}
+      </div>
       {error && <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 text-sm">{error}</div>}
       <button
         type="submit"
@@ -317,6 +360,21 @@ function SignUpForm() {
       >
         {loading && <Spinner size="sm" className="border-white" />} Create Account
       </button>
+
+      <DocModal
+        open={docModal === "terms"}
+        title={LEGAL_DOCS.terms.title}
+        iframeSrc={LEGAL_DOCS.terms.iframeSrc}
+        fallbackHref={LEGAL_DOCS.terms.fallbackHref}
+        onClose={() => setDocModal(null)}
+      />
+      <DocModal
+        open={docModal === "privacy"}
+        title={LEGAL_DOCS.privacy.title}
+        iframeSrc={LEGAL_DOCS.privacy.iframeSrc}
+        fallbackHref={LEGAL_DOCS.privacy.fallbackHref}
+        onClose={() => setDocModal(null)}
+      />
     </form>
   );
 }
