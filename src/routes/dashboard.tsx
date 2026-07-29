@@ -18,6 +18,7 @@ import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { StudentShell } from "@/components/StudentShell";
 import { Spinner } from "@/components/Spinner";
+import { useTheme } from "@/lib/theme";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -473,6 +474,12 @@ function MiniDonut({ pct }: { pct: number }) {
 }
 
 function ProgressBarChart({ rows }: { rows: CourseRow[] }) {
+  // Recharts renders raw SVG <text>, so it can't pick up Tailwind's
+  // `dark:` classes — colors have to be resolved manually per theme or the
+  // niche titles/labels become invisible (dark text on a dark background).
+  const { resolved } = useTheme();
+  const isDark = resolved === "dark";
+
   const data = rows.map((row) => ({
     name: row.title,
     pct: row.pct,
@@ -480,23 +487,33 @@ function ProgressBarChart({ rows }: { rows: CourseRow[] }) {
     detail: `${row.completedLessons}/${row.lessonCount} lessons · ${row.completedAssignments}/${row.assignmentCount} assignments · ${row.completedTests}/${row.testCount} tests`,
   }));
   const height = Math.max(220, data.length * 54);
+  const gridStroke = isDark ? "#2c2c3a" : "#f3e8ff";
+  const axisTickFill = isDark ? "#a1a1aa" : "#9ca3af";
+  const nameTickFill = isDark ? "#e5e7eb" : "#374151";
+  const labelFill = isDark ? "#d1d5db" : "#6b7280";
   return (
     <div className="mt-4" style={{ width: "100%", height }}>
       <ResponsiveContainer>
         <BarChart data={data} layout="vertical" margin={{ left: 8, right: 32, top: 8, bottom: 8 }}>
-          <CartesianGrid horizontal={false} stroke="#f3e8ff" />
-          <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
-          <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 12, fontWeight: 700, fill: "#374151" }} axisLine={false} tickLine={false} />
+          <CartesianGrid horizontal={false} stroke={gridStroke} />
+          <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: axisTickFill }} axisLine={false} tickLine={false} />
+          <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 12, fontWeight: 700, fill: nameTickFill }} axisLine={false} tickLine={false} />
           <Tooltip
             formatter={(_value: number, _key: string, entry: any) => [entry?.payload?.detail || "", "Progress"]}
             labelFormatter={(label) => label}
-            contentStyle={{ borderRadius: 12, border: "1px solid #f3e8ff", fontSize: 12 }}
+            contentStyle={{
+              borderRadius: 12,
+              border: isDark ? "1px solid #33333f" : "1px solid #f3e8ff",
+              fontSize: 12,
+              background: isDark ? "#1b1b26" : "#ffffff",
+              color: isDark ? "#f3f4f6" : "#111827",
+            }}
           />
           <Bar dataKey="pct" radius={[0, 8, 8, 0]} barSize={18}>
             {data.map((d, i) => (
               <Cell key={i} fill={d.fill} />
             ))}
-            <LabelList dataKey="pct" position="right" formatter={(v: number) => `${v}%`} style={{ fontSize: 11, fontWeight: 700, fill: "#6b7280" }} />
+            <LabelList dataKey="pct" position="right" formatter={(v: number) => `${v}%`} style={{ fontSize: 11, fontWeight: 700, fill: labelFill }} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

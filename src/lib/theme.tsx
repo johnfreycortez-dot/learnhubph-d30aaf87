@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 
 // Theme modes:
 // - "auto"  : follow Philippine time (6AM–5:59PM = light, 6PM–5:59AM = dark)
@@ -8,6 +9,11 @@ export type ThemeMode = "auto" | "light" | "dark";
 export type ResolvedTheme = "light" | "dark";
 
 const STORAGE_KEY = "learnhub-theme-mode";
+
+// The public marketing/landing page ("/") is always presented in light mode,
+// regardless of the visitor's saved preference or the current PHT time — no
+// dark mode there at all.
+const LIGHT_ONLY_PATHS = new Set(["/"]);
 
 function getPhtHour(): number {
   return Number(
@@ -43,15 +49,20 @@ type ThemeContextValue = {
   resolved: ResolvedTheme;
   setMode: (mode: ThemeMode) => void;
   toggle: () => void;
+  /** True while the current route is pinned to light mode (the landing page). */
+  isLightLocked: boolean;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isLightLocked = LIGHT_ONLY_PATHS.has(pathname);
+
   const [mode, setModeState] = useState<ThemeMode>("auto");
   const [resolved, setResolved] = useState<ResolvedTheme>("light");
 
-  // Load persisted preference & apply immediately on mount.
+  // Load persisted preference on mount.
   useEffect(() => {
     let initial: ThemeMode = "auto";
     try {
@@ -59,14 +70,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       if (saved === "auto" || saved === "light" || saved === "dark") initial = saved;
     } catch {}
     setModeState(initial);
-    const r = resolveTheme(initial);
-    setResolved(r);
-    applyThemeClass(r);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // When in auto mode, re-check PHT every minute so the theme flips at 6AM/6PM.
+  // Apply whenever the mode or the route's light-lock status changes, so
+  // navigating to/from the landing page immediately flips the theme.
   useEffect(() => {
-    if (mode !== "auto") return;
+    const r = isLightLocked ? "light" : resolveTheme(mode);
+    setResolved(r);
+    applyThemeClass(r);
+  }, [mode, isLightLocked]);
+
+  // When in auto mode (and not light-locked), re-check PHT every minute so
+  // the theme flips at 6AM/6PM.
+  useEffect(() => {
+    if (mode !== "auto" || isLightLocked) return;
     const tick = () => {
       const r = resolveAutoTheme();
       setResolved(r);
@@ -75,14 +93,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     tick();
     const id = window.setInterval(tick, 60_000);
     return () => window.clearInterval(id);
-  }, [mode]);
+  }, [mode, isLightLocked]);
 
   const setMode = (next: ThemeMode) => {
     setModeState(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {}
-    const r = resolveTheme(next);
+    const r = isLightLocked ? "light" : resolveTheme(next);
     setResolved(r);
     applyThemeClass(r);
   };
@@ -93,7 +111,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, resolved, setMode, toggle }}>
+    <ThemeContext.Provider value={{ mode, resolved, setMode, toggle, isLightLocked }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -108,6 +126,7 @@ export function useTheme() {
       resolved: "light" as ResolvedTheme,
       setMode: () => {},
       toggle: () => {},
+      isLightLocked: false,
     };
   }
   return ctx;

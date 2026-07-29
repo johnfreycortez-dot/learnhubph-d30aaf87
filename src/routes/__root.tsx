@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastProvider } from "../components/Toast";
-import { ThemeProvider } from "../lib/theme";
+import { ThemeProvider, useTheme } from "../lib/theme";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { jsonLdScript, organizationJsonLd, SITE_URL } from "../lib/seo";
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -125,6 +125,15 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+// The landing page is pinned to light mode (see lib/theme.tsx) and doesn't
+// offer a dark mode at all, so the floating toggle has nothing to do there —
+// hide it instead of showing a control that can't actually change anything.
+function ConditionalThemeToggle() {
+  const { isLightLocked } = useTheme();
+  if (isLightLocked) return null;
+  return <ThemeToggle />;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
@@ -134,7 +143,7 @@ function RootComponent() {
         <ToastProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
-          <ThemeToggle />
+          <ConditionalThemeToggle />
         </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>
