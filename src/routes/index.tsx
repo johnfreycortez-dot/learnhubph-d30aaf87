@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
 import {
   BookOpen,
   Layout,
@@ -33,8 +33,9 @@ import {
   PlayCircle,
   Settings,
   HelpCircle,
-  MonitorPlay,
-  Rocket,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
 } from "lucide-react";
 
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
@@ -47,9 +48,7 @@ import shotCertificates from "../assets/screenshot-certificates.png";
 import shotSettings from "../assets/screenshot-settings.png";
 import shotChatbot from "../assets/screenshot-chatbot.png";
 import shotHelp from "../assets/screenshot-help.png";
-import shotHomepage from "../assets/screenshot-homepage.png";
 import shotCurriculum from "../assets/screenshot-curriculum.png";
-import shotBadge from "../assets/screenshot-badge.png";
 import { NICHES, type Niche } from "../data/niches";
 import { canonicalLink } from "../lib/seo";
 
@@ -1085,26 +1084,158 @@ const PLATFORM_SHOTS: {
     src: shotHelp,
   },
   {
-    name: "Homepage",
-    desc: "The landing page where your VA journey begins.",
-    icon: Rocket,
-    src: shotHomepage,
-  },
-  {
     name: "Course Curriculum",
     desc: "Preview every module and lesson before you enroll.",
     icon: ClipboardList,
     src: shotCurriculum,
   },
-  {
-    name: "Progress Widget",
-    desc: "A quick peek at what you're currently learning.",
-    icon: MonitorPlay,
-    src: shotBadge,
-  },
 ];
 
+function ScreenshotLightbox({
+  shot,
+  onClose,
+}: {
+  shot: (typeof PLATFORM_SHOTS)[number] | null;
+  onClose: () => void;
+}) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!shot) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [shot, onClose]);
+
+  if (!shot) return null;
+  const Icon = shot.icon;
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="screenshot-lightbox-title"
+      style={{ animation: "fade-up 0.25s ease-out both" }}
+    >
+      <div
+        className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-200">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white shrink-0">
+              <Icon className="h-4 w-4" />
+            </span>
+            <h3
+              id="screenshot-lightbox-title"
+              className="text-base sm:text-lg font-bold text-slate-900 truncate"
+            >
+              {shot.name}
+            </h3>
+          </div>
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={onClose}
+            className="grid place-items-center h-9 w-9 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 shrink-0"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-auto bg-[#f1f0fb] p-3 sm:p-5">
+          <img
+            src={shot.src}
+            alt={`${shot.name} screenshot enlarged`}
+            className="w-full h-auto rounded-lg border border-violet-100 shadow-sm"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ScreenshotShowcase() {
+  const [index, setIndex] = useState(0);
+  const [layerAShot, setLayerAShot] = useState(PLATFORM_SHOTS[0]);
+  const [layerBShot, setLayerBShot] = useState(PLATFORM_SHOTS[0]);
+  const [layerAOpacity, setLayerAOpacity] = useState(1);
+  const [layerBOpacity, setLayerBOpacity] = useState(0);
+  const aIsCurrentRef = useRef(true);
+  const intervalRef = useRef<number | null>(null);
+  const indexRef = useRef(0);
+  const [lightboxShot, setLightboxShot] = useState<(typeof PLATFORM_SHOTS)[number] | null>(null);
+
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
+
+  const reduced =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const applyIndex = (nextIdx: number) => {
+    const nextShot = PLATFORM_SHOTS[nextIdx];
+    if (aIsCurrentRef.current) {
+      setLayerBShot(nextShot);
+      requestAnimationFrame(() => {
+        setLayerAOpacity(0);
+        setLayerBOpacity(1);
+      });
+    } else {
+      setLayerAShot(nextShot);
+      requestAnimationFrame(() => {
+        setLayerBOpacity(0);
+        setLayerAOpacity(1);
+      });
+    }
+    aIsCurrentRef.current = !aIsCurrentRef.current;
+    setIndex(nextIdx);
+  };
+
+  const startInterval = () => {
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+    intervalRef.current = window.setInterval(() => {
+      const next = (indexRef.current + 1) % PLATFORM_SHOTS.length;
+      applyIndex(next);
+    }, 10000);
+  };
+
+  useEffect(() => {
+    if (reduced) return;
+    startInterval();
+    return () => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduced]);
+
+  const jumpTo = (i: number) => {
+    if (i === index) return;
+    applyIndex(i);
+    startInterval();
+  };
+
+  const goPrev = () => jumpTo((index - 1 + PLATFORM_SHOTS.length) % PLATFORM_SHOTS.length);
+  const goNext = () => jumpTo((index + 1) % PLATFORM_SHOTS.length);
+
+  const currentShot = PLATFORM_SHOTS[index];
+  const CurrentIcon = currentShot.icon;
+
+  const layerBase: CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    transition: "opacity 0.7s ease",
+  };
+
   return (
     <div className="mt-16">
       <div className="text-center max-w-2xl mx-auto reveal">
@@ -1120,56 +1251,98 @@ function ScreenshotShowcase() {
         </p>
       </div>
 
-      <div
-        className="mt-10 flex gap-6 overflow-x-auto pb-6 px-1 snap-x snap-mandatory scroll-smooth [-webkit-overflow-scrolling:touch]"
-        style={{ scrollbarWidth: "thin" }}
-      >
-        {PLATFORM_SHOTS.map((shot, i) => {
-          const Icon = shot.icon;
-          return (
-            <div
-              key={shot.name}
-              className="reveal snap-start shrink-0 w-[280px] sm:w-[340px]"
-              style={{ animationDelay: `${(i % 5) * 0.1}s` }}
-            >
-              <div
-                className="animate-float"
-                style={{ animationDelay: `${-(i % 6)}s`, animationDuration: "7s" }}
-              >
-                <div className="relative rounded-2xl border border-violet-100 bg-white shadow-xl shadow-violet-900/5 overflow-hidden hover:shadow-2xl hover:shadow-violet-900/10 hover:-translate-y-1 transition-all duration-300">
-                  {/* browser chrome */}
-                  <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#f8f6ff] border-b border-violet-100">
-                    <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-                    <span className="ml-2 truncate rounded-md bg-white border border-violet-100 px-2 py-0.5 text-[10px] text-slate-400">
-                      learnhubph.com
-                    </span>
-                  </div>
-                  {/* screenshot */}
-                  <div className="relative h-44 sm:h-52 bg-[#f1f0fb] overflow-hidden">
-                    <img
-                      src={shot.src}
-                      alt={`${shot.name} screenshot`}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover object-top"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/50 to-transparent" />
-                  </div>
-                </div>
-                {/* floating name badge */}
-                <div className="relative z-10 -mt-4 ml-4 inline-flex items-center gap-2 rounded-xl bg-white shadow-lg border border-violet-100 px-3 py-2 text-xs font-bold text-slate-800">
-                  <span className="grid place-items-center h-6 w-6 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white shrink-0">
-                    <Icon className="h-3.5 w-3.5" />
-                  </span>
-                  {shot.name}
-                </div>
-              </div>
-              <p className="mt-3 px-1 text-xs text-slate-500 leading-relaxed">{shot.desc}</p>
+      <div className="mt-10 max-w-3xl mx-auto reveal">
+        <div className="relative animate-float" style={{ animationDuration: "7s" }}>
+          <div className="relative rounded-2xl border border-violet-100 bg-white shadow-2xl shadow-violet-900/10 overflow-hidden">
+            {/* browser chrome */}
+            <div className="flex items-center gap-1.5 px-4 py-3 bg-[#f8f6ff] border-b border-violet-100">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+              <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+              <span className="ml-2 truncate rounded-md bg-white border border-violet-100 px-2.5 py-1 text-xs text-slate-400">
+                learnhubph.com
+              </span>
             </div>
-          );
-        })}
+
+            {/* crossfading screenshot */}
+            <button
+              type="button"
+              onClick={() => setLightboxShot(currentShot)}
+              className="group relative block w-full h-64 sm:h-96 bg-[#f1f0fb] overflow-hidden cursor-zoom-in focus-visible:outline-none"
+              aria-label={`Enlarge ${currentShot.name} screenshot`}
+            >
+              <img
+                src={layerAShot.src}
+                alt=""
+                className="h-full w-full object-cover object-top"
+                style={{ ...layerBase, opacity: layerAOpacity }}
+              />
+              <img
+                src={layerBShot.src}
+                alt=""
+                className="h-full w-full object-cover object-top"
+                style={{ ...layerBase, opacity: layerBOpacity }}
+              />
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+              <span className="absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-lg bg-black/50 backdrop-blur px-2.5 py-1.5 text-[11px] font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <Maximize2 className="h-3.5 w-3.5" /> Click to enlarge
+              </span>
+            </button>
+          </div>
+
+          {/* floating name badge */}
+          <div className="relative z-10 -mt-5 ml-5 inline-flex items-center gap-2.5 rounded-xl bg-white shadow-lg border border-violet-100 px-4 py-2.5 text-sm font-bold text-slate-800">
+            <span className="grid place-items-center h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-purple-700 text-white shrink-0">
+              <CurrentIcon className="h-4 w-4" />
+            </span>
+            {currentShot.name}
+          </div>
+        </div>
+
+        <p className="mt-4 text-center text-sm text-slate-500 min-h-[1.25rem]">
+          {currentShot.desc}
+        </p>
+
+        {/* controls */}
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={goPrev}
+            aria-label="Previous screenshot"
+            className="grid place-items-center h-9 w-9 rounded-full border border-violet-200 text-violet-600 bg-white hover:bg-violet-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="flex items-center gap-2">
+            {PLATFORM_SHOTS.map((s, i) => (
+              <button
+                key={s.name}
+                type="button"
+                aria-label={`Show ${s.name}`}
+                onClick={() => jumpTo(i)}
+                style={{
+                  width: i === index ? 22 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                }}
+                className={`transition-all duration-300 ${
+                  i === index ? "bg-violet-600" : "bg-violet-200 hover:bg-violet-300"
+                }`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={goNext}
+            aria-label="Next screenshot"
+            className="grid place-items-center h-9 w-9 rounded-full border border-violet-200 text-violet-600 bg-white hover:bg-violet-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
+
+      <ScreenshotLightbox shot={lightboxShot} onClose={() => setLightboxShot(null)} />
     </div>
   );
 }
