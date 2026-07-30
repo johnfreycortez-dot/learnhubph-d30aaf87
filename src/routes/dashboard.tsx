@@ -315,7 +315,7 @@ function DashboardPage() {
     if (!q) return rows;
     return rows.filter((r) => r.title.toLowerCase().includes(q));
   }, [rows, search]);
-  const upcoming = useMemo(() => buildUpcoming(notifications, rows, todos), [notifications, rows, todos]);
+  const { upcoming, recent } = useMemo(() => buildUpcoming(notifications, rows, todos), [notifications, rows, todos]);
 
   function openLesson(lessonId: string, nicheTitle?: string) {
     navigate({
@@ -417,7 +417,7 @@ function DashboardPage() {
             todos={todos}
             onDayClick={(day) => setActiveDate(day)}
           />
-          <UpcomingWidget items={upcoming} onOpen={handleUpcomingOpen} />
+          <UpcomingWidget upcoming={upcoming} recent={recent} onOpen={handleUpcomingOpen} />
         </aside>
       </div>
 
@@ -723,9 +723,23 @@ function buildUpcoming(notifications: Notif[], rows: CourseRow[], todos: TodoMap
       .filter((item): item is UpcomingItem => Boolean(item)),
   );
 
-  return [...fromTodos, ...fromLessons, ...fromNotifications]
+  const all = [...fromTodos, ...fromLessons, ...fromNotifications];
+
+  // Anything from today onward is "upcoming"; anything before today is "recent".
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const upcoming = all
+    .filter((item) => item.date.getTime() >= startOfToday.getTime())
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(0, 5);
+
+  const recent = all
+    .filter((item) => item.date.getTime() < startOfToday.getTime())
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, 5);
+
+  return { upcoming, recent };
 }
 
 function parseDate(value: string) {
@@ -758,37 +772,68 @@ function toneFor(type: string) {
   return "bg-purple-500";
 }
 
-function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (id: string) => void }) {
+function UpcomingWidget({
+  upcoming,
+  recent,
+  onOpen,
+}: {
+  upcoming: UpcomingItem[];
+  recent: UpcomingItem[];
+  onOpen: (id: string) => void;
+}) {
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <h2 className="text-lg font-black">Upcoming</h2>
-      {items.length === 0 ? (
-        <p className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm font-medium text-gray-400">No upcoming deadlines from your backend yet.</p>
+      {upcoming.length === 0 ? (
+        <p className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm font-medium text-gray-400">Nothing upcoming right now.</p>
       ) : (
-        <ul className="mt-4 divide-y divide-gray-50">
-          {items.map((item) => (
-            <li key={item.id}>
-              <button
-                type="button"
-                onClick={() => onOpen(item.id)}
-                className="grid w-full grid-cols-[42px_minmax(0,1fr)] gap-3 rounded-xl py-3 text-left hover:bg-purple-50/60"
-              >
-                <div className="rounded-xl bg-gray-50 py-2 text-center">
-                  <div className="text-sm font-black text-gray-700">{item.date.getDate()}</div>
-                  <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
-                </div>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-gray-700">{item.title}</p>
-                  <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
-                    <span className={`h-1.5 w-1.5 rounded-full ${item.tone}`} /> {item.label}
-                  </p>
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <UpcomingList items={upcoming} onOpen={onOpen} className="mt-4" />
+      )}
+
+      {recent.length > 0 && (
+        <div className="mt-6 border-t border-gray-50 pt-4">
+          <h3 className="text-xs font-black uppercase tracking-wide text-gray-400">Recent</h3>
+          <UpcomingList items={recent} onOpen={onOpen} className="mt-2" muted />
+        </div>
       )}
     </section>
+  );
+}
+
+function UpcomingList({
+  items,
+  onOpen,
+  className = "",
+  muted = false,
+}: {
+  items: UpcomingItem[];
+  onOpen: (id: string) => void;
+  className?: string;
+  muted?: boolean;
+}) {
+  return (
+    <ul className={`divide-y divide-gray-50 ${className}`}>
+      {items.map((item) => (
+        <li key={item.id}>
+          <button
+            type="button"
+            onClick={() => onOpen(item.id)}
+            className="grid w-full grid-cols-[42px_minmax(0,1fr)] gap-3 rounded-xl py-3 text-left hover:bg-purple-50/60"
+          >
+            <div className={`rounded-xl py-2 text-center ${muted ? "bg-gray-50/60" : "bg-gray-50"}`}>
+              <div className={`text-sm font-black ${muted ? "text-gray-500" : "text-gray-700"}`}>{item.date.getDate()}</div>
+              <div className="text-[10px] font-bold text-gray-400">{item.date.toLocaleDateString(undefined, { month: "short" })}</div>
+            </div>
+            <div className="min-w-0">
+              <p className={`truncate text-sm font-bold ${muted ? "text-gray-500" : "text-gray-700"}`}>{item.title}</p>
+              <p className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                <span className={`h-1.5 w-1.5 rounded-full ${item.tone} ${muted ? "opacity-60" : ""}`} /> {item.label}
+              </p>
+            </div>
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
