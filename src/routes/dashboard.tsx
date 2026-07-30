@@ -784,18 +784,20 @@ function UpcomingWidget({
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <h2 className="text-lg font-black">Upcoming</h2>
-      {upcoming.length === 0 ? (
-        <p className="mt-5 rounded-2xl bg-gray-50 p-4 text-sm font-medium text-gray-400">Nothing upcoming right now.</p>
-      ) : (
-        <UpcomingList items={upcoming} onOpen={onOpen} className="mt-4" />
-      )}
+      <div className="mt-4 max-h-[420px] overflow-y-auto pr-1">
+        {upcoming.length === 0 ? (
+          <p className="rounded-2xl bg-gray-50 p-4 text-sm font-medium text-gray-400">Nothing upcoming right now.</p>
+        ) : (
+          <UpcomingList items={upcoming} onOpen={onOpen} />
+        )}
 
-      {recent.length > 0 && (
-        <div className="mt-6 border-t border-gray-50 pt-4">
-          <h3 className="text-xs font-black uppercase tracking-wide text-gray-400">Recent</h3>
-          <UpcomingList items={recent} onOpen={onOpen} className="mt-2" muted />
-        </div>
-      )}
+        {recent.length > 0 && (
+          <div className="mt-6 border-t border-gray-50 pt-4">
+            <h3 className="text-xs font-black uppercase tracking-wide text-gray-400">Recent</h3>
+            <UpcomingList items={recent} onOpen={onOpen} className="mt-2" muted />
+          </div>
+        )}
+      </div>
     </section>
   );
 }
