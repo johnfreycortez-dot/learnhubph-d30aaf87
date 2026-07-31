@@ -5,8 +5,8 @@ import { ConfirmModal } from "@/components/ConfirmModal";
 import { Drawer } from "@/components/Drawer";
 import { useToast } from "@/components/Toast";
 import {
-  EmptyState, InitialsAvatar, LoadState, SearchInput, SectionHeading, StatusPill, TableShell,
-  rowCls, tdCls, thCls, useAdminQuery,
+  EmptyState, ExportButton, InitialsAvatar, LastUpdated, LoadState, PAGE_SIZE, Pagination,
+  SearchInput, SectionHeading, StatusPill, TableShell, exportToCsv, rowCls, tdCls, thCls, useAdminQuery,
 } from "./shared";
 
 export default function StudentsTab() {
@@ -14,6 +14,7 @@ export default function StudentsTab() {
   const q = useAdminQuery("adminGetUsers");
   const users: any[] = Array.isArray(q.data) ? q.data : (q.data as any)?.users || [];
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [drawer, setDrawer] = useState<any | null>(null);
   const [del, setDel] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -28,6 +29,29 @@ export default function StudentsTab() {
       ),
     [users, search],
   );
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  function handleSearch(v: string) {
+    setSearch(v);
+    setPage(1);
+  }
+
+  function handleExport() {
+    exportToCsv(
+      `students-${new Date().toISOString().slice(0, 10)}.csv`,
+      filtered,
+      [
+        { key: "name", label: "Name" },
+        { key: "email", label: "Email" },
+        { key: "signupDate", label: "Signup" },
+        { key: "verified", label: "Verified" },
+        { key: "amountPaid", label: "Amount Paid" },
+        { key: "enrolledNiche", label: "Niche" },
+      ],
+    );
+  }
 
   async function doDelete() {
     if (!del) return;
@@ -48,8 +72,14 @@ export default function StudentsTab() {
     <div>
       <SectionHeading
         title="All Students"
-        action={<div className="w-full sm:w-64"><SearchInput value={search} onChange={setSearch} placeholder="Search students…" /></div>}
+        action={
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <div className="w-full sm:w-64"><SearchInput value={search} onChange={handleSearch} placeholder="Search students…" /></div>
+            <ExportButton onClick={handleExport} disabled={filtered.length === 0} />
+          </div>
+        }
       />
+      <LastUpdated ts={q.updatedAt} />
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
       {!q.loading && !q.error && filtered.length === 0 && (
         <TableShell>
@@ -67,7 +97,7 @@ export default function StudentsTab() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((u) => {
+              {pageRows.map((u) => {
                 const status: { label: string; tone: "green" | "amber" | "gray" } = u.verified
                   ? { label: "Verified", tone: "green" }
                   : u.refNumber !== "—"
@@ -101,6 +131,7 @@ export default function StudentsTab() {
               })}
             </tbody>
           </table>
+          <Pagination page={page} totalPages={totalPages} onChange={setPage} />
         </TableShell>
       )}
 

@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { AlertCircle, Search } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight, Download, Search } from "lucide-react";
 import { Spinner } from "@/components/Spinner";
 import { useGasQuery } from "@/hooks/useGasQuery";
 import type { UseQueryOptions } from "@tanstack/react-query";
@@ -27,7 +27,26 @@ export function useAdminQuery<T = any>(
     loading: q.isLoading,
     error: q.isError ? "Failed to load data." : "",
     reload: () => q.refetch(),
+    updatedAt: q.dataUpdatedAt,
   };
+}
+
+/** "2m ago" / "Just now" style relative time for a "last updated" label. */
+export function relativeTime(ts: number) {
+  if (!ts) return "";
+  const seconds = Math.floor((Date.now() - ts) / 1000);
+  if (seconds < 10) return "Just now";
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+export function LastUpdated({ ts }: { ts: number }) {
+  if (!ts) return null;
+  return <p className="mt-1 text-xs font-medium text-gray-400">Last updated {relativeTime(ts)}</p>;
 }
 
 export function LoadState({ loading, error, onRetry }: { loading: boolean; error: string; onRetry: () => void }) {
@@ -137,6 +156,70 @@ const STAT_TONES: Record<string, string> = {
   amber: "bg-amber-50 text-amber-600",
   blue: "bg-blue-50 text-blue-600",
 };
+
+/** Rows to a downloaded CSV file. `columns` controls column order/labels; defaults to the keys of the first row. */
+export function exportToCsv(filename: string, rows: Record<string, any>[], columns?: { key: string; label: string }[]) {
+  if (!rows.length) return;
+  const cols = columns || Object.keys(rows[0]).map((k) => ({ key: k, label: k }));
+  const escape = (v: any) => {
+    const s = v === null || v === undefined ? "" : String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const header = cols.map((c) => escape(c.label)).join(",");
+  const body = rows.map((r) => cols.map((c) => escape(r[c.key])).join(",")).join("\n");
+  const csv = `${header}\n${body}`;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+export function ExportButton({ onClick, label = "Export CSV", disabled }: { onClick: () => void; label?: string; disabled?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-bold text-gray-700 shadow-sm transition-colors hover:border-purple-200 hover:text-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      <Download size={16} /> {label}
+    </button>
+  );
+}
+
+export const PAGE_SIZE = 10;
+
+export function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  if (totalPages <= 1) return null;
+  return (
+    <div className="flex items-center justify-between gap-3 border-t border-gray-100 px-4 py-3">
+      <button
+        type="button"
+        disabled={page <= 1}
+        onClick={() => onChange(page - 1)}
+        className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ChevronLeft size={14} /> Previous
+      </button>
+      <span className="text-xs font-semibold text-gray-500">
+        Page {page} of {totalPages}
+      </span>
+      <button
+        type="button"
+        disabled={page >= totalPages}
+        onClick={() => onChange(page + 1)}
+        className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Next <ChevronRight size={14} />
+      </button>
+    </div>
+  );
+}
 
 export function AdminStat({
   icon,

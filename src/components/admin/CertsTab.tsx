@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Award, CheckCircle, Send, Users, X } from "lucide-react";
 import { gasCall } from "@/lib/api";
 import { useToast } from "@/components/Toast";
-import { AdminStat, EmptyState, InitialsAvatar, LoadState, SectionHeading, TableShell, rowCls, tdCls, thCls, useAdminQuery } from "./shared";
+import {
+  AdminStat, EmptyState, ExportButton, InitialsAvatar, LastUpdated, LoadState, PAGE_SIZE, Pagination,
+  SearchInput, SectionHeading, TableShell, exportToCsv, rowCls, tdCls, thCls, useAdminQuery,
+} from "./shared";
 
 export default function CertsTab() {
   const { showToast } = useToast();
@@ -13,6 +16,38 @@ export default function CertsTab() {
   const [testName, setTestName] = useState("");
   const [testNiche, setTestNiche] = useState("");
   const [sending, setSending] = useState(false);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+
+  const allStudents: any[] = data?.students || [];
+  const filtered = useMemo(
+    () =>
+      !search
+        ? allStudents
+        : allStudents.filter(
+            (s) => s.name?.toLowerCase().includes(search.toLowerCase()) || s.email?.toLowerCase().includes(search.toLowerCase()),
+          ),
+    [allStudents, search],
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  function handleSearch(v: string) {
+    setSearch(v);
+    setPage(1);
+  }
+
+  function handleExport() {
+    exportToCsv(
+      `certificates-${new Date().toISOString().slice(0, 10)}.csv`,
+      filtered,
+      [
+        { key: "name", label: "Name" },
+        { key: "email", label: "Email" },
+        { key: "certsEarned", label: "Certs Earned" },
+      ],
+    );
+  }
 
   async function sendTest() {
     setSending(true);
@@ -32,14 +67,19 @@ export default function CertsTab() {
       <SectionHeading
         title="Certificates"
         action={
-          <button
-            onClick={() => setTestOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-purple-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-purple-800"
-          >
-            <Send size={16} /> Send Test Certificate
-          </button>
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            <div className="w-full sm:w-56"><SearchInput value={search} onChange={handleSearch} placeholder="Search students…" /></div>
+            <ExportButton onClick={handleExport} disabled={filtered.length === 0} />
+            <button
+              onClick={() => setTestOpen(true)}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-purple-800"
+            >
+              <Send size={16} /> Send Test Certificate
+            </button>
+          </div>
         }
       />
+      <LastUpdated ts={q.updatedAt} />
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
       {data?.summary && (
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -49,9 +89,13 @@ export default function CertsTab() {
         </div>
       )}
       {data?.students && (
-        data.students.length === 0 ? (
+        allStudents.length === 0 ? (
           <TableShell>
             <EmptyState icon={<Award size={26} />} title="No certificates issued yet" />
+          </TableShell>
+        ) : filtered.length === 0 ? (
+          <TableShell>
+            <EmptyState icon={<Award size={26} />} title="No matches" subtitle="Try a different search term." />
           </TableShell>
         ) : (
         <TableShell>
@@ -64,7 +108,7 @@ export default function CertsTab() {
               </tr>
             </thead>
             <tbody>
-              {data.students.map((s: any) => {
+              {pageRows.map((s: any) => {
                 const total = s.totalNiches || data.summary?.totalNiches || 9;
                 const pct = total ? Math.round((s.certsEarned / total) * 100) : 0;
                 return (
@@ -92,6 +136,7 @@ export default function CertsTab() {
               })}
             </tbody>
           </table>
+          <Pagination page={page} totalPages={totalPages} onChange={setPage} />
         </TableShell>
         )
       )}
