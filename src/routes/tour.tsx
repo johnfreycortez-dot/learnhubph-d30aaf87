@@ -225,6 +225,7 @@ function addDays(date: Date, days: number) {
 
 function TourPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [upsellDismissed, setUpsellDismissed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [view, setView] = useState<ViewKey>("dashboard");
   const [coursesIndex, setCoursesIndex] = useState<number | null>(null);
@@ -440,27 +441,42 @@ function TourPage() {
           {view === "messages" && <MessagesView onLockedSend={openLocked} />}
           {view === "notifications" && <NotificationsView notifs={notifs} setNotifs={setNotifs} />}
 
-          <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl bg-purple-700 p-6 text-center text-white sm:flex-row sm:justify-between sm:text-left">
-            <div>
-              <p className="text-base font-black">Like what you see?</p>
-              <p className="text-sm text-purple-100">
-                Get lifetime access to all {NICHES.length} niches and {TOTAL_LESSONS} lessons for a
-                one-time ₱399.
-              </p>
-            </div>
-            <div className="flex shrink-0 flex-col items-center gap-2 sm:items-end">
+          {!upsellDismissed && (
+            <div className="relative mt-8 flex flex-col items-center gap-3 rounded-2xl border border-purple-100 bg-purple-50/70 p-4 text-center sm:flex-row sm:justify-between sm:text-left">
               <button
                 type="button"
-                onClick={goToLogin}
-                className="rounded-xl bg-white px-5 py-2.5 text-sm font-black text-purple-700 hover:bg-purple-50"
+                onClick={() => setUpsellDismissed(true)}
+                aria-label="Dismiss"
+                className="absolute right-3 top-3 grid h-6 w-6 place-items-center rounded-full text-purple-400 hover:bg-purple-100 hover:text-purple-700 sm:static sm:hidden"
               >
-                Get Started Now
+                <X size={14} />
               </button>
-              <a href="/" className="text-xs font-semibold text-purple-100 underline hover:text-white">
-                Exit Tour
-              </a>
+              <div>
+                <p className="text-sm font-bold text-purple-900">Like what you see?</p>
+                <p className="text-xs text-purple-700">
+                  Get lifetime access to all {NICHES.length} niches and {TOTAL_LESSONS} lessons for a
+                  one-time ₱399.
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3">
+                <button
+                  type="button"
+                  onClick={goToLogin}
+                  className="rounded-xl bg-purple-700 px-4 py-2 text-xs font-bold text-white hover:bg-purple-800"
+                >
+                  Get Started Now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUpsellDismissed(true)}
+                  aria-label="Dismiss"
+                  className="hidden h-8 w-8 place-items-center rounded-full text-purple-400 hover:bg-purple-100 hover:text-purple-700 sm:grid"
+                >
+                  <X size={14} />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </main>
       </div>
 
