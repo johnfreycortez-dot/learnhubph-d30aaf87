@@ -26,6 +26,7 @@ import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LessonLessonIdRouteImport } from './routes/lesson.$lessonId'
 import { Route as CoursesNicheIdRouteImport } from './routes/courses_.$nicheId'
+import { Route as BlogHowToBecomeAVirtualAssistantRouteImport } from './routes/blog.how-to-become-a-virtual-assistant'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const TourRoute = TourRouteImport.update({
@@ -113,6 +114,12 @@ const CoursesNicheIdRoute = CoursesNicheIdRouteImport.update({
   path: '/courses/$nicheId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogHowToBecomeAVirtualAssistantRoute =
+  BlogHowToBecomeAVirtualAssistantRouteImport.update({
+    id: '/blog/how-to-become-a-virtual-assistant',
+    path: '/blog/how-to-become-a-virtual-assistant',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/blog/how-to-become-a-virtual-assistant': typeof BlogHowToBecomeAVirtualAssistantRoute
   '/courses/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
@@ -156,6 +164,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/blog/how-to-become-a-virtual-assistant': typeof BlogHowToBecomeAVirtualAssistantRoute
   '/courses/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
@@ -177,6 +186,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tour': typeof TourRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/blog/how-to-become-a-virtual-assistant': typeof BlogHowToBecomeAVirtualAssistantRoute
   '/courses_/$nicheId': typeof CoursesNicheIdRoute
   '/lesson/$lessonId': typeof LessonLessonIdRoute
 }
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tour'
     | '/admin/dashboard'
+    | '/blog/how-to-become-a-virtual-assistant'
     | '/courses/$nicheId'
     | '/lesson/$lessonId'
   fileRoutesByTo: FileRoutesByTo
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tour'
     | '/admin/dashboard'
+    | '/blog/how-to-become-a-virtual-assistant'
     | '/courses/$nicheId'
     | '/lesson/$lessonId'
   id:
@@ -239,6 +251,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/tour'
     | '/admin/dashboard'
+    | '/blog/how-to-become-a-virtual-assistant'
     | '/courses_/$nicheId'
     | '/lesson/$lessonId'
   fileRoutesById: FileRoutesById
@@ -260,6 +273,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TourRoute: typeof TourRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  BlogHowToBecomeAVirtualAssistantRoute: typeof BlogHowToBecomeAVirtualAssistantRoute
   CoursesNicheIdRoute: typeof CoursesNicheIdRoute
   LessonLessonIdRoute: typeof LessonLessonIdRoute
 }
@@ -385,6 +399,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesNicheIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/how-to-become-a-virtual-assistant': {
+      id: '/blog/how-to-become-a-virtual-assistant'
+      path: '/blog/how-to-become-a-virtual-assistant'
+      fullPath: '/blog/how-to-become-a-virtual-assistant'
+      preLoaderRoute: typeof BlogHowToBecomeAVirtualAssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -412,9 +433,20 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TourRoute: TourRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  BlogHowToBecomeAVirtualAssistantRoute: BlogHowToBecomeAVirtualAssistantRoute,
   CoursesNicheIdRoute: CoursesNicheIdRoute,
   LessonLessonIdRoute: LessonLessonIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
