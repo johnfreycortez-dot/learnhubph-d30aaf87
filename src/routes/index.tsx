@@ -85,6 +85,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [canonicalLink("/")],
+    scripts: [jsonLdScript(homeCourseJsonLd(DEFAULT_OG_IMAGE))],
   }),
   component: Landing,
 });

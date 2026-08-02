@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastProvider } from "../components/Toast";
 import { ThemeProvider, useTheme } from "../lib/theme";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { jsonLdScript, organizationJsonLd, SITE_URL } from "../lib/seo";
+import { jsonLdScript, organizationJsonLd, websiteJsonLd, SITE_URL } from "../lib/seo";
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 
 function NotFoundComponent() {
