@@ -144,10 +144,13 @@ function LessonPage() {
           </div>
         ) : (
           <iframe
+            id="lesson-frame"
             src={blobUrl}
             className="w-full border-0"
             style={{ height: "calc(100vh - 56px)" }}
-            sandbox="allow-scripts allow-same-origin allow-forms"
+            // No allow-same-origin: blob: URLs inherit this page's origin, so combining
+            // it with allow-scripts would give lesson HTML full access to session storage.
+            sandbox="allow-scripts allow-forms allow-popups"
             title={lesson?.Title || "Lesson"}
           />
         )}
