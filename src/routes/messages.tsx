@@ -126,24 +126,29 @@ function MessagesPage() {
                   <li key={m.id}>
                     <button
                       onClick={() => setSelectedId(m.id)}
-                      className={`w-full text-left px-4 py-3 border-b border-gray-50 ${
+                      className={`flex w-full items-start gap-3 px-4 py-3 text-left border-b border-gray-50 ${
                         active ? "border-l-4 border-l-purple-600 bg-purple-50" : "hover:bg-gray-50"
                       }`}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="font-semibold text-sm text-gray-900 truncate">{m.subject}</span>
-                        <span className="text-[10px] text-gray-400 flex-shrink-0">
-                          {new Date(m.sentAt).toLocaleDateString()}
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-purple-100 text-xs font-black text-purple-700">
+                        {m.subject.slice(0, 1).toUpperCase()}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <span className="font-semibold text-sm text-gray-900 truncate">{m.subject}</span>
+                          <span className="text-[10px] text-gray-400 flex-shrink-0">
+                            {new Date(m.sentAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-500 truncate">{m.body}</p>
+                        <span
+                          className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                            rep ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {rep ? "Replied" : "Awaiting Reply"}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-500 truncate">{m.body}</p>
-                      <span
-                        className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                          rep ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
-                        }`}
-                      >
-                        {rep ? "Replied" : "Awaiting Reply"}
-                      </span>
                     </button>
                   </li>
                 );
@@ -176,10 +181,12 @@ function MessagesPage() {
               <p className="text-xs text-gray-400">{fmt(selected.sentAt)}</p>
 
               <div className="mt-6 space-y-6">
-                <div className="flex flex-col items-end">
-                  <span className="text-xs text-gray-400 mb-1">You</span>
-                  <div className="bg-purple-600 text-white rounded-2xl rounded-tr-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
-                    {selected.body}
+                <div className="flex items-end justify-end gap-2">
+                  <div className="flex flex-col items-end">
+                    <span className="text-xs text-gray-400 mb-1">You</span>
+                    <div className="bg-purple-600 text-white rounded-2xl rounded-tr-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
+                      {selected.body}
+                    </div>
                   </div>
                 </div>
 
@@ -187,12 +194,17 @@ function MessagesPage() {
                   const rep = replyFor(selected);
                   if (rep) {
                     return (
-                      <div className="flex flex-col items-start">
-                        <span className="text-xs text-gray-400 mb-1">
-                          LearnHub PH Support · {fmt(rep.createdAt)}
+                      <div className="flex items-end gap-2">
+                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-purple-100 text-[10px] font-black text-purple-700">
+                          LH
                         </span>
-                        <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
-                          {rep.body}
+                        <div className="flex flex-col items-start">
+                          <span className="text-xs text-gray-400 mb-1">
+                            LearnHub PH Support · {fmt(rep.createdAt)}
+                          </span>
+                          <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
+                            {rep.body}
+                          </div>
                         </div>
                       </div>
                     );

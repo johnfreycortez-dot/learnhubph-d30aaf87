@@ -38,17 +38,6 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  LabelList,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { NICHES, type Niche } from "../data/niches";
 import { canonicalLink } from "../lib/seo";
 import { ChatWidget } from "../components/ChatWidget";
@@ -816,46 +805,22 @@ function UpcomingWidget({ items, onOpen }: { items: UpcomingItem[]; onOpen: (tit
 }
 
 function ProgressBarChart({ rows }: { rows: { name: string; pct: number; fill: string }[] }) {
-  const height = Math.max(220, rows.length * 54);
   return (
-    <div className="mt-4" style={{ width: "100%", height }}>
-      <ResponsiveContainer>
-        <BarChart data={rows} layout="vertical" margin={{ left: 8, right: 32, top: 8, bottom: 8 }}>
-          <CartesianGrid horizontal={false} stroke="#f3e8ff" />
-          <XAxis
-            type="number"
-            domain={[0, 100]}
-            tickFormatter={(v) => `${v}%`}
-            tick={{ fontSize: 11, fill: "#9ca3af" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            type="category"
-            dataKey="name"
-            width={150}
-            tick={{ fontSize: 12, fontWeight: 700, fill: "#374151" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip
-            formatter={(value: number) => [`${value}%`, "Progress"]}
-            labelFormatter={(label) => label}
-            contentStyle={{ borderRadius: 12, border: "1px solid #f3e8ff", fontSize: 12 }}
-          />
-          <Bar dataKey="pct" radius={[0, 8, 8, 0]} barSize={18}>
-            {rows.map((d, i) => (
-              <Cell key={i} fill={d.fill} />
-            ))}
-            <LabelList
-              dataKey="pct"
-              position="right"
-              formatter={(v: number) => `${v}%`}
-              style={{ fontSize: 11, fontWeight: 700, fill: "#6b7280" }}
+    <div className="mt-4 space-y-4">
+      {rows.map((d) => (
+        <div key={d.name}>
+          <div className="mb-1.5 flex items-center justify-between gap-2 text-sm">
+            <span className="truncate font-bold text-gray-700">{d.name}</span>
+            <span className="shrink-0 text-xs font-bold text-gray-500">{d.pct}%</span>
+          </div>
+          <div className="h-4 overflow-hidden rounded-full bg-purple-50">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${Math.max(2, d.pct)}%`, backgroundColor: d.fill }}
             />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
