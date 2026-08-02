@@ -22,6 +22,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const staticUrls: { loc: string; changefreq: string; priority: string }[] = [
           { loc: `${SITE_URL}/`, changefreq: "weekly", priority: "1.0" },
           { loc: `${SITE_URL}/courses`, changefreq: "weekly", priority: "0.9" },
+          { loc: `${SITE_URL}/blog/how-to-become-a-virtual-assistant`, changefreq: "monthly", priority: "0.7" },
           { loc: `${SITE_URL}/faq`, changefreq: "monthly", priority: "0.6" },
           { loc: `${SITE_URL}/help`, changefreq: "monthly", priority: "0.6" },
         ];
