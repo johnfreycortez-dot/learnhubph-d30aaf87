@@ -50,7 +50,7 @@ import shotChatbot from "../assets/screenshot-chatbot.png";
 import shotHelp from "../assets/screenshot-help.png";
 import shotCurriculum from "../assets/screenshot-curriculum.png";
 import { NICHES, type Niche } from "../data/niches";
-import { canonicalLink } from "../lib/seo";
+import { canonicalLink, jsonLdScript, homeCourseJsonLd, DEFAULT_OG_IMAGE } from "../lib/seo";
 import { DocModal, LEGAL_DOCS } from "../components/DocModal";
 
 const CTA_URL =
@@ -85,6 +85,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [canonicalLink("/")],
+    scripts: [jsonLdScript(homeCourseJsonLd(DEFAULT_OG_IMAGE))],
   }),
   component: Landing,
 });

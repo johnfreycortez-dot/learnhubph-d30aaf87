@@ -66,3 +66,50 @@ export function courseJsonLd(opts: {
     },
   };
 }
+
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    alternateName: "LearnHub Philippines",
+    url: SITE_URL,
+    description:
+      "Filipino-built virtual assistant training platform: 9 niches, 81 lessons, quizzes and certificates for a one-time ₱399.",
+  };
+}
+
+// Course + Offer for the homepage, so search engines can show the price and
+// provider in rich results.
+export function homeCourseJsonLd(image?: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: "LearnHub PH — Virtual Assistant Training (9 Niches)",
+    description:
+      "Complete virtual assistant training covering 9 in-demand niches across 81 lessons, with quizzes and completion certificates. One-time payment, lifetime access.",
+    url: SITE_URL,
+    ...(image ? { image } : {}),
+    inLanguage: "en",
+    provider: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      sameAs: SITE_URL,
+    },
+    offers: {
+      "@type": "Offer",
+      price: "399",
+      priceCurrency: "PHP",
+      category: "One-time payment, lifetime access",
+      availability: "https://schema.org/InStock",
+      url: SITE_URL,
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+      courseWorkload: "P7D",
+    },
+  };
+}
+

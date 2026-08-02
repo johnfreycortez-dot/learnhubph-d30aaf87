@@ -14,13 +14,599 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_config: {
+        Row: {
+          key: string
+          value: string | null
+        }
+        Insert: {
+          key: string
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
+      certificates: {
+        Row: {
+          id: string
+          issued_at: string
+          niche_id: string
+          pdf_storage_path: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          issued_at?: string
+          niche_id: string
+          pdf_storage_path?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          issued_at?: string
+          niche_id?: string
+          pdf_storage_path?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_niche_id_fkey"
+            columns: ["niche_id"]
+            isOneToOne: false
+            referencedRelation: "niches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_faq: {
+        Row: {
+          answer: string
+          id: string
+          keywords: string | null
+          question: string
+        }
+        Insert: {
+          answer: string
+          id?: string
+          keywords?: string | null
+          question: string
+        }
+        Update: {
+          answer?: string
+          id?: string
+          keywords?: string | null
+          question?: string
+        }
+        Relationships: []
+      }
+      chatbot_unmatched: {
+        Row: {
+          created_at: string
+          id: string
+          question: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_unmatched_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          legacy_id: string | null
+          niche_id: string
+          sort_order: number
+          thumbnail_url: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          legacy_id?: string | null
+          niche_id: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          legacy_id?: string | null
+          niche_id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_niche_id_fkey"
+            columns: ["niche_id"]
+            isOneToOne: false
+            referencedRelation: "niches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          content_html: string | null
+          content_storage_path: string | null
+          created_at: string
+          id: string
+          legacy_id: string | null
+          module_id: string
+          sort_order: number
+          thumbnail_storage_path: string | null
+          title: string
+          video_url: string | null
+        }
+        Insert: {
+          content_html?: string | null
+          content_storage_path?: string | null
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          module_id: string
+          sort_order?: number
+          thumbnail_storage_path?: string | null
+          title: string
+          video_url?: string | null
+        }
+        Update: {
+          content_html?: string | null
+          content_storage_path?: string | null
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          module_id?: string
+          sort_order?: number
+          thumbnail_storage_path?: string | null
+          title?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_support_messages: {
+        Row: {
+          body: string
+          id: string
+          sender: string
+          sent_at: string
+          session_id: string
+        }
+        Insert: {
+          body: string
+          id?: string
+          sender: string
+          sent_at?: string
+          session_id: string
+        }
+        Update: {
+          body?: string
+          id?: string
+          sender?: string
+          sent_at?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_support_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "live_support_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_support_sessions: {
+        Row: {
+          accepted_at: string | null
+          closed_at: string | null
+          created_at: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          closed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_support_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          admin_reply: string | null
+          body: string
+          id: string
+          replied_at: string | null
+          sent_at: string
+          subject: string
+          user_id: string
+        }
+        Insert: {
+          admin_reply?: string | null
+          body: string
+          id?: string
+          replied_at?: string | null
+          sent_at?: string
+          subject: string
+          user_id: string
+        }
+        Update: {
+          admin_reply?: string | null
+          body?: string
+          id?: string
+          replied_at?: string | null
+          sent_at?: string
+          subject?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          legacy_id: string | null
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          sort_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      niches: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          image_url: string | null
+          legacy_id: string | null
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          legacy_id?: string | null
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          legacy_id?: string | null
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          amount_paid: number | null
+          created_at: string
+          email: string
+          enrolled_niche_id: string | null
+          id: string
+          is_admin: boolean
+          name: string
+          payment_method: string | null
+          payment_submitted_at: string | null
+          profile_photo_url: string | null
+          reference_number: string | null
+          signup_date: string
+          tnc_accepted_at: string | null
+          verified: boolean
+          verified_date: string | null
+        }
+        Insert: {
+          amount_paid?: number | null
+          created_at?: string
+          email: string
+          enrolled_niche_id?: string | null
+          id: string
+          is_admin?: boolean
+          name: string
+          payment_method?: string | null
+          payment_submitted_at?: string | null
+          profile_photo_url?: string | null
+          reference_number?: string | null
+          signup_date?: string
+          tnc_accepted_at?: string | null
+          verified?: boolean
+          verified_date?: string | null
+        }
+        Update: {
+          amount_paid?: number | null
+          created_at?: string
+          email?: string
+          enrolled_niche_id?: string | null
+          id?: string
+          is_admin?: boolean
+          name?: string
+          payment_method?: string | null
+          payment_submitted_at?: string | null
+          profile_photo_url?: string | null
+          reference_number?: string | null
+          signup_date?: string
+          tnc_accepted_at?: string | null
+          verified?: boolean
+          verified_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_enrolled_niche_fk"
+            columns: ["enrolled_niche_id"]
+            isOneToOne: false
+            referencedRelation: "niches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_results: {
+        Row: {
+          attempt_number: number
+          id: string
+          lesson_id: string
+          passed: boolean
+          score: number
+          taken_at: string
+          total_points: number
+          user_id: string
+        }
+        Insert: {
+          attempt_number?: number
+          id?: string
+          lesson_id: string
+          passed: boolean
+          score: number
+          taken_at?: string
+          total_points: number
+          user_id: string
+        }
+        Update: {
+          attempt_number?: number
+          id?: string
+          lesson_id?: string
+          passed?: boolean
+          score?: number
+          taken_at?: string
+          total_points?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_results_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_results_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quizzes: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          id: string
+          legacy_id: string | null
+          lesson_id: string
+          option_a: string
+          option_b: string
+          option_c: string
+          option_d: string
+          points: number
+          question: string
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          lesson_id: string
+          option_a: string
+          option_b: string
+          option_c: string
+          option_d: string
+          points?: number
+          question: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          id?: string
+          legacy_id?: string | null
+          lesson_id?: string
+          option_a?: string
+          option_b?: string
+          option_c?: string
+          option_d?: string
+          points?: number
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quizzes_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stat_history: {
+        Row: {
+          snapshot_date: string
+          total_revenue: number
+          total_signups: number
+          verified_students: number
+        }
+        Insert: {
+          snapshot_date: string
+          total_revenue?: number
+          total_signups?: number
+          verified_students?: number
+        }
+        Update: {
+          snapshot_date?: string
+          total_revenue?: number
+          total_signups?: number
+          verified_students?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

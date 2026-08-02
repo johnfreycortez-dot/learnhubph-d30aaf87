@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ToastProvider } from "../components/Toast";
 import { ThemeProvider, useTheme } from "../lib/theme";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { jsonLdScript, organizationJsonLd, SITE_URL } from "../lib/seo";
+import { jsonLdScript, organizationJsonLd, websiteJsonLd, SITE_URL } from "../lib/seo";
 import logoAsset from "../assets/learnhub-logo.png.asset.json";
 
 function NotFoundComponent() {
@@ -93,7 +93,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
-    scripts: [jsonLdScript(organizationJsonLd(`${SITE_URL}${logoAsset.url}`))],
+    scripts: [
+      jsonLdScript(organizationJsonLd(`${SITE_URL}${logoAsset.url}`)),
+      jsonLdScript(websiteJsonLd()),
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },

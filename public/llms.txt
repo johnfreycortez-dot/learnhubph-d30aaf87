@@ -1,0 +1,17 @@
+# LearnHub PH
+
+> Virtual assistant training platform built for Filipinos and open to aspiring VAs everywhere: 9 in-demand niches, 81 lessons, quizzes and completion certificates for a one-time ₱399 with lifetime access.
+
+LearnHub PH ("Learn More. Earn More.") teaches beginner-friendly, client-ready virtual assistant skills across nine specializations: Social Media Management, General VA, Admin Assistant, Graphic Design, Bookkeeping, E-Commerce, Operations, Customer Support, and Appointment Setting. Each niche has 3 modules and 9 lessons, with quizzes and a downloadable certificate on completion. Payment is a single ₱399 fee (GCash or BPI bank transfer) — no subscriptions.
+
+## Pages
+
+- [Home](/): Overview of the platform, the 9 VA niches, curriculum, pricing and student reviews.
+- [Courses](/courses): Browse all 9 virtual assistant learning paths.
+- [How to Become a Virtual Assistant](/blog/how-to-become-a-virtual-assistant): Step-by-step guide to starting a VA career, with advice for the Philippine market.
+- [FAQ](/faq): Answers about access, pricing, certificates and support.
+- [Help Center](/help): Getting-started guides and how to contact the team.
+
+## Optional
+
+- [Tour](/tour): Guided walkthrough of the student experience.
