@@ -93,7 +93,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
-    scripts: [jsonLdScript(organizationJsonLd(`${SITE_URL}${logoAsset.url}`))],
+    scripts: [
+      jsonLdScript(organizationJsonLd(`${SITE_URL}${logoAsset.url}`)),
+      jsonLdScript(websiteJsonLd()),
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
