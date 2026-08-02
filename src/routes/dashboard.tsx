@@ -674,7 +674,11 @@ function DayTodoModal({
 
 type UpcomingItem = { id: string; title: string; label: string; date: Date; tone: string };
 
-function buildUpcoming(notifications: Notif[], rows: CourseRow[], todos: TodoMap): UpcomingItem[] {
+function buildUpcoming(
+  notifications: Notif[],
+  rows: CourseRow[],
+  todos: TodoMap,
+): { upcoming: UpcomingItem[]; recent: UpcomingItem[] } {
   const fromTodos = Object.entries(todos).flatMap(([key, items]) =>
     items
       .filter((item) => !item.done)
