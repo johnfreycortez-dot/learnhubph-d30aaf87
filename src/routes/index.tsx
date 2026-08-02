@@ -263,7 +263,7 @@ function LogoMark({ className = "" }: { className?: string }) {
     <img
       src={logoAsset.url}
       onError={() => setBroken(true)}
-      alt="LearnHub PH"
+      alt="LearnHub PH logo"
       className={`${className} object-contain`}
     />
   );
