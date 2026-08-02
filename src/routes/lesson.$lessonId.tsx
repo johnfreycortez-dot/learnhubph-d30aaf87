@@ -75,6 +75,11 @@ function LessonPage() {
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
+      // Only trust messages coming from the sandboxed lesson iframe itself.
+      // A sandbox without allow-same-origin posts with a null/"null" origin.
+      const frame = document.getElementById("lesson-frame") as HTMLIFrameElement | null;
+      if (!frame || e.source !== frame.contentWindow) return;
+      if (e.origin !== "null" && e.origin !== window.location.origin) return;
       if (e.data?.action === "lessonComplete") {
         gasCall("submitQuiz", getToken(), lessonId, [])
           .then(() => showToast("Lesson completed! Great work!", "success"))
