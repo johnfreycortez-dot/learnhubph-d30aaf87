@@ -40,7 +40,7 @@ export const Route = createFileRoute("/courses")({
         {
           name: "description",
           content:
-            "Browse all 9 virtual assistant learning paths on LearnHub PH: Social Media Management, General VA, Admin, Design, Bookkeeping, E-Commerce, Operations, Support, and Appointment Setting.",
+            "Browse all 9 virtual assistant learning paths on LearnHub PH — social media, admin, design, bookkeeping, e-commerce, support and more.",
         },
         { property: "og:title", content: "Courses — 9 VA Specializations | LearnHub PH" },
         {
