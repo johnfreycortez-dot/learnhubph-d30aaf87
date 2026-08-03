@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Clock, MessageSquare, Plus, Send, X } from "lucide-react";
+import { Check, CheckCheck, Clock, MessageSquare, Plus, Send, X } from "lucide-react";
 import { gasCall, getToken } from "@/lib/api";
 import { SessionGuard } from "@/components/SessionGuard";
 import { StudentShell } from "@/components/StudentShell";
 import { Spinner } from "@/components/Spinner";
 import { useToast } from "@/components/Toast";
+import { EmojiPicker } from "@/components/EmojiPicker";
+import { ImageAttach } from "@/components/ImageAttach";
 
 export const Route = createFileRoute("/messages")({
   head: () => ({
@@ -24,29 +26,16 @@ export const Route = createFileRoute("/messages")({
 });
 
 interface SentMessage {
-  id: string;
+  msgId: string;
   subject: string;
   body: string;
   sentAt: string;
-}
-
-type Notif = { notifId: string; type: string; title: string; body: string; createdAt: string; read: boolean };
-
-const STORE_KEY = "lhph_messages";
-
-function loadMessages(): SentMessage[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(STORE_KEY);
-    const arr = raw ? JSON.parse(raw) : [];
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveMessages(list: SentMessage[]) {
-  window.localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  adminReply: string;
+  repliedAt: string;
+  imageUrl: string;
+  replyImageUrl: string;
+  adminSeenAt: string;
+  studentSeenAt: string;
 }
 
 function fmt(d: string) {
@@ -57,44 +46,44 @@ function fmt(d: string) {
 function MessagesPage() {
   const { showToast } = useToast();
   const [messages, setMessages] = useState<SentMessage[]>([]);
-  const [replies, setReplies] = useState<Notif[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const list = loadMessages();
-    setMessages(list);
-    setSelectedId(list[0]?.id ?? null);
-    (async () => {
-      try {
-        const res = await gasCall("getNotifications", getToken());
-        if (res?.ok) setReplies((res.items || []).filter((i: Notif) => i.type === "reply"));
-      } catch {
-        /* ignore */
-      } finally {
-        setLoading(false);
+  async function load(preserveSelection = true) {
+    try {
+      const res = await gasCall("getMyMessages", getToken());
+      if (res?.ok) {
+        const list: SentMessage[] = res.messages || [];
+        setMessages(list);
+        if (!preserveSelection || !list.some((m) => m.msgId === selectedId)) {
+          setSelectedId(list[0]?.msgId ?? null);
+        }
       }
-    })();
-  }, []);
-
-  const sorted = useMemo(
-    () => messages.slice().sort((a, b) => (a.sentAt < b.sentAt ? 1 : -1)),
-    [messages],
-  );
-
-  function replyFor(m: SentMessage) {
-    return replies.find((r) => (r.title || "").toLowerCase().includes(m.subject.toLowerCase()));
+    } catch {
+      /* ignore */
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const selected = sorted.find((m) => m.id === selectedId) || null;
+  useEffect(() => {
+    load(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  function onSent(msg: SentMessage) {
-    const next = [msg, ...messages];
-    setMessages(next);
-    saveMessages(next);
-    setSelectedId(msg.id);
+  // Opening the page marks every reply as seen — drives the double-check
+  // that shows up on the *admin's* side of their own reply bubbles.
+  useEffect(() => {
+    gasCall("markRepliesSeenByStudent", getToken());
+  }, []);
+
+  const sorted = useMemo(() => messages.slice().sort((a, b) => (a.sentAt < b.sentAt ? 1 : -1)), [messages]);
+  const selected = sorted.find((m) => m.msgId === selectedId) || null;
+
+  function onSent() {
     setModalOpen(false);
+    load(false);
     showToast("Message sent! We'll reply to your email.", "success");
   }
 
@@ -120,12 +109,11 @@ function MessagesPage() {
           ) : (
             <ul className="max-h-[420px] overflow-y-auto">
               {sorted.map((m) => {
-                const rep = replyFor(m);
-                const active = m.id === selectedId;
+                const active = m.msgId === selectedId;
                 return (
-                  <li key={m.id}>
+                  <li key={m.msgId}>
                     <button
-                      onClick={() => setSelectedId(m.id)}
+                      onClick={() => setSelectedId(m.msgId)}
                       className={`flex w-full items-start gap-3 px-4 py-3 text-left border-b border-gray-50 ${
                         active ? "border-l-4 border-l-purple-600 bg-purple-50" : "hover:bg-gray-50"
                       }`}
@@ -140,13 +128,13 @@ function MessagesPage() {
                             {new Date(m.sentAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500 truncate">{m.body}</p>
+                        <p className="text-sm text-gray-500 truncate">{m.body || "📷 Photo"}</p>
                         <span
                           className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                            rep ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                            m.adminReply ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
                           }`}
                         >
-                          {rep ? "Replied" : "Awaiting Reply"}
+                          {m.adminReply ? "Replied" : "Awaiting Reply"}
                         </span>
                       </div>
                     </button>
@@ -184,39 +172,49 @@ function MessagesPage() {
                 <div className="flex items-end justify-end gap-2">
                   <div className="flex flex-col items-end">
                     <span className="text-xs text-gray-400 mb-1">You</span>
-                    <div className="bg-purple-600 text-white rounded-2xl rounded-tr-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
-                      {selected.body}
+                    <div className="bg-purple-600 text-white rounded-2xl rounded-tr-sm max-w-lg overflow-hidden text-sm">
+                      {selected.imageUrl && (
+                        <img src={selected.imageUrl} alt="Photo you attached" className="max-h-72 w-full object-cover" />
+                      )}
+                      {selected.body && <p className="px-4 py-3 whitespace-pre-wrap">{selected.body}</p>}
                     </div>
+                    {/* Double-check: admin has viewed this message (WhatsApp-style seen receipt) */}
+                    <span className="mt-1 flex items-center gap-1 text-[10px] text-gray-400">
+                      {selected.adminSeenAt ? (
+                        <>
+                          Seen <CheckCheck size={12} className="text-purple-500" />
+                        </>
+                      ) : (
+                        <>
+                          Sent <Check size={12} className="text-gray-300" />
+                        </>
+                      )}
+                    </span>
                   </div>
                 </div>
 
-                {(() => {
-                  const rep = replyFor(selected);
-                  if (rep) {
-                    return (
-                      <div className="flex items-end gap-2">
-                        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-purple-100 text-[10px] font-black text-purple-700">
-                          LH
-                        </span>
-                        <div className="flex flex-col items-start">
-                          <span className="text-xs text-gray-400 mb-1">
-                            LearnHub PH Support · {fmt(rep.createdAt)}
-                          </span>
-                          <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-sm max-w-lg px-4 py-3 text-sm whitespace-pre-wrap">
-                            {rep.body}
-                          </div>
-                        </div>
+                {selected.adminReply || selected.replyImageUrl ? (
+                  <div className="flex items-end gap-2">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-purple-100 text-[10px] font-black text-purple-700">
+                      LH
+                    </span>
+                    <div className="flex flex-col items-start">
+                      <span className="text-xs text-gray-400 mb-1">LearnHub PH Support · {fmt(selected.repliedAt)}</span>
+                      <div className="bg-gray-100 text-gray-800 rounded-2xl rounded-tl-sm max-w-lg overflow-hidden text-sm">
+                        {selected.replyImageUrl && (
+                          <img src={selected.replyImageUrl} alt="Photo sent by support" className="max-h-72 w-full object-cover" />
+                        )}
+                        {selected.adminReply && <p className="px-4 py-3 whitespace-pre-wrap">{selected.adminReply}</p>}
                       </div>
-                    );
-                  }
-                  return (
-                    <div className="mx-auto max-w-sm rounded-2xl bg-gray-50 border border-gray-100 p-5 text-center">
-                      <Clock size={20} className="text-amber-400 mx-auto" />
-                      <p className="mt-2 text-sm font-semibold text-gray-700">Waiting for a reply...</p>
-                      <p className="text-xs text-gray-500">We usually reply within 24 hours.</p>
                     </div>
-                  );
-                })()}
+                  </div>
+                ) : (
+                  <div className="mx-auto max-w-sm rounded-2xl bg-gray-50 border border-gray-100 p-5 text-center">
+                    <Clock size={20} className="text-amber-400 mx-auto" />
+                    <p className="mt-2 text-sm font-semibold text-gray-700">Waiting for a reply...</p>
+                    <p className="text-xs text-gray-500">We usually reply within 24 hours.</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -228,15 +226,10 @@ function MessagesPage() {
   );
 }
 
-function NewMessageModal({
-  onClose,
-  onSent,
-}: {
-  onClose: () => void;
-  onSent: (m: SentMessage) => void;
-}) {
+function NewMessageModal({ onClose, onSent }: { onClose: () => void; onSent: () => void }) {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -245,12 +238,9 @@ function NewMessageModal({
     setError("");
     setLoading(true);
     try {
-      const res = await gasCall("sendMessage", getToken(), subject, body);
-      if (res?.ok) {
-        onSent({ id: Date.now().toString(), subject, body, sentAt: new Date().toISOString() });
-      } else {
-        setError(res?.msg || "Failed to send message");
-      }
+      const res = await gasCall("sendMessage", getToken(), subject, body, imageUrl || "");
+      if (res?.ok) onSent();
+      else setError(res?.msg || "Failed to send message");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -279,12 +269,27 @@ function NewMessageModal({
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Message</label>
-            <textarea
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              required
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 min-h-[120px] outline-none focus:ring-2 focus:ring-purple-500"
+            <div className="relative">
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                required={!imageUrl}
+                className="w-full rounded-xl border border-gray-200 px-4 py-2.5 pr-11 min-h-[120px] outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <div className="absolute bottom-2 right-2">
+                <EmojiPicker onSelect={(e) => setBody((b) => b + e)} />
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <ImageAttach
+              token={getToken()}
+              imageUrl={imageUrl}
+              onUploaded={setImageUrl}
+              onClear={() => setImageUrl(null)}
+              onError={setError}
             />
+            {!imageUrl && <span className="text-xs text-gray-400">Attach a screenshot or photo (optional)</span>}
           </div>
           {error && (
             <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 text-sm">{error}</div>

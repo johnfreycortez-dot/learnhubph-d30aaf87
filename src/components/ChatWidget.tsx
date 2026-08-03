@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { MessageCircle, Send, X, Sparkles, Headphones, Loader2, MessageSquareText, Mail } from "lucide-react";
 import { gasCall, getToken } from "@/lib/api";
 import { isLiveSupportOpen } from "@/lib/businessHours";
+import { EmojiPicker } from "@/components/EmojiPicker";
+import { ImageAttach } from "@/components/ImageAttach";
 
 // ---- Knowledge base loading (module-scope cache) -----------------------
 // Same pattern as useStudentIdentity.ts: fetch getChatbotKnowledgeBase()
@@ -135,7 +137,7 @@ let nextId = 1;
 // "unavailable" — admin clicked "I am Busy" on this request, or 2 minutes
 //                 passed with nobody accepting it; one-time notice, then off.
 type LiveSupportPhase = "off" | "waiting" | "active" | "closed" | "unavailable";
-type LiveMessage = { sender: "student" | "admin"; body: string; sentAt: string };
+type LiveMessage = { sender: "student" | "admin"; body: string; sentAt: string; imageUrl?: string };
 
 const LIVE_SUPPORT_STORAGE_KEY = "lhph_live_support_session";
 const WAITING_POLL_MS = 4000;
@@ -182,6 +184,7 @@ export function ChatWidget() {
   const [liveSessionId, setLiveSessionId] = useState<string | null>(null);
   const [liveMessages, setLiveMessages] = useState<LiveMessage[]>([]);
   const [liveInput, setLiveInput] = useState("");
+  const [liveImageUrl, setLiveImageUrl] = useState<string | null>(null);
   const [liveStarting, setLiveStarting] = useState(false);
   const [liveSending, setLiveSending] = useState(false);
   const liveListRef = useRef<HTMLDivElement>(null);
@@ -327,12 +330,14 @@ export function ChatWidget() {
   async function handleLiveSend(e?: React.FormEvent) {
     e?.preventDefault();
     const body = liveInput.trim();
-    if (!body || !liveSessionId || liveSending) return;
+    if ((!body && !liveImageUrl) || !liveSessionId || liveSending) return;
     setLiveInput("");
+    const imageToSend = liveImageUrl;
+    setLiveImageUrl(null);
     setLiveSending(true);
-    setLiveMessages((prev) => [...prev, { sender: "student", body, sentAt: new Date().toISOString() }]);
+    setLiveMessages((prev) => [...prev, { sender: "student", body, sentAt: new Date().toISOString(), imageUrl: imageToSend || undefined }]);
     try {
-      await gasCall("sendLiveSupportMessage", liveSessionId, body, getToken());
+      await gasCall("sendLiveSupportMessage", liveSessionId, body, getToken(), imageToSend || "");
     } catch {
       // next poll tick will reconcile either way
     } finally {
@@ -564,19 +569,42 @@ export function ChatWidget() {
                 {liveMessages.map((m, i) => (
                   <div key={i} className={`flex ${m.sender === "student" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                      className={`max-w-[85%] overflow-hidden rounded-2xl text-sm leading-relaxed ${
                         m.sender === "student"
                           ? "rounded-br-sm bg-purple-700 text-white"
                           : "rounded-bl-sm border border-gray-100 bg-white text-gray-700 shadow-sm"
                       }`}
                     >
-                      {m.body}
+                      {m.imageUrl && (
+                        <img src={m.imageUrl} alt="Attached photo" className="max-h-56 w-full object-cover" />
+                      )}
+                      {m.body && <p className="px-3.5 py-2.5">{m.body}</p>}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <form onSubmit={handleLiveSend} className="flex items-center gap-2 border-t border-gray-100 bg-white p-3">
+              {liveImageUrl && (
+                <div className="border-t border-gray-100 bg-white px-3 pt-3">
+                  <ImageAttach
+                    token={getToken()}
+                    imageUrl={liveImageUrl}
+                    onUploaded={setLiveImageUrl}
+                    onClear={() => setLiveImageUrl(null)}
+                    onError={(msg) => pushMessage("bot", msg)}
+                  />
+                </div>
+              )}
+              <form onSubmit={handleLiveSend} className="flex items-center gap-1 border-t border-gray-100 bg-white p-3">
+                {!liveImageUrl && (
+                  <ImageAttach
+                    token={getToken()}
+                    imageUrl={null}
+                    onUploaded={setLiveImageUrl}
+                    onClear={() => setLiveImageUrl(null)}
+                    onError={(msg) => pushMessage("bot", msg)}
+                  />
+                )}
                 <input
                   type="text"
                   value={liveInput}
@@ -584,9 +612,10 @@ export function ChatWidget() {
                   placeholder="Type a message…"
                   className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm outline-none transition-shadow focus:ring-2 focus:ring-purple-500"
                 />
+                <EmojiPicker onSelect={(e) => setLiveInput((v) => v + e)} />
                 <button
                   type="submit"
-                  disabled={!liveInput.trim() || liveSending}
+                  disabled={(!liveInput.trim() && !liveImageUrl) || liveSending}
                   aria-label="Send"
                   className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-700 text-white transition-colors hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-40"
                 >

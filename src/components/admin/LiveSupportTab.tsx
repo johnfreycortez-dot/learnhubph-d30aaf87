@@ -4,7 +4,9 @@ import { gasCall } from "@/lib/api";
 import { Drawer } from "@/components/Drawer";
 import { ConfirmModal } from "@/components/ConfirmModal";
 import { useToast } from "@/components/Toast";
-import { EmptyState, InitialsAvatar, LoadState, SectionHeading, useAdminQuery } from "./shared";
+import { EmojiPicker } from "@/components/EmojiPicker";
+import { ImageAttach } from "@/components/ImageAttach";
+import { EmptyState, InitialsAvatar, LoadState, useAdminQuery } from "./shared";
 
 type LiveSupportRow = {
   sessionId: string;
@@ -14,7 +16,7 @@ type LiveSupportRow = {
   createdAt: string;
   acceptedAt: string;
 };
-type LiveMsg = { sender: "student" | "admin"; body: string; sentAt: string };
+type LiveMsg = { sender: "student" | "admin"; body: string; sentAt: string; imageUrl?: string };
 
 export default function LiveSupportTab() {
   const { showToast } = useToast();
@@ -73,7 +75,7 @@ export default function LiveSupportTab() {
 
   return (
     <div>
-      <SectionHeading title="Live Support" />
+      
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
 
       {!q.loading && !q.error && (
@@ -193,6 +195,7 @@ function ThreadDrawer({
   showToast: (msg: string, variant?: "success" | "error" | "info") => void;
 }) {
   const [reply, setReply] = useState("");
+  const [replyImage, setReplyImage] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [confirmClose, setConfirmClose] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -205,12 +208,13 @@ function ThreadDrawer({
   const messages = q.data?.messages || [];
 
   async function send() {
-    if (!reply.trim() || !session) return;
+    if ((!reply.trim() && !replyImage) || !session) return;
     setSending(true);
     try {
-      const res = await gasCall("adminSendLiveSupportMessage", session.sessionId, reply);
+      const res = await gasCall("adminSendLiveSupportMessage", session.sessionId, reply, replyImage || "");
       if (res.ok) {
         setReply("");
+        setReplyImage(null);
         q.reload();
       } else {
         showToast(res.msg || "Failed to send message.", "error");
@@ -255,33 +259,59 @@ function ThreadDrawer({
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.sender === "admin" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                    className={`max-w-[80%] overflow-hidden rounded-2xl text-sm leading-relaxed ${
                       m.sender === "admin"
                         ? "rounded-br-sm bg-purple-700 text-white"
                         : "rounded-bl-sm border border-gray-100 bg-gray-50 text-gray-700"
                     }`}
                   >
-                    {m.body}
+                    {m.imageUrl && <img src={m.imageUrl} alt="Attached photo" className="max-h-56 w-full object-cover" />}
+                    {m.body && <p className="px-3.5 py-2.5">{m.body}</p>}
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="mt-4 space-y-2 border-t border-gray-100 pt-4">
-              <textarea
-                value={reply}
-                onChange={(e) => setReply(e.target.value)}
-                placeholder="Type your reply..."
-                className="min-h-[70px] w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500"
-              />
+              {replyImage && (
+                <ImageAttach
+                  token={null}
+                  imageUrl={replyImage}
+                  onUploaded={setReplyImage}
+                  onClear={() => setReplyImage(null)}
+                  onError={(msg) => showToast(msg, "error")}
+                />
+              )}
+              <div className="relative">
+                <textarea
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)}
+                  placeholder="Type your reply..."
+                  className="min-h-[70px] w-full rounded-xl border border-gray-200 px-4 py-2.5 pr-11 text-sm outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <div className="absolute bottom-2 right-2">
+                  <EmojiPicker onSelect={(e) => setReply((r) => r + e)} />
+                </div>
+              </div>
               <div className="flex items-center justify-between gap-2">
-                <button
-                  onClick={send}
-                  disabled={sending || !reply.trim()}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-purple-700 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-60"
-                >
-                  <Send size={16} /> Send
-                </button>
+                <div className="flex items-center gap-1">
+                  {!replyImage && (
+                    <ImageAttach
+                      token={null}
+                      imageUrl={null}
+                      onUploaded={setReplyImage}
+                      onClear={() => setReplyImage(null)}
+                      onError={(msg) => showToast(msg, "error")}
+                    />
+                  )}
+                  <button
+                    onClick={send}
+                    disabled={sending || (!reply.trim() && !replyImage)}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-purple-700 px-4 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-60"
+                  >
+                    <Send size={16} /> Send
+                  </button>
+                </div>
                 <button
                   onClick={() => setConfirmClose(true)}
                   className="rounded-xl px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50"

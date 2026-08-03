@@ -66,7 +66,7 @@ export default function SettingsTab() {
 
   return (
     <div className="max-w-3xl">
-      <SectionHeading title="Settings" />
+      
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
       {cfg && (
         <>

@@ -13,7 +13,7 @@ export default function OverviewTab() {
 
   return (
     <div>
-      <SectionHeading title="Overview" />
+      
       <LastUpdated ts={q.updatedAt} />
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
       {stats && (

@@ -120,7 +120,6 @@ export default function PendingTab() {
   return (
     <div>
       <SectionHeading
-        title="Pending Payments"
         action={
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <div className="w-full sm:w-56"><SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search pending…" /></div>

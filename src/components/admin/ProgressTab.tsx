@@ -91,7 +91,6 @@ export default function ProgressTab() {
   return (
     <div>
       <SectionHeading
-        title="Progress"
         action={
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <div className="w-full sm:w-56"><SearchInput value={search} onChange={handleSearch} placeholder="Search students…" /></div>

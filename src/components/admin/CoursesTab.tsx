@@ -9,7 +9,7 @@ export default function CoursesTab() {
   const [sub, setSub] = useState<"lessons" | "quizzes">("lessons");
   return (
     <div>
-      <SectionHeading title="Courses" />
+      
       <div className="mt-4 inline-flex rounded-full border border-gray-100 bg-white p-1 shadow-sm">
         <button onClick={() => setSub("lessons")}
           className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition-colors ${sub === "lessons" ? "bg-purple-700 text-white shadow-sm" : "text-gray-500 hover:text-purple-700"}`}>

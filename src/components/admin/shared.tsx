@@ -84,7 +84,8 @@ export function EmptyState({ icon, title, subtitle }: { icon: ReactNode; title: 
   );
 }
 
-export function SectionHeading({ title, action }: { title: string; action?: ReactNode }) {
+export function SectionHeading({ title, action }: { title?: string; action?: ReactNode }) {
+  if (!title) return action ? <div className="flex flex-wrap items-center justify-end gap-3">{action}</div> : null;
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <h2 className="text-xl font-black text-gray-900 sm:text-2xl">{title}</h2>

@@ -1,8 +1,10 @@
-import { useMemo, useState } from "react";
-import { ArrowLeft, Clock, Inbox, Send } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Check, CheckCheck, Clock, Inbox, Send } from "lucide-react";
 import { gasCall } from "@/lib/api";
 import { useToast } from "@/components/Toast";
-import { EmptyState, InitialsAvatar, LoadState, SearchInput, SectionHeading, useAdminQuery } from "./shared";
+import { EmojiPicker } from "@/components/EmojiPicker";
+import { ImageAttach } from "@/components/ImageAttach";
+import { EmptyState, InitialsAvatar, LoadState, SearchInput, useAdminQuery } from "./shared";
 
 interface Conversation {
   email: string;
@@ -57,9 +59,15 @@ export default function MessagesTab() {
 
   const selected = conversations.find((c) => c.email === selectedEmail) || null;
 
+  // Opening a conversation marks every message in it as seen — drives the
+  // double-check on the *student's* side once they view their sent bubble.
+  useEffect(() => {
+    if (selectedEmail) gasCall("adminMarkMessagesSeen", selectedEmail).then(() => q.reload());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedEmail]);
+
   return (
     <div>
-      <SectionHeading title="Messages" />
       <LoadState loading={q.loading} error={q.error} onRetry={q.reload} />
       {!q.loading && !q.error && conversations.length === 0 && (
         <div className="mt-6 rounded-2xl border border-gray-100 bg-white shadow-sm">
@@ -133,17 +141,19 @@ function ConversationThread({
   showToast: (msg: string, v?: any) => void;
 }) {
   const [reply, setReply] = useState("");
+  const [replyImage, setReplyImage] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const pending = conversation.messages.find((m) => !m.adminReply);
 
   async function send() {
-    if (!reply.trim() || !pending) return;
+    if ((!reply.trim() && !replyImage) || !pending) return;
     setSending(true);
     try {
-      const res = await gasCall("adminReplyToMessage", pending.msgId, reply);
+      const res = await gasCall("adminReplyToMessage", pending.msgId, reply, replyImage || "");
       if (res.ok) {
         showToast("Reply sent!", "success");
         setReply("");
+        setReplyImage(null);
         onReplied();
       } else showToast(res.msg || "Failed", "error");
     } finally {
@@ -175,17 +185,27 @@ function ConversationThread({
               <p className="mb-1.5 text-center text-[11px] font-bold uppercase tracking-wide text-gray-400">{m.subject}</p>
             )}
             <div className="flex flex-col items-start">
-              <div className="max-w-[75%] rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-2.5 text-sm text-gray-800">
-                {m.body}
+              <div className="max-w-[75%] overflow-hidden rounded-2xl rounded-tl-sm bg-gray-100 text-sm text-gray-800">
+                {m.imageUrl && <img src={m.imageUrl} alt="Attachment sent by student" className="max-h-64 w-full object-cover" />}
+                {m.body && <p className="px-4 py-2.5">{m.body}</p>}
               </div>
               <span className="mt-1 text-[10px] text-gray-400">{new Date(m.sentAt).toLocaleString()}</span>
             </div>
             {m.adminReply && (
               <div className="mt-2 flex flex-col items-end">
-                <div className="max-w-[75%] rounded-2xl rounded-tr-sm bg-purple-600 px-4 py-2.5 text-sm text-white">
-                  {m.adminReply}
+                <div className="max-w-[75%] overflow-hidden rounded-2xl rounded-tr-sm bg-purple-600 text-sm text-white">
+                  {m.replyImageUrl && <img src={m.replyImageUrl} alt="Attachment sent by admin" className="max-h-64 w-full object-cover" />}
+                  {m.adminReply && <p className="px-4 py-2.5">{m.adminReply}</p>}
                 </div>
-                <span className="mt-1 text-[10px] text-gray-400">{new Date(m.repliedAt).toLocaleString()}</span>
+                <span className="mt-1 flex items-center gap-1 text-[10px] text-gray-400">
+                  {new Date(m.repliedAt).toLocaleString()}
+                  {/* Double-check: student has viewed this reply (WhatsApp-style seen receipt) */}
+                  {m.studentSeenAt ? (
+                    <CheckCheck size={13} className="text-purple-500" />
+                  ) : (
+                    <Check size={13} className="text-gray-300" />
+                  )}
+                </span>
               </div>
             )}
           </div>
@@ -195,29 +215,50 @@ function ConversationThread({
       {/* Composer */}
       <div className="border-t border-gray-100 p-4">
         {pending ? (
-          <div className="flex items-end gap-2">
-            <textarea
-              value={reply}
-              onChange={(e) => setReply(e.target.value)}
-              placeholder="Type your reply…"
-              rows={1}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  send();
-                }
-              }}
-              className="min-h-[44px] max-h-32 flex-1 resize-none rounded-2xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <button
-              type="button"
-              onClick={send}
-              disabled={sending || !reply.trim()}
-              aria-label="Send reply"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-purple-700 text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-50"
-            >
-              <Send size={18} />
-            </button>
+          <div className="space-y-2">
+            {replyImage && (
+              <ImageAttach
+                token={null}
+                imageUrl={replyImage}
+                onUploaded={setReplyImage}
+                onClear={() => setReplyImage(null)}
+                onError={(msg) => showToast(msg, "error")}
+              />
+            )}
+            <div className="flex items-end gap-1.5">
+              <textarea
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                placeholder="Type your reply…"
+                rows={1}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    send();
+                  }
+                }}
+                className="min-h-[44px] max-h-32 flex-1 resize-none rounded-2xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              {!replyImage && (
+                <ImageAttach
+                  token={null}
+                  imageUrl={null}
+                  onUploaded={setReplyImage}
+                  onClear={() => setReplyImage(null)}
+                  onError={(msg) => showToast(msg, "error")}
+                />
+              )}
+              <EmojiPicker onSelect={(e) => setReply((r) => r + e)} />
+              <button
+                type="button"
+                onClick={send}
+                disabled={sending || (!reply.trim() && !replyImage)}
+                aria-label="Send reply"
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-purple-700 text-white shadow-sm transition-colors hover:bg-purple-800 disabled:opacity-50"
+              >
+                <Send size={18} />
+              </button>
+            </div>
           </div>
         ) : (
           <div className="flex items-center justify-center gap-2 text-xs font-semibold text-gray-400">

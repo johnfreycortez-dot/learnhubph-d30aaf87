@@ -71,7 +71,6 @@ export default function StudentsTab() {
   return (
     <div>
       <SectionHeading
-        title="All Students"
         action={
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <div className="w-full sm:w-64"><SearchInput value={search} onChange={handleSearch} placeholder="Search students…" /></div>
