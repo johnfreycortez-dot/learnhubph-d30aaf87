@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PublicShell } from "@/components/PublicShell";
 import { canonicalLink, jsonLdScript, DEFAULT_OG_IMAGE, SITE_URL, SITE_NAME } from "@/lib/seo";
 
-const TITLE = "How to Become a Virtual Assistant (2026 Step-by-Step Guide)";
+const TITLE = "How to Become a Virtual Assistant in 2026";
 const DESCRIPTION =
-  "A practical, step-by-step guide to becoming a virtual assistant — choosing a niche, building skills and a portfolio, setting rates, and landing your first client, with specific advice for VAs in the Philippines.";
+  "Step-by-step guide to becoming a virtual assistant: pick a niche, build skills and a portfolio, set your rates, and land your first client.";
 
 const steps: { title: string; body: string[] }[] = [
   {
