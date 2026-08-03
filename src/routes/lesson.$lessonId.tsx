@@ -7,14 +7,22 @@ import { Spinner } from "@/components/Spinner";
 import { useToast } from "@/components/Toast";
 
 export const Route = createFileRoute("/lesson/$lessonId")({
-  head: () => ({
-    meta: [
-      { title: "Lesson — LearnHub PH" },
-      { name: "description", content: "Study your LearnHub PH lesson." },
-      { property: "og:title", content: "Lesson — LearnHub PH" },
-      { property: "og:description", content: "Study your LearnHub PH lesson." },
-    ],
-  }),
+  head: ({ params }) => {
+    const title = `Lesson ${params.lessonId} — LearnHub PH`;
+    const description =
+      `Study lesson ${params.lessonId} of your LearnHub PH virtual assistant course, then take the quiz to unlock your module certificate.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "robots", content: "noindex, follow" },
+      ],
+    };
+  },
   component: () => (
     <SessionGuard>
       <LessonPage />
