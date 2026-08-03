@@ -10,10 +10,21 @@ import { useToast } from "@/components/Toast";
 export const Route = createFileRoute("/certificates")({
   head: () => ({
     meta: [
-      { title: "Certificates — LearnHub PH" },
-      { name: "description", content: "Download your certificates of completion." },
-      { property: "og:title", content: "Certificates — LearnHub PH" },
-      { property: "og:description", content: "Download your certificates of completion." },
+      { title: "My Certificates — LearnHub PH" },
+      {
+        name: "description",
+        content:
+          "View and download your LearnHub PH certificates of completion for every virtual assistant module you finish.",
+      },
+      { property: "og:title", content: "My Certificates — LearnHub PH" },
+      {
+        property: "og:description",
+        content:
+          "View and download your LearnHub PH certificates of completion for every virtual assistant module you finish.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "noindex, follow" },
     ],
   }),
   component: () => (
