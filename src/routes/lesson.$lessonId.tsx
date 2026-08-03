@@ -72,6 +72,11 @@ function LessonPage() {
   }, [lessonId]);
 
   useEffect(() => {
+    const name = lesson?.Title || lesson?.LessonTitle;
+    if (name) document.title = `${name} — LearnHub PH`;
+  }, [lesson?.Title, lesson?.LessonTitle]);
+
+  useEffect(() => {
     if (lesson?.ContentHTML) {
       const blob = new Blob([lesson.ContentHTML], { type: "text/html" });
       const url = URL.createObjectURL(blob);

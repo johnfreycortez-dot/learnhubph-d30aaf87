@@ -53,6 +53,11 @@ export const Route = createFileRoute("/tour")({
       },
       { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: "Take a Tour — LearnHub PH" },
+      {
+        property: "og:description",
+        content:
+          "Preview the real LearnHub PH student dashboard — browse all 9 VA niches and 81 lesson topics before you sign up.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
