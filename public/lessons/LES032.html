@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES032 — Stories, Reels Covers & Thumbnails</title>
+<style>
+  :root{
+    --rose:#d45f7a;
+    --rose-dark:#c04060;
+    --blush:#f7a8b8;
+    --soft-blush:#fce4ec;
+    --bg:#fff8f9;
+    --card-header:#fff0f3;
+    --ink:#3d1a22;
+    --orange:#f4a261;
+    --orange-dark:#dd8f4e;
+    --warn-bg:#fff3ee;
+    --warn:#d97748;
+    --scenario-bg:#fdf0f4;
+    --green:#2d8a50;
+    --green-bg:#d4f7e0;
+    --red-bg:#fde8e8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ color:var(--ink); margin:0 0 12px; font-weight:800; }
+  p{ margin:0 0 14px; font-size:15px; }
+  a{ color:var(--rose); }
+  img{max-width:100%;display:block;}
+
+  /* ---------- SPLASH ---------- */
+  #splash{
+    position:fixed; inset:0; z-index:9999;
+    background:linear-gradient(160deg, #fce4ec 0%, #fff8f9 60%, #fdf0f4 100%);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; padding:24px; text-align:center;
+    transition:opacity .5s ease;
+  }
+  #splash.fade-out{ opacity:0; pointer-events:none; }
+  .splash-card{ max-width:460px; width:100%; }
+  .splash-eyebrow{
+    font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--rose); margin-bottom:18px;
+  }
+  .splash-thumb-wrap{
+    border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(212,95,122,0.18);
+    margin:0 auto 22px; border:0.5px solid var(--blush);
+    display:inline-block;
+  }
+  .splash-thumb-wrap img{ width:320px; max-width:100%; height:auto; display:block; }
+  .splash-card h1{ font-size:clamp(22px,5vw,28px); margin-bottom:8px; }
+  .splash-sub{ font-size:14px; color:#8a5361; margin-bottom:26px; }
+  .splash-bar-track{
+    width:100%; height:8px; border-radius:99px; background:#fff; border:0.5px solid var(--blush);
+    overflow:hidden; margin-bottom:14px;
+  }
+  .splash-bar-fill{
+    height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg, var(--rose), var(--blush), var(--soft-blush));
+  }
+  .splash-msg{ font-size:13px; color:#8a5361; font-weight:600; min-height:18px; }
+
+  /* ---------- TOPBAR ---------- */
+  #topbar{
+    position:sticky; top:0; z-index:500;
+    background:#fff; border-bottom:2px solid var(--rose);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 20px; gap:12px;
+  }
+  #topbar .brand{ display:flex; align-items:center; gap:10px; }
+  #topbar .brand img{ height:26px; width:auto; }
+  #topbar .lesson-tag{ font-size:12px; color:#8a5361; font-weight:700; }
+  #topbar .progress-wrap{ flex:1; max-width:320px; display:flex; align-items:center; gap:10px; }
+  #topbar .progress-track{
+    flex:1; height:8px; border-radius:99px; background:var(--soft-blush); overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg, var(--rose), var(--blush), var(--soft-blush));
+    transition:width 0.6s cubic-bezier(0.22,1,0.36,1);
+  }
+  #topbar .progress-pct{ font-size:12px; font-weight:800; color:var(--rose); min-width:34px; text-align:right; }
+  #menuToggle{
+    display:none; background:var(--soft-blush); border:0.5px solid var(--blush); border-radius:8px;
+    width:36px; height:36px; align-items:center; justify-content:center; cursor:pointer; color:var(--rose);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  #layout{ display:flex; max-width:1280px; margin:0 auto; align-items:flex-start; }
+  #toc{
+    width:270px; flex-shrink:0; position:sticky; top:57px; max-height:calc(100vh - 57px);
+    overflow-y:auto; padding:20px 14px; border-right:0.5px solid var(--blush);
+  }
+  #toc h4{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#8a5361; margin-bottom:10px; }
+  .toc-item{
+    display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px;
+    border-left:3px solid transparent; cursor:pointer; font-size:13px; font-weight:600; color:#8a5361;
+    transition:background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .toc-item:hover{ background:var(--card-header); }
+  .toc-item.active{ border-left-color:var(--rose); background:var(--soft-blush); color:var(--ink); }
+  .toc-item.locked{ color:#c9adb3; cursor:not-allowed; }
+  .toc-dot{
+    width:20px; height:20px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:#eee; color:#fff; font-size:10px; font-weight:800; border:1.5px solid var(--blush);
+    transition:background 0.3s ease, transform 0.3s ease;
+  }
+  .toc-dot.done{ background:var(--rose); border-color:var(--rose); transform:scale(1.1); }
+  .toc-dot.locked{ background:#f1f1f1; border-color:#ddd; color:#bbb; }
+  .toc-dot svg{ width:11px; height:11px; }
+
+  main{ flex:1; min-width:0; padding:28px 24px 80px; }
+
+  /* ---------- SECTION CARD ---------- */
+  .section{ margin-bottom:28px; opacity:0; }
+  .section.is-visible{ animation: sectionSlideIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+  @keyframes sectionSlideIn{ from{opacity:0; transform:translateY(24px);} to{opacity:1; transform:translateY(0);} }
+  .section-card{
+    background:#fff; border:0.5px solid var(--blush); border-radius:16px; overflow:hidden;
+    box-shadow:0 4px 24px rgba(212,95,122,0.08);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .section-card:hover{ transform:translateY(-2px); box-shadow:0 8px 32px rgba(212,95,122,0.12); }
+  .section-head{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); border-bottom:0.5px solid var(--blush);
+    padding:18px 24px; display:flex; align-items:center; gap:14px;
+  }
+  .sec-badge{
+    width:36px; height:36px; border-radius:8px; background:var(--rose); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;
+  }
+  .section-head h2{ font-size:clamp(17px,2.4vw,21px); margin:0; }
+  .section-body{ padding:24px; }
+  .section-body h3{ font-size:16px; margin-top:22px; }
+  .section-body ul, .section-body ol{ padding-left:20px; font-size:15px; }
+  .section-body li{ margin-bottom:6px; }
+
+  /* ---------- CALLOUT BOXES ---------- */
+  .def-box, .tip-box, .warn-box, .scenario-box{
+    border-radius:10px; padding:14px 16px; margin:16px 0; font-size:14px;
+    animation: boxFadeUp 0.4s ease forwards; animation-delay: calc(var(--box-index, 0) * 0.08s); opacity:0;
+    display:flex; gap:10px;
+  }
+  @keyframes boxFadeUp{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+  .def-box{ background:var(--card-header); border-left:3px solid var(--rose); }
+  .tip-box{ background:#fff8f0; border-left:3px solid var(--orange); }
+  .warn-box{ background:var(--warn-bg); border-left:3px solid var(--warn); }
+  .scenario-box{ background:var(--scenario-bg); border-left:3px solid var(--blush); }
+  .box-icon{ flex-shrink:0; width:20px; height:20px; margin-top:1px; }
+  .def-box .box-icon, .def-box b{ color:var(--rose); }
+  .tip-box .box-icon, .tip-box b{ color:var(--orange-dark); }
+  .warn-box .box-icon, .warn-box b{ color:var(--warn); }
+  .scenario-box .box-icon, .scenario-box b{ color:#c25a76; }
+  .box-icon svg{ width:100%; height:100%; }
+  .box-label{ font-weight:800; text-transform:uppercase; font-size:11px; letter-spacing:0.06em; display:block; margin-bottom:4px; }
+
+  /* ---------- TABLES ---------- */
+  .table-wrap{ overflow-x:auto; margin:16px 0; border-radius:10px; border:0.5px solid var(--blush); }
+  table{ width:100%; border-collapse:collapse; table-layout:fixed; font-size:13px; min-width:620px; }
+  thead th{
+    background:var(--card-header); color:var(--rose); text-align:left; padding:10px 12px;
+    font-size:11px; text-transform:uppercase; letter-spacing:0.04em; border-bottom:0.5px solid var(--blush);
+  }
+  tbody td{ padding:10px 12px; border-bottom:1px dashed var(--soft-blush); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:none; }
+
+  /* ---------- MOCKUPS ---------- */
+  .mockup-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--rose);
+    font-weight:800; margin:20px 0 8px;
+  }
+  .mockup-frame{
+    position:relative; border:1px solid var(--blush); border-radius:12px; overflow:hidden;
+    background:#fff; margin-bottom:10px;
+  }
+  .legend-wrap{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:10px; padding:12px 16px; margin-bottom:16px;
+  }
+  .legend{ list-style:none; padding:0; margin:0; counter-reset:leg; }
+  .legend li{ counter-increment:leg; padding:6px 0 6px 30px; position:relative; font-size:13px; border-bottom:1px dashed var(--soft-blush); }
+  .legend li:last-child{ border-bottom:none; }
+  .legend li::before{
+    content:counter(leg); position:absolute; left:0; top:6px; width:20px; height:20px; border-radius:50%;
+    background:var(--rose); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;
+  }
+  .legend b{ color:var(--rose); }
+
+  .callout{
+    position:absolute; width:22px; height:22px; border-radius:50%;
+    background:var(--rose); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800;
+    box-shadow:0 2px 6px rgba(0,0,0,.25); z-index:5;
+    cursor:pointer; border:none; padding:0;
+    animation:calloutPulse 2.6s ease-in-out infinite;
+    transition:transform .15s ease;
+  }
+  .callout:hover, .callout:focus-visible{ transform:scale(1.15); animation-play-state:paused; }
+  .callout:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  @keyframes calloutPulse{
+    0%,100%{ box-shadow:0 2px 6px rgba(0,0,0,.25), 0 0 0 0 rgba(212,95,122,.55); }
+    50%{ box-shadow:0 2px 6px rgba(0,0,0,.25), 0 0 0 7px rgba(212,95,122,0); }
+  }
+  .callout-tip{
+    position:fixed; z-index:9990; background:var(--ink); color:#fff;
+    font-size:12.5px; line-height:1.5; padding:10px 13px;
+    border-radius:10px; max-width:240px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    opacity:0; pointer-events:none;
+    transform:translateY(6px);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .callout-tip.show{ opacity:1; transform:translateY(0); }
+  .callout-tip b{ color:var(--blush); }
+
+  /* ---------- CANVA MOCKUP SPECIFIC ---------- */
+  .canva-mock{ font-size:12px; }
+  .canva-topbar{
+    background:linear-gradient(90deg, var(--rose), #e07f95);
+    color:#fff; display:flex; align-items:center; gap:16px; padding:8px 14px; font-size:11px; font-weight:700;
+  }
+  .canva-topbar .grow{ flex:1; }
+  .canva-topbar .share-btn{ background:#fff; color:var(--rose); border-radius:6px; padding:4px 12px; font-weight:800; }
+  .canva-toolbar{
+    display:flex; align-items:center; gap:10px; padding:7px 14px; border-bottom:0.5px solid var(--blush);
+    background:#fff; flex-wrap:wrap; font-size:11px; color:#8a5361;
+  }
+  .canva-toolbar span{ padding:4px 8px; border-radius:5px; background:var(--card-header); }
+  .canva-body{ display:flex; }
+  .canva-sidebar{
+    width:64px; flex-shrink:0; background:var(--card-header); border-right:0.5px solid var(--blush);
+    display:flex; flex-direction:column; align-items:center; gap:14px; padding:14px 0;
+  }
+  .canva-sidebar .icn{
+    display:flex; flex-direction:column; align-items:center; gap:3px; color:#8a5361; font-size:9px; font-weight:700;
+  }
+  .canva-sidebar .icn svg{ width:18px; height:18px; }
+  .canva-canvas{
+    flex:1; background:#fdf6f7; display:flex; align-items:center; justify-content:center; padding:24px; min-height:260px;
+    position:relative;
+  }
+  .canva-sample-post{
+    width:180px; height:180px; border-radius:8px; background:linear-gradient(135deg,#fce4ec,#fdf0f4);
+    border:1px solid var(--blush); position:relative; display:flex; flex-direction:column; justify-content:flex-end; padding:12px;
+    box-shadow:0 6px 20px rgba(212,95,122,0.15);
+  }
+  .canva-sample-post .headline{ font-weight:800; font-size:14px; color:var(--ink); }
+  .canva-sample-post .cta{ margin-top:6px; background:var(--rose); color:#fff; font-size:9px; font-weight:800; padding:4px 8px; border-radius:5px; display:inline-block; width:fit-content; }
+
+  /* ---------- PLATFORM DIMENSION PANEL ---------- */
+  .dim-panel{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:20px; }
+  .dim-card{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:10px; padding:12px;
+    display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;
+  }
+  .dim-shape{ background:#fff; border:1.5px solid var(--rose); border-radius:4px; }
+  .dim-card .plat-name{ font-weight:800; font-size:12px; }
+  .dim-card .plat-size{ font-size:11px; color:#8a5361; }
+  @media (max-width:640px){ .dim-panel{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ---------- HIERARCHY DIAGRAM ---------- */
+  .hier-diagram{
+    padding:20px; display:flex; justify-content:center;
+  }
+  .hier-post{
+    width:260px; height:320px; border-radius:12px; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#fce4ec,#fdf0f4); border:1px solid var(--blush);
+  }
+  .hier-hero{ position:absolute; inset:0; background:linear-gradient(160deg,#f7a8b8,#e07f95); opacity:0.5; }
+  .hier-headline{ position:absolute; top:30px; left:16px; right:16px; font-weight:800; font-size:20px; color:#fff; }
+  .hier-subhead{ position:absolute; top:78px; left:16px; right:16px; font-size:11px; color:#fff; }
+  .hier-cta{ position:absolute; bottom:44px; left:16px; background:#fff; color:var(--rose); font-weight:800; font-size:10px; padding:6px 12px; border-radius:6px; }
+  .hier-logo{ position:absolute; bottom:14px; right:14px; width:24px; height:24px; border-radius:5px; background:#fff; }
+
+  /* ---------- GAME CARD ---------- */
+  .game-card{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:12px; padding:18px; margin:20px 0;
+  }
+  .game-label{
+    display:flex; align-items:center; gap:10px; font-weight:800; font-size:13px; color:var(--rose);
+    border-left:3px solid var(--rose); padding-left:10px; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .game-label svg{ width:16px; height:16px; }
+  .game-instructions{ font-size:13px; color:#8a5361; margin-bottom:14px; }
+  .game-feedback{ font-size:13px; font-weight:700; margin-top:10px; min-height:18px; }
+  .game-feedback.ok{ color:var(--green); }
+  .game-feedback.bad{ color:#c0392b; }
+
+  .draggable{
+    background:#fff; border:1.5px solid var(--blush); border-radius:8px; padding:9px 12px; font-size:13px; font-weight:600;
+    cursor:grab; user-select:none; transition:transform 0.2s ease, box-shadow 0.2s ease; touch-action:none;
+  }
+  .draggable:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(212,95,122,0.2); }
+  .draggable.dragging{ opacity:0.5; transform:scale(1.04); }
+  .drop-zone{
+    background:#fff; border:2px dashed var(--blush); border-radius:10px; padding:12px; min-height:52px; font-size:12px;
+    display:flex; flex-direction:column; gap:6px; transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .drop-zone.drag-over{ border-color:var(--rose); background:var(--card-header); box-shadow:0 0 0 3px rgba(212,95,122,0.15); }
+  .drop-zone-label{ font-weight:800; font-size:11px; text-transform:uppercase; color:#8a5361; margin-bottom:4px; }
+
+  .clickable-chip{
+    display:inline-block; background:#fff; border:1.5px solid var(--blush); border-radius:8px; padding:8px 12px; margin:4px;
+    font-size:13px; font-weight:600; cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .clickable-chip:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(212,95,122,0.18); }
+  .clickable-chip.correct-hit{ animation:correctBounce 0.5s ease forwards; }
+  .clickable-chip.wrong-hit{ animation:wrongShake 0.5s ease; }
+  .clickable-chip.struck{ text-decoration:line-through; opacity:0.55; }
+
+  @keyframes correctBounce{
+    0%{ transform:scale(1); }
+    40%{ transform:scale(1.08); background:var(--green-bg); }
+    70%{ transform:scale(0.97); }
+    100%{ transform:scale(1); background:var(--green-bg); border-color:var(--green); }
+  }
+  @keyframes wrongShake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px); background:var(--red-bg); }
+    40%{ transform:translateX(6px); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(4px); background:var(--red-bg); }
+  }
+  @keyframes cpUnlockPop{
+    0%{ transform:scale(0.92); opacity:0; }
+    60%{ transform:scale(1.03); }
+    100%{ transform:scale(1); opacity:1; }
+  }
+  @keyframes confettiFall{
+    0%{ transform:translateY(0) rotate(0deg) scale(1); opacity:1; }
+    100%{ transform:translateY(-80px) rotate(720deg) scale(0.3); opacity:0; }
+  }
+  .confetti-piece{ position:absolute; width:8px; height:8px; border-radius:2px; pointer-events:none; animation:confettiFall 0.9s ease-out forwards; }
+
+  .game-btn{
+    background:linear-gradient(135deg, var(--rose), var(--rose-dark)); color:#fff; border:none; border-radius:8px;
+    padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer; transition:opacity 0.2s;
+  }
+  .game-btn:hover{ opacity:0.9; }
+  .game-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .game-btn.secondary{ background:#fff; color:var(--rose); border:1.5px solid var(--rose); }
+
+  /* ---------- CHECKPOINT ---------- */
+  .checkpoint{ background:#fff; border:0.5px solid var(--blush); border-radius:12px; margin:20px 0; overflow:hidden; }
+  .cp-header{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); padding:12px 18px; display:flex; align-items:center; gap:10px;
+    font-weight:800; font-size:13px; color:var(--rose); text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .cp-header svg{ width:18px; height:18px; }
+  .cp-locked{ padding:24px; text-align:center; color:#8a5361; font-size:13px; }
+  .cp-locked svg{ width:28px; height:28px; color:var(--blush); margin-bottom:8px; }
+  .cp-content{ padding:20px; display:none; animation:cpUnlockPop 0.5s ease forwards; }
+  .cp-question{ font-weight:700; font-size:14px; margin-bottom:14px; }
+  .cp-opt{
+    display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--blush); border-radius:8px;
+    padding:10px 14px; margin-bottom:8px; font-size:13.5px; cursor:pointer; transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cp-opt:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(212,95,122,0.15); }
+  .cp-opt.correct{ animation:correctBounce 0.5s ease forwards; }
+  .cp-opt.wrong{ animation:wrongShake 0.5s ease; }
+  .cp-passed{ display:none; text-align:center; padding:10px 0; }
+  .cp-passed svg{ width:32px; height:32px; color:var(--green); margin-bottom:6px; }
+  .cp-passed p{ font-weight:700; color:var(--green); }
+
+  /* ---------- ACTION STEP ---------- */
+  .action-step{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); border:0.5px solid var(--blush); border-radius:10px;
+    padding:14px 18px; margin-top:18px; font-size:13.5px;
+  }
+  .action-step b{ color:var(--rose); display:flex; align-items:center; gap:6px; margin-bottom:4px; text-transform:uppercase; font-size:11px; letter-spacing:0.05em; }
+  .action-step svg{ width:15px; height:15px; }
+
+  /* ---------- VIDEO ---------- */
+  .yt-label{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; color:var(--rose); margin:18px 0 10px; }
+  .yt-label svg{ width:18px; height:18px; }
+  .yt-wrap{ position:relative; width:100%; padding-bottom:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--blush); }
+  .yt-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-continue{
+    background:linear-gradient(135deg, var(--orange), var(--orange-dark)); color:#fff; border:none; border-radius:10px;
+    padding:12px 22px; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    animation:btnPulse 2s ease-in-out infinite;
+  }
+  @keyframes btnPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(212,95,122,0.4); } 50%{ box-shadow:0 0 0 8px rgba(212,95,122,0); } }
+  .btn-continue svg{ width:16px; height:16px; }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--rose), var(--rose-dark)); color:#fff; border:none; border-radius:10px;
+    padding:14px 26px; font-size:15px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary svg{ width:18px; height:18px; }
+  .btn-primary:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---------- FINAL BLOCK ---------- */
+  #final-block{ display:none; }
+  .takeaways{ background:#fff; border:0.5px solid var(--blush); border-radius:16px; padding:26px; box-shadow:0 4px 24px rgba(212,95,122,0.08); margin-bottom:24px; }
+  .takeaways h2{ display:flex; align-items:center; gap:10px; }
+  .takeaways h2 svg{ width:24px; height:24px; color:var(--rose); }
+  .takeaways ul{ padding-left:20px; }
+  .complete-wrap{ text-align:center; padding:30px 0 10px; }
+  #lessonCompleteMsg{ display:none; margin-top:14px; font-weight:700; color:var(--green); }
+
+  .section.locked-section .section-body{ opacity:0.5; pointer-events:none; filter:blur(5px); transition:filter 0.3s ease, opacity 0.3s ease; user-select:none; }
+
+  @media (max-width:900px){
+    #toc{
+      position:fixed; left:0; top:57px; bottom:0; z-index:400; background:#fff; width:78vw; max-width:300px;
+      transform:translateX(-100%); transition:transform 0.3s ease; box-shadow:4px 0 20px rgba(0,0,0,0.1);
+    }
+    #toc.open{ transform:translateX(0); }
+    #menuToggle{ display:flex; }
+    #topbar .progress-wrap{ display:none; }
+  }
+  @media (max-width:640px){
+    .dim-panel{ grid-template-columns:1fr 1fr; }
+    .canva-body{ flex-direction:column; }
+    .canva-sidebar{ width:100%; flex-direction:row; justify-content:center; flex-wrap:wrap; }
+    main{ padding:20px 14px 60px; }
+    .section-body{ padding:18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<div id="splash">
+  <div class="splash-card">
+    <div class="splash-eyebrow">LearnHub PH &middot; Module 11 &middot; Lesson 2</div>
+    <div class="splash-thumb-wrap">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAEMAUADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7aooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAENV5vu1YNQyjK1UXqBhXoODiufuR8xrp7yPg1z13HhjkV6uGkVFlBWwasRvxVVgQ2KVXxXVOFzqjI0VfjrUqv6Gs9ZDnmp1k965J0ymXg9Sq+aorJk1MsnvXNOmZSiXQ3fNSq1Ulk7VPG+TXFVp6HDXp6GnEfunPQ1qocoKx4DlM+9a8RzGK4cHpzR8yaI+iiiu43CiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAA0xhkU+kIoAz7mLIPFYd5b9cCunkTIrOubfIPFddGrYDkJ4SCeKqEEGugurXrxWTNBtPSvVp1FJGkZFUORUqSc9ahYYpuSO9aONzZSLyye9SrJ71nrIRUokrCVIq5oLJ71ahfLCslZfertm+6QCuOtSsmYVI3R0Nt9ytSJvkFZcI2xCrkcoA5r57DSXPP1OJPkZdzS8VWWUetOEnvXdzGqmiY0tRb6N9O4+ZEtFFFMoKKKKACiiigAooooAKKKKACiiigAooooAKKKKAOb8beONF8A6FBq+vJeG2mnFun2WHzG3FS3IyOMKaqeCviV4X8eRSNok1wjo7IIbuPy3faqsxUZOQA6ZPuK8v/aF+DupeP9CRrLxHqtuW1BZ/ItIGl2ARsvQMOPf3rb8J/CTX/h4lvL4Z1Kz1aRkuVlN+7WbRGaOFVZCqybipiJwcdRX0E8Pl0Mt9pzP2zat2euqtbSy6t69D53CZjjK+PnQlDljHdb6O/K1LZ81r2Wsep7J0BJ4AOCfQ0EFQSwwB68V4XbfBzxVBoy2klzpM/wAsUVxDJMrJeMiSD7S2bYqH3OCd6yORkbwQpre0H4QrCdIfxSmnaxLDetPqLyl5ftcYsRAiHf8AeAkBfaeOc/er58+iPSJNZ0qL7T5moQL9muY7OfLf6uaTZsjPox8yPA/2hU1xfWlpdWttczLHLdO0UCkH52VGdh7YVWPPpXlemfCHVIvDU9tqOv3MmoPfWM4MV/P9nMcCW6NviPyu+IWwSDn5Mnjhs/w88X3+oaJd6zp/hjUoNHt7W1GnT3c7R3ohiuIzI5MeFLGZGClWA2kNu4NAHo2s+K/Dnh6+t7PXNYtrCe4UvEk+4ZUMFLEgEKoLKMsQOetWodZ0q5WzMGoQSC9aRLYq2fOaPdvC+u3Y2foa4az+Gl9LBptnqmuz29jFpVzp13baZLgSJNciX7OGkRm8lI8xggq2AOnaXw58N5NA1Dw5eJqNy7abNfNNA97NJbhJhKEEMTHamN65wBwDQB6ARUUke4VPSEU07AZNxbgjpWNdWuCSBXUyR5FZ9xb5zxXXSrWA5Ce3IJ4qk6FTXS3Nr1IFZE8G09K9SlVuWpGcTSbzUkiFarMSDiuhK5opE4l54NbekxljvOa5+3RppwqgmuvsYRDEq968/MJKnTa6msY3i5M014TFG4ihCCKVhxXw0arpzdzzasebYBIQKeJTioWU0zkV308Qmcj5olsTe9O873qnuI70BzXQqovaM3KKKK6j0gooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBCKhkjBFT0hFNOwGXcW4IPFY91bdeK6aRMiqFxb5zgV1UqtgOPuLcg9KzZYzuC9z2rodUkhtV25BkPQVQsrYyS+dLyT29K9aFW0eZm9Gm6jsT6XYiJN7j5jW1HwKgjAUYqZa8jFSdS7Z24iFocqLKtipVbIqqp5qRWNeBiMNc8KTcHqWOCKaU4pqvkVIDkV5zjKDGmpERTmkKmp8ZFJtq44hrciVFM1qKKK+jOsKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAGkVia5q0VhAVUgynoPSruq6iljaM2fnxwK87u7qS7umlkbJJrvwWG9o+aWxUY3ZIjPc3XnTNuYmti3wFFY9ucYrThkAHWu6ur6Hq0EoqyNBTzUoNV0apQcjNcE4nTKPMiYGng1CD6U8GuKrSPHxWGvqiZWp6vzzUIOaUGvOq0UzxpJwZZDUoaoA3el3H1rilhi41jdooor3TuCiiigAoooyB1NABRS7WxnafypM84oAKKKcI5D0jc/RTQA2in+TN/zxl/74NJ5Uv/PKT/vk0ANopzI6jLRuo9SpFNoAKKKhuru1sbOS7vrqC1t4xl5p5FjRB0yWYgDr3oAmornJfiB4Bgz53jrwxHj+/q1uP/Z63LO9s9R0+G/0+7gu7SdBJDcW8gkjkU9GVlJBHuKAJ6KK43xf8Wvhn4A1WLTPGnjfSNDvZoRcR295Iyu8ZJUMAAeMqR+BoA7KivI5P2of2fovvfFTRG/3Fmb+UdU5P2s/2eo/+akWj/8AXOyum/8AaVAHtFFeO2X7VX7Pt9MIo/ibpsLHobqCeEfm0YFem6B4m8OeK9K/tPwxr2m6zZ9PtGn3KToD6EqTg+xxQBq0V418QP2ofhN8M/HV34Q8UXmtLqtosbyx2mmtMgDoHXD5APDCk+HP7T/wv+KfxBh8G+FDrrajNBLcIbyw8mPbGu5vm3k5x04oA9mpksgiiLntT68a+O/x68O/BePR4Nd0fVtQbVhMYTYeXhPL2Z3b2HXeMYz0NVFJvUDpddvmuLlvm49Kwu9fP1t+2J4P1nxBZ6bb+D9fRru4jt1klmgAUu4UE4J4Ga2Pix+0Np/wq8ejwvdeFLzVJTapcieK7SJcMWGMFSeNv6171KvShTunojSDSPcI3xV6GXAr5p+Hv7Udr48+J2k+EIvBU+n/ANoSNGLqS/WTy8Iz52hBn7uOvevZvGPxA8K/D3w5/bXivVY7K3J2RIAXlnbGdsaDlj+g7kUe0hUi5Reh2U6itc76KXOOatI+a+L9f/bcljuHj8JeBEaIHCz6vdkM3v5cQ4/76Nc1/wANtfE4S7l8OeFAv93yZz+vm159StTvozZYymt2ffQbNPB5r4z8K/tzsbyOHxr4ERICcNdaNclmT38qXr9A4r6s8HeNfDHj7wnB4j8J6rFqOnykrvTKtG46pIh5RxnlT/LmsbxlsaKpTrL3WdGDTgc1EDinA1zVKR52Jwl9iQHrS54pm6kL4Fc7pHlSwzTOlooorc7AoopQNzBR3OKAPGfj1+0R4a+B+jQQS2v9seJb6MyWekpJsAQHHmzPzsjyCBgbmIIHQkfDXiv9rj47+KbuRofGLeH7ZidtrocK24Uem8hpD9S1cx8f/E974t/aa8a6teys+zVJrKBSf9XDAxijQegATP1Jr0H9j34R+Hfij8WtTvPFtol/pGgWkdydPk+5czSOVjEgHVBtdivcgA8ZoA8qf40/FmSbzn+Kvi0vnr/bMw5/BsV2HhX9qn47eFL2OSPx5eaxbqfmtNbRbyNx6ZYbx9Qwr9Nbzw74H07wxPFqHh/w5aaNbws0yz2MCW8UQHJYFdoUDqTXy/rXwW/Ynvdeu9Ul8f6Tpy3Ehk+x2HieKK3iz1EaYJVfbJx244oA9Y/Z6/aK0H44aXLaSWaaP4nsFWS80zzN6SRkgedCx5ZMnBB5UkZyCCfz7+I/xD+Ilt8XvFlgnj3xQkNvrN5DHEuq3AVFWdwFAD4AAAAFfaPwo8D/ALJ3hH4uaRqXw48ewXXigu1vaQR+IWuTPvUhozGBhgRng+gPavhX4wxeT+0N47iH8PiC+/8AR7n+tAEOm6r8VPE80sWjar421mSIBpVs7q7uSgPALBGOM4PWtCTwh8b/ACzPL4b+IpUcl2tr44/HFeh/sq/G7wn8E/Evii/8WxavJBqdnBDANNgWVt8cjMd2XXAw1fSN1+318Koo2az8OeM7qQdFMUEWfxMpxQB8N6Z8R/if4T1IjTPHHivSrqFsNH/aE6FGHZkc4/AivtH9lP8Aaf8AEXxE8VH4c/EOSC71d7d7jTtWjjWJrnyxl4pVXCl9uWDADO0gjODXyL8cfimnxj+Ml543j0JNGjlghtktvMEsjLGCA8jgAM5zzgcAAc4zXoH7F/hTVte/al0zXbO3kOn6BDNd3twB8iF4mijQn+8zPwPRWPagD9NK+Ef25PjINR1eH4N6FchrWyZLvXGQ5Ek+N0VufUICHYf3io/hr6n+OPxVsfg98GtR8WTeXLqJH2XS7Vz/AK+6YHYCP7q4Lt7L7ivyXvb3Udb1y41C/uJb7Ub6dppppDl55XbJJJ7lj+tAFX7Li3+0fZcRb/L8zy/l3YztzjGcc49K+yv2Jvjl/Zupr8GvE13izu3aXQZpG4imPL2ueyvyyD+9uH8Qrvrf4K/C6P8AYtX4U6j408JW/iORf7WbUX1S3/daoV453/cAxCf9nJr8/wA/bNK1chZWtr20n4kglBMciN95HU4OGGQwPYEUAftjX57ft+RlPjr4YlBIEmgY/K5l/wAa+pP2bPjXB8ZfhNHc38sa+J9K222rwLxvbHyXCj+7IAT7MGHpXzP/AMFAotvxX8Fzf39FmX8rg/40AfL3g7wzqHjb4gaN4Q0ue3hvdWu0soJLlisau5wCxAJA+gNfSMf7A3xVZf3ni7weh9BJcN/7Sr5r8JeJdQ8G+PNG8W6VHBJfaTeR3tulwpaNnQ5AYAgkeoBFfQM37dPxukBEVn4Sh/3dMdv5y0AcL8YP2b/iF8FtEtNb8Rz6Rf6VdXAtUu9NnZtkpUsFdHVWGQrYPI4rhvh98QfEnwv8d2fi7wtfy2tzbOGmiViI7uIHLRSr0ZWGRz06jBFdB8T/AI8/Ez4tWltZeN9fhl0+1l8+GxtbZLaBZMFd5C8s2CQCxOMnHWpvg/8AAvxt8YvFdrZaTpV1b6EZFF/rc0RW3t4s/NtY8O5GQqrk5xnAyaAOn/a9u4NR/ap1HVbZSsN9pWm3cYbqFe1UjP4Va/YwkMf7YegqM/vLK/T/AMl2P9Km/bR0+30z9qaSztIylvHoenRxKeyrGyAfkoryD4f+D/Enj74iaf4S8IvEusX3mC3Mtz9nX5UZ2zJ2+VT9elAH7KMyoMswX/eOK+Hv2/3imh8CSRyxuVlvUIRw2PlhPb6VwA/Yn+P9wM3F34eX/rrrbv8AyQ15z8WvgH46+Del6Xf+MLrR5o9SneCEWF08xDIoY7tyLgYPvTWzA898Pv5Xi/SJM4239u35Sqa9x/bEj2/H60k/v6REfymlFeDac/l6zZyf3biJvycGvoP9suPb8Z9El/56aMP0nk/xroh/Bn6ofQ87+ADlP2mvBmDgtf7Pzicf1qL42+OL3x38Z9Yv5p3axsp3sLCEn5YoY2K8D1ZgWJ7k+wqP4HSiD9pHwRITgDVos/jkf1rA8daPdeH/AIneIdFvEKTWuozoQe4MhZT9CpB/Gp5n7G3S/wCgX0sdh8D/AIQy/Fvxnc2lzfSWGj6fGs17cxKGkO4kJHHnjc2GOTwACcHivqlv2Sfg1NphtktddhmK4F2upMzg+uCu0/TFeG/sofETQvCXi3WPDviC9hsItZWJra6nYJGJo9w8tmPC7g/BPGRjuK+031SxtbJr25v7WG2VdxnlmVUA9dxOMV3YWhTnSu9WdFFRtqj421L9jD4kJr91Dous+H7rTVkItrm6uWhlkTsXjCNtbscEjjivX/2d/gb8VPhD8QLm91XWtAm8P6hbmK9s7W5ldzIozFIoMYG4HIJz91j7VBrv7Y3gDQ/EV3pmn6LrGtw27+Wt/aSRJDMR1KbjkrnIzjnGRxW/8MP2oNM+KHxItfCGj+B9XtmkiknlvLi6iZII0XJZgoycnao92FYOFJStF6m9JUVJNPU+hg3NO3cdapiYY60GfHeqdO53Ssy0ZMdaiknA6GqklyB3qnLdZyM1ccNc5akInpFFN3UZrzDyx1GSDkdRyKT8aKAPyn/af8C33gX9pzxNDPbuljq10+r2EpHyyxTNuYA+quXU+mB6im/s5/Gs/BL4py6xe2M1/ompW4s9St4CPNCBtySx5wCyNngkZDMMjiv0j+KHwm8FfF7wkNB8Zac0oiYyWl7bt5dxZuRgtG+DjPGVIKnHI6Y+PfFH7APjG2vJH8G+OdF1K1z8keqRSWkwHoSgdD9Rj6UAe1eLv2o/2ePGHwt1vw9N4+u7Iavp01k2dHuXlh8xCudm3BIznG7Bx1r88PFVp4Qstfa28Favq2raaigfbdTsks3lbuViV22r/vHPsK98j/YX+N7TbHn8JRrn751RiPyEea9D8F/sAzi+jufiH47ga3UgvY6DC25/YzSgbfqEJoA+dP2c5jD+1n8PHzj/AIncK/mGH9apfHiLyP2oPiDF6a/dn85Cf619kaP+xdB4Y/aN03x/4Y8W2tloGm6rDqFtosttJLMiJgmLzi/PO7DEHgjNVviF+xG3j34t+IvGh+JCaemsXz3otF0oyGHdj5d3mjd064FAHy3+z58Eovjn421fQJfEr6F/Z9gL0SpaC4MmZVj24LLj72c819Dz/wDBPey+xP8AZfitc/acfJ52kL5effbLnH0r1X4CfswQ/A3xvqXiOPxtLrjX1h9hNu1gLcIPMWTduDtn7mMY719A0AfjX8QvAmvfDT4kan4K8SRxDUNPcAyQktHMjAMkiEgEqykEZ56g8ivrb9h74xTT6lP8HtT0/TIIRayX+nXltbpBJIyY81JyuPMO07g7fNhSCSMY9s+Mv7Lvgz40eOLTxVrGuavpF9DZrZSf2esTCdVZmQtvBwRuI47Y9K5HRP2H/A3h3UGv9I+IXjazu2gltTPA9sjeXLGY5F/1Z+8jMPxoA+V/2pvjIfi18ZpYdJujJ4Y0IvZaYFPyztn97cf8DYAL/sKvqa4XwP8AB34m/ErTLrUfA/g6/wBZs7aUW808LRoiSFd23LsuTgg8ZxkZ619txfsE/CGMASeIvGMgHb7TAv8AKKvffh38PfDfwv8Ah3Y+DPC0MyafaF38y4YPLNI7bmkkYAZYnHYcADtQB+a0X7Iv7QEnT4ZyJ/10vLRf5yVk+Nv2dfjB8O/BkvirxZ4S+xaTDIkUs8V3DP5Rc4UssbEhc4GegJHrX604HpWfrmiaV4k8M3/h/XLKO903UIHtrm3k+7JGwwR7ex6ggHtQB+Sfwb+KWsfB/wCLOn+L9MDz26nyNQsg2Bd2zEb4/wDeGAynsyj3r3n9uXW9I8VXnwy8V+H7xL3TNS0a5mtrhP40MsbDI7EZII7EEdq+jov2Ov2eogM+CrmXH/PXVro/+z1uyfs0/BCbw9p2hXfgaG607Tnmks7e5vbmRYDKVMm3MmQGKqSOmcnuaAPzD+HWn2GqfGLwnpmrWiXVhd6zaW9zbyZ2yxvMispxg4IJFfqAn7NHwCgchPhP4cOCR88cjfzc0/TP2bvgZo2qWup6b8MdGgu7WVJ4Jx5rNHIjBlYZc8ggGvUc7iSTk9TQBxGk/Bv4S6FMs2kfDPwpaSLyJF0yJmH4sCa7VESOJIo0VI0GFRQAqj0AHAp1OCOeiOfopoA/Nn9utUi/anhdnVfM0CzPJA6NKP6Vxn7J9xGn7Y/gcLKhLXUyYDA9baUV+oGq+DPC+tX41HXPCWj6jdKgjFzfadFO4UE4Xc6kgZJ496LLwp4V0y6jutN8L6JZTxnKTW2nwxOh6ZDKoI/CgDW/gr47/b8t2b4a+DplUnbrEy8DPW3P+FfYhIA5IA96z742Tp++mteOf3jpx+dVHsB+L9va3huI3S0uW2up+WJj0I9q+mP2w9H1O++IvhW5sNNvboNo7Bjb27yYPnE4O0HHWvujUGsLNVee7tLZXGUaSVIww9iSM/hXP3Ov+HYCd/ibSIvXOoRL/wCzV3UqMeRxct7Afm/8JPDfia2+Ovg+8l8OazHBFq9u0kr2Mqoi7+SWK4A9zX1H8cv2fYPiVMviPw9dQaf4kjjET+fkQ3qL90ORyrgcB8Hjg9AR7PceNfB0QIm8baAo7htVhx/6HWXN8RfhzDnzPH3hhf8AuJw//FV10qFKMHCTumUj8+de+DXxS8OTvFqfgXWGQcedawG6ib6NHuGKw08H+M7jFsnhTxDJjgRf2fOQPw24r9KbTxf4Rv8AQb7XdO8UaTc6bYZ+13tvdK8VvgbjvYHC8HPNc7L8avhRHkP8TPD5+l5u/lWTwNL+ewWR8V+GP2eviz4nuo1XwtPpNsx+a71c/ZkUeu0/O30C19lfBn4Q6F8ItAmjtrj+0dZvQv23UmTZvA5Eca/wxg84zknk9gIpfjt8HIzz8RdEY/7DO38lqEftA/BsuF/4T/TPqUlA/PZW1LD4elrzJv1RpTlGLueui84601rw46muH0H4keA/E862/h/xlouoTN92GG7XzD9EbBP5V0x3ZwRg11xpReqZv7ctvcknrUe9mNRpGzHpV63tGZgcVT5YoylVbPR/NHrThIDWSLnnrU0dxnvXzrpmPKZfxA+IPh74ZeAbrxj4pa7XS7aSOKQ2kPnSbpG2rhcjPJrxSX9uj4Hp9yLxbL/u6Wq/zlrW/a9xP+x74mH9yeyf8rlP8a/MbHOKxkrEs/ReX9vL4Op/q9D8Yy/SzhX+c1Mh/b1+ETyhZvDvjGFf7/2WB/0EteV/DT9ifSvH3wl8OeNbj4kX1kdYsI702kWlo4hLZ+XcZBnGOuBV3xT+wBrFrpEtx4L+IMGqXiKWSy1Oy+y+cf7qyo7BSe24Y9SKQH0L4Q/at+BnjK+isLTxkNKvJSFSDW7drLcT2DtmPP8AwKvRvHfiyHwN8Lte8azWT38OkWL3zW0UgQzKoBwrEEDIPXBr8b7+xvNM1O60zUbaS2u7aV7e4t5Rho3VirKw9QQRX1L8CPidrXiD9lf4tfCvW7yW8g0zwtc6hpTzNuaGIDbJCCedgJRlHbLAcYoA7uX/AIKEaUCRB8Kb8/8AXTV4x/KKqcv/AAUJf/lh8J1/7aa0f6Q18R19UfA/4S/s1eKvgvY+IPiZ47TStfluLiOezfX4rPaiSEIfLKlhlcHOeaAOnk/4KEa0f9T8KtMH/XTVpT/KMV2XwZ/bF8Q/FP45aJ4FvvA2j6Xa6iZg11BeTSyJsheQYDAA5KAfjWV/wp/9he1/1/xGs5MevirP/oIr1D4OfBj9m6HxNbePvhLL/bF3pNw0KXkGrzXMccrR4KMGwCSj+nfNAFn45/tReDvgxd/2CllL4g8UNGJf7MglEcdsrDKtPJg7cjkKAWI54BBPyprH7dPxpv7lm0q08L6PCT8scVg1wwHu0jnP5CvA/G+q6zrfxM8Q6v4haU6rc6lcSXYlzuWTzGBU56bcbcdgAK3vhTq/wp0TxbNffFjwrrPiTTliAt7LTrhYk8zPLS5ZSwxjADDnOc8UAenWn7bfx6trgPPqPh67QHmKbSEUH8UKn9a+gvgr+2no3jrxLZ+E/iBo1v4d1W8cQ2uoWspaznlPCo4f5omY8AkspJAyM189eLNY/Y88W3NtLpGg+P8AwI0eRMNMtYbqKYdspJM20j1Xr3FdR8P/AIJfsq/EPUoNL0T42+Jk1WY7YrC/t4bCeRuwTfHhm9ApJoA9C/an/aK+Knwo+N8PhbwdqOmWunSaVBdlbnT0nfzHaRW+Zu3yDiuR+A37UPxj8eftI+FPCfijxBYXGkajcyRXEEOmQQlwIZGGGUZHzKOhrl/249PfTfjx4dtZbue8ePwxawtc3GPMmKSypvfAA3HGTgdSa88/Zjk8r9r/AOHzf3tVCf8AfUUg/rQB94/H79pXw78E7SHSoLIa54qu4vOg0wSbI4IzwJZ3HKqSDhR8zYPQc18R+KP2tfjz4nu5HTxtJodux+W10SBLVVHpuwXP1LVwXxW8UX3jP43eK/EuoSs8t3qk+3cfuRo5jjQegVEUY9q9u/Yy+Dnhj4k+ONc8ReMbCLU9N0BIVh06cZinuJSxDSL/ABKqoTtPBJGcgYoA8ZPxu+Ljz+Yfiv4sMmev9sS9fpurtvCX7Wvx28KXsby+MpfEFqp+az12JblXHpv4kX6hq/SfWPDfw9s/CdymveHvC1tocMRM4vLK3jt44+mWLKFUc9eK+YNS+BP7Fkmr3N6/xGsbJJpGkFpbeKYVhhyc7UGCQo7Ak49aAPa/gJ8evDnxy8NST2dsdL12xKDUdJkk3mMMcLJG3G+JjkZwCDwexP5s+IPib8TF8UapbP8AETxYVivZ4wv9r3GAFlYAY3+1fePwX8EfsveDPi9Y3Xwu8fQX/iS4R7aO0j1/7WbiMjc6mMDDYC7vYqD2r87vGcXkfErxHD/c1a8X8p3oA2NC+LXxK8O+KbHxDp/jfXmvbKYTR/ar+aeNiOqujsVZSMgg9QTX6d/BD40eH/jV8Ok1zTQlpqttti1XSi+WtJSOo7tG2CVb6g8g18C/Af4HW/xs+HXj21sJ1tfE2kfY7nSppHxFIWEweCT0V9q4b+FgD0yK4fwN428b/Az4wf2tp8M2n6vpszWmoaXeAqsyBv3lvMvoccHscMPcA+7/ANuDzF/ZTeaKR0aPW7I5RipwfMHb61+akzySQuHkd8qfvMT296/QT9on4jeGfi3/AME/rjxh4XuC0DanYC4tZCPOs5hLhoZAP4hu4PRgQRwa/PojKke1AH1p+1vEs3wD+Bt8VB36OVyRn/l1tT/Svk2C0+03cVtBbxvLK6xou0fMzEAD8yK+tf2nz9o/Y/8AgJedc6eEz/25w/8AxNfJ1tNJbXsNzD/rYpFkTIz8ysCOO/IFDdwPXl/ZP+PBYqfh20ZBwfMvbVcf+RKsx/skfHVuvhCyj/39Ttx/Jq6Nv2of2n71y0MLZY5/ceF8/wDshpknx5/a2u4m+zxa7naceT4WXrj/AK4mtFydbgekeCPhL4z+G37IfxW0vxlYW1rPeWc11AsFyk4KrbFSSV6cgV8V5PrX6weM4LzUv2UdcudRRxe3HhKWa4EibGEpsyz5XjB3Z47V+Ty8xqfYVVWSdkugHsXw8/Zv+IXxM8DQeLPD93ocWnzTSwqLu6dJN0bbWyoQ8Z966S8/Y2+L1taNLbXHhy9kAyIIr50ZvYF0Az9SKxfhr+0343+F3w6h8HaDoegXVpFcTXCz30crSbpG3EfK4GAenFbOq/tlfGS/tHhsx4d0lmGBNaaeWkX3UyOwB/CnF0ra3uB4Dd2tzYalNZ3kLwXVtK0Ukb8NG6sQw9iCCPwr7e/ZI8ea1428F6v4d1+7lvrrQ3hMF1MxaR4JAwCsx5YqyEAnnBA7V8RSSXmp6o8sjTXd5dTFmY5d5ZHbJPqWLH8Sa/Q79kr4K+IPhv4B1TWfF1k9hrGuyRMLCT/WW0EYOwSDs7F2Yr2G0HnIDw1R053WwHskOndOK1LawxjIrWjswO1Wo7cL2rpqYpsDlRcEHrU0d0R/FWXv7UokIPU1u6aZvY89/ajk+0fsi+MU67Yrd/yuYq/MwffH1r9Kf2i2839lfxqhPAsVbn2mjNfmmZYg3+ujz/vCvPxMeWRlNWZ+r37NN0sn7JXgDLD5dJVPykcf0r1Wa5gt7KW7uZ44LeJC8s8rhEjUdWZjwAPU1+RuhfHb4t+GfDNn4d8PfEXVtN0uyTyra1tpI1WJclsD5c9ST171n6/8RPid49h+x+IvGHibX4WP/HrNcyyxsf8Armvyn8qxuiSb4v69pfin4/8AjPxHobrJpuoaxcXFtIowJIy+A49mxu/Gu9/ZpsZ7y6+KMiIxhj8AaoshHQFggUH8QfyrmfBf7Pvxg8eXUa6L4H1KC2cjN/qcZsrdB6lpME/8BBPtX3P8P/gFpnwb/Zp8aaVFdDVvEOr6PdHUL6OMhXIt5AkMS9diljjPLEknHACsB+ZanKKfUCvpD4Jfskah8Z/hcnja28b22kxNeTWf2ZtNe4YGMgbtwcDnPTFeE2/g3xjNCgh8I+IJDtH3NMnPb2St6w8JfGKCzFnpfhnx9Bb7iwhtbO9jTJ6naoAyfWkB9Tp/wT0lX/j4+KxX/c0Q/wBZq+g/gN8F7f4GeC9U8PJ4obWxqF+L0zTW623lny1j243tn7oOc1+cK/Db453fTwT8QZs/3rS7P86lT4IfHW5YN/wrDxtJ3zJZS/8As1AH0v8AGm6/Y08ceN9Tutf8Ra5oHimKd4L+60fTp1MkyEq3mxvGUdgRgsACcck15JoHwf8A2efGficaH4b/AGhr2wuHUtF/b+gfZYpMfwiVpEXd7HGcGvf/ANoH9ka5+I2sHx74AurSw8Q3UMbalpd6fKhvJQgBkWQA+XIcYYEbWIzkHOflHVP2aPjzpVw9vdfCzXpwDjfZxpdRt9GjYgigC78aPgt4X+E9nZnTPi9oPiy/uZdp02wh/exR4JMrMkjqoyAMEgnPGcGvHd20btxXb82QcEY5yPQivU9N/Zo+PGozCG0+FOvwgn71zElsg+pdgBX0T8Fv2INRsvEdn4l+L93YtBayLNH4fspPP85wcgXEo+XZnqiZz0JAzkA8k/albXrgfCa+8UNK+s3Hga1a8eX77SeY5y3+0QQT7k1xX7O8vk/tY/DuT0123H55H9a+uv2tfgH8R/i58QvDer+B9MsLm3stMktbhrm9jttrmYuAA3UYPavMPhX+yJ8avCnxq8J+KtYsNBhsdL1W3vLgx6qkj+WjgttULycZ4oA8P+PHgS/+Hf7Qfifw/dwOkEl5JfWUhGBNbTOZI2U98ZKn0KkV1X7Mvx3g+CPj6/fWrO4vPDusRJDfLagNLA6EmOZFJAbG5gVyMg8cjn9Bvi18FvA/xm8Nxab4ss5UurbcbLVLQhLm0J6hSQQynjKMCD7HmvkDxJ+wJ4/s7t28KeM/D+r22fkW/WSymx74Drn6GgD2n4j/ALSP7PHj/wCDOv8AhKT4kTWS6zYtamRNHuZZYdxBz5ZUAkY6bh9a/PTxLbeGLXxFNB4R1LUtS0tAAl3qNolpJKe5ESu21fTJz64r3+L9hn45STBJH8KQr/fbVSw/IRk16V4G/YD8rUIbv4j+N4ri3Qhm07QomXzP9lp5ACB/upn0IoA8I/ZMmMP7ZngU5+9dzJ+dtKK8/wDiVF5Hxq8Yw4xs1y+X/wAmHr7n8DfsdP4B/aX0/wCIuieLrNdC07UpLu10d7aRpkhZWURGUtgkB8bscgetYXiz9hSfxT8RNe8TN8TYbNNU1Ce+Fsuks5iEkhfbu80ZxnGcUAc9/wAE95MeIfiBD62li/5SSj+teo/tU/s3R/E/RJPHHg2zRfGVjDiWBAB/a0KjiM/9NlH3D3Hyn+HHQ/s+/s3p8Cda13UV8Yvrp1a2itzGbEW4i8ty+7O9s53YxxXu9AH4s22ua5pOiav4dgvLi3sdSMaX9kwwsjQyb03KejowPPBGWHcissda/Tb4p/sgfDv4ofEKbxg+q6p4evbtc3semRxNHdS/89iHHyuRwxH3sZPOSeSi/YD+GSkGXxp4uk+n2Zf/AGmaAPLP2hf9I/YF+BF112xImf8At0x/7LXyZFIYp45R1Rw4/A5/pX6reKP2b/A/i74KeFPhhq2p66NJ8MkGzngmjSeTCMn7w7Cp4Y9AOgrhov2E/gmn+svfF8v11KNf5RUAeaP/AMFDNXCgQfC+3GBj59akP8ohVOX/AIKE+LGz5Pw00Zf+umq3DfyUV7HF+w/8CE+/a+Jpf97V2H8kFXIv2LP2f4x83h7Wpf8ArprM5/ligDy7wN+1X4k+M9x4n8Dat4R0bS7afwvqtwJ7SeaSTdHbMQPnOMHce1fC0WTBGcfwD+VfrD4R/Zo+DXgfW5dX8N+GLm3vJbSexeSXUZ5cwzJskXDNjlTjPUdqzof2Rv2eYVVV+HcTgAAeZqF03/tSgDw/9kr4H/Cn4i/ASbxB4z8G2urapHrFza/aJp5lPlqsZVdquBxuPbvXsPif9j74Ha/4cuNO0rwonh6+dCtvqOn3EoaF8fKzKzlXXOMgjkZ5Fer+CfAPg/4c+HH0HwTocOj6c87XLW8UjuDIwALZdickKvftXR4oA/FTWdJvtB8R6hoepR+Xeafcy2k6+kkblG/UGv0A/Yd+IGq+LPhPrXhXXNRlvrjw9dRC0knkLyC1lUlUJPJVXRwM9AQOwr3TVfg18Jtc1+61zWfhx4Zv9Su5DLcXdzYo8kznqzE9Tx1rW8N+AfA/g64nn8J+ENE0OW4QRzSadZpA0ig5CsVHIB5waAN4IKcBinYoouB5xR9aKT6V7h0kV1a2t9ZSWd9bQ3NvKNskE8YkRx6FTwR9az4vC3heA/uvDGiJ/u6fCP8A2WtWjPrRYLFaLS9IgI8rR9Oj/wB20jH8lrTtZY7Y/uIo4v8ArmgT+QqtRn3qXFMVjfg1AuwLsSfUnNakFyGwQa49JGU8GtG0uyCATXPUo9iXE65bmUjmeX/vs0/zZD/y1c/8CNZVvcbgOavI+R1rhlGzMmibcx6sx/GmnFJnjrTSfSpsIkBpRg84quWx3pyyc9adh2LGBnoKWmKwNOFS0IWiiikAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAHm9IWxSt0qFmwete4ehSp8zHF+aaZQO9V5JOtVmnFI9ejl6auzREw9aeJM9ayRc89asRTZ70wrZcrXiaI5qSNyp4qujcA1L9KDxKkHF2ZtWVweBmtqGTIrl7VyGFb1tJ8ozXFWgYSRphuKaxpitxSM3FctiBrvimCbBqOVveqjy4NaKJtTjc1o5ge9W1bIrBiufm61pQT7gOazlGw6lFrUvClpinIp4rI5gooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAPOJBiqcrYrQnXGay7g4zXtJnv4CHMypNJ1FU3kp878mqrE1tCJ7kpW0RIJDnrVq3k5Hes/OKsW5+cVUo6CjLWxvQNkVZ7VUtvuCrYrFHzuPVqjsWIWVFLOwVQMlmOAB61Rs/if8OGs3ul+IHhhoIpVheQanCQrkEhT83UhWx64PpVLxZdaBZfDzXLnxVP5OiLYTLfOGKnyWQqwBHO4g4GOSSMV8pt4m8Fp8NtHvdWs/FV5eeH9Uso4NFvdTtrA2trHBIbdzNFbpK6spdGK5cOhG7jLcmIlY8yTPsxPiT8PjPbwL468ONLcqrQIuoxMZQzFVKgNzlgQPcEVdvPGPhSyOqi88TaRbnSSi6iJbyNTZF/uCYE/u92eN2M18IWHiXwF4O8YNregaX4ospbfTTqFuzalbSvPgNegFWtWON0jL5khDEAEiu88LXVhpUmleM/DulXeoXviDUn8NX5uPFiTG6mvwZA1yn2TCjducMuCpXgEZFciZCPpVvin8NZiiw/EDwzIZPuBNSibdzjjDc88VBf/EPwNZajd2F34y0KC6tC63MEl9GrwFBlg4z8uByc9K+ZvBZ8C+IPiZb6FdXOreD7jwboLabDePqNrc77eznZ2eYGDYHzubhuVX7vWquj+P8AwrYeKPEXjvR9J1+bVdV1iOaPw7fz28cWqQXz+R5gLwZQZ2bo8nG5ctgmtYyOijKzPp26+IngjTrloL/xjoVtIjbGSW+jBDbQ+3r12kNj0IPetq78c+FNA0yz1LXfE+kaXZ3gDWtze3ccKTggMCjMQGGCDkdjXxPcar4Bmu9C8B6HYXmlw+Hby/FvqGqapb6aTLJAks6XAe3YCRSxhC46oOSMV1s3i/wTfeIfBuu31v4n8LNP4clvLvxGkkM0lvDNIbdlnt5InQiR4lCyRquDInGDRJ3O2U1KL2PsyPxR4dGo2unPr+mC8u7Zr22t/tSeZPAoy0qLnLIByWGRWbH8V/hfJYz3kfxG8Ktb2+3zpRqkO2PccLk7uMnoO9fHEvi/wQl3B41utK8dp40sda8iCwi1SIz6dZ6fGo3GNINgBWV4/KK/O8sg3DqNnXvHXgiLxXqsnh3RtcubWHxsut2PiTTbyI7Ly9s1YFFltWtxF5Zx5cr785K5PFc0jy5rU+v4vHXgm40251G38YaDNZ2sMVxcXMV/E8cMcpxE7sGwquQQpPUggVHB8QfAd012tt418PTGzt3vLkR6hExghRiryv8AN8qKwILHgEc18WXGrfDXW/hj4o8V3Xh3xLJNP4a0u+ujq+qRWN1ceXOMNYxrbqs8YZyJJimz5QFUZybNl4F8KahpFjBpXh2W8l8a6jJ4dgvrfxVGs+nS/wCkXDjctn8qSRzSoysGDKUG3o1SQfZtv488D3XiE6Da+MtAm1UR+abCO/iafZt37tgbP3fm6dOelEvjzwPBBp883jHQY4tSjWaxd7+ILdIzhA0Z3fOpZlUEcZIHU18VeDviL4R8MG68YafovjSw0Xw4B4hjsk1S3ls31CcSQrDO4txKqTfZmwxYorkLhdwrd8Ny/CzxR4rvfDr6NeaXDq+pyNZWc+txve2H2CVr/wCypaG3P2e1lmaRxuclgQRwAAAfWun/ABB8BavqCWGleNvD19dyTm2SC21CKR3lCligUNkthWOB2U+lWbbxf4TvZNKjs/E+j3D6v5h01YryNjfeX9/yQD+824OducYr4Y8N3Hw50rwz4Y8V6DY+O9L8TT6rZ3Edut/apFoFtOxhhuQTb+TJHKLraAU3Eq4+XyyT0Ph6w+F+sa9f6T4VPiz7b4dshN4P1C61tbaO8gsZmlmkgP2ZlVy5knAYP5ivn5V4AB9izeMfCNt4afxFceKNGi0eOVoG1B7yMQCRWKFN+cbgwK7euQRVe8+IPgPTtNsNQv8Axp4ftrTUUaSyuJb+JY7pVxuaNt2HAyMkdM818Yf2tp174a8OeAdWXUbTQvElunjCxgvdasfJsmubtiJN5sNwcM0hK5wAcZrGuPF3hi88E+Ebe/0HxgLTS7e/i0a5OpRMzwTXcNrOssk1oEl+ZiymIvtDbTgAEAH3LH8Rvh9Lq0OlxeOvDb3s+zyrddShLybwCm0budwIIx1yMVbufGXhGyi1eS88U6NAmjMiam0t7GosGb7onyf3ZORjdjNfEpHwR8PyeLrTTYvFtzb6IkN/ompXGqIIdXl0kKphSMw+UwO0lS6ybljYrtwAbHxHj+EHhSHT4dH1fX/EUPiWxJ17ULbxNbTiZnuo7gpLGIZC04mPmcKuNxHQ4AB9k6j8Q/AOjyeXq3jbw9Yvtjfbc6hFGdsil4zy3RlUsp7gEimn4jfD4G3B8deGv9JEZg/4mcOJfMZlj2ndzuKsB6lSO1fH/ik/D3wn8S9U1bQbHxRaeI9J8VS21rotnqdoXsre0sZZY7mKK4gYJakXEihXyq54bAC1w1lq/wAKI3sdXHgXW9WujObi50+41uF7a8njuVXbIxtVXEjakxbZhV2DGOtAH31qPxE+H+jyNHq3jjw5YOty9my3WowxFZ0xvjIZhhl3LkdsjPWukVleNXRldWAZWU5BB6EHuK/P+Sf4f6R441nR9C/4TXStWnll07UdX13XLe0EYmgFxcWlzNLbSGKVHthGjKC8hyQxBGftX4Ya7p/iX4N+Gda0uSWS0n0+JY3lm85zsHlnc+1dxyhy21c+goA6yiiigAooooAKKKKACiiigDgrpMZrDvOM10d2mM8Vz18MA168Hc+jyx6mLKfmNQnmpZOpqKu2J6j3G96s23+sFVz/ACqza8yCiew47m7bj5KtDGOKrQfdFWVrnR89jneoywiI67XRXX+6wBH5GtDyobj/AI+YY58gA+agfIByAc1Qiq5G+KxmrnnsueXbs5ke3haQr5ZcxqSV/uk46e3So/JtYxiK1t4xu3YSJV59eB196b5uB1qKSWsVASRVu7aykkMj2dsz7t5ZolJLYIyTjk4JGfQmqN15cjKZUSQoMKXUMVHoM9KtTSe9Z08nXmt4xPTwdK7K00ds7lpLeByTklo1OT68jrXNePtM8T634JksvCGopY6mZ4GdzN9naaBZAZIVmCsYiyjAcA4rfkk5xRFJ83FU4XR7s6ScOU88m8IfHC/8PWWleGfEtv4YMU1xeyXtxrct/dOxP+j27TCBWeJTl2DZDcKSRzV2/wDAH7RGpW3iG/0/xXpmlzavfWTLoyX7NbWUMaxNK9tIIwY38xJV24IeOXnDKK9S06YhhXX2Mm5BXBWp2Pm8ZQ5GeSnwN8aLG81hbLxLp2p22m291beFRqN0xMxupdwmvwUO77NH8kaDO/AJxVSz8B/HfSvgxrPgpfEek32pNeQSad4hjvnS8S3ZgbhdzRr+9XadjNgFZCpI2g17wvSnVynmniFr4U+OjfAJfBk174ftPEU10ttNry6jLI62P33fd5W7zycxqBkIpDAkrk8ze/Dn9oq6kthea9aXFxaaHPpUd/pviSXTjPdCYtbX8wEBaRliIRkb7xGe9fStFAHzJefCv9pKVp4h8Qbee/ZmI1hNUeC1e3+xmMWo04Q7EfzzvE4bI+914rLX4T/tRDToIP8AhOR5UZsS8D+JJndjGHFwY5PL/drIGUbQR06Cvq+igDlfA2j6nZfD/TdO8V6dA2pWiGJ3muxqLSAEkP5rLnnJ+XnbjGTXSm2tmjVGtoGVc7VMakLnrgY4qWigBjQwvAkLwxNEn3I2QFV+gxgfhUYsrJdu2ytV2tvXEKDa3qOOD79anooAZ5MJnM5hi80rsMmwbivoW649qYtpaLGsa2lsqL91REoC854GOOeamooAiktraVXWW2gkDkFw8asGI6ZyOce9SBVVcKoUegGBS0UAFFFFABRRRQAUUUUAFFFFAHIXq9a5jUB1rrb5flPFcrqQ616lFn0OWM5+Tlqbt4qR/vc0mM13rY9YhINWLY4kqFxg57UsTbXpvVBF2Z0dufkHtVoVnWkwKCryt0Nc54mPotTbLSEVMr8VUD07zKlxPN5S2ZeKhklAFQGWoJJfelymtOk5PQWWTrzWbcTVJPOADzWXNMSetXGNz6HC0FSjzPcc0mTjNOjfkV5/quueK7XXZoNNsvNjnvWihe5jcxqqJCoQbRwHZpW3einHfEtn4j8T6jrt7Z2Vh9ntzdQwW89zZODCGlkVyw3ANhI92cgZdexxVNrY1ddN2PVNPk+Yc12mmNlBXhltqfjO9mNpCBardSxLBOlm4a1X7d5e5yWw2YUdyPlxkdjmuu0Lxn4oDWVteaJKbiSKGd/L0+YKY9ty8rZ5VDiKBQhOQ8mOciuDEM8jHtNHr6fdp9eM6f478Z2fhjSba+l8y6udqC+l0S4aVmSyMkyeRuDMROYY/M+UEuwxkCum0jXPGUfimS5123aHS5jIJbVbOSQ2jRW1uCY5FJLK08koA2nIBIPBrgZ4TPQKK86n8R+MbXxG9rBZyyR3GpSm3jns5JPOhW6WDyldcLCqxo8+985DrjIzUOreNPGlh4f1S6GhyJNb3kmnWxTT5JfPkRpXMwXdnymRYUQ87pGbtigR6XRXk8nirx6L/WglpO0gtCRYLp03+jsNOV/NimPysDdP5YTDE4Y8ba3fDviPxPN4zv8AS9aslh0yyP2RZmglaZ5BIkUUhYLtYSZdzjhQVOcbjQB3dFeTS/EfxP8A2ldJJZf2dZS6hb2lrcXWlTPJEpNy02YlOZGWO3Q8dDIM8HAv6F408Yan4xstIutPghaMWiajaixlBjMlu0s0nnFtkezdCBGctlyp6ggA9Koo7UUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAc7ep8p4rk9STrXa3aZBrldThPOBXfRke5ls7OxyUgw5oQVNcJtkNRpXpX0PciMdeKhIINXtuV6VBJEccCnGRUoj7a5KHBNasN0rDrWAVZaeszLSlC+qM5xjNWmjpFmHrQZgAeawReOBjNKb1s9ajkkcv1Gle9zZe4AGc1TnuwM4OaznuXbvUZLv61Sp9zop0qdP4USyTl29qiwScmpEgJ61OIcCqulsa8rluVgCOhNSR5J5JNKyc0+Jfm6Um9B8tjV05SZB1ru9LUiIcn8643SocyLXdWEe2IV5uJkeNmcrKxfEaNMk7IplRSqyEfMoOMgHqAcDPrgVICR3NNA4xTq4GfPC5OCMnB60AkHIJH0NJRQAuTjGTj60ZOAMnA6c0lFADWRHljkdVZ4iTGzDJQkYO09uCRx2NCRxxlzHGiGRt77QBvbAGT6nAAz6AU6igAooooAKKKKACiiigAooooAKKKKACiiigAooooAz7iPKmue1G3yDxXUSgVkXqKVPFdFOVjvwlTlkcFfQYY8VngENXS6hEmTxWBMoD4FepTldH0lKdxUp5jDVChwM+9WU5UZolodi2IGt8/wANQm256VojkCjAAoU2iHZmX9mNKLUmtQKvpQFHpVe0ZL5UZ6Wh6kVYjtQOoq2APSlwMVLk2ZuqlsiERAdqGT2qxUb9akIVm3qUmTmpIYyW5p5UZ/GrVqimQDHFNy0NpyUVc29HtiWBxXY26bYwKxNJjQKOK6CMDaK8ytK7Pk8dVc56jxS0DpRXOeeFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH//Z" alt="Stories, Reels Covers &amp; Thumbnails">
+    </div>
+    <h1>Stories, Reels Covers &amp; Thumbnails</h1>
+    <div class="splash-sub">Hang tight — Module 11 Lesson 2 is being prepared</div>
+    <div class="splash-bar-track"><div class="splash-bar-fill" id="splashBarFill"></div></div>
+    <div class="splash-msg" id="splashMsg">Initializing LES032&hellip;</div>
+  </div>
+</div>
+
+<div id="topbar">
+  <button id="menuToggle" aria-label="Toggle lesson menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <div class="brand">
+    <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+    <span class="lesson-tag">LES032 &middot; Module 11, Lesson 2</span>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+</div>
+
+<div id="layout">
+  <nav id="toc">
+    <h4>Lesson Sections</h4>
+    <div class="toc-item" data-target="s1"><span class="toc-dot" id="toc-dot-1">1</span><span>Why Covers &amp; Thumbnails Matter</span></div>
+    <div class="toc-item" data-target="s2"><span class="toc-dot" id="toc-dot-2">2</span><span>Anatomy of a Reels Cover</span></div>
+    <div class="toc-item" data-target="s3"><span class="toc-dot" id="toc-dot-3">3</span><span>Building a Reels Cover in Canva</span></div>
+    <div class="toc-item" data-target="s4"><span class="toc-dot" id="toc-dot-4">4</span><span>Reels Content Fundamentals</span></div>
+    <div class="toc-item" data-target="s5"><span class="toc-dot" id="toc-dot-5">5</span><span>Filming &amp; Publishing a Reel</span></div>
+    <div class="toc-item" data-target="s6"><span class="toc-dot" id="toc-dot-6">6</span><span>Thumbnail Design Principles</span></div>
+    <div class="toc-item" data-target="s7"><span class="toc-dot" id="toc-dot-7">7</span><span>Creating Thumbnails in Canva</span></div>
+  </nav>
+
+  <main id="main">
+  <div class="section" id="s1">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">1</div><h2>Why Visual Covers &amp; Thumbnails Matter</h2></div>
+      <div class="section-body">
+        <p>Every Reels cover, Story highlight cover, and video thumbnail a client posts is doing a job before a single word of copy gets read: it's deciding, in under a second, whether a scrolling stranger stops or keeps moving. On a busy feed or a crowded grid, these small static images are the client's <b>shop window</b> — and as their VA, keeping that window clean, consistent, and on-brand is one of the most visible parts of your work.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Shop window effect — the idea that a cover image or thumbnail is often the very first, and sometimes only, piece of content a viewer sees, so it has to communicate the brand and the value instantly, with no caption to lean on.</div>
+        </div>
+
+        <h3>Three surfaces, one first impression</h3>
+        <ul>
+          <li><b>Reels covers</b> — the static frame that shows on a client's grid before someone taps play</li>
+          <li><b>Story highlight covers</b> — small circular icons that organize a profile and signal how tidy the account is</li>
+          <li><b>Video thumbnails</b> — the image that decides click-through on platforms like YouTube</li>
+        </ul>
+        <p>When these are mismatched in style, font, or color from post to post, a profile reads as unfinished — even if the content behind each cover is great. Your role as a Design VA is to make sure covers and thumbnails feel like they belong to the same brand family, every single time.</p>
+
+        <div class="scenario-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A client tells you their grid "looks messy" even though each individual Reel performs fine. Your first move isn't editing new content — it's auditing their last 9-12 covers side by side and identifying where font, color, or layout breaks the pattern.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Screenshot a client's grid every couple of weeks and keep it in a swipe file. Spotting drift in color or font early is far faster than fixing twelve mismatched covers at once.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Priority Ranking</div>
+          <div class="game-instructions">Drag to rank these three factors from most to least important for stopping the scroll on a profile grid.</div>
+          <div id="g1-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;"></div>
+          <button class="game-btn" id="g1-check">Check Order</button>
+          <div class="game-feedback" id="g1-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-1">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-1-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-1-content">
+            <div class="cp-question">Why does the lesson describe Reels covers and thumbnails as a client's "shop window"?</div>
+            <div id="cp-1-opts">
+              <button class="cp-opt" data-idx="0">Because Instagram requires every account to have one</button>
+              <button class="cp-opt" data-idx="1">Because they're the only content type the algorithm ranks</button>
+              <button class="cp-opt" data-idx="2">Because they're often the first thing a scrolling viewer sees, before any caption</button>
+              <button class="cp-opt" data-idx="3">Because they can only be changed once per month</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-1-fb"></div>
+            <div class="cp-passed" id="cp-1-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-1-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Pick a client or brand you follow, screenshot their last 9 Reels covers as they appear on the grid, and mark which ones break the pattern in font, color, or layout.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s2">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">2</div><h2>Anatomy of a Great Reels Cover</h2></div>
+      <div class="section-body">
+        <p>A Reels cover is built inside a fixed canvas, but that canvas isn't fully "safe" to design in — Instagram's own interface sits on top of parts of it. Understanding the exact dimensions and which zones get covered by app UI is the difference between a cover that looks intentional and one that gets cropped or blocked mid-scroll.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Safe zone — the central area of a 1080x1920 (9:16) canvas that stays fully visible on every device and isn't covered by Instagram's username, caption, or icon overlays. Key text and logos should always live here.</div>
+        </div>
+
+        <h3>Four things that separate amateur from professional</h3>
+        <ul>
+          <li><b>Dimensions</b> — 1080x1920 pixels, a 9:16 vertical canvas, matching the Reels player exactly</li>
+          <li><b>Safe zones</b> — keeping key text and logos out of the bottom strip and right edge, where caption, username, and icons overlap the video</li>
+          <li><b>Branding consistency</b> — the same font pairing, color palette, and logo placement used across every cover on the grid</li>
+          <li><b>Legibility at thumbnail size</b> — the cover has to read clearly shrunk to a small grid tile, not just at full screen</li>
+        </ul>
+
+        <div class="warn-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Placing a logo or key headline text near the bottom of the canvas. On the live grid it gets hidden behind the caption and username overlay — always keep critical content inside the safe zone.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>After designing a cover, zoom your view out to about 25% before exporting. If the headline is still readable that small, it will survive being shrunk to a grid tile.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Safe-Zone Labeling</div>
+          <div class="game-instructions">Drag each label onto the zone it belongs to on a mock Reels cover: the Safe Zone or the UI Overlap Zone.</div>
+          <div id="g2-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g2-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g2-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-2">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-2-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-2-content">
+            <div class="cp-question">Where should a cover's logo and headline text always be placed?</div>
+            <div id="cp-2-opts">
+              <button class="cp-opt" data-idx="0">Anywhere, since Instagram never overlays the cover image</button>
+              <button class="cp-opt" data-idx="1">Inside the safe zone, away from the bottom and edges</button>
+              <button class="cp-opt" data-idx="2">Only in the top-right corner of the canvas</button>
+              <button class="cp-opt" data-idx="3">Centered exactly on the caption overlay</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-2-fb"></div>
+            <div class="cp-passed" id="cp-2-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-2-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Pull up any Reels cover you've made before, overlay a mental grid of the bottom 250px, and check whether any text or logo would currently get hidden behind the caption overlay.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s3">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">3</div><h2>Building a Reels Cover in Canva</h2></div>
+      <div class="section-body">
+        <p>With the theory in place, here's the actual step-by-step you'll run for a client: pick the right starting template, respect the safe zone while you position elements, pull in the brand kit instead of eyeballing colors, and export a clean static image.</p>
+        <ol>
+          <li>Search Canva for a "Reels Cover" template — this locks the canvas to 1080x1920 automatically, or use the Resize tool to switch an existing design to that preset.</li>
+          <li>Reposition and resize text and image elements so nothing critical sits in the bottom safe-zone margin.</li>
+          <li>Open the client's Brand Kit and apply their saved colors and fonts instead of default template styles.</li>
+          <li>Preview at a small size to confirm legibility, then open the download panel and export as a static image — not the MP4 video file — as the cover.</li>
+        </ol>
+
+        <div class="mockup-label">Interface Overview — Canva</div>
+        <div class="mockup-frame canva-mock" id="canvaMock3">
+          <div class="canva-topbar">
+            <span>File</span>
+            <span style="position:relative;">Resize
+              <div class="callout" style="top:-6px; left:100%; margin-left:4px;" tabindex="0" role="button" aria-label="Resize" data-tip="Resize — Browse suggested sizes or search a platform preset like Reels Cover, then Copy &amp; Resize or Resize this design.">1</div>
+            </span>
+            <span>Editing</span>
+            <div class="grow"></div>
+            <span class="share-btn">Download</span>
+          </div>
+          <div class="canva-toolbar"><span>Templates</span><span>Elements</span><span>Text</span><span>Brand</span><span>Uploads</span><span>Tools</span></div>
+          <div class="canva-body">
+            <div class="canva-sidebar">
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Templates</div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="4"/><path d="M15 4l5 5-5 5"/></svg>Elements</div>
+              <div class="icn" style="position:relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="17" r="2"/><circle cx="6" cy="17" r="2"/><path d="M13.5 9v5M6 15v-1a4 4 0 0 1 4-4h1"/></svg>Brand
+                <div class="callout" style="top:-6px; right:-10px;" tabindex="0" role="button" aria-label="Brand Kit" data-tip="Brand Kit — Applies the client's saved colors and fonts to every element in one click.">2</div>
+              </div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>Uploads</div>
+            </div>
+            <div class="canva-canvas">
+              <div class="canva-sample-post" style="width:130px; height:231px; border-radius:10px; position:relative;">
+                <div style="position:absolute; top:8px; left:8px; right:8px; font-size:9px; font-weight:700; color:#8a5361; text-transform:uppercase; letter-spacing:.04em;">Safe zone</div>
+                <div class="headline" style="font-size:13px;">Cover<br>Headline</div>
+                <div class="cta">@brandhandle</div>
+                <div class="callout" style="bottom:6px; right:6px;" tabindex="0" role="button" aria-label="Download panel" data-tip="Download — Choose PNG or JPG for a static cover, or MP4 at 1080x1920 for the full Reel.">3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="legend-wrap">
+          <ul class="legend">
+            <li><b>Resize</b> — search or browse preset sizes, then Copy &amp; Resize or Resize this design</li>
+            <li><b>Brand Kit</b> — applies the client's saved colors and fonts in one click</li>
+            <li><b>Download</b> — export panel where you pick the static file type before download</li>
+          </ul>
+        </div>
+
+        <div class="scenario-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>Your client wants Reels covers that match their Canva brand kit. Your process: start from a Reels Cover template, swap in their saved brand colors and fonts, keep text inside the safe zone, then export a static image — never the MP4 file — as the cover.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Save a finished cover as a reusable Canva template for that client. Next week's cover becomes a 2-minute swap instead of a rebuild.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Toolbar Match-Up</div>
+          <div class="game-instructions">Drag each Canva tool onto the action it performs.</div>
+          <div id="g3-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g3-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g3-fb"></div>
+        </div>
+
+        <div class="yt-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Watch: Designing a Scroll-Stopping Reels Cover — Full Walkthrough</div>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/pBcNkTB-NCw?rel=0&amp;enablejsapi=1" title="Reels Cover walkthrough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="checkpoint" id="cp-3">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-3-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-3-content">
+            <div class="cp-question">Instead of eyeballing colors, what should you use to match a client's cover to their brand?</div>
+            <div id="cp-3-opts">
+              <button class="cp-opt" data-idx="0">Their saved Brand Kit in Canva</button>
+              <button class="cp-opt" data-idx="1">Instagram's default color suggestions</button>
+              <button class="cp-opt" data-idx="2">Whatever colors the template starts with</button>
+              <button class="cp-opt" data-idx="3">A random color picker tool</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-3-fb"></div>
+            <div class="cp-passed" id="cp-3-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-3-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Build one Reels cover in Canva from a blank 1080x1920 canvas, apply a brand kit (yours or a sample one), and export it as a static PNG to see the full workflow end to end.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">4</div><h2>Reels Content Fundamentals</h2></div>
+      <div class="section-body">
+        <p>The cover gets someone to tap play — but the first few seconds of the Reel itself decide whether they keep watching. Before you touch the editing tools, it helps to know the specs and the psychology behind what makes a Reel actually hold attention.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Hook — the opening moment of a Reel, typically the first 3 seconds, whose only job is to give the viewer a reason not to scroll away.</div>
+        </div>
+
+        <ul>
+          <li><b>Format</b> — vertical video, 9:16, matching the 1080x1920 cover canvas</li>
+          <li><b>Length</b> — most performing Reels stay short and tight rather than padded; trim anything that doesn't earn its place</li>
+          <li><b>The hook</b> — the first 3 seconds should show or say the most interesting thing in the video, not build up to it slowly</li>
+          <li><b>Trending audio</b> — can widen reach, but only pair it with content the track actually fits</li>
+          <li><b>Captions and text overlays</b> — most viewers watch with sound off, so on-screen text keeps the message landing either way</li>
+        </ul>
+
+        <div class="warn-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Starting a Reel with a slow logo intro or a "hey guys, today I want to talk about..." wind-up. That's exactly the window a scrolling viewer uses to swipe away.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>When you receive raw client footage, watch the first 3 seconds of your rough cut on mute. If you can't tell what's interesting about it without sound, add a text overlay or re-trim the opening.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Sort the Hook</div>
+          <div class="game-instructions">Drag each opening line into "Strong Hook" or "Weak Hook" for the first 3 seconds of a Reel.</div>
+          <div id="g4-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g4-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g4-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-4">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-4-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-4-content">
+            <div class="cp-question">Why does the lesson recommend adding captions or text overlays to Reels?</div>
+            <div id="cp-4-opts">
+              <button class="cp-opt" data-idx="0">Because Instagram requires captions on every Reel</button>
+              <button class="cp-opt" data-idx="1">Because captions boost the video's export resolution</button>
+              <button class="cp-opt" data-idx="2">Because trending audio only works with captions</button>
+              <button class="cp-opt" data-idx="3">Because many viewers watch with the sound off</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-4-fb"></div>
+            <div class="cp-passed" id="cp-4-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-4-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Watch three Reels from a client's competitor with the sound off. Note which ones you could still follow from text and visuals alone — that's the hook standard to aim for.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s5">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">5</div><h2>Filming &amp; Publishing a Reel</h2></div>
+      <div class="section-body">
+        <p>Once you understand what makes a Reel work, the actual production workflow is straightforward — but the order of operations matters. Skipping ahead, like publishing before choosing a proper cover frame, is one of the most common ways a client's grid ends up inconsistent.</p>
+        <ol>
+          <li>Record or receive raw clips from the client, then review them for usable footage.</li>
+          <li>Trim and edit down to the tightest possible cut, leading with the hook.</li>
+          <li>Add text overlays and transitions to support the pacing and accessibility.</li>
+          <li>Choose a cover frame — or swap in the custom static cover built in Canva — before publishing.</li>
+          <li>Publish or schedule according to the client's content calendar.</li>
+        </ol>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Content calendar — a client's planned schedule of what publishes when, which a VA uses to decide whether a Reel should go live immediately or be queued for a specific day and time.</div>
+        </div>
+
+        <div class="scenario-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A client sends five raw clips and says "post whenever, no rush." Even without a strict deadline, you still trim, add text, and choose a proper cover before publishing — "no rush" changes the timeline, not the quality bar.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Publishing with the auto-selected cover frame from the middle of the video. It's rarely the strongest frame and almost never matches the client's branding — always choose or replace it deliberately.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Sequence the Workflow</div>
+          <div class="game-instructions">Drag these steps into the correct publishing order, start to finish.</div>
+          <div id="g5-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;"></div>
+          <button class="game-btn" id="g5-check">Check Order</button>
+          <div class="game-feedback" id="g5-fb"></div>
+        </div>
+
+        <div class="yt-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Watch: How To Create Reels — Full Walkthrough</div>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/o9O_cbIvrOU?rel=0&amp;enablejsapi=1" title="How To Create Reels walkthrough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="checkpoint" id="cp-5">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-5-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-5-content">
+            <div class="cp-question">What should determine whether a Reel is published immediately or scheduled?</div>
+            <div id="cp-5-opts">
+              <button class="cp-opt" data-idx="0">Whichever cover frame Instagram auto-selects</button>
+              <button class="cp-opt" data-idx="1">The client's content calendar</button>
+              <button class="cp-opt" data-idx="2">How many trending audio tracks are available that day</button>
+              <button class="cp-opt" data-idx="3">The length of the raw footage received</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-5-fb"></div>
+            <div class="cp-passed" id="cp-5-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-5-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Take one raw clip, trim it to its tightest cut, add a text overlay, and pick a deliberate cover frame before saving it as if you were about to publish for a client.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s6">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">6</div><h2>Thumbnail Design Principles</h2></div>
+      <div class="section-body">
+        <p>Thumbnails live or die at a tiny size — often no bigger than a postage stamp on a phone screen. A handful of principles separate thumbnails that get clicked from ones that get scrolled past.</p>
+
+        <ul>
+          <li><b>Contrast and legibility</b> — strong contrast between text and background so the thumbnail reads instantly, even shrunk down</li>
+          <li><b>Minimal text (3-5 words)</b> — a short, punchy phrase beats a full sentence that turns to mush at small sizes</li>
+          <li><b>Emotion or expression in imagery</b> — a clear facial expression or reaction draws the eye faster than a neutral, posed shot</li>
+          <li><b>Consistent style across a channel</b> — matching fonts, colors, and layout across thumbnails builds brand recognition over time</li>
+        </ul>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Legibility — how easily text and imagery can be read and understood at a glance, especially at the small sizes thumbnails typically appear at in feeds and search results.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Cramming a full sentence onto the thumbnail. By the time it shrinks to feed size, the text is illegible and the whole design reads as noise.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Shrink your thumbnail draft to roughly the size of a thumbnail icon before you finalize it. If the text or expression is unclear at that size, simplify before exporting.</div>
+        </div>
+
+        <div class="scenario-box" style="--box-index:3">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A client wants their new thumbnail to "match the last one exactly, just with different text." Reuse the same font, color palette, and layout grid from the previous thumbnail, and only swap the headline and image.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Do or Don't</div>
+          <div class="game-instructions">Drag each thumbnail example into "Do" or "Don't."</div>
+          <div id="g6-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g6-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g6-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-6">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-6-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-6-content">
+            <div class="cp-question">Why does a clear facial expression tend to help a thumbnail perform better?</div>
+            <div id="cp-6-opts">
+              <button class="cp-opt" data-idx="0">It increases the thumbnail's file size</button>
+              <button class="cp-opt" data-idx="1">It's required by platform upload rules</button>
+              <button class="cp-opt" data-idx="2">It draws the eye faster than a neutral, posed shot</button>
+              <button class="cp-opt" data-idx="3">It replaces the need for any text at all</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-6-fb"></div>
+            <div class="cp-passed" id="cp-6-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-6-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Find one thumbnail online that you think works well and one that doesn't. Write one sentence for each explaining which of the four principles above it follows or breaks.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s7">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">7</div><h2>Creating Thumbnails in Canva</h2></div>
+      <div class="section-body">
+        <p>Bringing the principles from Section 6 into Canva follows a similar flow to the Reels cover build, with one key difference: thumbnails often need to export at more than one size depending on the platform.</p>
+        <ol>
+          <li>Choose a thumbnail template or set a custom canvas size — commonly 1280x720 for YouTube-style thumbnails.</li>
+          <li>Layer a high-contrast image with bold, short headline text on top.</li>
+          <li>Use the Position and Layers panel to make sure text sits above the image and nothing important is cropped.</li>
+          <li>Apply brand colors for contrast, then open the download panel and export at the platform-specific dimensions required.</li>
+        </ol>
+
+        <div class="mockup-label">Interface Overview — Canva</div>
+        <div class="mockup-frame canva-mock" id="canvaMock7">
+          <div class="canva-topbar">
+            <span>File</span><span>Resize</span><span>Editing</span><div class="grow"></div>
+            <span class="share-btn" style="position:relative;">Download
+              <div class="callout" style="top:-6px; left:100%; margin-left:4px;" tabindex="0" role="button" aria-label="Download panel" data-tip="Download — Pick a File type, confirm the pixel dimensions under Quality, then Download.">3</div>
+            </span>
+          </div>
+          <div class="canva-toolbar"><span>Templates</span><span>Elements</span><span>Text</span><span>Uploads</span><span>Tools</span></div>
+          <div class="canva-body">
+            <div class="canva-sidebar">
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Templates</div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20V9"/></svg>Layers</div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>Uploads</div>
+            </div>
+            <div class="canva-canvas">
+              <div class="canva-sample-post" style="width:220px; height:124px; position:relative;">
+                <div style="position:absolute; top:8px; left:8px; right:8px; font-weight:800; font-size:14px; color:var(--ink);">Bold Headline Here
+                  <div class="callout" style="top:-8px; right:-8px;" tabindex="0" role="button" aria-label="Text contrast" data-tip="Text Contrast — Bold, high-contrast headline text placed over the image using the Layers panel.">1</div>
+                </div>
+                <div class="headline" style="position:relative;">
+                  <div class="callout" style="top:-30px; left:0;" tabindex="0" role="button" aria-label="Layers panel" data-tip="Layers &amp; Position — Keeps text stacked above the image so nothing important gets cropped.">2</div>
+                </div>
+                <div class="cta">Export at 1280x720</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="legend-wrap">
+          <ul class="legend">
+            <li><b>Text Contrast</b> — bold, high-contrast headline placed over the image</li>
+            <li><b>Layers &amp; Position</b> — keeps text stacked above the image, nothing cropped</li>
+            <li><b>Download</b> — choose File type and confirm dimensions before export</li>
+          </ul>
+        </div>
+
+        <div class="warn-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Exporting at the wrong dimensions for the destination platform. Always confirm the required size in the download panel before export — a mismatched size gets auto-cropped or stretched.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Duplicate the finished design as a template with placeholder text before exporting. Next week's thumbnail becomes a quick swap of the image and headline.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Click the Feature</div>
+          <div class="game-instructions">Click the one option below that describes where you'd adjust text contrast on the thumbnail canvas. Selecting the wrong option, or leaving the right one unselected, won't pass.</div>
+          <div id="g7-chips" style="margin-bottom:14px;"></div>
+          <button class="game-btn" id="g7-check">Check My Selection</button>
+          <div class="game-feedback" id="g7-fb"></div>
+        </div>
+
+        <div class="yt-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Watch: How To Make Thumbnails — Full Walkthrough</div>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/V7Ki4rWMWLk?rel=0&amp;enablejsapi=1" title="How To Make Thumbnails walkthrough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="checkpoint" id="cp-7">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-7-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-7-content">
+            <div class="cp-question">Why should you confirm the platform's required dimensions before exporting a thumbnail?</div>
+            <div id="cp-7-opts">
+              <button class="cp-opt" data-idx="0">Canva only allows one export size per account</button>
+              <button class="cp-opt" data-idx="1">Brand colors change automatically at different sizes</button>
+              <button class="cp-opt" data-idx="2">Layers panels don't work above 1280x720</button>
+              <button class="cp-opt" data-idx="3">A mismatched size gets auto-cropped or stretched on the platform</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-7-fb"></div>
+            <div class="cp-passed" id="cp-7-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-7-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Build one thumbnail in Canva at 1280x720 using a high-contrast image, a 3-5 word headline, and your brand colors — then export it and check how it looks shrunk to icon size.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="final-block">
+    <div class="takeaways">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Key Takeaways</h2>
+      <ul>
+        <li>Reels covers, Story highlight covers, and thumbnails are a client's shop window — first impressions happen before any caption is read.</li>
+        <li>A Reels cover canvas is 1080x1920 (9:16) — always keep logos and key text inside the safe zone, away from the bottom UI overlap.</li>
+        <li>Build covers in Canva using the client's Brand Kit, not eyeballed colors, and export as a static image.</li>
+        <li>A Reel's first 3 seconds are the hook — lead with the most interesting moment, not a slow build-up.</li>
+        <li>Publish only after choosing a deliberate cover frame, and schedule according to the client's content calendar.</li>
+        <li>Thumbnails need high contrast, minimal text (3-5 words), emotional imagery, and a consistent style across the channel.</li>
+        <li>Always confirm and export thumbnails at the platform-specific dimensions to avoid auto-cropping or stretching.</li>
+      </ul>
+    </div>
+    <div class="complete-wrap">
+      <button class="btn-primary" id="markCompleteBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mark as Complete</button>
+      <div id="lessonCompleteMsg">Lesson complete! Great work finishing Stories, Reels Covers &amp; Thumbnails.</div>
+    </div>
+  </div>
+
+  </main>
+</div>
+<script>
+(function(){
+"use strict";
+var LESSON_ID = "LES032";
+var SAVE_KEY = "lhph_LES032";
+var TOTAL_SECTIONS = 0;
+var CP_CORRECT = {1:2,2:1,3:0,4:3,5:1,6:2,7:3};
+
+var defaultState = { gamesDone:{}, cpsDone:{}, lessonCompleted:false };
+var state = JSON.parse(JSON.stringify(defaultState));
+
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function load(){
+  try{
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(raw){
+      var parsed = JSON.parse(raw);
+      state = Object.assign({}, defaultState, parsed);
+      state.gamesDone = Object.assign({}, defaultState.gamesDone, parsed.gamesDone || {});
+      state.cpsDone = Object.assign({}, defaultState.cpsDone, parsed.cpsDone || {});
+    }
+  }catch(e){}
+}
+function markLessonComplete(){
+  try{ window.parent.postMessage({action:"lessonComplete"}, "*"); }catch(e){}
+}
+
+/* ---------------- SPLASH ---------------- */
+function runSplash(){
+  var fill = document.getElementById("splashBarFill");
+  var msg = document.getElementById("splashMsg");
+  var steps = [
+    {p:0, t:"Initializing LES032\u2026"},
+    {p:15, t:"Loading lesson content\u2026"},
+    {p:30, t:"Preparing activities and games\u2026"},
+    {p:50, t:"Setting up your checkpoints\u2026"},
+    {p:70, t:"Almost there\u2026"},
+    {p:88, t:"LES032 is ready \u2014 launching!"}
+  ];
+  var duration = 4000;
+  var start = null;
+  function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function frame(ts){
+    if(!start) start = ts;
+    var elapsed = ts - start;
+    var progress = Math.min(elapsed/duration, 1);
+    var eased = ease(progress);
+    var pct = eased*100;
+    fill.style.width = pct + "%";
+    var current = steps[0].t;
+    for(var i=0;i<steps.length;i++){ if(pct>=steps[i].p) current = steps[i].t; }
+    msg.textContent = current;
+    if(progress < 1){
+      requestAnimationFrame(frame);
+    } else {
+      setTimeout(function(){
+        var splash = document.getElementById("splash");
+        splash.classList.add("fade-out");
+        setTimeout(function(){ splash.remove(); }, 550);
+      }, 200);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------- TOC / PROGRESS / SECTION LOCKS ---------------- */
+function updateProgress(){
+  var done = 0;
+  for(var i=1;i<=TOTAL_SECTIONS;i++){ if(state.cpsDone[i]) done++; }
+  var pct = Math.round((done/TOTAL_SECTIONS)*100);
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressPct").textContent = pct + "%";
+}
+
+function updateSectionLocks(){
+  for(var n=1;n<=TOTAL_SECTIONS;n++){
+    var sec = document.getElementById("s"+n);
+    var tocItem = document.querySelector('.toc-item[data-target="s'+n+'"]');
+    var dot = document.getElementById("toc-dot-"+n);
+    var locked = (n>1 && !state.cpsDone[n-1] && !state.lessonCompleted);
+    if(sec){ sec.classList.toggle("locked-section", locked); }
+    if(tocItem){ tocItem.classList.toggle("locked", locked); }
+    if(dot){
+      dot.classList.remove("done","locked");
+      if(state.cpsDone[n]){
+        dot.classList.add("done");
+        dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+      } else if(locked){
+        dot.classList.add("locked");
+        dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+      } else {
+        dot.textContent = n;
+      }
+    }
+  }
+}
+
+function initTOC(){
+  var items = document.querySelectorAll(".toc-item");
+  items.forEach(function(it){
+    it.addEventListener("click", function(){
+      if(it.classList.contains("locked")) return;
+      var target = document.getElementById(it.dataset.target);
+      if(target){ target.scrollIntoView({behavior:"smooth", block:"start"}); }
+      document.getElementById("toc").classList.remove("open");
+    });
+  });
+  var menuToggle = document.getElementById("menuToggle");
+  if(menuToggle){
+    menuToggle.addEventListener("click", function(){ document.getElementById("toc").classList.toggle("open"); });
+  }
+}
+
+function observeSections(){
+  var sections = document.querySelectorAll(".section");
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add("is-visible");
+      }
+    });
+  }, {threshold:0.15});
+  sections.forEach(function(s){ io.observe(s); });
+
+  var tocIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var id = entry.target.id;
+      var tocItem = document.querySelector('.toc-item[data-target="'+id+'"]');
+      if(!tocItem) return;
+      if(entry.isIntersecting){
+        document.querySelectorAll(".toc-item.active").forEach(function(t){ t.classList.remove("active"); });
+        tocItem.classList.add("active");
+      }
+    });
+  }, {rootMargin:"-40% 0px -50% 0px"});
+  sections.forEach(function(s){ tocIO.observe(s); });
+}
+
+/* ---------------- CHECKPOINT ENGINE ---------------- */
+function unlockCP(n){
+  var locked = document.getElementById("cp-"+n+"-locked");
+  var content = document.getElementById("cp-"+n+"-content");
+  if(locked) locked.style.display = "none";
+  if(content) content.style.display = "block";
+}
+
+function initCheckpoint(n){
+  var opts = document.querySelectorAll("#cp-"+n+"-opts .cp-opt");
+  opts.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var idx = parseInt(btn.dataset.idx, 10);
+      var correct = CP_CORRECT[n];
+      if(idx === correct){
+        btn.classList.add("correct");
+        opts.forEach(function(o){ o.disabled = true; });
+        var fb = document.getElementById("cp-"+n+"-fb");
+        fb.textContent = "Correct!"; fb.className = "cp-fb game-feedback ok";
+        setTimeout(function(){
+          document.getElementById("cp-"+n+"-opts").style.display = "none";
+          fb.style.display = "none";
+          document.getElementById("cp-"+n+"-passed").style.display = "block";
+          state.cpsDone[n] = true; save();
+          updateProgress(); updateSectionLocks();
+        }, 650);
+      } else {
+        btn.classList.add("wrong");
+        var fb2 = document.getElementById("cp-"+n+"-fb");
+        fb2.textContent = "Not quite \u2014 try again."; fb2.className = "cp-fb game-feedback bad";
+        setTimeout(function(){ btn.classList.remove("wrong"); }, 700);
+      }
+    });
+  });
+  var contBtn = document.getElementById("cp-"+n+"-cont");
+  if(contBtn){
+    contBtn.addEventListener("click", function(){
+      if(n < TOTAL_SECTIONS){
+        var next = document.getElementById("s"+(n+1));
+        if(next) next.scrollIntoView({behavior:"smooth", block:"start"});
+      } else {
+        var fb3 = document.getElementById("final-block");
+        fb3.style.display = "block";
+        fb3.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
+  }
+  if(state.cpsDone[n]){
+    var lockedEl = document.getElementById("cp-"+n+"-locked");
+    var contentEl = document.getElementById("cp-"+n+"-content");
+    if(lockedEl) lockedEl.style.display = "none";
+    if(contentEl) contentEl.style.display = "block";
+    var optsWrap = document.getElementById("cp-"+n+"-opts");
+    if(optsWrap) optsWrap.style.display = "none";
+    var passedEl = document.getElementById("cp-"+n+"-passed");
+    if(passedEl) passedEl.style.display = "block";
+  } else if(state.gamesDone[n]){
+    unlockCP(n);
+  }
+}
+
+/* ---------------- CONFETTI ---------------- */
+var CONFETTI_COLORS = ["#d45f7a","#f7a8b8","#fce4ec","#ffffff"];
+function confettiBurst(container){
+  if(!container) return;
+  var rect = container.getBoundingClientRect();
+  for(var i=0;i<16;i++){
+    var piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+    piece.style.left = (40 + Math.random()*(rect.width-80)) + "px";
+    piece.style.top = (rect.height/2) + "px";
+    piece.style.animationDelay = (Math.random()*0.15) + "s";
+    container.style.position = "relative";
+    container.appendChild(piece);
+    (function(p){ setTimeout(function(){ p.remove(); }, 1100); })(piece);
+  }
+}
+
+function gameComplete(n, containerEl){
+  state.gamesDone[n] = true; save();
+  unlockCP(n);
+  confettiBurst(containerEl);
+}
+
+/* ---------------- GENERIC CLICK-SELECT GAME ---------------- */
+function makeClickSelectGame(opts){
+  opts.chips.forEach(function(c){
+    var el = document.createElement("div");
+    el.className = "clickable-chip";
+    el.textContent = c.t;
+    el.dataset.ok = c.ok ? "true" : "false";
+    el.dataset.sel = "false";
+    el.addEventListener("click", function(){
+      if(el.classList.contains("locked-chip")) return;
+      var sel = el.dataset.sel === "true";
+      el.dataset.sel = sel ? "false" : "true";
+      el.style.background = !sel ? "var(--soft-blush)" : "#fff";
+      el.style.borderColor = !sel ? "var(--rose)" : "var(--blush)";
+    });
+    opts.wrapEl.appendChild(el);
+  });
+  opts.checkBtn.addEventListener("click", function(){
+    var els = opts.wrapEl.querySelectorAll(".clickable-chip");
+    var allCorrect = true;
+    els.forEach(function(el){
+      var sel = el.dataset.sel === "true";
+      var ok = el.dataset.ok === "true";
+      if(sel !== ok) allCorrect = false;
+    });
+    if(allCorrect){
+      els.forEach(function(el){ if(el.dataset.ok==="true"){ el.classList.add("correct-hit"); el.classList.add("locked-chip"); } });
+      opts.feedbackEl.textContent = opts.correctMsg;
+      opts.feedbackEl.className = "game-feedback ok";
+      opts.checkBtn.disabled = true;
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else {
+      opts.feedbackEl.textContent = opts.wrongMsg;
+      opts.feedbackEl.className = "game-feedback bad";
+      els.forEach(function(el){ el.classList.add("wrong-hit"); setTimeout(function(){ el.classList.remove("wrong-hit"); }, 600); });
+    }
+  });
+}
+
+/* ---------------- GENERIC MATCHER (drag or click) GAME ---------------- */
+function makeMatcherGame(opts){
+  var selectedChip = null;
+  opts.items.forEach(function(item){
+    var chip = document.createElement("div");
+    chip.className = "draggable";
+    chip.textContent = item.label;
+    chip.draggable = true;
+    chip.dataset.id = item.id;
+    chip.addEventListener("dragstart", function(e){
+      chip.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", item.id);
+    });
+    chip.addEventListener("dragend", function(){ chip.classList.remove("dragging"); });
+    chip.addEventListener("click", function(){
+      if(chip.parentElement.classList.contains("drop-zone")) return;
+      document.querySelectorAll(".draggable").forEach(function(c){ c.style.boxShadow=""; });
+      chip.style.boxShadow = "0 0 0 3px rgba(212,95,122,0.35)";
+      selectedChip = chip;
+    });
+    chip.addEventListener("touchend", function(e){
+      e.preventDefault();
+      chip.click();
+    });
+    opts.dragsEl.appendChild(chip);
+  });
+  opts.zones.forEach(function(z){
+    var zoneEl = document.createElement("div");
+    zoneEl.className = "drop-zone";
+    zoneEl.dataset.zone = z.id;
+    if(z.acceptType) zoneEl.dataset.accept = z.acceptType;
+    var lbl = document.createElement("div");
+    lbl.className = "drop-zone-label";
+    lbl.textContent = z.label;
+    zoneEl.appendChild(lbl);
+    zoneEl.addEventListener("dragover", function(e){ e.preventDefault(); zoneEl.classList.add("drag-over"); });
+    zoneEl.addEventListener("dragleave", function(){ zoneEl.classList.remove("drag-over"); });
+    zoneEl.addEventListener("drop", function(e){
+      e.preventDefault(); zoneEl.classList.remove("drag-over");
+      var id = e.dataTransfer.getData("text/plain");
+      var chip = document.querySelector('.draggable[data-id="'+id+'"]');
+      if(chip) place(chip, zoneEl);
+    });
+    zoneEl.addEventListener("click", function(){
+      if(selectedChip){ place(selectedChip, zoneEl); selectedChip.style.boxShadow=""; selectedChip=null; }
+    });
+    zoneEl.addEventListener("touchend", function(e){
+      if(selectedChip){ e.preventDefault(); place(selectedChip, zoneEl); selectedChip.style.boxShadow=""; selectedChip=null; }
+    });
+    opts.zonesEl.appendChild(zoneEl);
+  });
+
+  function place(chip, zoneEl){ zoneEl.appendChild(chip); checkAll(); }
+
+  function checkAll(){
+    var allPlaced = true, allCorrect = true;
+    opts.items.forEach(function(item){
+      var chip = document.querySelector('.draggable[data-id="'+item.id+'"]');
+      if(!chip || !chip.parentElement.classList.contains("drop-zone")){ allPlaced = false; return; }
+      var zoneEl = chip.parentElement;
+      var correct = opts.byType ? (zoneEl.dataset.accept === item.matchType) : (zoneEl.dataset.zone === item.zone);
+      if(correct){ chip.classList.remove("wrong-hit"); }
+      else { allCorrect = false; }
+    });
+    if(allPlaced && allCorrect){
+      document.querySelectorAll(".draggable").forEach(function(c){ c.classList.add("correct-hit"); c.draggable=false; c.style.cursor="default"; });
+      if(opts.feedbackEl){ opts.feedbackEl.textContent = opts.correctMsg || "All correct! Great matching."; opts.feedbackEl.className = "game-feedback ok"; }
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else if(allPlaced && !allCorrect){
+      opts.items.forEach(function(item){
+        var chip = document.querySelector('.draggable[data-id="'+item.id+'"]');
+        if(chip && chip.parentElement.classList.contains("drop-zone")){
+          var zoneEl = chip.parentElement;
+          var correct = opts.byType ? (zoneEl.dataset.accept === item.matchType) : (zoneEl.dataset.zone === item.zone);
+          if(!correct){ chip.classList.add("wrong-hit"); setTimeout(function(){ chip.classList.remove("wrong-hit"); }, 700); }
+        }
+      });
+      if(opts.feedbackEl){ opts.feedbackEl.textContent = opts.wrongMsg || "Some items are in the wrong zone \u2014 check the highlighted ones."; opts.feedbackEl.className = "game-feedback bad"; }
+    }
+  }
+}
+
+/* ---------------- GENERIC REORDER (RANKER) GAME ---------------- */
+function makeReorderGame(opts){
+  var shuffled = opts.items.slice().sort(function(){ return Math.random()-0.5; });
+  shuffled.forEach(function(item){
+    var row = document.createElement("div");
+    row.className = "draggable";
+    row.textContent = item.label;
+    row.draggable = true;
+    row.dataset.id = item.id;
+    row.style.cursor = "grab";
+    row.addEventListener("dragstart", function(){ row.classList.add("dragging"); });
+    row.addEventListener("dragend", function(){ row.classList.remove("dragging"); });
+    opts.listEl.appendChild(row);
+  });
+  opts.listEl.addEventListener("dragover", function(e){
+    e.preventDefault();
+    var dragging = opts.listEl.querySelector(".dragging");
+    if(!dragging) return;
+    var afterEl = getDragAfterElement(opts.listEl, e.clientY);
+    if(afterEl == null){ opts.listEl.appendChild(dragging); }
+    else { opts.listEl.insertBefore(dragging, afterEl); }
+  });
+  function getDragAfterElement(container, y){
+    var els = [].slice.call(container.querySelectorAll(".draggable:not(.dragging)"));
+    return els.reduce(function(closest, child){
+      var box = child.getBoundingClientRect();
+      var offset = y - box.top - box.height/2;
+      if(offset < 0 && offset > closest.offset){
+        return {offset: offset, element: child};
+      } else { return closest; }
+    }, {offset: -Infinity}).element;
+  }
+  opts.checkBtn.addEventListener("click", function(){
+    var order = [].slice.call(opts.listEl.querySelectorAll(".draggable")).map(function(el){ return el.dataset.id; });
+    var correct = order.length === opts.correctOrder.length && order.every(function(id,i){ return id === opts.correctOrder[i]; });
+    if(correct){
+      opts.listEl.querySelectorAll(".draggable").forEach(function(el){ el.classList.add("correct-hit"); el.draggable=false; });
+      opts.feedbackEl.textContent = opts.correctMsg;
+      opts.feedbackEl.className = "game-feedback ok";
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else {
+      opts.listEl.querySelectorAll(".draggable").forEach(function(el){ el.classList.add("wrong-hit"); setTimeout(function(){ el.classList.remove("wrong-hit"); }, 600); });
+      opts.feedbackEl.textContent = "Not quite the right order \u2014 drag to rearrange and try again.";
+      opts.feedbackEl.className = "game-feedback bad";
+    }
+  });
+}
+
+/* ---------------- SECTION-SPECIFIC GAME SETUP ---------------- */
+function setupGame1(){
+  makeReorderGame({
+    listEl: document.getElementById("g1-list"),
+    items: [
+      {id:"cover", label:"Cover image"},
+      {id:"username", label:"Username"},
+      {id:"caption", label:"Caption text"}
+    ],
+    correctOrder: ["cover","username","caption"],
+    checkBtn: document.getElementById("g1-check"),
+    feedbackEl: document.getElementById("g1-fb"),
+    sectionNum: 1,
+    containerEl: document.querySelector("#s1 .game-card"),
+    correctMsg: "Nice work \u2014 cover image first, then username, then caption."
+  });
+}
+
+function setupGame2(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g2-drags"),
+    zonesEl: document.getElementById("g2-zones"),
+    items: [
+      {id:"logo", label:"Logo & headline text", zone:"safe"},
+      {id:"cta", label:"Key call-to-action text", zone:"safe"},
+      {id:"caption", label:"Caption & username", zone:"overlap"},
+      {id:"icons", label:"Like / share icons", zone:"overlap"}
+    ],
+    zones: [
+      {id:"safe", label:"Safe Zone"},
+      {id:"overlap", label:"UI Overlap Zone"}
+    ],
+    byType: false,
+    feedbackEl: document.getElementById("g2-fb"),
+    sectionNum: 2,
+    containerEl: document.querySelector("#s2 .game-card"),
+    correctMsg: "Perfect \u2014 branding stays safe, platform UI stays where it lands."
+  });
+}
+
+function setupGame3(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g3-drags"),
+    zonesEl: document.getElementById("g3-zones"),
+    items: [
+      {id:"resize", label:"Resize tool", matchType:"resize"},
+      {id:"brand", label:"Brand Kit", matchType:"brand"},
+      {id:"download", label:"Download panel", matchType:"download"}
+    ],
+    zones: [
+      {id:"z1", label:"Switch canvas to a new preset size", acceptType:"resize"},
+      {id:"z2", label:"Apply brand colors & fonts", acceptType:"brand"},
+      {id:"z3", label:"Export the finished file", acceptType:"download"}
+    ],
+    byType: true,
+    feedbackEl: document.getElementById("g3-fb"),
+    sectionNum: 3,
+    containerEl: document.querySelector("#s3 .game-card"),
+    correctMsg: "All matched \u2014 you know the toolbar."
+  });
+}
+
+function setupGame4(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g4-drags"),
+    zonesEl: document.getElementById("g4-zones"),
+    items: [
+      {id:"a", label:"\u201C3 mistakes killing your grid \u2014 number 2 surprised me.\u201D", zone:"strong"},
+      {id:"b", label:"A jump-cut showing the finished result before the process.", zone:"strong"},
+      {id:"c", label:"\u201CHey guys, welcome back to my channel, today...\u201D", zone:"weak"},
+      {id:"d", label:"A slow fade-in of the client's logo for two seconds.", zone:"weak"}
+    ],
+    zones: [
+      {id:"strong", label:"Strong Hook"},
+      {id:"weak", label:"Weak Hook"}
+    ],
+    byType: false,
+    feedbackEl: document.getElementById("g4-fb"),
+    sectionNum: 4,
+    containerEl: document.querySelector("#s4 .game-card"),
+    correctMsg: "Good ear \u2014 those are the strong, scroll-stopping opens."
+  });
+}
+
+function setupGame5(){
+  makeReorderGame({
+    listEl: document.getElementById("g5-list"),
+    items: [
+      {id:"record", label:"Record or receive raw clips"},
+      {id:"edit", label:"Trim, edit & add text overlays"},
+      {id:"cover", label:"Choose a cover frame"},
+      {id:"publish", label:"Publish or schedule the Reel"}
+    ],
+    correctOrder: ["record","edit","cover","publish"],
+    checkBtn: document.getElementById("g5-check"),
+    feedbackEl: document.getElementById("g5-fb"),
+    sectionNum: 5,
+    containerEl: document.querySelector("#s5 .game-card"),
+    correctMsg: "That's the workflow \u2014 record, edit, choose a cover, then publish."
+  });
+}
+
+function setupGame6(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g6-drags"),
+    zonesEl: document.getElementById("g6-zones"),
+    items: [
+      {id:"a", label:"A close-up expressive face with a 3-word headline in high contrast.", zone:"do"},
+      {id:"b", label:"Same font and color palette as the last five thumbnails on the channel.", zone:"do"},
+      {id:"c", label:"A thumbnail packed with two full sentences of text.", zone:"dont"},
+      {id:"d", label:"Light gray text on a white background.", zone:"dont"}
+    ],
+    zones: [
+      {id:"do", label:"Do"},
+      {id:"dont", label:"Don't"}
+    ],
+    byType: false,
+    feedbackEl: document.getElementById("g6-fb"),
+    sectionNum: 6,
+    containerEl: document.querySelector("#s6 .game-card"),
+    correctMsg: "Exactly \u2014 contrast, brevity, and consistency win."
+  });
+}
+
+function setupGame7(){
+  makeClickSelectGame({
+    wrapEl: document.getElementById("g7-chips"),
+    checkBtn: document.getElementById("g7-check"),
+    feedbackEl: document.getElementById("g7-fb"),
+    sectionNum: 7,
+    containerEl: document.querySelector("#s7 .game-card"),
+    correctMsg: "That's it \u2014 the headline text is where contrast gets adjusted.",
+    wrongMsg: "Not quite \u2014 look for where the bold headline text sits on the canvas.",
+    chips: [
+      {t:"The bold headline text layered over the image", ok:true},
+      {t:"The background image itself", ok:false},
+      {t:"The bottom-right corner of the canvas", ok:false}
+    ]
+  });
+}
+
+/* ---------------- CALLOUT TOOLTIPS ---------------- */
+function initCalloutTooltips() {
+  var tip = document.createElement("div");
+  tip.className = "callout-tip";
+  document.body.appendChild(tip);
+  var activeCallout = null;
+
+  function renderTip(text) {
+    var idx = text.indexOf(" \u2014 ");
+    if (idx !== -1) {
+      tip.innerHTML = "<b>" + text.slice(0, idx) + "</b> \u2014 " + text.slice(idx + 3);
+    } else {
+      tip.textContent = text;
+    }
+  }
+  function positionTip(el) {
+    var r = el.getBoundingClientRect();
+    var tipRect = tip.getBoundingClientRect();
+    var top = r.bottom + 8;
+    var left = r.left + r.width / 2 - tipRect.width / 2;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    if (left < 8) left = 8;
+    if (left + tipRect.width > vw - 8) left = vw - tipRect.width - 8;
+    if (top + tipRect.height > vh - 8) { top = r.top - tipRect.height - 8; }
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function showTip(el) {
+    var text = el.getAttribute("data-tip");
+    if (!text) return;
+    renderTip(text);
+    tip.classList.add("show");
+    positionTip(el);
+    activeCallout = el;
+  }
+  function hideTip() {
+    tip.classList.remove("show");
+    activeCallout = null;
+  }
+  document.querySelectorAll(".callout[data-tip]").forEach(function(el) {
+    el.addEventListener("click", function(e) {
+      e.stopPropagation();
+      if (activeCallout === el) { hideTip(); } else { showTip(el); }
+    });
+    el.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (activeCallout === el) { hideTip(); } else { showTip(el); }
+      }
+    });
+  });
+  document.addEventListener("click", hideTip);
+  document.addEventListener("keydown", function(e) { if (e.key === "Escape") hideTip(); });
+  window.addEventListener("scroll", function() { if (activeCallout) positionTip(activeCallout); }, { passive: true, capture: true });
+  window.addEventListener("resize", function() { if (activeCallout) positionTip(activeCallout); });
+}
+
+/* ---------------- RESTORE UI ---------------- */
+function restoreUI(){
+  if(state.lessonCompleted){
+    document.querySelectorAll(".section").forEach(function(s){ s.classList.add("is-visible"); s.classList.remove("locked-section"); });
+    for(var n=1;n<=TOTAL_SECTIONS;n++){
+      state.cpsDone[n] = true;
+      unlockCP(n);
+    }
+    document.getElementById("final-block").style.display = "block";
+    document.getElementById("lessonCompleteMsg").style.display = "block";
+    document.getElementById("markCompleteBtn").disabled = true;
+  }
+}
+
+/* ---------------- INIT ---------------- */
+document.addEventListener("DOMContentLoaded", function(){
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+
+  var params = new URLSearchParams(window.location.search);
+  load();
+  if(params.get("completed") === "1"){
+    state.lessonCompleted = true;
+    for(var n=1;n<=TOTAL_SECTIONS;n++){ state.cpsDone[n] = true; state.gamesDone[n] = true; }
+    save();
+  }
+
+  runSplash();
+  initTOC();
+  observeSections();
+
+  for(var i=1;i<=TOTAL_SECTIONS;i++){ initCheckpoint(i); }
+
+  setupGame1(); setupGame2(); setupGame3(); setupGame4();
+  setupGame5(); setupGame6(); setupGame7();
+
+  updateProgress();
+  updateSectionLocks();
+  restoreUI();
+
+  initCalloutTooltips();
+
+  document.getElementById("markCompleteBtn").addEventListener("click", function(){
+    state.lessonCompleted = true;
+    save();
+    document.getElementById("lessonCompleteMsg").style.display = "block";
+    document.getElementById("markCompleteBtn").disabled = true;
+    markLessonComplete();
+    var confettiHost = document.querySelector(".complete-wrap");
+    confettiBurst(confettiHost);
+  });
+});
+})();
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

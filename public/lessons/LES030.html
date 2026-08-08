@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES030 — Exporting & Delivering Design Files</title>
+<style>
+:root{
+  --rose:#d45f7a;
+  --rose-dark:#c04060;
+  --blush:#f7a8b8;
+  --soft-blush:#fce4ec;
+  --sand:#f4a261;
+  --sand-dark:#dd8f4e;
+  --warn:#d97748;
+  --text:#3d1a22;
+  --bg:#fff8f9;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:clamp(14px,1.4vw,16px);
+  line-height:1.6;
+}
+img{max-width:100%;}
+h1,h2,h3,h4{color:var(--text);margin:0 0 12px;}
+a{color:var(--rose);}
+.hidden{display:none !important;}
+
+/* SPLASH */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(160deg,#fce4ec 0%,#fff8f9 60%,#fdf0f4 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;text-align:center;transition:opacity .5s ease;
+}
+#splash .eyebrow{
+  display:flex;align-items:center;gap:8px;color:var(--rose);
+  font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:20px;
+}
+#splash .eyebrow svg{width:16px;height:16px;}
+#splash .thumb-wrap{
+  border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(212,95,122,.18);
+  margin-bottom:24px;border:1px solid var(--blush);max-width:320px;
+}
+#splash .thumb-wrap img{display:block;width:320px;max-width:80vw;height:auto;}
+#splash h1{font-size:clamp(22px,4vw,30px);margin-bottom:8px;}
+#splash .subtitle{color:#8a5364;margin-bottom:28px;font-size:14px;}
+#splash .bar-track{width:min(360px,80vw);height:8px;background:#fce4ec;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+#splash .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#d45f7a,#f7a8b8,#fce4ec);border-radius:8px;}
+#splash .loadmsg{font-size:13px;color:#8a5364;min-height:18px;}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:500;background:#fff;
+  border-bottom:2px solid var(--rose);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;gap:12px;
+}
+.topbar .logo{height:28px;}
+.topbar .lesson-tag{font-size:12px;color:var(--rose);font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+.progress-wrap{flex:1;max-width:280px;height:8px;background:var(--soft-blush);border-radius:8px;overflow:hidden;margin:0 16px;}
+.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#d45f7a,#f7a8b8,#fce4ec);border-radius:8px;transition:width .6s cubic-bezier(.22,1,.36,1);}
+.progress-pct{font-size:12px;color:var(--rose);font-weight:700;min-width:34px;text-align:right;}
+
+/* LAYOUT */
+.layout{display:flex;max-width:1200px;margin:0 auto;gap:24px;padding:20px;align-items:flex-start;}
+.toc{
+  position:sticky;top:70px;width:250px;flex-shrink:0;background:#fff;
+  border:0.5px solid var(--blush);border-radius:12px;padding:14px;
+  box-shadow:0 4px 24px rgba(212,95,122,.08);
+}
+.toc h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--rose);margin-bottom:10px;}
+.toc-item{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;
+  font-size:13px;cursor:pointer;border-left:3px solid transparent;
+  transition:background .3s ease,color .3s ease,border-color .3s ease;
+  margin-bottom:2px;
+}
+.toc-item:hover{background:#fff0f3;}
+.toc-item.active{background:var(--soft-blush);border-left-color:var(--rose);color:var(--rose);font-weight:700;}
+.toc-dot{
+  width:16px;height:16px;border-radius:50%;flex-shrink:0;
+  background:#e5e5e5;display:flex;align-items:center;justify-content:center;
+  transition:background .3s ease,transform .3s ease;
+}
+.toc-dot.done{background:var(--rose);transform:scale(1.1);}
+.toc-dot.done svg{width:10px;height:10px;stroke:#fff;}
+.toc-dot.locked{background:#e5e5e5;}
+.toc-dot.locked svg{width:9px;height:9px;stroke:#a89aa0;}
+
+.main{flex:1;min-width:0;}
+
+/* SECTION CARD */
+.section{
+  background:#fff;border:0.5px solid var(--blush);border-radius:14px;
+  box-shadow:0 4px 24px rgba(212,95,122,.08);margin-bottom:28px;overflow:hidden;
+  opacity:0;transform:translateY(24px);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.section.is-visible{animation:sectionSlideIn .45s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes sectionSlideIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.section:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,95,122,.12);}
+.section-head{
+  background:linear-gradient(135deg,#fff0f3,#fce4ec);
+  border-bottom:0.5px solid var(--blush);
+  padding:18px 24px;display:flex;align-items:center;gap:14px;
+}
+.section-badge{
+  width:34px;height:34px;border-radius:8px;background:var(--rose);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;
+}
+.section-head h2{font-size:clamp(17px,2.2vw,21px);margin:0;}
+.section-body{padding:22px 24px 26px;}
+.section-body p{margin:0 0 14px;}
+.section-body ul,.section-body ol{margin:0 0 14px;padding-left:22px;}
+.section-body li{margin-bottom:6px;}
+
+/* BOXES */
+.def-box,.tip-box,.warn-box,.scenario-box{
+  border-radius:10px;padding:14px 16px;margin:16px 0;font-size:14px;
+  animation:boxFadeUp .4s ease forwards;animation-delay:calc(var(--box-index,0)*.08s);opacity:0;
+  display:flex;gap:10px;
+}
+@keyframes boxFadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.def-box{background:#fff0f3;border-left:3px solid var(--rose);}
+.tip-box{background:#fff8f0;border-left:3px solid var(--sand);}
+.warn-box{background:#fff3ee;border-left:3px solid var(--warn);}
+.scenario-box{background:#fdf0f4;border-left:3px solid var(--blush);}
+.box-icon{width:20px;height:20px;flex-shrink:0;margin-top:2px;}
+.def-box .box-icon,.def-box .box-label{color:var(--rose);}
+.tip-box .box-icon,.tip-box .box-label{color:var(--sand-dark);}
+.warn-box .box-icon,.warn-box .box-label{color:var(--warn);}
+.scenario-box .box-icon,.scenario-box .box-label{color:#c04060;}
+.box-label{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:16px 0;border-radius:10px;border:0.5px solid var(--blush);}
+table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:13px;}
+th,td{padding:10px 12px;border-bottom:1px solid #fce4ec;text-align:left;word-wrap:break-word;}
+th{background:var(--soft-blush);color:var(--rose);font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+tr:last-child td{border-bottom:none;}
+
+/* MOCKUPS */
+.mockup-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--rose);font-weight:700;margin-bottom:10px;}
+.mockup-frame{border:1px solid var(--blush);border-radius:12px;padding:0;position:relative;background:#fffafb;margin-bottom:14px;overflow-x:auto;}
+.mock-app{min-width:560px;font-size:13px;color:var(--text);}
+.mock-titlebar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f4f6f8;border-bottom:1px solid #e3e7ea;border-radius:12px 12px 0 0;}
+.mock-dot{width:9px;height:9px;border-radius:50%;}
+.mock-dot.r{background:#ef6a5f;}.mock-dot.y{background:#f4bf4f;}.mock-dot.g{background:#61c454;}
+.mock-titlebar .mtitle{margin-left:8px;font-size:12px;color:#6b7280;font-weight:600;}
+.mock-body{padding:20px;background:#fff;position:relative;}
+.mock-toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fff;border-bottom:1px solid #eee;}
+.mock-toolbar .mt-left{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);}
+.mock-toolbar .mt-left svg{width:16px;height:16px;color:var(--rose);}
+.mock-panel-row{display:flex;gap:16px;flex-wrap:wrap;}
+.mock-col{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+.mock-field{display:flex;flex-direction:column;gap:4px;}
+.mock-field label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#9aa3ab;font-weight:700;}
+.mock-select,.mock-input{display:flex;align-items:center;justify-content:space-between;border:1px solid #e3e7ea;background:#fafbfc;border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--text);}
+.mock-select svg{width:13px;height:13px;color:#9aa3ab;}
+.mock-toggle-row{display:flex;align-items:center;justify-content:space-between;border:1px solid #e3e7ea;background:#fafbfc;border-radius:8px;padding:9px 12px;font-size:12.5px;}
+.mock-switch{width:32px;height:18px;border-radius:20px;background:#e3e7ea;position:relative;flex-shrink:0;}
+.mock-switch.on{background:var(--rose);}
+.mock-switch::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s;}
+.mock-switch.on::after{left:16px;}
+.mock-btn-primary{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#d45f7a,#c04060);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:12.5px;font-weight:700;margin-top:4px;}
+.mock-btn-primary svg{width:14px;height:14px;}
+
+.mock-sidebar-app{display:flex;min-width:600px;}
+.mock-sidebar{width:180px;background:#fbfbfc;border-right:1px solid #eee;padding:14px 0;flex-shrink:0;}
+.mock-sidebar .msi{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:12px;color:#6b7280;}
+.mock-sidebar .msi svg{width:14px;height:14px;}
+.mock-sidebar .msi.active{color:var(--rose);font-weight:700;background:#fff0f3;border-right:2px solid var(--rose);}
+.mock-tree{padding:16px;}
+.tree-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:12.5px;}
+.tree-row:hover{background:#fbf0f2;}
+.tree-row svg{width:15px;height:15px;flex-shrink:0;}
+.tree-row .folder-icon{color:#f4bf4f;}
+.tree-row .file-icon{color:var(--rose);}
+.tree-row .tname{flex:1;}
+.tree-row .tbadge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;}
+.tree-row .tbadge.private{background:#f1f2f4;color:#8a9099;}
+.tree-row .tbadge.shared{background:#e4f6e9;color:#2d8a50;}
+.lvl1{padding-left:0;}.lvl2{padding-left:22px;}.lvl3{padding-left:44px;}.lvl4{padding-left:66px;}
+
+.mock-nametag{display:flex;justify-content:center;flex-wrap:wrap;gap:2px;padding:32px 20px 10px;font-family:'SFMono-Regular',Consolas,monospace;font-size:15px;font-weight:700;}
+.mock-nametag span{padding:6px 3px;border-bottom:3px solid transparent;text-align:center;}
+.nt-1{color:#c04060;border-color:#f7a8b8;}
+.nt-2{color:#d45f7a;border-color:var(--rose);}
+.nt-3{color:#dd8f4e;border-color:var(--sand);}
+.nt-4{color:#2d8a50;border-color:#7fc99a;}
+.nt-5{color:#5b7fd4;border-color:#a9bdf0;}
+.mock-nametag-labels{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:0 16px 24px;}
+.ntl{font-size:10px;text-transform:uppercase;letter-spacing:.04em;font-weight:700;padding:4px 10px;border-radius:20px;}
+.ntl.nt-1{background:#fdf0f4;}
+.ntl.nt-2{background:#fff0f3;}
+.ntl.nt-3{background:#fff8f0;}
+.ntl.nt-4{background:#e9f8ee;}
+.ntl.nt-5{background:#eef1fc;}
+
+.mock-transfer{display:flex;min-width:580px;}
+.mt-drop{flex:1;margin:20px;border:2px dashed var(--blush);border-radius:10px;background:#fff8f9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:30px 16px;color:#b8899a;min-height:180px;}
+.mt-drop svg{width:30px;height:30px;color:var(--blush);}
+.mt-form{flex:1;margin:20px 20px 20px 0;display:flex;flex-direction:column;gap:12px;}
+
+/* Canva-style app bar + panel */
+.cv-appbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:linear-gradient(135deg,#d45f7a,#c04060);color:#fff;}
+.cv-appbar .cv-title{font-weight:700;font-size:14px;}
+.cv-appbar .cv-right{display:flex;align-items:center;gap:10px;}
+.cv-avatar{width:26px;height:26px;border-radius:50%;background:#fce4ec;color:#c04060;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+.cv-pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;}
+.cv-pill.solid{background:#fff;color:#c04060;}
+.cv-panel{max-width:340px;margin:0 auto;background:#fff;padding:20px;}
+.cv-panel-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f1e4e8;}
+.cv-panel-head svg{width:16px;height:16px;color:#6b7280;}
+.cv-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.cv-filetype-row{display:flex;align-items:center;gap:8px;border:1px solid #e3e7ea;border-radius:8px;padding:10px 12px;margin-bottom:16px;}
+.cv-filetype-row svg{width:16px;height:16px;color:#6b7280;}
+.cv-badge-suggested{background:var(--rose);color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:3px 9px;}
+.cv-filetype-row .cv-ft-name{font-weight:700;font-size:13px;flex:1;}
+.cv-filetype-row .chev{margin-left:auto;color:#9aa3ab;}
+.cv-size-row{font-size:12px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:5px;font-weight:700;}
+.cv-size-row .dim{font-weight:400;color:#8a8f96;}
+.cv-slider-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.cv-slider-track{flex:1;height:5px;border-radius:6px;background:#eee;position:relative;}
+.cv-slider-fill{position:absolute;left:0;top:0;bottom:0;background:var(--rose);border-radius:6px;}
+.cv-slider-dot{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid var(--rose);transform:translate(-50%,-50%);}
+.cv-slider-val{border:1px solid #e3e7ea;border-radius:6px;padding:6px 10px;font-size:12px;min-width:44px;text-align:center;}
+.cv-seg{display:flex;background:#f2f3f5;border-radius:8px;padding:3px;margin-bottom:16px;}
+.cv-seg .seg-opt{flex:1;text-align:center;padding:8px 4px;font-size:12px;border-radius:6px;color:#6b7280;}
+.cv-seg .seg-opt.on{background:#fff;color:var(--text);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.12);}
+.cv-toggle-row{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;margin-bottom:14px;}
+.cv-download-btn{width:100%;background:linear-gradient(135deg,#d45f7a,#c04060);color:#fff;border:none;border-radius:24px;padding:13px;font-size:14px;font-weight:800;margin-top:6px;}
+
+/* Google Drive style */
+.gd-app{display:flex;flex-direction:column;min-width:600px;}
+.gd-topbar{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid #eee;}
+.gd-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--text);}
+.gd-logo svg{width:22px;height:22px;color:var(--rose);}
+.gd-search{flex:1;background:#f4f4f6;border-radius:20px;padding:8px 14px;font-size:12px;color:#8a8f96;display:flex;align-items:center;gap:8px;}
+.gd-search svg{width:13px;height:13px;}
+.gd-topicons{display:flex;align-items:center;gap:12px;color:#6b7280;}
+.gd-topicons svg{width:16px;height:16px;}
+.gd-body2{display:flex;}
+.gd-side{width:170px;flex-shrink:0;padding:16px 10px;border-right:1px solid #eee;}
+.gd-newbtn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e3e7ea;box-shadow:0 1px 3px rgba(0,0,0,.12);border-radius:20px;padding:9px 16px;font-size:12.5px;font-weight:700;margin-bottom:14px;}
+.gd-newbtn svg{width:15px;height:15px;color:var(--rose);}
+.gd-side .gsi{display:flex;align-items:center;gap:9px;padding:8px 10px;font-size:12px;color:#5f6368;border-radius:0 20px 20px 0;}
+.gd-side .gsi svg{width:14px;height:14px;}
+.gd-side .gsi.active{background:#fde4ea;color:#c04060;font-weight:700;}
+.gd-main{flex:1;padding:14px 20px;min-width:0;}
+.gd-crumb{font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;}
+.gd-table{width:100%;font-size:12.5px;}
+.gd-thead{display:flex;color:#8a8f96;font-weight:700;padding:8px 6px;border-bottom:1px solid #eee;font-size:11px;text-transform:uppercase;letter-spacing:.03em;}
+.gd-row{display:flex;align-items:center;padding:9px 6px;border-bottom:1px solid #f4f4f6;}
+.gd-row:hover{background:#fbf0f2;}
+.gd-row svg{width:16px;height:16px;flex-shrink:0;}
+.gd-col-name{flex:1;display:flex;align-items:center;gap:10px;padding-left:0;}
+.gd-col-owner{width:90px;color:#5f6368;}
+.gd-col-mod{width:120px;color:#5f6368;}
+.gd-col-badge{width:110px;}
+
+/* WeTransfer style */
+.wt-scene{background:linear-gradient(155deg,#fce4ec 0%,#f7a8b8 45%,#fdf0f4 100%);padding:36px 24px;display:flex;justify-content:center;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+.wt-wordmark{position:absolute;top:16px;left:20px;color:#fff;font-weight:800;font-size:14px;letter-spacing:.02em;}
+.wt-card{background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(150,60,90,.25);width:280px;overflow:hidden;}
+.wt-row{padding:14px 18px;border-bottom:1px solid #f1e4e8;font-size:12.5px;}
+.wt-add{display:flex;align-items:center;gap:10px;color:#8a5364;}
+.wt-add svg{width:20px;height:20px;color:var(--rose);flex-shrink:0;}
+.wt-add .wt-sub{display:block;font-size:11px;color:#b98a99;}
+.wt-label{font-size:10px;color:#b98a99;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+.wt-recipient{display:flex;align-items:center;gap:8px;}
+.wt-avatar2{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--sand));flex-shrink:0;}
+.wt-value{font-weight:700;color:var(--text);}
+.wt-btnrow{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;}
+.wt-transfer-btn{background:linear-gradient(135deg,#d45f7a,#c04060);color:#fff;border:none;border-radius:24px;padding:11px 26px;font-size:13px;font-weight:800;}
+.wt-tip{background:#3d1a22;color:#fff;font-size:12px;border-radius:12px;padding:14px 16px;max-width:220px;line-height:1.5;position:relative;top:40px;}
+
+
+.callout{
+  position:absolute;width:22px;height:22px;border-radius:50%;background:var(--rose);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;
+  box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:5;cursor:pointer;border:none;padding:0;
+  animation:calloutPulse 2.6s ease-in-out infinite;transition:transform .15s ease;
+}
+.callout:hover,.callout:focus-visible{transform:scale(1.15);animation-play-state:paused;}
+.callout:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+@keyframes calloutPulse{
+  0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.25),0 0 0 0 rgba(212,95,122,.55);}
+  50%{box-shadow:0 2px 6px rgba(0,0,0,.25),0 0 0 7px rgba(212,95,122,0);}
+}
+.callout-tip{
+  position:fixed;z-index:9990;background:#3d1a22;color:#fff;font-size:12.5px;line-height:1.5;
+  padding:10px 13px;border-radius:10px;max-width:240px;box-shadow:0 10px 30px rgba(0,0,0,.3);
+  opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;
+}
+.callout-tip.show{opacity:1;transform:translateY(0);}
+.callout-tip b{color:var(--blush);}
+
+.legend{list-style:none;padding:0;margin:0;counter-reset:leg;}
+.legend li{counter-increment:leg;padding:6px 0 6px 30px;position:relative;font-size:13px;border-bottom:1px dashed #fce4ec;}
+.legend li:last-child{border-bottom:none;}
+.legend li::before{content:counter(leg);position:absolute;left:0;top:6px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.legend b{color:var(--rose);}
+
+/* GAME CARD */
+.game-card{
+  background:#fff0f3;border:0.5px solid var(--blush);border-radius:12px;padding:18px;margin:20px 0;
+}
+.game-head{border-left:3px solid var(--rose);padding-left:10px;margin-bottom:14px;}
+.game-head .game-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--rose);font-weight:800;}
+.game-head h4{margin:2px 0 0;font-size:15px;}
+.game-status{font-size:12px;color:#8a5364;margin-top:10px;}
+
+/* Drag/Drop generic */
+.dz-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;}
+.item-pool{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:#fff;border-radius:10px;border:1px dashed var(--blush);min-height:50px;}
+.draggable{
+  background:#fff;border:1px solid var(--blush);border-radius:8px;padding:8px 12px;font-size:13px;
+  cursor:grab;user-select:none;transition:transform .15s ease,box-shadow .15s ease;min-height:44px;display:flex;align-items:center;
+}
+.draggable.dragging{opacity:.5;transform:scale(1.04);}
+.draggable:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(212,95,122,.18);}
+.drop-zone{
+  flex:1;min-width:200px;background:#fff;border:2px dashed var(--blush);border-radius:10px;padding:12px;min-height:90px;
+}
+.drop-zone .zlabel{font-size:12px;font-weight:800;color:var(--rose);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;}
+.drop-zone.drag-over{border-color:var(--rose);background:#fff0f3;box-shadow:0 0 0 3px rgba(212,95,122,.15);transition:all .15s ease;}
+.drop-zone .dz-items{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;}
+.dz-items .draggable.correct{animation:correctBounce .5s ease forwards;}
+.dz-items .draggable.wrong{animation:wrongShake .5s ease;}
+@keyframes correctBounce{0%{transform:scale(1);}40%{transform:scale(1.08);background:#d4f7e0;}70%{transform:scale(.97);}100%{transform:scale(1);background:#d4f7e0;border-color:#2d8a50;}}
+@keyframes wrongShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);background:#fde8e8;}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);background:#fde8e8;}}
+
+/* click pick */
+.pick-q{background:#fff;border:1px solid var(--blush);border-radius:10px;padding:14px;margin-bottom:12px;}
+.pick-q p.qtext{font-weight:700;margin:0 0 10px;font-size:13px;}
+.pick-opts{display:flex;flex-direction:column;gap:8px;}
+.pick-opt{
+  text-align:left;background:#fff8f9;border:1px solid var(--blush);border-radius:8px;padding:10px 12px;
+  font-size:13px;cursor:pointer;transition:transform .15s ease,box-shadow .2s ease;min-height:44px;
+}
+.pick-opt:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(212,95,122,.18);}
+.pick-opt.correct{animation:correctBounce .5s ease forwards;}
+.pick-opt.wrong{animation:wrongShake .5s ease;}
+.pick-opt.strike{text-decoration:line-through;opacity:.5;}
+
+/* sequence */
+.seq-list{display:flex;flex-direction:column;gap:8px;}
+.seq-item{
+  background:#fff;border:1px solid var(--blush);border-radius:8px;padding:10px 14px;font-size:13px;
+  cursor:grab;display:flex;align-items:center;gap:10px;min-height:44px;
+}
+.seq-item .handle{color:var(--blush);font-weight:800;}
+.seq-item.dragging{opacity:.5;}
+
+.btn{
+  border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;
+  color:#fff;transition:transform .15s ease,box-shadow .2s ease;display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:linear-gradient(135deg,#d45f7a,#c04060);}
+.btn-continue{background:linear-gradient(135deg,#f4a261,#dd8f4e);animation:btnPulse 2s ease-in-out infinite;}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,95,122,.4);}50%{box-shadow:0 0 0 8px rgba(212,95,122,0);}}
+.btn[disabled]{opacity:.5;cursor:not-allowed;animation:none;}
+
+/* CHECKPOINT */
+.cp-block{background:#fff;border-radius:12px;overflow:hidden;border:0.5px solid var(--blush);margin-top:20px;}
+.cp-head{background:linear-gradient(135deg,#fff0f3,#fce4ec);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--blush);}
+.cp-head svg{width:18px;height:18px;color:var(--rose);}
+.cp-head span{font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--rose);}
+.cp-locked{padding:30px 16px;text-align:center;color:#a3717f;font-size:13px;}
+.cp-locked svg{width:26px;height:26px;color:var(--blush);margin-bottom:8px;}
+.cp-content{padding:18px;animation:cpUnlockPop .4s ease forwards;}
+@keyframes cpUnlockPop{0%{transform:scale(.92);opacity:0;}60%{transform:scale(1.03);}100%{transform:scale(1);opacity:1;}}
+.cp-q{font-weight:700;margin-bottom:12px;font-size:14px;}
+.cp-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.cp-opt{text-align:left;background:#fff8f9;border:1px solid var(--blush);border-radius:8px;padding:10px 12px;font-size:13px;cursor:pointer;min-height:44px;transition:transform .15s ease;}
+.cp-opt:hover{transform:translateY(-2px);}
+.cp-opt.correct{animation:correctBounce .5s ease forwards;}
+.cp-opt.wrong{animation:wrongShake .5s ease;}
+.cp-fb{font-size:13px;font-weight:700;margin-bottom:10px;min-height:18px;}
+.cp-passed{display:flex;align-items:center;gap:8px;color:#2d8a50;font-weight:800;font-size:13px;padding:16px;}
+.cp-passed svg{width:18px;height:18px;}
+
+/* video */
+.yt-wrap{position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;margin:16px 0;border:0.5px solid var(--blush);}
+.yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.yt-label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--rose);margin-bottom:10px;}
+.yt-label svg{width:18px;height:18px;}
+
+/* final block */
+.final-block{background:#fff;border:0.5px solid var(--blush);border-radius:14px;box-shadow:0 4px 24px rgba(212,95,122,.08);padding:26px;text-align:center;margin-top:10px;}
+.final-block h3{color:var(--rose);}
+.final-block ul{text-align:left;max-width:560px;margin:14px auto 22px;}
+.final-block .award{width:48px;height:48px;color:var(--rose);margin-bottom:10px;}
+
+/* confetti */
+.confetti-piece{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:9998;animation:confettiFall 1s ease-out forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(-80px) rotate(720deg) scale(.3);opacity:0;}}
+
+@media (max-width:640px){
+  .layout{flex-direction:column;padding:12px;}
+  .toc{position:static;width:100%;order:2;}
+  .dz-row{flex-direction:column;}
+  .drop-zone{min-width:0;}
+  .callout{transform:scale(.85);}
+  .mockup-frame{padding:14px;}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+
+<div id="splash">
+  <div class="eyebrow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    LearnHub PH · Module 10 · Lesson 3
+  </div>
+  <div class="thumb-wrap"><img src="data:image/jpeg;base64,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" alt="Graphic Designer thumbnail"></div>
+  <h1>Exporting &amp; Delivering Design Files</h1>
+  <div class="subtitle">Hang tight — Module 10 Lesson 3 is being prepared</div>
+  <div class="bar-track"><div class="bar-fill" id="splashBar"></div></div>
+  <div class="loadmsg" id="splashMsg">Initializing LES030…</div>
+</div>
+
+<div class="topbar">
+  <img class="logo" src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="lesson-tag">Module 10 · Lesson 3 of 3</div>
+  <div class="progress-wrap"><div class="progress-fill" id="progFill"></div></div>
+  <div class="progress-pct" id="progPct">0%</div>
+</div>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <h4>Lesson Contents</h4>
+    <div id="tocList"></div>
+  </nav>
+
+  <main class="main" id="mainContent">
+    <!-- SECTION 1 -->
+    <div class="section" id="s1">
+      <div class="section-head"><div class="section-badge">1</div><h2>Why Exporting &amp; File Delivery Is Where Design Work Succeeds or Fails</h2></div>
+      <div class="section-body">
+        <p>Design work is judged twice. The first time is when the client sees the concept. The second — and the one that decides whether they hire you again — is when they open the delivered file. A flyer that looks flawless inside Canva can still fail the client completely if it's exported as a low-resolution JPG when the print shop needed a 300dpi PDF with bleed. The export and delivery phase is not an administrative afterthought tacked onto the end of a project. It is the moment where client trust is either confirmed or lost.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Key Idea</span>A design is only "done" when it's been exported correctly, named clearly, and delivered in a way the recipient can actually use.</div>
+        </div>
+        <p>This is also the skill that separates a design VA who genuinely understands the full creative workflow from one who only knows how to drag elements around inside Canva. Any VA can build a pretty graphic. A professional VA can hand that graphic off in exactly the format, resolution, color mode, and file structure the next person in the chain — a print shop, a developer, a social media scheduler, a client's marketing folder — needs it in, without being asked twice.</p>
+        <p>This lesson covers file formats, resolution and DPI, color modes, naming conventions, folder organization, print preparation, web preparation, delivery methods, feedback handling, and special delivery scenarios. None of these skills are tool-specific. Whether you're exporting from Canva, Adobe Express, Figma, or Illustrator, the underlying logic taught here applies every time you hand off a finished design.</p>
+        <div class="scenario-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Scenario</span>Two VAs design the same logo. One delivers a single PNG named "logo.png." The other delivers a PNG, an SVG, and a transparent-background version, all named by client and version. Only one of them gets asked back for the next project.</div>
+        </div>
+        <button class="btn btn-continue" id="s1ContinueBtn" style="margin-top:8px;">Continue<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section hidden" id="s2">
+      <div class="section-head"><div class="section-badge">2</div><h2>Understanding File Formats — What Every Format Is and When to Use It</h2></div>
+      <div class="section-body">
+        <p class="mockup-label">Interface Overview — Canva Export Panel</p>
+        <div class="mockup-frame">
+          <div class="mock-app" style="min-width:auto;max-width:420px;margin:0 auto;">
+            <div class="cv-appbar">
+              <span class="cv-title">Summer Flyer — Client Project</span>
+              <div class="cv-right">
+                <span class="cv-avatar">CL</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="width:16px;height:16px;"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.4 8.5 8.5 0 0 1-4-.9L3 20l1-4a8.5 8.5 0 1 1 17-4.5z"/></svg>
+                <span class="cv-pill">Share</span>
+                <span class="cv-pill solid">Send to client</span>
+              </div>
+            </div>
+            <div class="cv-panel">
+              <div class="cv-panel-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>Download</div>
+
+              <div style="position:relative;">
+                <div class="cv-label">File type</div>
+                <div class="cv-filetype-row">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                  <span class="cv-ft-name">PDF Print</span>
+                  <span class="cv-badge-suggested">Print-ready</span>
+                  <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+                <div class="callout" tabindex="0" role="button" aria-label="File type dropdown" data-tip="File type dropdown — PDF Print, PDF Standard, PNG, JPG, SVG, MP4, GIF and more, chosen based on the deliverable's destination." style="top:2px;right:-10px;">1</div>
+              </div>
+
+              <div style="position:relative;">
+                <div class="cv-size-row">Resolution <span class="dim">&nbsp;•&nbsp;300 dpi at 8.5 x 11 in</span></div>
+                <div class="cv-slider-row">
+                  <div class="cv-slider-track"><div class="cv-slider-fill" style="width:92%;"></div><div class="cv-slider-dot" style="left:92%;"></div></div>
+                  <div class="cv-slider-val">300</div>
+                </div>
+                <div class="cv-label">Quality</div>
+                <div class="cv-seg">
+                  <div class="seg-opt">Compress</div>
+                  <div class="seg-opt on">High</div>
+                  <div class="seg-opt">Limit size</div>
+                </div>
+                <div class="callout" tabindex="0" role="button" aria-label="Size and Quality" data-tip="Size / Quality — controls resolution and compression level of the exported file." style="top:2px;right:-10px;">2</div>
+              </div>
+
+              <div class="cv-toggle-row" style="position:relative;"><span>Include bleed &amp; crop marks</span><span class="mock-switch on"></span><div class="callout" tabindex="0" role="button" aria-label="Include bleed toggle" data-tip="Include bleed toggle — adds bleed area and crop marks for professional printing." style="top:50%;left:100%;transform:translate(10px,-50%);">5</div></div>
+              <div class="cv-toggle-row" style="position:relative;"><span>Flatten PDF</span><span class="mock-switch"></span><div class="callout" tabindex="0" role="button" aria-label="Flatten PDF toggle" data-tip="Flatten PDF toggle — merges layers into one flat page, useful for print-ready delivery." style="top:50%;left:100%;transform:translate(10px,-50%);">4</div></div>
+
+              <div style="position:relative;">
+                <div class="cv-label">Select pages</div>
+                <div class="cv-seg">
+                  <div class="seg-opt on">All</div>
+                  <div class="seg-opt">This page</div>
+                  <div class="seg-opt">Custom</div>
+                </div>
+                <div class="callout" tabindex="0" role="button" aria-label="Pages selector" data-tip="Pages selector — choose which pages of a multi-page design to include in the export." style="top:2px;right:-10px;">3</div>
+              </div>
+
+              <div style="position:relative;margin-bottom:16px;">
+                <div class="cv-label">Color profile</div>
+                <div class="mock-select">CMYK<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+                <div class="callout" tabindex="0" role="button" aria-label="Color profile selector" data-tip="Color profile selector — switches the export between RGB and CMYK depending on destination." style="top:26px;right:-10px;">6</div>
+              </div>
+
+              <div style="position:relative;">
+                <button class="cv-download-btn" type="button">Download</button>
+                <div class="callout" tabindex="0" role="button" aria-label="Download button" data-tip="Download button — generates and saves the exported file to the device." style="top:-10px;right:-8px;">7</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="legend">
+          <li><b>File type dropdown</b> — PDF Print, PDF Standard, PNG, JPG, SVG, MP4, GIF and more, chosen based on the deliverable's destination.</li>
+          <li><b>Size / Quality</b> — controls resolution and compression level of the exported file.</li>
+          <li><b>Pages selector</b> — choose which pages of a multi-page design to include in the export.</li>
+          <li><b>Flatten PDF toggle</b> — merges layers into one flat page, useful for print-ready delivery.</li>
+          <li><b>Include bleed toggle</b> — adds bleed area and crop marks for professional printing.</li>
+          <li><b>Color profile selector</b> — switches the export between RGB and CMYK depending on destination.</li>
+          <li><b>Download button</b> — generates and saves the exported file to the device.</li>
+        </ol>
+
+        <p>Every design tool offers a menu of export formats, and choosing the right one is not a stylistic preference — it's a technical decision with real consequences. Below is a complete breakdown of every format a design VA will encounter.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">PNG</span>Lossless compression, supports transparency. Best for digital graphics, logos, and any design with text sitting on a transparent background. Avoid for large photographic designs where file size matters.</div>
+        </div>
+        <div class="def-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">JPG / JPEG</span>Lossy compression, no transparency support. Best for photographs and designs where a smaller file size matters more than perfect edge sharpness. Quality settings (usually a percentage or High/Medium/Low) control the trade-off between size and detail loss.</div>
+        </div>
+        <div class="def-box" style="--box-index:2"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">PDF Standard</span>Best for sharing documents digitally. Preserves fonts and layout across devices. Not built for professional print — no bleed or crop marks.</div>
+        </div>
+        <div class="def-box" style="--box-index:3"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">PDF Print</span>Built for professional print shops. Supports CMYK color, bleed, and crop marks. Produces a larger file size than PDF Standard.</div>
+        </div>
+        <div class="def-box" style="--box-index:4"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">SVG</span>Vector format — scales to any size with zero quality loss. Best for logos and icons, and the format to hand a client who needs an editable vector version.</div>
+        </div>
+        <div class="def-box" style="--box-index:5"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">GIF</span>Animated, limited color palette, small file size. Used for simple looping web graphics, though it's increasingly being replaced by short MP4 video clips.</div>
+        </div>
+        <div class="def-box" style="--box-index:6"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">MP4</span>Video format used for animated Canva designs, social media reels, and any video-based export.</div>
+        </div>
+        <div class="def-box" style="--box-index:7"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">WEBP</span>Modern web format, smaller than PNG or JPG at similar visual quality. Adoption is growing across websites and web apps.</div>
+        </div>
+        <div class="tip-box" style="--box-index:8"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Tip</span><b>AI and EPS</b> are native Adobe Illustrator formats. If a client or print shop specifically requests one and you don't own Illustrator, export the closest equivalent (a high-resolution PDF or SVG) and communicate clearly what format you're able to provide.</div>
+        </div>
+
+        <p><strong>Complete Format Decision Table</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:12%"><col style="width:15%"><col style="width:13%"><col style="width:12%"><col style="width:28%"><col style="width:20%"></colgroup>
+          <tr><th>Format</th><th>Transparency</th><th>Animation</th><th>Print-Safe</th><th>Best For</th><th>Avoid When</th></tr>
+          <tr><td>PNG</td><td>Yes</td><td>No</td><td>No</td><td>Logos, digital graphics, transparent overlays</td><td>File size is critical</td></tr>
+          <tr><td>JPG</td><td>No</td><td>No</td><td>No</td><td>Photographs, large background images</td><td>Transparency is needed</td></tr>
+          <tr><td>PDF Standard</td><td>No</td><td>No</td><td>No</td><td>Digital document sharing</td><td>Sending to a print shop</td></tr>
+          <tr><td>PDF Print</td><td>No</td><td>No</td><td>Yes</td><td>Professional printing</td><td>Quick digital sharing</td></tr>
+          <tr><td>SVG</td><td>Yes</td><td>No</td><td>Yes</td><td>Logos, icons, editable vector handoff</td><td>Design has photographic elements</td></tr>
+          <tr><td>GIF</td><td>Limited</td><td>Yes</td><td>No</td><td>Simple looping web graphics</td><td>Smooth motion or many colors needed</td></tr>
+          <tr><td>MP4</td><td>No</td><td>Yes</td><td>No</td><td>Social reels, animated Canva videos</td><td>A static file is required</td></tr>
+          <tr><td>WEBP</td><td>Yes</td><td>No</td><td>No</td><td>Web assets, faster page loads</td><td>Recipient's software doesn't support it</td></tr>
+          <tr><td>AI / EPS</td><td>Yes</td><td>No</td><td>Yes</td><td>Illustrator-native editing, print vendors</td><td>You don't have Illustrator to open it</td></tr>
+        </table></div>
+
+        <p><strong>Action step:</strong> Open your last three delivered projects and check whether the format you exported actually matched their destination. If any were wrong, note what should have been used instead.</p>
+
+        <div class="game-card" id="game2">
+          <div class="game-head"><div class="game-label">Mini-Game · File Format Matcher</div><h4>Drag each delivery scenario onto the correct file format</h4></div>
+          <div id="g2-root"></div>
+          <div class="game-status" id="g2-status">0 / 5 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-2-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-2-content" class="cp-content hidden">
+            <div id="cp-2-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-2-quiz">
+              <div class="cp-q">A client needs a design that will be printed by a professional print shop with full bleed and crop marks. Which format should you export?</div>
+              <div class="cp-opts" id="cp-2-opts"></div>
+              <div class="cp-fb" id="cp-2-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SECTION 3 -->
+    <div class="section hidden" id="s3">
+      <div class="section-head"><div class="section-badge">3</div><h2>Resolution, DPI, and Size — Getting the Technical Settings Right</h2></div>
+      <div class="section-body">
+        <p>Resolution determines how sharp an image looks, and it's measured differently depending on the destination. Screens display images at roughly 72 DPI (dots per inch), while professional printers need 300 DPI to render crisp detail. A design that looks perfectly sharp on a laptop screen can print blurry and pixelated if it was only ever built at screen resolution.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Pixel Dimensions vs. Physical Dimensions</span>Pixel dimensions (e.g. 1080x1080px) describe the raw grid of an image. Physical dimensions (e.g. 8.5in x 11in) describe the size it will occupy in the real world. Resolution is what connects the two — more pixels packed into the same physical size means a sharper print.</div>
+        </div>
+        <p>In Canva and most design tools, export size is set through the download panel's quality or dimension controls. When exporting for print, always choose the highest quality setting available, and confirm the design was built at print dimensions from the start rather than scaled up afterward — scaling a small design up after the fact stretches the same pixels and makes it blurrier, not sharper.</p>
+        <div class="warn-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Warning</span>Before dropping a client's uploaded photo into a print design, check its native pixel dimensions. An image that's only 400px wide will look pixelated the moment it's stretched to fill a full-page print layout.</div>
+        </div>
+        <p><strong>Resolution Requirements Table</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:26%"><col style="width:14%"><col style="width:32%"><col style="width:28%"></colgroup>
+          <tr><th>Deliverable Type</th><th>Min. DPI</th><th>Recommended Pixel Dimensions</th><th>Format</th></tr>
+          <tr><td>Social media post</td><td>72dpi</td><td>1080 x 1080px (square)</td><td>PNG or JPG</td></tr>
+          <tr><td>Website graphic</td><td>72dpi</td><td>Varies by placement, often 1200px wide</td><td>PNG, JPG, or WEBP</td></tr>
+          <tr><td>Business card</td><td>300dpi</td><td>3.7in x 2.2in with bleed</td><td>PDF Print</td></tr>
+          <tr><td>Flyer</td><td>300dpi</td><td>8.5in x 11in with bleed</td><td>PDF Print</td></tr>
+          <tr><td>Banner / large format</td><td>150-300dpi</td><td>Scaled to physical banner size</td><td>PDF Print</td></tr>
+        </table></div>
+        <p><strong>Action step:</strong> Before your next print deliverable, check every embedded photo's native resolution against the print size it will occupy — if it falls below 300dpi at that size, flag it for the client before delivery.</p>
+
+        <div class="game-card" id="game3">
+          <div class="game-head"><div class="game-label">Mini-Game · Resolution Identifier</div><h4>Classify each design as screen-ready or print-ready</h4></div>
+          <div id="g3-root"></div>
+          <div class="game-status" id="g3-status">0 / 5 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-3-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-3-content" class="cp-content hidden">
+            <div id="cp-3-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-3-quiz">
+              <div class="cp-q">What is the minimum DPI generally required for professional print deliverables like flyers and business cards?</div>
+              <div class="cp-opts" id="cp-3-opts"></div>
+              <div class="cp-fb" id="cp-3-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section hidden" id="s4">
+      <div class="section-head"><div class="section-badge">4</div><h2>Color Modes — RGB vs. CMYK</h2></div>
+      <div class="section-body">
+        <p>Every screen you've ever looked at builds color from red, green, and blue light — that's RGB. Every printing press builds color from cyan, magenta, yellow, and black ink — that's CMYK. Because these are two completely different physical ways of producing color, a design that looks perfect on-screen in RGB can shift noticeably once it's printed in CMYK, usually appearing slightly duller or darker.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">RGB vs. CMYK</span>RGB is a wider, more vibrant color space built for light-emitting screens. CMYK is a narrower color space built for ink absorbed by paper. Some bright RGB colors — especially neon greens and electric blues — simply cannot be reproduced in CMYK ink.</div>
+        </div>
+        <p>Canva is fundamentally an RGB tool. When you export a "PDF Print" file from Canva, it converts the design to CMYK during export, but this conversion is approximate. For color-critical print work — brand-sensitive packaging, large campaigns where exact color matching matters — a professional tool like Adobe Illustrator, which lets you design natively in CMYK from the start, produces more predictable results.</p>
+        <div class="tip-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Tip</span>When handing a print-ready file to a client or vendor, say so plainly: "This was exported as CMYK for print — colors may look slightly different from the on-screen preview, which is normal." Setting that expectation up front avoids a confused follow-up message later.</div>
+        </div>
+        <p><strong>RGB vs. CMYK Comparison</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
+          <tr><th>&nbsp;</th><th>RGB</th><th>CMYK</th></tr>
+          <tr><td>Built for</td><td>Screens, digital displays</td><td>Printing presses, ink on paper</td></tr>
+          <tr><td>Color creation</td><td>Adds light (red, green, blue)</td><td>Subtracts light with ink (cyan, magenta, yellow, black)</td></tr>
+          <tr><td>Color range</td><td>Wider, more vibrant</td><td>Narrower, more muted</td></tr>
+          <tr><td>Use for</td><td>Social posts, websites, digital ads</td><td>Flyers, business cards, packaging</td></tr>
+        </table></div>
+
+        <div class="game-card" id="game4">
+          <div class="game-head"><div class="game-label">Mini-Game · RGB vs. CMYK Sorter</div><h4>Drag each deliverable type into the correct color mode zone</h4></div>
+          <div id="g4-root"></div>
+          <div class="game-status" id="g4-status">0 / 5 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-4-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-4-content" class="cp-content hidden">
+            <div id="cp-4-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-4-quiz">
+              <div class="cp-q">Why can a design look slightly different once it moves from an RGB screen preview to a CMYK printed piece?</div>
+              <div class="cp-opts" id="cp-4-opts"></div>
+              <div class="cp-fb" id="cp-4-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section hidden" id="s5">
+      <div class="section-head"><div class="section-badge">5</div><h2>Professional File Naming Conventions for Design Files</h2></div>
+      <div class="section-body">
+        <p>File naming feels small, but it's one of the clearest signals of professionalism in a design handoff. A consistent naming system means anyone — the client, a print shop, a teammate — can open a folder and instantly understand what each file is, without opening it first.</p>
+        <p class="mockup-label">Interface Overview — File Naming Convention Diagram</p>
+        <div class="mockup-frame">
+          <div class="mock-app">
+            <div class="mock-titlebar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span><span class="mtitle">Final Exports</span></div>
+            <div class="mock-nametag">
+              <span class="nt-1">CLNT01</span><span style="color:#c7ccd1;">_</span><span class="nt-2">Logo</span><span style="color:#c7ccd1;">_</span><span class="nt-3">Primary</span><span style="color:#c7ccd1;">_</span><span class="nt-4">v2</span><span style="color:#c7ccd1;">_</span><span class="nt-5">2024-08-01.png</span>
+            </div>
+            <div class="mock-nametag-labels">
+              <span class="ntl nt-1">1 ClientCode</span>
+              <span class="ntl nt-2">2 ProjectName</span>
+              <span class="ntl nt-3">3 AssetType</span>
+              <span class="ntl nt-4">4 Version</span>
+              <span class="ntl nt-5">5 Date &amp; Format</span>
+            </div>
+          </div>
+        </div>
+        <ol class="legend">
+          <li><b>ClientCode</b> — a short, unique code identifying the client (CLNT01).</li>
+          <li><b>ProjectName</b> — what the asset actually is (Logo).</li>
+          <li><b>AssetType</b> — the specific variant (Primary).</li>
+          <li><b>Version</b> — where the file sits in revision history (v2).</li>
+          <li><b>Date &amp; Format</b> — delivery date and file extension (2024-08-01.png).</li>
+        </ol>
+        <div class="warn-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Never Name a File</span>"final," "final2," "USE THIS," "new version," or anything else that has no version history and won't sort logically next to earlier drafts.</div>
+        </div>
+        <p>For version control, use a simple, consistent suffix system: <em>v1</em> for the first draft, <em>v1-feedback</em> once notes come in, <em>v2</em> for the revision, and <em>v2-approved</em> or <em>Final</em> only once the client has actually signed off. This makes it obvious at a glance which file is current, and protects both you and the client if there's ever confusion about which version was approved.</p>
+        <p><strong>File Naming Guide</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+          <tr><th>Correct</th><th>Never Do This</th></tr>
+          <tr><td>CLNT01_Flyer_Summer_v1_2024-08-01.pdf</td><td>flyer final.pdf</td></tr>
+          <tr><td>CLNT01_Logo_Primary_v2-approved.svg</td><td>logo USE THIS.png</td></tr>
+          <tr><td>CLNT01_SocialPost_IG_v1.png</td><td>Untitled design (14).png</td></tr>
+        </table></div>
+
+        <div class="game-card" id="game5">
+          <div class="game-head"><div class="game-label">Mini-Game · File Naming Fixer</div><h4>Pick the correctly renamed version of each badly named file</h4></div>
+          <div id="g5-root"></div>
+          <div class="game-status" id="g5-status">0 / 4 answered</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-5-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-5-content" class="cp-content hidden">
+            <div id="cp-5-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-5-quiz">
+              <div class="cp-q">What should you name a file once the client has given final sign-off on it?</div>
+              <div class="cp-opts" id="cp-5-opts"></div>
+              <div class="cp-fb" id="cp-5-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section hidden" id="s6">
+      <div class="section-head"><div class="section-badge">6</div><h2>Organizing and Structuring Design Deliverable Folders</h2></div>
+      <div class="section-body">
+        <p>A professional folder structure follows a predictable hierarchy: client, then project, then deliverable type, with working files always kept separate from final exports. This separation matters because a client should almost never receive the editable working files folder — only the finished, ready-to-use exports, unless they specifically ask for source files.</p>
+        <p class="mockup-label">Interface Overview — Google Drive Delivery Folder Structure</p>
+        <div class="mockup-frame">
+          <div class="gd-app">
+            <div class="gd-topbar" style="position:relative;">
+              <div class="gd-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Drive</div>
+              <div class="gd-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Search in Drive</div>
+              <div class="gd-topicons">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>
+                <span class="cv-avatar" style="background:#fce4ec;color:#c04060;">VA</span>
+              </div>
+            </div>
+            <div class="gd-body2">
+              <div class="gd-side">
+                <div class="gd-newbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New</div>
+                <div class="gsi active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>My Drive</div>
+                <div class="gsi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><path d="M1 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>Shared with me</div>
+                <div class="gsi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Recent</div>
+                <div class="gsi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>Starred</div>
+              </div>
+              <div class="gd-main">
+                <div class="gd-crumb" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+                  <span>My Drive</span><span style="color:#c7ccd1;">›</span>
+                  <span style="position:relative;padding-right:14px;">CLNT01<span class="callout" tabindex="0" role="button" aria-label="Client folder" data-tip="Client folder — top level, one folder per client, named by client code or name." style="width:16px;height:16px;font-size:9px;top:-8px;right:-2px;">1</span></span><span style="color:#c7ccd1;">›</span>
+                  <span style="position:relative;padding-right:14px;">2024<span class="callout" tabindex="0" role="button" aria-label="Year subfolder" data-tip="Year subfolder — keeps long-term clients organized chronologically." style="width:16px;height:16px;font-size:9px;top:-8px;right:-2px;">2</span></span><span style="color:#c7ccd1;">›</span>
+                  <span style="position:relative;padding-right:14px;">Summer Flyer Project<span class="callout" tabindex="0" role="button" aria-label="Project subfolder" data-tip="Project subfolder — one per distinct project or campaign." style="width:16px;height:16px;font-size:9px;top:-8px;right:-2px;">3</span></span>
+                </div>
+                <div class="gd-table">
+                  <div class="gd-thead"><span class="gd-col-name">Name</span><span class="gd-col-owner">Owner</span><span class="gd-col-mod">Modified</span><span class="gd-col-badge">Access</span></div>
+
+                  <div class="gd-row" style="position:relative;">
+                    <span class="gd-col-name"><svg viewBox="0 0 24 24" fill="#e3b23c" stroke="#e3b23c" stroke-width="1"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>Working Files (source)</span>
+                    <span class="gd-col-owner">me</span><span class="gd-col-mod">Aug 1</span>
+                    <span class="gd-col-badge"><span class="tbadge private"><svg style="width:9px;height:9px;vertical-align:-1px;margin-right:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private</span></span>
+                    <div class="callout" tabindex="0" role="button" aria-label="Working Files folder" data-tip="Working Files — editable source files (Canva projects, layered files) — kept private." style="top:5px;right:2px;">4</div>
+                  </div>
+
+                  <div class="gd-row" style="position:relative;">
+                    <span class="gd-col-name"><svg viewBox="0 0 24 24" fill="#e3b23c" stroke="#e3b23c" stroke-width="1"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>Final Exports</span>
+                    <span class="gd-col-owner">me</span><span class="gd-col-mod">Aug 1</span>
+                    <span class="gd-col-badge"><span class="tbadge shared"><svg style="width:9px;height:9px;vertical-align:-1px;margin-right:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Shared</span></span>
+                    <div class="callout" tabindex="0" role="button" aria-label="Final Exports folder" data-tip="Final Exports — the finished, delivery-ready files — this is the only folder shared with the client." style="top:5px;right:2px;">5</div>
+                  </div>
+
+                  <div class="gd-row" style="padding-left:24px;">
+                    <span class="gd-col-name"><svg viewBox="0 0 24 24" fill="none" stroke="#c04060" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>CLNT01_Flyer_Summer_v2-approved_2024-08-01.pdf</span>
+                    <span class="gd-col-owner">me</span><span class="gd-col-mod">Aug 1</span><span class="gd-col-badge">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="legend">
+          <li><b>Client folder</b> — top level, one folder per client, named by client code or name (breadcrumb: CLNT01).</li>
+          <li><b>Year subfolder</b> — keeps long-term clients organized chronologically (breadcrumb: 2024).</li>
+          <li><b>Project subfolder</b> — one per distinct project or campaign (breadcrumb: Summer Flyer Project).</li>
+          <li><b>Working Files</b> — editable source files (Canva projects, layered files) — kept private.</li>
+          <li><b>Final Exports</b> — the finished, delivery-ready files — this is the only folder shared with the client.</li>
+        </ol>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Source Files vs. Export Files</span>Source files are editable (a Canva design link, a layered file). Export files are the finished output (a PNG, PDF, or JPG). Clients receive export files; VAs and designers keep the source files organized and accessible for future edits.</div>
+        </div>
+        <p>Once a project wraps, move its folder into an "Archive" section rather than deleting it — completed projects often get reopened months later for a reprint or a refreshed version, and having the organized source files on hand saves rebuilding from scratch.</p>
+        <p><strong>Action step:</strong> Recreate this exact four-level structure (Client → Year → Project → Working/Final) for one active client folder today.</p>
+
+        <div class="game-card" id="game6">
+          <div class="game-head"><div class="game-label">Mini-Game · Folder Structure Builder</div><h4>Drag each folder or file into its correct place in the hierarchy</h4></div>
+          <div id="g6-root"></div>
+          <div class="game-status" id="g6-status">0 / 5 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-6-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-6-content" class="cp-content hidden">
+            <div id="cp-6-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-6-quiz">
+              <div class="cp-q">Which folder should a client normally be given access to?</div>
+              <div class="cp-opts" id="cp-6-opts"></div>
+              <div class="cp-fb" id="cp-6-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SECTION 7 -->
+    <div class="section hidden" id="s7">
+      <div class="section-head"><div class="section-badge">7</div><h2>Preparing Files for Print Delivery</h2></div>
+      <div class="section-body">
+        <p>A "print-ready" file is one a print shop can send straight to press without sending it back for corrections. Getting there means checking a specific set of technical requirements every single time, not just eyeballing whether the design looks finished.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Bleed</span>Extra artwork extending past the trim line — a minimum of 3mm on all sides — so that when the printer's blade cuts the page, there's no thin white sliver at the edge from tiny cutting misalignment.</div>
+        </div>
+        <p>In Canva Pro, bleed can be added automatically by enabling the "bleed" option in the download panel, which extends the background and design elements past the trim edge. Beyond bleed, a genuinely print-ready file needs correct final dimensions, 300dpi minimum resolution, embedded (not missing) fonts, a CMYK color profile, and ideally a PDF/X format, which is the print industry's standard for reliable, predictable output.</p>
+        <p><strong>Print-Ready Delivery Checklist</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:35%"><col style="width:65%"></colgroup>
+          <tr><th>Item</th><th>What to Confirm</th></tr>
+          <tr><td>Dimensions + bleed</td><td>Final trim size plus minimum 3mm bleed on every edge</td></tr>
+          <tr><td>Resolution</td><td>300dpi minimum at final print size</td></tr>
+          <tr><td>Color profile</td><td>CMYK, not RGB</td></tr>
+          <tr><td>Fonts</td><td>Embedded or outlined, not missing</td></tr>
+          <tr><td>Format</td><td>PDF Print or PDF/X</td></tr>
+          <tr><td>Crop marks</td><td>Included if the print shop requests them</td></tr>
+        </table></div>
+        <div class="tip-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Communicating With a Print Shop</span>Always confirm what file type they prefer, ask whether they need crop marks or bleed pre-applied, and request a proof before the full run prints — catching a color or sizing issue on one proof copy is far cheaper than discovering it after 500 flyers are printed.</div>
+        </div>
+        <div class="warn-box" style="--box-index:2"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Common Mistakes</span>Forgetting bleed, leaving the file in RGB, exporting at screen resolution, and sending PDF Standard instead of PDF Print are the most common reasons a print job bounces back for correction.</div>
+        </div>
+
+        <div class="game-card" id="game7">
+          <div class="game-head"><div class="game-label">Mini-Game · Print-Ready Checklist Builder</div><h4>Drag the steps into the correct ready-to-send sequence</h4></div>
+          <div id="g7-root"></div>
+          <div class="game-status" id="g7-status">Arrange all steps, then check order</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-7-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-7-content" class="cp-content hidden">
+            <div id="cp-7-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-7-quiz">
+              <div class="cp-q">What is the minimum recommended bleed area on each side of a print-ready design?</div>
+              <div class="cp-opts" id="cp-7-opts"></div>
+              <div class="cp-fb" id="cp-7-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section hidden" id="s8">
+      <div class="section-head"><div class="section-badge">8</div><h2>Preparing Files for Digital and Web Delivery</h2></div>
+      <div class="section-body">
+        <p>A web-optimized file is small enough to load quickly but still looks crisp on screen. That means correct pixel dimensions for the platform it's headed to, RGB color mode, an appropriate format, and a compressed file size that doesn't visibly sacrifice quality.</p>
+        <p>Tools like TinyPNG, Squoosh, and ImageOptim compress images by reducing file size while preserving visual quality — running a finished export through one of these before delivery is standard practice for web assets, especially ones headed onto a live website where load speed affects the visitor's experience.</p>
+        <div class="tip-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Naming for Developer Handoff</span>Name web assets by their function, not their creation order — "hero-banner.png" tells a developer exactly what it is; "Untitled design (3).png" does not.</div>
+        </div>
+        <div class="def-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Accessibility Considerations</span>When handing off web images, suggest brief alt text describing each image's content, and check that any text placed over an image background has sufficient contrast to remain readable for low-vision users.</div>
+        </div>
+        <p><strong>Web Delivery Checklist</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:35%"><col style="width:65%"></colgroup>
+          <tr><th>Item</th><th>What to Confirm</th></tr>
+          <tr><td>Pixel dimensions</td><td>Match the platform's spec exactly</td></tr>
+          <tr><td>Color mode</td><td>RGB</td></tr>
+          <tr><td>Format</td><td>PNG, JPG, or WEBP depending on transparency and size needs</td></tr>
+          <tr><td>File size</td><td>Compressed with a tool like TinyPNG without visible quality loss</td></tr>
+          <tr><td>Naming</td><td>Descriptive, functional names a developer can act on immediately</td></tr>
+          <tr><td>Alt text</td><td>A short description supplied for each image</td></tr>
+        </table></div>
+
+        <div class="game-card" id="game8">
+          <div class="game-head"><div class="game-label">Mini-Game · Web Asset Optimizer</div><h4>Choose the correct format and setting for each web scenario</h4></div>
+          <div id="g8-root"></div>
+          <div class="game-status" id="g8-status">0 / 4 answered</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-8-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-8-content" class="cp-content hidden">
+            <div id="cp-8-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-8-quiz">
+              <div class="cp-q">What color mode should web-delivered assets use?</div>
+              <div class="cp-opts" id="cp-8-opts"></div>
+              <div class="cp-fb" id="cp-8-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 9 -->
+    <div class="section hidden" id="s9">
+      <div class="section-head"><div class="section-badge">9</div><h2>Delivering Files to Clients Professionally</h2></div>
+      <div class="section-body">
+        <p>The delivery workflow is a small but visible moment of client-facing professionalism: compress multiple files into a zip when needed, write a clear covering message, send it through the right channel, and confirm the client could actually open everything.</p>
+        <p class="mockup-label">Interface Overview — File Transfer Service</p>
+        <div class="mockup-frame">
+          <div class="wt-scene" style="position:relative;">
+            <svg viewBox="0 0 24 24" style="position:absolute;top:16px;left:20px;width:22px;height:22px;color:#fff;" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+
+            <div class="wt-card">
+              <div class="wt-row wt-add" style="position:relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                <div>Add more files<span class="wt-sub">1 file added · 200.0 GB remaining</span></div>
+                <div class="callout" tabindex="0" role="button" aria-label="Add files area" data-tip="Add files area — drag files or click to attach the deliverables." style="top:-8px;right:-8px;">1</div>
+              </div>
+              <div class="wt-row" style="position:relative;">
+                <div class="wt-label">Upload to</div>
+                <div class="wt-recipient"><span class="wt-avatar2"></span><span class="wt-value">Client — CLNT01</span></div>
+                <div class="callout" tabindex="0" role="button" aria-label="Recipient field" data-tip="Recipient field — who the files are being sent to." style="top:8px;right:-8px;">2</div>
+              </div>
+              <div class="wt-row" style="position:relative;">
+                <div class="wt-label">Your email</div>
+                <div style="color:#8a8f96;">va@learnhubph.com</div>
+                <div class="callout" tabindex="0" role="button" aria-label="Your email field" data-tip="Your email — used to notify you once the client downloads the files." style="top:8px;right:-8px;">3</div>
+              </div>
+              <div class="wt-row" style="position:relative;">
+                <div class="wt-label">Title</div>
+                <div class="wt-value" style="font-family:monospace;font-size:12px;">CLNT01_Flyer_Summer_v2_2024-08-01.pdf</div>
+                <div class="callout" tabindex="0" role="button" aria-label="Title field" data-tip="Title field — the transfer's file name, following the naming convention." style="top:8px;right:-8px;">4</div>
+              </div>
+              <div class="wt-row" style="position:relative;color:#b5babf;">
+                <div class="wt-label">Message</div>
+                Your Summer Flyer files are ready — let me know once you've reviewed!
+                <div class="callout" tabindex="0" role="button" aria-label="Message field" data-tip="Message field — the covering note explaining what's included." style="top:8px;right:-8px;">5</div>
+              </div>
+              <div class="wt-btnrow" style="position:relative;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2" style="width:18px;height:18px;"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+                <button class="wt-transfer-btn" type="button">Transfer</button>
+                <div class="callout" tabindex="0" role="button" aria-label="Transfer button" data-tip="Transfer button — sends the files and notifies the recipient by email." style="top:-8px;right:0px;">6</div>
+              </div>
+            </div>
+
+            <div class="wt-tip">Pop in your email and we'll let you know when your files are downloaded. You'll need to verify your email so we know it's really you.</div>
+          </div>
+        </div>
+        <ol class="legend">
+          <li><b>Add files area</b> — drag files or click to attach the deliverables.</li>
+          <li><b>Recipient field</b> — who the files are being sent to.</li>
+          <li><b>Your email</b> — used to notify you once the client downloads the files.</li>
+          <li><b>Title field</b> — the transfer's file name, following the naming convention.</li>
+          <li><b>Message field</b> — the covering note explaining what's included.</li>
+          <li><b>Transfer button</b> — sends the files and notifies the recipient by email.</li>
+        </ol>
+        <p><strong>Delivery Methods Compared</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+          <tr><th>Method</th><th>Best For</th></tr>
+          <tr><td>Google Drive shared folder</td><td>Ongoing clients who receive files regularly</td></tr>
+          <tr><td>WeTransfer</td><td>One-time large file transfers</td></tr>
+          <tr><td>Dropbox</td><td>Clients already using it as their storage system</td></tr>
+          <tr><td>Direct email attachment</td><td>Small individual files only</td></tr>
+        </table></div>
+        <p><strong>Delivery Message Template</strong></p>
+        <div class="scenario-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Template</span>"Hi [Client], your [project name] files are ready. This folder includes [list of files/formats]. Let me know once you've had a chance to review, and reach out if anything doesn't open correctly on your end."</div>
+        </div>
+        <p>If a client doesn't acknowledge receipt within a couple of days, a short, friendly follow-up ("just checking you were able to access everything") is appropriate — it protects against files quietly sitting unopened in an inbox.</p>
+
+        <div class="game-card" id="game9">
+          <div class="game-head"><div class="game-label">Mini-Game · Delivery Method Chooser</div><h4>Match each client scenario to the correct delivery method</h4></div>
+          <div id="g9-root"></div>
+          <div class="game-status" id="g9-status">0 / 4 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-9-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-9-content" class="cp-content hidden">
+            <div id="cp-9-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-9-quiz">
+              <div class="cp-q">A client asks for 15 large, high-resolution files that are too big to email. What should you do?</div>
+              <div class="cp-opts" id="cp-9-opts"></div>
+              <div class="cp-fb" id="cp-9-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SECTION 10 -->
+    <div class="section hidden" id="s10">
+      <div class="section-head"><div class="section-badge">10</div><h2>Getting Client Feedback and Managing Revisions</h2></div>
+      <div class="section-body">
+        <p>Never just drop a file and ask "what do you think?" — it puts the entire burden of evaluation on the client. Instead, present the design in context, briefly explain the key decisions behind it, and ask specific questions that make it easy for the client to respond usefully.</p>
+        <div class="tip-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Specific Feedback Request</span>Instead of "thoughts?", try: "I used the brand blue for the headline to keep it consistent with your last campaign — does the layout feel balanced, and is the CTA button clear enough?"</div>
+        </div>
+        <p>Canva's built-in comment feature lets clients leave feedback directly on specific elements of a design, which keeps notes organized and in context rather than scattered across email threads. For larger projects, a simple revision tracker in a Google Sheet — with columns for Item, Client Comment, Action Taken, and Status — keeps everyone aligned on what's been addressed.</p>
+        <p><strong>Revision Tracker Template</strong></p>
+        <div class="tbl-wrap"><table>
+          <colgroup><col style="width:22%"><col style="width:32%"><col style="width:26%"><col style="width:20%"></colgroup>
+          <tr><th>Item</th><th>Client Comment</th><th>Action Taken</th><th>Status</th></tr>
+          <tr><td>Header text</td><td>Make the headline bigger</td><td>Increased size 20%</td><td>Done</td></tr>
+          <tr><td>Color</td><td>Try a lighter background</td><td>Swapped to soft blush tone</td><td>Pending review</td></tr>
+        </table></div>
+        <div class="warn-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><span class="box-label">Scope Creep</span>Most standard packages include a defined number of revision rounds (commonly 2-3). If a client asks for something well beyond the original brief — a full redesign, a completely new concept — recognize that as a new project, not an extra revision, and communicate that clearly and kindly.</div>
+        </div>
+
+        <div class="game-card" id="game10">
+          <div class="game-head"><div class="game-label">Mini-Game · Revision Tracker Builder</div><h4>Drag the revision log column headers into the correct order</h4></div>
+          <div id="g10-root"></div>
+          <div class="game-status" id="g10-status">Arrange all headers, then check order</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-10-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-10-content" class="cp-content hidden">
+            <div id="cp-10-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-10-quiz">
+              <div class="cp-q">A client requests a full redesign that goes far beyond what was originally agreed. How should this be treated?</div>
+              <div class="cp-opts" id="cp-10-opts"></div>
+              <div class="cp-fb" id="cp-10-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 11 -->
+    <div class="section hidden" id="s11">
+      <div class="section-head"><div class="section-badge">11</div><h2>Handling Special Delivery Scenarios</h2></div>
+      <div class="section-body">
+        <p>Not every recipient needs the same thing. Matching the delivery approach to who's actually receiving the file is part of professional judgment.</p>
+        <div class="def-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Non-tech-savvy client</span>Keep formats simple (JPG or PDF over SVG), and include short plain-language instructions for opening and using the files.</div>
+        </div>
+        <div class="def-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Developer</span>Provide SVGs for logos, PNGs with transparency for graphics, exact hex codes for colors, and fonts in web-ready format.</div>
+        </div>
+        <div class="def-box" style="--box-index:2"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Print shop</span>Include exact specs in the delivery message, and confirm dimensions, bleed, and color mode before the file goes to press.</div>
+        </div>
+        <div class="def-box" style="--box-index:3"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">New VA / teammate taking over</span>Deliver a full asset handover package — brand assets, source files, naming conventions, and folder structure explained.</div>
+        </div>
+        <div class="tip-box" style="--box-index:4"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Lost files</span>If a client loses their files and needs a re-delivery, this is exactly why maintaining your own organized archive matters — you can re-send within minutes instead of rebuilding the project from scratch.</div>
+        </div>
+
+        <div class="game-card" id="game11">
+          <div class="game-head"><div class="game-label">Mini-Game · Special Delivery Scenario Router</div><h4>Match each recipient type to the correct delivery approach</h4></div>
+          <div id="g11-root"></div>
+          <div class="game-status" id="g11-status">0 / 4 matched</div>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-11-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-11-content" class="cp-content hidden">
+            <div id="cp-11-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-11-quiz">
+              <div class="cp-q">A developer asks for the website icon assets. What should they receive?</div>
+              <div class="cp-opts" id="cp-11-opts"></div>
+              <div class="cp-fb" id="cp-11-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 12 -->
+    <div class="section hidden" id="s12">
+      <div class="section-head"><div class="section-badge">12</div><h2>Maintaining a Professional File Delivery System Long-Term</h2></div>
+      <div class="section-body">
+        <p>Every skill in this lesson only holds up if it becomes a habit, not a one-time effort. A personal delivery checklist that runs automatically before every file goes out — format, resolution, color mode, naming, folder placement — turns all of this into muscle memory instead of something you re-derive every time.</p>
+        <div class="tip-box" style="--box-index:0"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Delivery Log</span>Keep a simple running record — what was delivered, when, in which format, and to whom. It's the fastest way to answer "did you already send me that?" months later.</div>
+        </div>
+        <p>Keeping your own archive of every client deliverable protects you professionally — if a dispute ever comes up about what was or wasn't delivered, you have a clear record. A quarterly audit of client folders — checking that naming stayed consistent and nothing was left in the wrong place — keeps the whole system from quietly drifting into disorganization as client volume grows.</p>
+        <div class="def-box" style="--box-index:1"><svg class="box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg>
+          <div><span class="box-label">Scaling</span>A system that works for one client often breaks quietly at five or ten — build the naming and folder conventions to hold up regardless of how many clients you're juggling.</div>
+        </div>
+
+        <div class="game-card" id="game12">
+          <div class="game-head"><div class="game-label">Mini-Game · Delivery Checklist Sequencer</div><h4>Drag the pre-delivery steps into the correct order</h4></div>
+          <div id="g12-root"></div>
+          <div class="game-status" id="g12-status">Arrange all steps, then check order</div>
+        </div>
+
+        <div class="yt-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Watch: Exporting &amp; Delivering Design Files — Full Walkthrough</div>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/MdpCCwwPOsY?rel=0&amp;enablejsapi=1" title="Exporting &amp; Delivering Design Files" allowfullscreen></iframe>
+        </div>
+
+        <div class="cp-block">
+          <div class="cp-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Knowledge Checkpoint</span></div>
+          <div id="cp-12-locked" class="cp-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><br>Complete the mini-game above to unlock this checkpoint.</div>
+          <div id="cp-12-content" class="cp-content hidden">
+            <div id="cp-12-passed" class="cp-passed hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Checkpoint passed!</div>
+            <div id="cp-12-quiz">
+              <div class="cp-q">Why keep your own archive and delivery log of every client deliverable?</div>
+              <div class="cp-opts" id="cp-12-opts"></div>
+              <div class="cp-fb" id="cp-12-fb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINAL BLOCK -->
+    <div class="final-block hidden" id="finalBlock">
+      <svg class="award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+      <h3>Lesson Complete — Exporting &amp; Delivering Design Files</h3>
+      <ul>
+        <li>Choose the right file format — PNG, JPG, PDF Standard, PDF Print, SVG, GIF, MP4, WEBP, or AI/EPS — based on the deliverable's destination.</li>
+        <li>Export at the correct resolution: 72dpi for screen, 300dpi minimum for print.</li>
+        <li>Use RGB for digital work and CMYK for professional print, and set client expectations about the color shift between them.</li>
+        <li>Name every file with a consistent ClientCode_ProjectName_AssetType_Version_Date system — never "final2."</li>
+        <li>Organize folders by Client → Year → Project → Working Files / Final Exports, sharing only the Final Exports folder.</li>
+        <li>Prepare print-ready files with bleed, 300dpi, CMYK, and embedded fonts; prepare web files with correct dimensions, RGB, and compression.</li>
+        <li>Deliver files through the right channel with a clear covering message, and follow up if receipt isn't confirmed.</li>
+        <li>Request feedback with specific, contextual questions and track revisions in a simple log.</li>
+        <li>Match delivery format and approach to the recipient — client, developer, print shop, or teammate.</li>
+        <li>Maintain a personal delivery checklist, log, and archive that scales as your client list grows.</li>
+      </ul>
+      <button class="btn btn-primary" id="markCompleteBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mark as Complete</button>
+    </div>
+
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+var LESSON_ID = "LES030";
+var SAVE_KEY = "lhph_LES030";
+var TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+var SECTION_ORDER = ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12"];
+var CP_FOR_SECTION = {"s2":2,"s3":3,"s4":4,"s5":5,"s6":6,"s7":7,"s8":8,"s9":9,"s10":10,"s11":11,"s12":12};
+
+var defaultState = {
+  lessonCompleted:false,
+  sectionsUnlocked:1,
+  finalUnlocked:false,
+  sectionsDone:[],
+  cpPassed:[],
+  gamesDone:[]
+};
+var state = JSON.parse(JSON.stringify(defaultState));
+
+function save(){ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }
+function load(){
+  try{
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(raw){ state = Object.assign({}, defaultState, JSON.parse(raw)); }
+  }catch(e){}
+  // self-heal: older saves could under-report sectionsUnlocked relative to sectionsDone
+  var minUnlocked = 1;
+  (state.sectionsDone || []).forEach(function(sid){
+    var idx = SECTION_ORDER.indexOf(sid);
+    if(idx !== -1){ minUnlocked = Math.max(minUnlocked, Math.min(idx+2, SECTION_ORDER.length)); }
+  });
+  if(state.sectionsUnlocked < minUnlocked){ state.sectionsUnlocked = minUnlocked; save(); }
+}
+function markLessonComplete(){
+  try{ window.parent.postMessage({action:"lessonComplete"}, "*"); }catch(e){}
+}
+
+/* ---------- ICONS ---------- */
+var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+var ICON_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+
+/* ---------- CONFETTI ---------- */
+function confettiBurst(originEl){
+  var colors = ["#d45f7a","#f7a8b8","#fce4ec","#ffffff"];
+  var rect = originEl ? originEl.getBoundingClientRect() : {left:window.innerWidth/2, top:window.innerHeight/2, width:0};
+  for(var i=0;i<16;i++){
+    var p = document.createElement("div");
+    p.className = "confetti-piece";
+    p.style.background = colors[i % colors.length];
+    p.style.left = (rect.left + rect.width/2 + (Math.random()*80-40)) + "px";
+    p.style.top = (rect.top + (Math.random()*20)) + "px";
+    p.style.animationDelay = (Math.random()*0.15) + "s";
+    document.body.appendChild(p);
+    (function(el){ setTimeout(function(){ el.remove(); }, 1200); })(p);
+  }
+}
+
+/* ---------- TOC ---------- */
+function buildTOC(){
+  var list = document.getElementById("tocList");
+  list.innerHTML = "";
+  SECTION_ORDER.forEach(function(sid, idx){
+    var secEl = document.getElementById(sid);
+    if(!secEl) return;
+    var title = secEl.querySelector("h2").textContent;
+    var item = document.createElement("div");
+    item.className = "toc-item";
+    item.dataset.section = sid;
+    var isDone = state.sectionsDone.indexOf(sid) !== -1;
+    var isUnlocked = idx < state.sectionsUnlocked;
+    var dotClass = isDone ? "toc-dot done" : (isUnlocked ? "toc-dot" : "toc-dot locked");
+    item.innerHTML = '<span class="'+dotClass+'">'+(isDone?ICON_CHECK:(isUnlocked?'':ICON_LOCK))+'</span><span>'+(idx+1)+'. '+title+'</span>';
+    item.addEventListener("click", function(){
+      if(isUnlocked){ secEl.scrollIntoView({behavior:"smooth", block:"start"}); }
+    });
+    list.appendChild(item);
+  });
+  updateActiveTOC();
+}
+function updateActiveTOC(){
+  var items = document.querySelectorAll(".toc-item");
+  var best = null, bestTop = -Infinity;
+  items.forEach(function(item){
+    var sec = document.getElementById(item.dataset.section);
+    if(!sec || sec.classList.contains("hidden")) return;
+    var top = sec.getBoundingClientRect().top;
+    if(top <= 140 && top > bestTop){ bestTop = top; best = item; }
+  });
+  items.forEach(function(item){ item.classList.remove("active"); });
+  if(best) best.classList.add("active");
+}
+window.addEventListener("scroll", updateActiveTOC, {passive:true});
+
+/* ---------- PROGRESS ---------- */
+function updateProgress(){
+  var pct = Math.round((state.sectionsDone.length / TOTAL_SECTIONS) * 100);
+  if(state.lessonCompleted) pct = 100;
+  document.getElementById("progFill").style.width = pct + "%";
+  document.getElementById("progPct").textContent = pct + "%";
+}
+
+/* ---------- SECTION UNLOCK / REVEAL ---------- */
+function revealSection(sid){
+  var el = document.getElementById(sid);
+  if(!el) return;
+  el.classList.remove("hidden");
+  requestAnimationFrame(function(){ el.classList.add("is-visible"); });
+}
+function completeSection(sid){
+  if(state.sectionsDone.indexOf(sid) === -1){ state.sectionsDone.push(sid); }
+  var idx = SECTION_ORDER.indexOf(sid);
+  if(idx+2 > state.sectionsUnlocked){ state.sectionsUnlocked = idx+2 > SECTION_ORDER.length ? SECTION_ORDER.length : idx+2; }
+  save();
+  updateProgress();
+  buildTOC();
+  var nextId = SECTION_ORDER[idx+1];
+  if(nextId){
+    revealSection(nextId);
+    setTimeout(function(){
+      var nextEl = document.getElementById(nextId);
+      if(nextEl) nextEl.scrollIntoView({behavior:"smooth", block:"start"});
+    }, 300);
+  } else {
+    state.lessonCompleted = true;
+    save();
+    document.getElementById("finalBlock").classList.remove("hidden");
+    updateProgress();
+    setTimeout(function(){
+      document.getElementById("finalBlock").scrollIntoView({behavior:"smooth", block:"start"});
+    }, 300);
+  }
+}
+
+/* ---------- CHECKPOINT ENGINE ---------- */
+function unlockCP(n){
+  var locked = document.getElementById("cp-"+n+"-locked");
+  var content = document.getElementById("cp-"+n+"-content");
+  if(locked) locked.classList.add("hidden");
+  if(content){ content.classList.remove("hidden"); }
+}
+function buildCheckpoint(n, sid, options, correctIdx){
+  var optsWrap = document.getElementById("cp-"+n+"-opts");
+  var fb = document.getElementById("cp-"+n+"-fb");
+  if(!optsWrap) return;
+  var passed = state.cpPassed.indexOf(n) !== -1;
+  options.forEach(function(optText, i){
+    var btn = document.createElement("button");
+    btn.className = "cp-opt";
+    btn.type = "button";
+    btn.textContent = optText;
+    btn.addEventListener("click", function(){
+      if(state.cpPassed.indexOf(n) !== -1) return;
+      if(i === correctIdx){
+        btn.classList.add("correct");
+        fb.textContent = "Correct!";
+        fb.style.color = "#2d8a50";
+        state.cpPassed.push(n);
+        save();
+        setTimeout(function(){
+          document.getElementById("cp-"+n+"-quiz").classList.add("hidden");
+          document.getElementById("cp-"+n+"-passed").classList.remove("hidden");
+          confettiBurst(btn);
+          completeSection(sid);
+        }, 700);
+      } else {
+        btn.classList.add("wrong");
+        fb.textContent = "Not quite — try again.";
+        fb.style.color = "#c0392b";
+        setTimeout(function(){ btn.classList.remove("wrong"); }, 700);
+      }
+    });
+    optsWrap.appendChild(btn);
+  });
+  if(passed){
+    document.getElementById("cp-"+n+"-quiz").classList.add("hidden");
+    document.getElementById("cp-"+n+"-passed").classList.remove("hidden");
+    unlockCP(n);
+  }
+}
+
+/* ---------- DRAG MATCH GAME ENGINE ---------- */
+function shuffle(arr){ var a = arr.slice(); for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+function buildDragMatch(gameKey, rootId, statusId, items, zones, cpN, sid){
+  var root = document.getElementById(rootId);
+  var statusEl = document.getElementById(statusId);
+  var matched = state.gamesDone.indexOf(gameKey) !== -1;
+  var pool = document.createElement("div");
+  pool.className = "item-pool";
+  var zoneRow = document.createElement("div");
+  zoneRow.className = "dz-row";
+  var matchedCount = 0;
+
+  var shuffledItems = shuffle(items);
+  shuffledItems.forEach(function(it){
+    var d = document.createElement("div");
+    d.className = "draggable";
+    d.textContent = it.label;
+    d.draggable = true;
+    d.dataset.itemId = it.id;
+    attachDragHandlers(d);
+    pool.appendChild(d);
+  });
+
+  zones.forEach(function(z){
+    var dz = document.createElement("div");
+    dz.className = "drop-zone";
+    dz.dataset.zoneId = z.id;
+    dz.innerHTML = '<div class="zlabel">'+z.label+'</div><div class="dz-items"></div>';
+    attachDropHandlers(dz, function(draggedEl){
+      var itemId = draggedEl.dataset.itemId;
+      var item = items.filter(function(x){return x.id===itemId;})[0];
+      if(!item) return;
+      if(item.zone === z.id){
+        draggedEl.classList.add("correct");
+        draggedEl.draggable = false;
+        dz.querySelector(".dz-items").appendChild(draggedEl);
+        matchedCount++;
+        statusEl.textContent = matchedCount + " / " + items.length + " matched";
+        if(matchedCount === items.length){
+          state.gamesDone.push(gameKey); save();
+          confettiBurst(root);
+          unlockCP(cpN);
+        }
+      } else {
+        draggedEl.classList.add("wrong");
+        setTimeout(function(){ draggedEl.classList.remove("wrong"); pool.appendChild(draggedEl); }, 650);
+      }
+    });
+    zoneRow.appendChild(dz);
+  });
+
+  root.appendChild(pool);
+  root.appendChild(zoneRow);
+
+  if(matched){
+    statusEl.textContent = items.length + " / " + items.length + " matched";
+    unlockCP(cpN);
+    pool.querySelectorAll(".draggable").forEach(function(d){
+      var it = items.filter(function(x){return x.id===d.dataset.itemId;})[0];
+      var dz = zoneRow.querySelector('[data-zone-id="'+it.zone+'"] .dz-items');
+      d.classList.add("correct"); d.draggable=false;
+      dz.appendChild(d);
+    });
+  }
+}
+
+function attachDragHandlers(el){
+  el.addEventListener("dragstart", function(e){
+    el.classList.add("dragging");
+    e.dataTransfer.setData("text/plain", "x");
+    window._draggedEl = el;
+  });
+  el.addEventListener("dragend", function(){ el.classList.remove("dragging"); });
+  el.addEventListener("touchstart", function(e){
+    window._draggedEl = el;
+    el.classList.add("dragging");
+  }, {passive:true});
+  el.addEventListener("touchend", function(e){
+    el.classList.remove("dragging");
+    var touch = e.changedTouches[0];
+    var target = document.elementFromPoint(touch.clientX, touch.clientY);
+    var dz = target ? target.closest(".drop-zone") : null;
+    if(dz && dz._onDropCb){ dz._onDropCb(window._draggedEl); }
+  });
+}
+function attachDropHandlers(dz, onDrop){
+  dz._onDropCb = onDrop;
+  dz.addEventListener("dragover", function(e){ e.preventDefault(); dz.classList.add("drag-over"); });
+  dz.addEventListener("dragleave", function(){ dz.classList.remove("drag-over"); });
+  dz.addEventListener("drop", function(e){
+    e.preventDefault();
+    dz.classList.remove("drag-over");
+    if(window._draggedEl) onDrop(window._draggedEl);
+  });
+}
+
+/* ---------- CLICK-PICK GAME ENGINE ---------- */
+function buildClickPick(gameKey, rootId, statusId, questions, cpN, sid){
+  var root = document.getElementById(rootId);
+  var statusEl = document.getElementById(statusId);
+  var done = state.gamesDone.indexOf(gameKey) !== -1;
+  var answered = 0;
+  questions.forEach(function(q, qi){
+    var qWrap = document.createElement("div");
+    qWrap.className = "pick-q";
+    var p = document.createElement("p");
+    p.className = "qtext";
+    p.textContent = q.q;
+    qWrap.appendChild(p);
+    var optsWrap = document.createElement("div");
+    optsWrap.className = "pick-opts";
+    var solved = false;
+    q.opts.forEach(function(opt, oi){
+      var btn = document.createElement("button");
+      btn.className = "pick-opt";
+      btn.type = "button";
+      btn.textContent = opt.text;
+      btn.addEventListener("click", function(){
+        if(solved) return;
+        if(opt.correct){
+          btn.classList.add("correct");
+          solved = true;
+          answered++;
+          statusEl.textContent = answered + " / " + questions.length + " answered";
+          if(answered === questions.length){
+            state.gamesDone.push(gameKey); save();
+            confettiBurst(root);
+            unlockCP(cpN);
+          }
+        } else {
+          btn.classList.add("wrong");
+          setTimeout(function(){ btn.classList.remove("wrong"); btn.classList.add("strike"); }, 650);
+        }
+      });
+      optsWrap.appendChild(btn);
+    });
+    qWrap.appendChild(optsWrap);
+    root.appendChild(qWrap);
+  });
+  if(done){
+    statusEl.textContent = questions.length + " / " + questions.length + " answered";
+    unlockCP(cpN);
+    root.querySelectorAll(".pick-q").forEach(function(qWrap, qi){
+      var correctBtn = Array.prototype.filter.call(qWrap.querySelectorAll(".pick-opt"), function(b,oi){ return questions[qi].opts[oi].correct; })[0];
+      if(correctBtn) correctBtn.classList.add("correct");
+    });
+  }
+}
+
+/* ---------- SEQUENCE GAME ENGINE ---------- */
+function buildSequence(gameKey, rootId, statusId, steps, cpN, sid){
+  var root = document.getElementById(rootId);
+  var statusEl = document.getElementById(statusId);
+  var done = state.gamesDone.indexOf(gameKey) !== -1;
+  var list = document.createElement("div");
+  list.className = "seq-list";
+  var order = done ? steps.map(function(s){return s;}) : shuffle(steps);
+  var dragEl = null;
+
+  order.forEach(function(s){
+    var item = document.createElement("div");
+    item.className = "seq-item";
+    item.draggable = true;
+    item.dataset.stepId = s.id;
+    item.innerHTML = '<span class="handle">::</span><span>'+s.label+'</span>';
+    item.addEventListener("dragstart", function(){ dragEl = item; item.classList.add("dragging"); });
+    item.addEventListener("dragend", function(){ item.classList.remove("dragging"); });
+    item.addEventListener("dragover", function(e){ e.preventDefault(); });
+    item.addEventListener("drop", function(e){
+      e.preventDefault();
+      if(dragEl && dragEl !== item){
+        var items = Array.prototype.slice.call(list.children);
+        var dragIdx = items.indexOf(dragEl);
+        var dropIdx = items.indexOf(item);
+        if(dragIdx < dropIdx){ list.insertBefore(dragEl, item.nextSibling); }
+        else{ list.insertBefore(dragEl, item); }
+      }
+    });
+    list.appendChild(item);
+  });
+  root.appendChild(list);
+
+  var checkBtn = document.createElement("button");
+  checkBtn.className = "btn btn-primary";
+  checkBtn.style.marginTop = "14px";
+  checkBtn.type = "button";
+  checkBtn.textContent = "Check Order";
+  checkBtn.addEventListener("click", function(){
+    var current = Array.prototype.map.call(list.children, function(el){ return el.dataset.stepId; });
+    var correct = steps.map(function(s){ return s.id; });
+    var ok = current.every(function(id, i){ return id === correct[i]; });
+    if(ok){
+      statusEl.textContent = "Correct order!";
+      statusEl.style.color = "#2d8a50";
+      list.querySelectorAll(".seq-item").forEach(function(el){ el.classList.add("correct"); el.style.borderColor="#2d8a50"; el.style.background="#d4f7e0"; });
+      if(state.gamesDone.indexOf(gameKey) === -1){ state.gamesDone.push(gameKey); save(); }
+      confettiBurst(root);
+      unlockCP(cpN);
+    } else {
+      statusEl.textContent = "Not quite the right order — try again.";
+      statusEl.style.color = "#c0392b";
+      list.querySelectorAll(".seq-item").forEach(function(el){
+        el.classList.add("wrong");
+        setTimeout(function(){ el.classList.remove("wrong"); }, 650);
+      });
+    }
+  });
+  root.appendChild(checkBtn);
+
+  if(done){
+    statusEl.textContent = "Correct order!";
+    statusEl.style.color = "#2d8a50";
+    list.querySelectorAll(".seq-item").forEach(function(el){ el.style.borderColor="#2d8a50"; el.style.background="#d4f7e0"; });
+    unlockCP(cpN);
+  }
+}
+
+/* ---------- GAME DATA ---------- */
+var GAME2_ITEMS = [
+  {id:"a",label:"Logo needs a transparent background for a website",zone:"PNG"},
+  {id:"b",label:"Photo-heavy Instagram post, smaller file size",zone:"JPG"},
+  {id:"c",label:"Client needs an infinitely scalable logo file",zone:"SVG"},
+  {id:"d",label:"Flyer heading to a professional print shop",zone:"PDF Print"},
+  {id:"e",label:"Animated Canva design for a social reel",zone:"MP4"}
+];
+var GAME2_ZONES = [{id:"PNG",label:"PNG"},{id:"JPG",label:"JPG"},{id:"SVG",label:"SVG"},{id:"PDF Print",label:"PDF Print"},{id:"MP4",label:"MP4"}];
+
+var GAME3_ITEMS = [
+  {id:"a",label:"1080x1080px design at 72dpi for Instagram",zone:"Screen-Ready"},
+  {id:"b",label:"8.5x11in flyer built at 300dpi",zone:"Print-Ready"},
+  {id:"c",label:"Website banner, 1200px wide, at 72dpi",zone:"Screen-Ready"},
+  {id:"d",label:"Business card at 300dpi with bleed added",zone:"Print-Ready"},
+  {id:"e",label:"Facebook cover photo at 72dpi",zone:"Screen-Ready"}
+];
+var GAME3_ZONES = [{id:"Screen-Ready",label:"Screen-Ready"},{id:"Print-Ready",label:"Print-Ready"}];
+
+var GAME4_ITEMS = [
+  {id:"a",label:"Instagram post graphic",zone:"RGB"},
+  {id:"b",label:"Business card for a print shop",zone:"CMYK"},
+  {id:"c",label:"Website banner ad",zone:"RGB"},
+  {id:"d",label:"Flyer heading to press",zone:"CMYK"},
+  {id:"e",label:"Facebook ad graphic",zone:"RGB"}
+];
+var GAME4_ZONES = [{id:"RGB",label:"RGB"},{id:"CMYK",label:"CMYK"}];
+
+var GAME5_QUESTIONS = [
+  {q:'A file named "finalfinal.png" needs a proper name. Which is correct?', opts:[
+    {text:"CLNT02_Poster_Event_v1_2024-07-10.png", correct:true},
+    {text:"finalfinal2.png", correct:false},
+    {text:"USE THIS ONE poster.png", correct:false}
+  ]},
+  {q:'A file named "logo new (2).png" needs a proper name. Which is correct?', opts:[
+    {text:"logo copy latest.png", correct:false},
+    {text:"CLNT03_Logo_Secondary_v1_2024-06-02.png", correct:true},
+    {text:"newlogo_final_USE.png", correct:false}
+  ]},
+  {q:'A file named "Untitled design (9).jpg" needs a proper name. Which is correct?', opts:[
+    {text:"design9_final.jpg", correct:false},
+    {text:"my design good one.jpg", correct:false},
+    {text:"CLNT04_SocialPost_IG_v1_2024-08-03.jpg", correct:true}
+  ]},
+  {q:'A file named "banner APPROVED FINAL.pdf" needs a proper name. Which is correct?', opts:[
+    {text:"CLNT05_Banner_Website_v2-approved_2024-08-01.pdf", correct:true},
+    {text:"banner APPROVED FINAL v2.pdf", correct:false},
+    {text:"banner_use_this_now.pdf", correct:false}
+  ]}
+];
+
+var GAME6_ITEMS = [
+  {id:"a",label:"CLNT01 client folder",zone:"Structure"},
+  {id:"b",label:"2024 year folder",zone:"Structure"},
+  {id:"c",label:"Summer Flyer Project folder",zone:"Structure"},
+  {id:"d",label:"Editable Canva source file",zone:"Working"},
+  {id:"e",label:"flyer_final_2024-08-01.pdf",zone:"Exports"}
+];
+var GAME6_ZONES = [{id:"Structure",label:"Structure Folders (Client/Year/Project)"},{id:"Working",label:"Working Files (private)"},{id:"Exports",label:"Final Exports (client-facing)"}];
+
+var GAME7_STEPS = [
+  {id:"1",label:"Confirm final trim dimensions"},
+  {id:"2",label:"Add bleed and crop marks"},
+  {id:"3",label:"Convert the color profile to CMYK"},
+  {id:"4",label:"Check resolution is 300dpi minimum"},
+  {id:"5",label:"Export as PDF Print / PDF-X"},
+  {id:"6",label:"Send a proof request to the print shop"}
+];
+
+var GAME8_QUESTIONS = [
+  {q:"A logo needs a transparent background on a website. Best choice?", opts:[
+    {text:"PNG with transparency enabled", correct:true},
+    {text:"JPG at 100% quality", correct:false},
+    {text:"GIF with animation", correct:false},
+    {text:"PDF Standard document", correct:false}
+  ]},
+  {q:"A large hero photo needs to load quickly on a webpage. Best choice?", opts:[
+    {text:"Uncompressed PNG at full size", correct:false},
+    {text:"Compressed JPG run through TinyPNG", correct:true},
+    {text:"Raw SVG vector file", correct:false},
+    {text:"PDF Print export", correct:false}
+  ]},
+  {q:"An icon set must stay crisp at any display size. Best choice?", opts:[
+    {text:"JPG at low compression", correct:false},
+    {text:"Animated GIF", correct:false},
+    {text:"SVG vector format", correct:true},
+    {text:"WEBP at 50% quality", correct:false}
+  ]},
+  {q:"What color mode should all web-delivered assets use?", opts:[
+    {text:"RGB", correct:true},
+    {text:"CMYK", correct:false},
+    {text:"Grayscale", correct:false},
+    {text:"Spot color", correct:false}
+  ]}
+];
+
+var GAME9_ITEMS = [
+  {id:"a",label:"Ongoing client receiving files every week",zone:"Drive"},
+  {id:"b",label:"One-time transfer of 240MB of files",zone:"WeTransfer"},
+  {id:"c",label:"Client already manages files in Dropbox",zone:"Dropbox"},
+  {id:"d",label:"A single 2MB logo file",zone:"Email"}
+];
+var GAME9_ZONES = [{id:"Drive",label:"Google Drive"},{id:"WeTransfer",label:"WeTransfer"},{id:"Dropbox",label:"Dropbox"},{id:"Email",label:"Email Attachment"}];
+
+var GAME10_STEPS = [
+  {id:"1",label:"Item"},
+  {id:"2",label:"Client Comment"},
+  {id:"3",label:"Action Taken"},
+  {id:"4",label:"Status"}
+];
+
+var GAME11_ITEMS = [
+  {id:"a",label:"Non-tech-savvy client",zone:"Simple"},
+  {id:"b",label:"Developer",zone:"Dev"},
+  {id:"c",label:"Print shop",zone:"Print"},
+  {id:"d",label:"New VA taking over",zone:"Handover"}
+];
+var GAME11_ZONES = [
+  {id:"Simple",label:"Simple formats + plain instructions"},
+  {id:"Dev",label:"SVG + PNG + hex codes"},
+  {id:"Print",label:"Full specs confirmed before press"},
+  {id:"Handover",label:"Complete asset handover package"}
+];
+
+var GAME12_STEPS = [
+  {id:"1",label:"Confirm format, resolution, and color mode"},
+  {id:"2",label:"Name files per the naming convention"},
+  {id:"3",label:"Place files in the correct delivery folder"},
+  {id:"4",label:"Compress into a zip if sending multiple files"},
+  {id:"5",label:"Write a clear covering message"},
+  {id:"6",label:"Send via the correct delivery method"},
+  {id:"7",label:"Log the delivery in your records"}
+];
+
+/* ---------- CHECKPOINT DATA ---------- */
+var CP_DATA = {
+  2:{q:"A client needs a design printed by a professional print shop with full bleed and crop marks. Which format is correct?", opts:["PNG at screen resolution","PDF Print with CMYK and bleed included","JPG at medium quality","GIF with a limited color palette"], correct:1, sid:"s2"},
+  3:{q:"What is the minimum DPI generally required for professional print deliverables like flyers and business cards?", opts:["72dpi, the same as a screen","150dpi for banners only","300dpi minimum","96dpi for business cards only"], correct:2, sid:"s3"},
+  4:{q:"Why can a design look slightly different once it moves from an RGB screen preview to a CMYK printed piece?", opts:["CMYK uses ink and covers a narrower color range than RGB light","Printers randomly shift hues during printing","RGB files cannot physically be printed at all","CMYK can only produce grayscale tones"], correct:0, sid:"s4"},
+  5:{q:"What should you name a file once the client has given final sign-off on it?", opts:["final2.png","USE THIS logo.png","CLNT01_Logo_Primary_v2-approved.png","Untitled design (14).png"], correct:2, sid:"s5"},
+  6:{q:"Which folder should a client normally be given access to?", opts:["The Working Files folder with editable source files","The Final Exports folder only","Both folders combined into one shared link","Neither folder should ever be shared"], correct:1, sid:"s6"},
+  7:{q:"What is the minimum recommended bleed area on each side of a print-ready design?", opts:["1mm on two sides only","3mm on all sides","10mm on all sides","No bleed is needed for print"], correct:1, sid:"s7"},
+  8:{q:"What color mode should web-delivered assets use?", opts:["CMYK for color accuracy","Grayscale to reduce file size","RGB","Pantone spot colors"], correct:2, sid:"s8"},
+  9:{q:"A client asks for 15 large, high-resolution files that are too big to email. What should you do?", opts:["Compress everything into low-quality JPGs","Share via a Google Drive folder or WeTransfer link","Send the files across many separate emails","Ask the client to install new software first"], correct:1, sid:"s9"},
+  10:{q:"A client requests a full redesign that goes far beyond what was originally agreed. How should this be treated?", opts:["As an included revision round","As a new project to discuss separately","Ignored until the client stops asking","Completed for free to keep them happy"], correct:1, sid:"s10"},
+  11:{q:"A developer asks for the website icon assets. What should they receive?", opts:["Low-resolution JPGs only", "PNGs with transparency and SVG versions", "A single PDF Standard file", "Animated GIFs for every icon"], correct:1, sid:"s11"},
+  12:{q:"Why keep your own archive and delivery log of every client deliverable?", opts:["It's required by every print shop by law","It protects you professionally and speeds up re-delivery","It automatically increases file resolution","It replaces the need for client communication"], correct:1, sid:"s12"}
+};
+
+/* ---------- INIT ---------- */
+function restoreUI(){
+  if(state.lessonCompleted){
+    SECTION_ORDER.forEach(function(sid){ revealSection(sid); document.getElementById(sid).classList.add("is-visible"); });
+    state.sectionsUnlocked = SECTION_ORDER.length;
+    document.getElementById("finalBlock").classList.remove("hidden");
+  } else {
+    for(var i=0;i<state.sectionsUnlocked;i++){
+      revealSection(SECTION_ORDER[i]);
+      document.getElementById(SECTION_ORDER[i]).classList.add("is-visible");
+    }
+  }
+  updateProgress();
+  buildTOC();
+}
+
+function initGames(){
+  buildDragMatch("g2","g2-root","g2-status",GAME2_ITEMS,GAME2_ZONES,2,"s2");
+  buildDragMatch("g3","g3-root","g3-status",GAME3_ITEMS,GAME3_ZONES,3,"s3");
+  buildDragMatch("g4","g4-root","g4-status",GAME4_ITEMS,GAME4_ZONES,4,"s4");
+  buildClickPick("g5","g5-root","g5-status",GAME5_QUESTIONS,5,"s5");
+  buildDragMatch("g6","g6-root","g6-status",GAME6_ITEMS,GAME6_ZONES,6,"s6");
+  buildSequence("g7","g7-root","g7-status",GAME7_STEPS,7,"s7");
+  buildClickPick("g8","g8-root","g8-status",GAME8_QUESTIONS,8,"s8");
+  buildDragMatch("g9","g9-root","g9-status",GAME9_ITEMS,GAME9_ZONES,9,"s9");
+  buildSequence("g10","g10-root","g10-status",GAME10_STEPS,10,"s10");
+  buildDragMatch("g11","g11-root","g11-status",GAME11_ITEMS,GAME11_ZONES,11,"s11");
+  buildSequence("g12","g12-root","g12-status",GAME12_STEPS,12,"s12");
+}
+function initCheckpoints(){
+  Object.keys(CP_DATA).forEach(function(n){
+    var d = CP_DATA[n];
+    buildCheckpoint(parseInt(n,10), d.sid, d.opts, d.correct);
+  });
+}
+
+function initCalloutTooltips(){
+  var tip = document.createElement("div");
+  tip.className = "callout-tip";
+  document.body.appendChild(tip);
+  var activeCallout = null;
+
+  function renderTip(text){
+    var idx = text.indexOf(" — ");
+    if(idx !== -1){
+      tip.innerHTML = "<b>" + text.slice(0, idx) + "</b> — " + text.slice(idx+3);
+    } else {
+      tip.textContent = text;
+    }
+  }
+  function positionTip(el){
+    var r = el.getBoundingClientRect();
+    var tipRect = tip.getBoundingClientRect();
+    var top = r.bottom + 8;
+    var left = r.left + r.width/2 - tipRect.width/2;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    if(left < 8) left = 8;
+    if(left + tipRect.width > vw - 8) left = vw - tipRect.width - 8;
+    if(top + tipRect.height > vh - 8){ top = r.top - tipRect.height - 8; }
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function showTip(el){
+    var text = el.getAttribute("data-tip");
+    if(!text) return;
+    renderTip(text);
+    tip.classList.add("show");
+    positionTip(el);
+    activeCallout = el;
+  }
+  function hideTip(){
+    tip.classList.remove("show");
+    activeCallout = null;
+  }
+  document.querySelectorAll(".callout[data-tip]").forEach(function(el){
+    el.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(activeCallout === el){ hideTip(); } else { showTip(el); }
+    });
+    el.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        if(activeCallout === el){ hideTip(); } else { showTip(el); }
+      }
+    });
+  });
+  document.addEventListener("click", hideTip);
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") hideTip(); });
+  window.addEventListener("scroll", function(){ if(activeCallout) positionTip(activeCallout); }, {passive:true, capture:true});
+  window.addEventListener("resize", function(){ if(activeCallout) positionTip(activeCallout); });
+}
+
+function checkUrlAutoUnlock(){
+  var params = new URLSearchParams(window.location.search);
+  if(params.get("completed") === "1"){
+    load();
+    state.lessonCompleted = true;
+    state.sectionsUnlocked = SECTION_ORDER.length;
+    state.finalUnlocked = true;
+    SECTION_ORDER.forEach(function(sid){
+      if(state.sectionsDone.indexOf(sid) === -1) state.sectionsDone.push(sid);
+    });
+    Object.keys(CP_DATA).forEach(function(n){
+      var num = parseInt(n,10);
+      if(state.cpPassed.indexOf(num) === -1) state.cpPassed.push(num);
+    });
+    save();
+  }
+}
+
+function wireStaticButtons(){
+  var s1Btn = document.getElementById("s1ContinueBtn");
+  if(s1Btn){
+    if(state.sectionsDone.indexOf("s1") !== -1){
+      s1Btn.disabled = true;
+      s1Btn.textContent = "Completed";
+    } else {
+      s1Btn.addEventListener("click", function(){
+        s1Btn.disabled = true;
+        s1Btn.textContent = "Completed";
+        completeSection("s1");
+      });
+    }
+  }
+
+  var markBtn = document.getElementById("markCompleteBtn");
+  if(markBtn){
+    markBtn.addEventListener("click", function(){
+      state.lessonCompleted = true;
+      save();
+      updateProgress();
+      confettiBurst(markBtn);
+      markLessonComplete();
+    });
+  }
+}
+
+/* ---------- SPLASH ---------- */
+function runSplash(){
+  var bar = document.getElementById("splashBar");
+  var msg = document.getElementById("splashMsg");
+  var splash = document.getElementById("splash");
+  var messages = [
+    {p:0, t:"Initializing LES030…"},
+    {p:15, t:"Loading lesson content…"},
+    {p:30, t:"Preparing activities and games…"},
+    {p:50, t:"Setting up your checkpoints…"},
+    {p:70, t:"Almost there…"},
+    {p:88, t:"LES030 is ready — launching!"}
+  ];
+  var duration = 4000;
+  var start = null;
+  function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function frame(ts){
+    if(!start) start = ts;
+    var elapsed = ts - start;
+    var t = Math.min(elapsed/duration, 1);
+    var pct = ease(t) * 100;
+    bar.style.width = pct + "%";
+    var current = messages[0].t;
+    for(var i=0;i<messages.length;i++){ if(pct >= messages[i].p) current = messages[i].t; }
+    msg.textContent = current;
+    if(t < 1){ requestAnimationFrame(frame); }
+    else {
+      setTimeout(function(){
+        splash.style.opacity = "0";
+        setTimeout(function(){ splash.remove(); }, 500);
+      }, 200);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- SECTION SCROLL REVEAL (for already-unlocked sections) ---------- */
+if("IntersectionObserver" in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add("is-visible"); }
+    });
+  }, {threshold:0.1});
+  document.querySelectorAll(".section").forEach(function(s){ io.observe(s); });
+}
+
+/* ---------- BOOT ---------- */
+load();
+checkUrlAutoUnlock();
+restoreUI();
+wireStaticButtons();
+initGames();
+initCheckpoints();
+initCalloutTooltips();
+runSplash();
+
+})();
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

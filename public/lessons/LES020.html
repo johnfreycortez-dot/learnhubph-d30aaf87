@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES020 — Calendar & Schedule Management | LearnHub PH</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#5a8a6a;--sage2:#4a7358;--sand:#f0a868;--sand2:#dd8f4e;--lsage:#8fb89c;
+  --text:#2b3630;--bg:#fbfaf7;--white:#ffffff;
+  --sage-light:#eef4f0;--sand-light:#fdf6ee;--warn-light:#fdf0e9;
+  --s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;--s400:#94a3b8;--s500:#64748b;--s600:#475569;
+  --g500:#22c55e;--r500:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:0 0 60px;line-height:1.6;font-size:14px}
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#eef4f0 0%,#fbfaf7 60%,#fdf6ee 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;transition:opacity .6s ease,visibility .6s ease}
+#splash.fade-out{opacity:0;visibility:hidden}
+.sp-eyebrow{font-size:10px;font-weight:800;color:var(--sage);letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;text-align:center}
+.sp-thumb{width:min(320px,80vw);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.18);margin-bottom:22px;background:linear-gradient(135deg,var(--sage),var(--sage2));display:flex;align-items:center;justify-content:center;aspect-ratio:16/9}
+.sp-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--text);text-align:center;letter-spacing:-.02em;margin-bottom:8px}
+.sp-sub{font-size:13px;color:#5c6f62;text-align:center;margin-bottom:22px}
+.sp-track{width:min(400px,90vw);height:8px;background:#dbe9de;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand));border-radius:99px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;width:min(400px,90vw);font-size:11px;font-weight:600;color:#5c6f62}
+.topbar{background:var(--white);border-bottom:2px solid var(--sage);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(90,138,106,.1)}
+.topbar img{height:28px}
+.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--sage);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,#3f6650 0%,var(--sage) 50%,var(--lsage) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--white);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.22)}
+.hero-tag{background:rgba(255,255,255,.14);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.hero h1{font-size:clamp(22px,4vw,30px);font-weight:900;line-height:1.2;margin-bottom:12px;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;color:rgba(255,255,255,.85)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.92);display:inline-flex;align-items:center;gap:6px}
+.hero-meta svg{width:14px;height:14px;flex-shrink:0}
+.progress-wrap{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--sage);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--white);border:1px solid var(--s200);border-left:3px solid var(--sage);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.toc-title svg{width:16px;height:16px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--sage);background:var(--sage-light)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--sage);font-weight:700;background:var(--sage-light)}
+.toc-list li a.toc-current::before{background:var(--sage)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-card{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.section-title{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--sage-light);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);font-size:10px;font-weight:800;flex-shrink:0}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:700}
+em{color:var(--sage);font-style:normal;font-weight:600}
+h2{font-size:17px;font-weight:800;color:var(--text);margin:18px 0 10px}
+h3{font-size:14px;font-weight:700;color:var(--sage);margin:14px 0 8px}
+.icon-inline{display:inline-block;vertical-align:middle;flex-shrink:0}
+.def-box{border-left:3px solid var(--sage);padding:16px 20px;background:var(--sage-light);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.def-box p{font-size:13px;color:#1f2e24;margin:0;line-height:1.75}
+.tip-box{border-left:3px solid var(--sand);padding:14px 18px;background:var(--sand-light);border-radius:0 12px 12px 0;margin:14px 0}
+.tip-label{font-size:10px;font-weight:800;color:#b5671a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.tip-box p{font-size:13px;color:#5c3b12;margin:0;line-height:1.7}
+.warn-box{border-left:3px solid #d97748;padding:14px 18px;background:var(--warn-light);border-radius:0 12px 12px 0;margin:14px 0}
+.warn-label{font-size:10px;font-weight:800;color:#d97748;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.warn-box p{font-size:13px;color:#7a3520;margin:0;line-height:1.7}
+.scenario-box{border-left:3px solid var(--lsage);padding:14px 18px;background:#eef7f1;border-radius:0 12px 12px 0;margin:14px 0}
+.scenario-label{font-size:10px;font-weight:800;color:#3f6b4c;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.scenario-box p{font-size:13px;color:#1a3a2c;margin:0;line-height:1.7}
+.action-box{background:linear-gradient(135deg,#eef4f0,#fbfaf7);border:2px solid var(--sage);border-radius:12px;padding:18px 20px;margin:18px 0}
+.action-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.action-box p{font-size:13px;color:var(--text);margin:0;line-height:1.7}
+.table-wrap{overflow-x:auto;margin:16px 0}
+.les-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);table-layout:fixed}
+.les-table th{background:var(--sage);color:var(--white);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.les-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.les-table tr:last-child td{border-bottom:none}
+.les-table tr:hover td{background:var(--sage-light)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.checklist li{font-size:13px;color:var(--s600);line-height:1.6;padding-left:22px;position:relative}
+.checklist li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a8a6a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand))}
+.stat-num{font-size:24px;font-weight:900;color:var(--sage);margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.mini-game{background:linear-gradient(135deg,#3f6650,var(--sage));border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.mg-inst{font-size:12px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.5}
+.mg-btn{background:linear-gradient(135deg,var(--sand),var(--sand2));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:10px;display:inline-flex;align-items:center;gap:6px}
+.mg-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(240,168,104,.4)}
+.mg-result{font-size:13px;font-weight:700;text-align:center;padding:10px 14px;border-radius:8px;margin-top:10px;display:none}
+.mg-result.win{display:block;background:rgba(143,184,156,.25);color:#eafff0;border:1px solid rgba(143,184,156,.4)}
+.mg-result.lose{display:block;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.drag-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.drag-zones.zones3{grid-template-columns:1fr 1fr 1fr}
+.drag-zone{min-height:110px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.24);border-radius:12px;padding:10px;transition:all .2s}
+.drag-zone.drag-over{border-color:var(--sand);background:rgba(240,168,104,.12)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.18);display:flex;align-items:center;gap:6px}
+.zone-label.good{color:#c9f2d6}
+.zone-label.bad{color:#fca5a5}
+.zone-label.neutral{color:rgba(255,255,255,.92)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--white);cursor:grab;user-select:none;transition:all .18s;line-height:1.4}
+.drag-card:hover{background:rgba(255,255,255,.2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.drag-card.dragging{opacity:.4;transform:scale(.96)}
+.drag-card.correct-flash{animation:correctFlash .5s ease forwards}
+.drag-card.wrong-shake{animation:wrongShake .5s ease forwards}
+.verdict-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.verdict-card{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;text-align:left}
+.verdict-card:hover{background:rgba(255,255,255,.17);transform:translateY(-2px)}
+.verdict-card.correct-v{border-color:#c9f2d6;background:rgba(143,184,156,.25);animation:correctFlash .5s ease}
+.verdict-card.wrong-v{border-color:#fca5a5;background:rgba(239,68,68,.14);animation:wrongShake .5s ease}
+.verdict-title{font-size:12px;font-weight:700;color:var(--white);line-height:1.5}
+.seq-drop{display:flex;flex-direction:column;gap:8px;min-height:100px;background:rgba(255,255,255,.05);border:2px dashed rgba(255,255,255,.2);border-radius:12px;padding:10px;transition:all .2s;margin-bottom:12px}
+.seq-drop.drag-over{border-color:var(--sand);background:rgba(240,168,104,.1)}
+.step-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--white);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.19)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.85);flex-shrink:0}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.17);border-color:var(--sand)}
+.match-item.selected{background:rgba(240,168,104,.28);border-color:var(--sand)}
+.match-item.matched{background:rgba(143,184,156,.28);border-color:#c9f2d6;cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.18);border-color:#fca5a5;animation:wrongShake .5s ease}
+.match-score{font-size:12px;color:rgba(255,255,255,.7);margin-top:10px;text-align:center}
+.audit-wrap{position:relative;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:16px;margin-bottom:10px}
+.audit-item{display:flex;align-items:flex-start;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.audit-item:hover{background:rgba(255,255,255,.08)}
+.audit-item.flagged{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.22)}
+.audit-item.flagged .audit-flag{opacity:1}
+.audit-icon{flex-shrink:0;color:rgba(255,255,255,.72)}
+.audit-text{font-size:12px;color:rgba(255,255,255,.88);line-height:1.5;flex:1}
+.audit-flag{font-size:11px;font-weight:700;color:#fca5a5;opacity:0;transition:opacity .2s;flex-shrink:0}
+.meter-track{background:rgba(255,255,255,.12);border-radius:99px;height:14px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.18)}
+.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sand),#c9f2d6);border-radius:99px;transition:width .4s ease}
+.meter-label{font-size:11px;color:rgba(255,255,255,.75);text-align:right;margin-bottom:10px}
+.meter-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.meter-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s}
+.meter-item:hover{background:rgba(255,255,255,.17);transform:translateY(-2px)}
+.meter-item.added{background:rgba(143,184,156,.28);border-color:#c9f2d6;cursor:default;opacity:.75}
+.check-items{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px}
+.check-item:hover{background:rgba(255,255,255,.17)}
+.check-item.picked{background:rgba(240,168,104,.22);border-color:var(--sand)}
+.check-box{width:18px;height:18px;border-radius:5px;border:2px solid rgba(255,255,255,.5);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.check-item.picked .check-box{background:var(--sand);border-color:var(--sand)}
+.dualseq-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.dualseq-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;text-align:center}
+.checkpoint{background:var(--white);border-radius:16px;overflow:hidden;margin:20px 0;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.cp-header{background:linear-gradient(135deg,var(--sage),var(--sage2));padding:14px 20px;display:flex;align-items:center;gap:10px}
+.cp-header-title{font-size:13px;font-weight:800;color:var(--white)}
+.cp-badge{background:rgba(255,255,255,.22);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--white);display:inline-flex;align-items:center;gap:6px}
+.cp-locked{padding:24px;text-align:center;color:var(--s400);font-size:13px}
+.cp-lock-icon{margin-bottom:8px;display:flex;justify-content:center;color:var(--s400)}
+.cp-content{padding:20px}
+.cp-question{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.6}
+.cp-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cp-opts label{display:flex;align-items:flex-start;gap:10px;background:var(--s100);border:2px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--s600);line-height:1.5}
+.cp-opts label:hover{border-color:var(--sage);background:var(--sage-light);color:var(--text)}
+.cp-opts input[type=radio]{accent-color:var(--sage);flex-shrink:0;margin-top:2px}
+.cp-opts label.opt-correct{border-color:var(--g500);background:#f0fdf4;color:#065f46}
+.cp-opts label.opt-incorrect{border-color:var(--r500);background:#fef2f2;color:#991b1b;animation:wrongShake .5s ease}
+.checkpoint-feedback{font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:none}
+.fb-correct{background:#d1fae5;color:#065f46;border:1px solid rgba(34,197,94,.3)}
+.fb-incorrect{background:#fef2f2;color:#991b1b;border:1px solid rgba(239,68,68,.2)}
+.cp-passed-note{display:none;align-items:center;gap:8px;background:#d1fae5;border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:#065f46;margin-bottom:10px}
+.btn-check{background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);border:none;padding:10px 24px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-right:10px}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(90,138,106,.3)}
+.btn-continue{background:linear-gradient(135deg,var(--sand),var(--sand2));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:none}
+.btn-continue:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(240,168,104,.4)}
+.final-block{display:none;margin-bottom:32px;scroll-margin-top:80px}
+.final-block.is-visible{display:block}
+.yt-wrap{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.yt-frame{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+.yt-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.yt-label{padding:12px 16px;font-size:12px;font-weight:700;color:var(--sage);background:var(--sage-light);display:flex;align-items:center;gap:8px}
+.takeaways{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.takeaways h3{font-size:14px;font-weight:800;color:var(--sage);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.complete-wrap{background:var(--white);border-left:3px solid var(--sand);border-radius:12px;padding:24px;text-align:center;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.complete-wrap p{font-size:13px;color:var(--s500);margin-bottom:16px}
+.btn-complete{background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 16px rgba(90,138,106,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-complete:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(90,138,106,.4)}
+.btn-complete:disabled{opacity:.6;cursor:not-allowed;transform:none}
+#complete-msg{display:none;margin-top:14px;font-size:14px;font-weight:700;color:var(--sage);background:var(--sage-light);padding:12px 20px;border-radius:10px}
+@keyframes correctFlash{0%{transform:scale(1)}30%{transform:scale(1.06);box-shadow:0 0 0 4px rgba(143,184,156,.5)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@media(max-width:640px){
+  .hero{padding:28px 20px 24px}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .drag-zones{grid-template-columns:1fr}
+  .drag-zones.zones3{grid-template-columns:1fr}
+  .verdict-grid{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:1fr}
+  .dualseq-wrap{grid-template-columns:1fr}
+  .wrap{padding:16px 14px 0}
+  .section-card{padding:16px}
+  .mini-game{padding:16px}
+  .les-table th,.les-table td{padding:8px}
+  .drag-card,.step-item,.audit-item,.meter-item,.check-item{min-height:44px}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+<body>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-eyebrow">LearnHub PH &nbsp;·&nbsp; Module 7 &nbsp;·&nbsp; Lesson 2</div>
+  <div class="sp-thumb"><img src="data:image/jpeg;base64,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" alt="LES020 thumbnail" style="width:100%;height:100%;object-fit:cover"></div>
+  <div class="sp-title">Calendar &amp; Schedule Management</div>
+  <div class="sp-sub">Hang tight &mdash; Module 7 Lesson 2 is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES020...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 7 &nbsp;·&nbsp; Lesson 2</span>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> MODULE 7 &nbsp;·&nbsp; LESSON 2 OF 3</div>
+  <h1>Calendar &amp; Schedule Management</h1>
+  <p class="hero-sub">A client hands you their calendar because they trust you with one of the most sensitive parts of their business day. This lesson teaches you how to earn and keep that trust &mdash; from learning a client's scheduling preferences, to setting up their calendar the right way, to handling time zones, recurring meetings, cancellations, and booking tools like a seasoned admin VA. By the end, you will be ready to run a client's calendar the same day.</p>
+  <div class="hero-meta">
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> ~60 min</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Beginner</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 1 Video</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59"/><rect x="2" y="5" width="20" height="16" rx="2"/></svg> 10 Activities</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> 10 Checkpoints</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 10</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> What is in this lesson</div>
+  <p class="toc-sub">Read the section &rarr; Complete the activity &rarr; Pass the checkpoint &rarr; Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. Why Calendar &amp; Schedule Management Matters</a></li>
+    <li><a href="#s2" data-toc="2">2. Understanding a Client's Calendar System</a></li>
+    <li><a href="#s3" data-toc="3">3. Setting Up a Calendar for a New Client</a></li>
+    <li><a href="#s4" data-toc="4">4. Scheduling Meetings &amp; Avoiding Double-Bookings</a></li>
+    <li><a href="#s5" data-toc="5">5. Managing Multiple Calendars &amp; Time Zones</a></li>
+    <li><a href="#s6" data-toc="6">6. Recurring Events &amp; Blocking Focus Time</a></li>
+    <li><a href="#s7" data-toc="7">7. Handling Last-Minute Changes Professionally</a></li>
+    <li><a href="#s8" data-toc="8">8. Using Scheduling Tools to Reduce Back-and-Forth</a></li>
+    <li><a href="#s9" data-toc="9">9. Common Calendar Management Mistakes</a></li>
+    <li><a href="#s10" data-toc="10">10. Building a Daily &amp; Weekly Review Routine</a></li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section is-visible" id="s1">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">1</span> Why Calendar &amp; Schedule Management Matters</div>
+
+  <p>A calendar looks simple &mdash; boxes on a grid, a name, a time. But for a busy founder or executive, that grid is where every important relationship, deal, and deadline lives. When you take over a client's calendar, you are not just moving appointments around. You are managing the single tool that decides where their attention goes every day.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p><strong>Calendar and schedule management</strong> is the ongoing work of organizing, protecting, and adjusting a client's time &mdash; booking meetings correctly, preventing conflicts, and keeping the calendar an accurate reflection of how the client actually wants to spend their day.</p>
+  </div>
+
+  <h2>The Real Cost of a Mistake</h2>
+  <p>A missed meeting is rarely just an awkward five minutes. If your client no-shows a call with an investor, a client, or a key vendor, that person walks away with a story about how unreliable your client's team is &mdash; and that story spreads. A double-booking forces your client to choose which relationship to disappoint. These are not small errors; they are reputational events that a VA is directly responsible for preventing.</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">1st</div><div class="stat-label">impression many external contacts form of your client comes from how smoothly a meeting was booked</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">margin for error most executives expect once they hand their calendar to a VA</div></div>
+    <div class="stat"><div class="stat-num">#1</div><div class="stat-label">task new clients watch most closely before trusting a VA with anything more sensitive</div></div>
+  </div>
+
+  <h2>Why This Is a High-Trust Task</h2>
+  <p>Think about what access a calendar requires: your client's daily whereabouts, who they are meeting, sometimes even private notes attached to events. Handing this over is an act of trust most clients do not extend lightly. Handle it well, consistently, for a few weeks, and clients often begin handing you more responsibility &mdash; inbox management, travel booking, even light financial admin &mdash; because you have proven you can be trusted with the details of their day.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Build Confidence Fast</div>
+    <p>Confirm every booked meeting back to the client in writing, even briefly. A short "Confirmed: 2pm call with Jordan, Thursday" message costs you ten seconds and reassures the client that nothing slipped through.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Mika took over calendar management for a coaching business owner. In her first week, she caught a double-booking the client had created before hiring her, moved one meeting with a polite message, and confirmed the fix same-day. The client noticed immediately and started forwarding her every scheduling request without being asked.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>If you already support a client's calendar, scan the next seven days right now for any overlapping events. If you do not yet have a client, open your own calendar and practice spotting what a conflict actually looks like.</p>
+  </div>
+
+  <div class="mini-game" id="game1">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Calendar Habit Sorter</div>
+    <div class="mg-inst">Drag each habit into the zone where it belongs.</div>
+    <div class="drag-pool" id="g1-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g1-zone-good" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label good"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Builds Trust</div></div>
+      <div class="drag-zone" id="g1-zone-bad" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label bad"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Damages Trust</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g1')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g1')">Reset</button>
+    <div class="mg-result" id="g1-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-1">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 1 Knowledge Check</span></div>
+    <div id="cp-1-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-1-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-1-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is calendar management considered one of the highest-trust tasks a VA can hold?</p>
+        <div class="cp-opts" id="cp-1-opts">
+          <label><input type="radio" name="cp1" value="a"> It never affects the client's reputation</label>
+          <label><input type="radio" name="cp1" value="b"> A missed meeting or double-booking directly costs the client time and can damage their professional reputation</label>
+          <label><input type="radio" name="cp1" value="c"> Calendars are the easiest tool to learn</label>
+          <label><input type="radio" name="cp1" value="d"> Clients rarely check their calendars themselves</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-1-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(1,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue to Section 2 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section" id="s2">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">2</span> Understanding a Client's Calendar System and Preferences</div>
+
+  <p>Before you move a single event, you need to learn how your client already works. Every client has a calendar platform they use, a rhythm of meeting lengths they prefer, buffer habits they may not even realize they have, and working hours they protect. Skipping this step is the fastest way to create friction in your first week.</p>
+
+  <h2>What to Learn Before You Touch Anything</h2>
+  <ul class="checklist">
+    <li><strong>Platform</strong> &mdash; Google Calendar, Outlook/Microsoft 365, Apple Calendar, or something else entirely</li>
+    <li><strong>Preferred meeting length</strong> &mdash; some executives default to 25 or 45 minutes instead of the standard 30 or 60</li>
+    <li><strong>Buffer time habits</strong> &mdash; do they want 10-15 minutes of breathing room between back-to-back calls</li>
+    <li><strong>Working hours</strong> &mdash; the actual hours they are willing to be booked, not just "business hours" in general</li>
+    <li><strong>Protected time</strong> &mdash; school pickups, gym time, existing commitments that must never be booked over</li>
+  </ul>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p><strong>Buffer time</strong> is a small block of unscheduled time deliberately placed between meetings so a client has room to breathe, take notes, or simply arrive at the next call on time instead of rushing in late.</p>
+  </div>
+
+  <h3>The Onboarding Conversation</h3>
+  <p>Before making changes, ask your client directly: which platform do they use, do they like back-to-back meetings or breathing room, what time do they truly stop taking calls, and is there anything on their calendar right now that looks wrong. This single conversation prevents most early mistakes.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Never assume your own scheduling preferences match the client's. A VA who likes back-to-back meetings might unknowingly pack a client's day so tight that the client has no time to actually do the work those meetings created.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A new VA assumed her client wanted standard one-hour meetings by default. After two weeks, the client mentioned he actually preferred 25-minute calls whenever possible, to keep his day moving. A five-minute onboarding question would have caught this from day one.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Write out five onboarding questions you would ask a brand-new calendar client before touching their schedule. Save them so you can reuse them with every future client.</p>
+  </div>
+
+  <div class="mini-game" id="game2">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Client Preference Matcher</div>
+    <div class="mg-inst">Click a preference type on the left, then click the matching real example on the right.</div>
+    <div class="match-grid">
+      <div><div class="match-col-label">Preference Type</div><div class="match-items" id="g2-left"></div></div>
+      <div><div class="match-col-label">Real Example</div><div class="match-items" id="g2-right"></div></div>
+    </div>
+    <div class="match-score" id="g2-score">Matched: 0 / 4</div>
+    <div class="mg-result" id="g2-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-2">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 2 Knowledge Check</span></div>
+    <div id="cp-2-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-2-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-2-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Before making any changes to a new client's calendar, what should a VA confirm first?</p>
+        <div class="cp-opts" id="cp-2-opts">
+          <label><input type="radio" name="cp2" value="a"> Nothing — changes can be made immediately</label>
+          <label><input type="radio" name="cp2" value="b"> The client's existing platform, preferred meeting lengths, buffer time habits, and working hours</label>
+          <label><input type="radio" name="cp2" value="c"> Only the client's favorite color scheme</label>
+          <label><input type="radio" name="cp2" value="d"> The VA's own personal schedule preferences</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-2-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(2,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue to Section 3 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section" id="s3">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">3</span> Setting Up a Calendar for a New Client</div>
+
+  <p>Once you understand how a client works, it is time to structure their calendar properly. A well-set-up calendar prevents dozens of small problems before they ever happen &mdash; missed reminders, unclear meeting types, and access confusion among them.</p>
+
+  <h2>Full New-Client Calendar Setup Walkthrough</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+    <tr><th>Setup Step</th><th>What to Do &amp; Why</th></tr>
+    <tr><td>Categories &amp; Colors</td><td>Create clear categories such as Client Calls, Internal Meetings, Personal, and Travel, each with its own color. This lets your client scan their day visually in seconds instead of reading every title.</td></tr>
+    <tr><td>Default Reminders</td><td>Set a standard reminder window (commonly 10-15 minutes before) so the client is never caught off guard, and adjust per-event when a meeting needs more prep time.</td></tr>
+    <tr><td>Shared Access &amp; Permissions</td><td>Confirm exactly what level of access you have &mdash; view only, edit, or manage-on-behalf-of &mdash; and get this confirmed in writing so there is no ambiguity about what you are authorized to change.</td></tr>
+    <tr><td>Buffer Defaults</td><td>Where the platform allows it, set default buffer time between meetings so back-to-back bookings do not happen by accident.</td></tr>
+    <tr><td>Working Hours</td><td>Set the calendar's working hours to match what the client actually confirmed in onboarding, not a generic 9-to-5 default.</td></tr>
+  </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Color-Coding Tip</div>
+    <p>Keep the color palette to four or five categories at most. A calendar with a dozen colors becomes just as hard to scan as one with no color at all.</p>
+  </div>
+
+  <h3>Access Permissions, Explained</h3>
+  <p>Most calendar platforms offer a few permission tiers. "View only" lets you see events but not edit them &mdash; not useful for active management. "Make changes" or "Edit" access is typically the correct tier for a VA managing bookings day-to-day. "Manage sharing" or full delegate access goes further, letting you add other people to the calendar &mdash; only take this level if the client explicitly wants you handling that too.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Reyna was given "view only" access by mistake on day one. She caught it immediately when she tried to move a meeting and could not, flagged it to the client the same hour, and had proper edit access within minutes &mdash; instead of silently missing bookings for days.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Sketch a simple four-category color scheme (Client Calls, Internal, Personal, Travel) you could propose to a new client on day one of managing their calendar.</p>
+  </div>
+
+  <div class="mini-game" id="game3">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Calendar Setup Day One Builder</div>
+    <div class="mg-inst">Drag the setup steps into the correct order for Day One of a new client calendar.</div>
+    <div class="drag-pool" id="g3-pool"></div>
+    <div class="seq-drop" id="g3-drop" ondragover="event.preventDefault();event.currentTarget.classList.add('drag-over')" ondragleave="event.currentTarget.classList.remove('drag-over')" ondrop="seqDrop(event,'g3')"></div>
+    <button class="mg-btn" onclick="seqCheck('g3')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="seqInit('g3')">Reset</button>
+    <div class="mg-result" id="g3-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-3">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 3 Knowledge Check</span></div>
+    <div id="cp-3-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-3-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-3-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA confirm their exact access permission level in writing before managing a client's calendar?</p>
+        <div class="cp-opts" id="cp-3-opts">
+          <label><input type="radio" name="cp3" value="a"> It removes any ambiguity about what changes the VA is authorized to make</label>
+          <label><input type="radio" name="cp3" value="b"> Permissions never actually matter on any platform</label>
+          <label><input type="radio" name="cp3" value="c"> It is only needed for very large companies</label>
+          <label><input type="radio" name="cp3" value="d"> Clients prefer VAs who never ask about access</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-3-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(3,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue to Section 4 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section" id="s4">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">4</span> Scheduling Meetings and Avoiding Double-Bookings</div>
+
+  <p>Booking a meeting sounds simple until you are juggling a client's real availability, travel time between calls, and the very real risk of two people landing in the same slot. This section covers the habits that keep a calendar conflict-free.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p>A <strong>double-booking</strong> is any moment where two events overlap on the same calendar, forcing the client to attend one and miss (or be late to) the other.</p>
+  </div>
+
+  <h2>Before You Confirm Any Meeting</h2>
+  <ul class="checklist">
+    <li>Check the client's <strong>true</strong> availability, not just what looks like an empty slot on screen</li>
+    <li>Account for travel time if the meeting is in person, not just back-to-back video calls</li>
+    <li>Leave the buffer time the client asked for in Section 2</li>
+    <li>Double-check the time zone of every external party before sending the invite</li>
+    <li>Confirm the meeting length matches what was actually agreed, not a default assumption</li>
+  </ul>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>An empty-looking slot is not always truly free. Personal commitments, informal holds, or events on a calendar you have not yet been given access to can all hide behind what looks like open space. When in doubt, ask before booking.</p>
+  </div>
+
+  <h3>The Time Zone Double-Check Habit</h3>
+  <p>Before hitting send on any meeting invite involving someone outside your client's own time zone, say the confirmed time out loud in both zones. "3pm Manila time, which is 11am in Sydney" takes two extra seconds and eliminates one of the most common and embarrassing scheduling errors.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA booked a client's flight-departure-day meeting without checking travel time. The client had to reschedule an important call from the departure gate because the meeting was set only thirty minutes after their flight was due to land. A quick travel-buffer check would have prevented it entirely.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Look at any calendar you can access right now and try to spot one moment where two events sit closer together than they realistically should.</p>
+  </div>
+
+  <div class="mini-game" id="game4">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Double-Booking Spotter</div>
+    <div class="mg-inst">Click every entry below that is part of a scheduling conflict in this sample daily schedule.</div>
+    <div class="audit-wrap"><div id="g4-items"></div></div>
+    <button class="mg-btn" onclick="auditCheck('g4')">Check My Findings</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="auditInit('g4')">Reset</button>
+    <div class="mg-result" id="g4-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-4">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 4 Knowledge Check</span></div>
+    <div id="cp-4-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-4-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-4-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is an empty-looking slot on a calendar not always safe to book over?</p>
+        <div class="cp-opts" id="cp-4-opts">
+          <label><input type="radio" name="cp4" value="a"> Empty slots are always genuinely free</label>
+          <label><input type="radio" name="cp4" value="b"> Personal commitments or informal holds can occupy time that looks open on screen</label>
+          <label><input type="radio" name="cp4" value="c"> Calendars cannot display personal events</label>
+          <label><input type="radio" name="cp4" value="d"> Clients never have commitments outside of work meetings</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-4-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(4,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue to Section 5 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section" id="s5">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">5</span> Managing Multiple Calendars and Time Zones</div>
+
+  <p>Many clients do not live on a single calendar. A founder might have a personal calendar, a business calendar, and a shared team calendar all in play at once &mdash; and their contacts might be scattered across several countries. Coordinating across both dimensions at once is where calendar management gets genuinely challenging.</p>
+
+  <h2>Handling Multiple Calendars for One Client</h2>
+  <p>When a client works across personal, business, and team calendars, your first job is to know which one governs true availability. Some platforms let you overlay calendars so you can see all commitments at a glance; where that is not possible, keep a simple habit of checking each calendar before confirming any new booking.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Overlay Tip</div>
+    <p>Most major calendar platforms let you view several calendars side-by-side or overlaid in one screen. Set this up once during onboarding and you will never have to manually cross-check calendars again.</p>
+  </div>
+
+  <h2>Time Zone Comparison Table</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:26%"><col style="width:24%"><col style="width:24%"><col style="width:26%"></colgroup>
+    <tr><th>Client Location</th><th>Common Time Zone</th><th>VA Location (Philippines)</th><th>Typical Overlap Window</th></tr>
+    <tr><td>United States (East Coast)</td><td>EST/EDT (UTC-5/-4)</td><td>PHT (UTC+8)</td><td>Philippine evening / US early morning</td></tr>
+    <tr><td>United States (West Coast)</td><td>PST/PDT (UTC-8/-7)</td><td>PHT (UTC+8)</td><td>Philippine late night / US morning</td></tr>
+    <tr><td>United Kingdom</td><td>GMT/BST (UTC+0/+1)</td><td>PHT (UTC+8)</td><td>Philippine afternoon / UK morning</td></tr>
+    <tr><td>Australia (Sydney)</td><td>AEST/AEDT (UTC+10/+11)</td><td>PHT (UTC+8)</td><td>Philippine morning / AU midday</td></tr>
+    <tr><td>Canada (Toronto)</td><td>EST/EDT (UTC-5/-4)</td><td>PHT (UTC+8)</td><td>Philippine evening / Canada early morning</td></tr>
+  </table>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Daylight saving changes do not happen on the same date everywhere, and the Philippines does not observe daylight saving at all. Always reconfirm the overlap window near a daylight saving transition instead of assuming last month's times still hold.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA scheduling between a Manila-based client and a Sydney investor almost sent an invite for 9am Manila time, assuming it matched the investor's stated "morning" preference &mdash; without realizing that was actually 11am in Sydney, past the investor's preferred cutoff. Checking the actual converted time before sending caught the mismatch.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Pick any two countries from the table above and write out, in your own words, what time it would be in the Philippines when it is 10am there.</p>
+  </div>
+
+  <div class="mini-game" id="game5">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Time Zone Scenario Matcher</div>
+    <div class="mg-inst">Read each scenario and choose the correct time-zone-safe action.</div>
+    <div id="g5-stage"></div>
+    <div class="mg-result" id="g5-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-5">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 5 Knowledge Check</span></div>
+    <div id="cp-5-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-5-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-5-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">When scheduling meetings across different time zones, what habit helps prevent errors?</p>
+        <div class="cp-opts" id="cp-5-opts">
+          <label><input type="radio" name="cp5" value="a"> Assuming all clients are in the same time zone as the VA</label>
+          <label><input type="radio" name="cp5" value="b"> Double-checking the time zone conversion before confirming any meeting</label>
+          <label><input type="radio" name="cp5" value="c"> Only scheduling meetings in the morning</label>
+          <label><input type="radio" name="cp5" value="d"> Avoiding all meetings with international clients</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-5-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(5,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue to Section 6 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section" id="s6">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">6</span> Recurring Events and Blocking Focus Time</div>
+
+  <p>Not everything on a calendar should be a one-off booking. Recurring meetings save you from rebuilding the same event every week, and focus time protects the hours a client actually needs to get work done between all those meetings.</p>
+
+  <h2>Setting Up Recurring Meetings Correctly</h2>
+  <p>When a meeting repeats &mdash; a weekly team check-in, a biweekly client call &mdash; set it as a true recurring event rather than manually rebooking it each time. This keeps reminders, attendee lists, and notes consistent, and it makes it obvious to everyone involved that the slot is a standing commitment.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p><strong>Focus time</strong> is a deliberately blocked period on a calendar reserved for deep, uninterrupted work &mdash; no meetings, no calls &mdash; so the tasks that meetings generate actually get done.</p>
+  </div>
+
+  <h3>Sample Recurring Meeting &amp; Focus-Time Setup</h3>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+    <tr><th>Block</th><th>Suggested Setup</th></tr>
+    <tr><td>Weekly Team Check-In</td><td>Recurring every Monday, 30 minutes, same time, marked as a standing meeting with a fixed agenda link</td></tr>
+    <tr><td>Biweekly Client Call</td><td>Recurring every other Wednesday, 45 minutes, with a 10-minute buffer built in immediately after</td></tr>
+    <tr><td>Morning Deep-Work Block</td><td>Recurring weekdays, 8:00-10:00am, marked private/busy so it cannot be booked over by mistake</td></tr>
+    <tr><td>Friday Admin &amp; Review Block</td><td>Recurring every Friday afternoon, 60 minutes, used for the weekly review routine covered later in this lesson</td></tr>
+  </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Protect It Like a Meeting</div>
+    <p>Mark focus-time blocks as "busy," not "free." A block that shows as free on the calendar will eventually get booked over by someone who does not know it is protected time.</p>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>A calendar packed with 100% meetings and zero breathing room quietly destroys productivity, even though every slot is technically "used." Part of your job as a VA is proactively suggesting focus-time blocks, not just filling every open slot with a meeting.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Pick one recurring meeting from the sample table above and set it up on a practice calendar, marked correctly as recurring and busy.</p>
+  </div>
+
+  <div class="mini-game" id="game6">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Calendar Block Sorter</div>
+    <div class="mg-inst">Drag each sample event into the zone it belongs in.</div>
+    <div class="drag-pool" id="g6-pool"></div>
+    <div class="drag-zones zones3">
+      <div class="drag-zone" id="g6-zone-rec" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g6')"><div class="zone-label neutral">Recurring Meeting</div></div>
+      <div class="drag-zone" id="g6-zone-focus" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g6')"><div class="zone-label neutral">Focus Time</div></div>
+      <div class="drag-zone" id="g6-zone-oneoff" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g6')"><div class="zone-label neutral">One-Off Meeting</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g6')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g6')">Reset</button>
+    <div class="mg-result" id="g6-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-6">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 6 Knowledge Check</span></div>
+    <div id="cp-6-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-6-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-6-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA proactively block off recurring focus time on a client's calendar, not just meetings?</p>
+        <div class="cp-opts" id="cp-6-opts">
+          <label><input type="radio" name="cp6" value="a"> Focus time has no real value</label>
+          <label><input type="radio" name="cp6" value="b"> Filling a calendar with 100% meetings and zero breathing room hurts productivity, so protected focus time matters too</label>
+          <label><input type="radio" name="cp6" value="c"> Clients never want any unscheduled time</label>
+          <label><input type="radio" name="cp6" value="d"> Focus time blocks are only for VAs, not clients</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-6-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(6,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue to Section 7 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section" id="s7">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">7</span> Handling Last-Minute Changes and Cancellations Professionally</div>
+
+  <p>Plans change. A client gets sick, an attendee has an emergency, priorities shift. What separates a strong VA is not avoiding every change &mdash; that is impossible &mdash; but handling changes with speed and professionalism so nobody is left confused or embarrassed.</p>
+
+  <h2>The Correct Sequence for Rescheduling or Cancelling</h2>
+  <ul class="checklist">
+    <li>Notify every affected party <strong>promptly</strong> &mdash; do not wait until the last possible minute</li>
+    <li>Offer two or three alternative times right away instead of just saying "we need to reschedule"</li>
+    <li>Update every calendar the event appears on, including any shared or synced copies</li>
+    <li>Confirm the new time once it is agreed, in writing, to everyone involved</li>
+    <li>Note the reason briefly if appropriate, without oversharing private details</li>
+  </ul>
+
+  <h2>Sample Rescheduling Message Template</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:100%"></colgroup>
+    <tr><th>Rescheduling Message Template</th></tr>
+    <tr><td>Hi [Name], I need to move our [meeting name] originally set for [original time]. Would [option 1] or [option 2] work on your end instead? Happy to adjust further if neither fits. Thank you for your flexibility, [Your Name] on behalf of [Client Name]</td></tr>
+  </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Speed Matters</div>
+    <p>The moment you know a meeting needs to move, send the notice. A rescheduling message sent an hour before the call reads as an emergency; one sent the moment you know reads as simply professional.</p>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Moving a meeting on the client's own calendar without updating a synced copy on a shared team calendar leaves a stale, incorrect entry behind &mdash; which can cause someone to show up at the wrong time later.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A client's flight got delayed the morning of an important call. The VA immediately messaged the other party with two alternative times, updated the calendar, and confirmed the new slot within fifteen minutes &mdash; turning a potential no-show into a smoothly handled reschedule.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Save the rescheduling message template above somewhere you can reuse it instantly the next time a meeting needs to move.</p>
+  </div>
+
+  <div class="mini-game" id="game7">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Cancellation Response Chooser</div>
+    <div class="mg-inst">For each scenario, click the most professional way to handle it.</div>
+    <div id="g7-stage"></div>
+    <div class="mg-result" id="g7-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-7">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 7 Knowledge Check</span></div>
+    <div id="cp-7-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-7-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-7-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">When a meeting needs to be rescheduled, what should a VA do right away?</p>
+        <div class="cp-opts" id="cp-7-opts">
+          <label><input type="radio" name="cp7" value="a"> Wait until the meeting time passes before saying anything</label>
+          <label><input type="radio" name="cp7" value="b"> Notify all affected parties promptly and offer alternative times</label>
+          <label><input type="radio" name="cp7" value="c"> Cancel the meeting with no explanation and no new time offered</label>
+          <label><input type="radio" name="cp7" value="d"> Only update the client's personal calendar and leave shared copies as-is</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-7-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(7,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue to Section 8 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section" id="s8">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">8</span> Using Scheduling Tools to Reduce Back-and-Forth</div>
+
+  <p>Some of the most time-consuming email threads in business are the ones spent negotiating a meeting time. Calendly-style booking links solve this by letting the other person pick from real, already-confirmed availability &mdash; no back-and-forth required.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p>A <strong>booking link</strong> is a shareable scheduling page that shows real-time availability pulled directly from a calendar, letting the recipient choose and confirm a slot without a single back-and-forth email.</p>
+  </div>
+
+  <h2>Setting Up a Booking Link the Right Way</h2>
+  <ul class="checklist">
+    <li>Set the availability window to match the client's actual confirmed working hours, not a generic default</li>
+    <li>Add buffer time before and after each bookable slot so back-to-back bookings do not sneak in</li>
+    <li>Set a minimum notice period (for example, no bookings within the next 4 hours) so the client is never blindsided by a same-hour booking</li>
+    <li>Cap how many meetings can be booked per day through the link, to prevent an overloaded schedule</li>
+    <li>Connect the link directly to the live calendar so it always reflects true, current availability</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Use Multiple Link Types</div>
+    <p>Set up separate booking links for different meeting types &mdash; a 15-minute intro call link and a 45-minute strategy call link &mdash; instead of forcing every request through one generic link.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Before booking links, a VA spent hours a week trading "does Tuesday work?" emails for a busy consultant. After setting up a properly buffered booking link, most external contacts booked their own slot in under a minute, freeing that time for actual calendar management work.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>List the two most common meeting types a client you support (or might support) takes, and sketch what a dedicated booking link for each would look like.</p>
+  </div>
+
+  <div class="mini-game" id="game8">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Booking Link Feature Matcher</div>
+    <div class="mg-inst">Click each feature to reveal the problem it solves and build up your setup meter.</div>
+    <div class="meter-track"><div class="meter-fill" id="g8-fill"></div></div>
+    <div class="meter-label" id="g8-pct">0% complete</div>
+    <div class="meter-items" id="g8-items"></div>
+    <div class="mg-result" id="g8-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-8">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 8 Knowledge Check</span></div>
+    <div id="cp-8-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-8-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-8-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What is a key benefit of using a scheduling tool like a Calendly-style booking link?</p>
+        <div class="cp-opts" id="cp-8-opts">
+          <label><input type="radio" name="cp8" value="a"> It replaces the need for a calendar entirely</label>
+          <label><input type="radio" name="cp8" value="b"> It reduces the back-and-forth of "does this time work" emails by letting people pick from real availability directly</label>
+          <label><input type="radio" name="cp8" value="c"> It only works for one-time meetings, never recurring ones</label>
+          <label><input type="radio" name="cp8" value="d"> It prevents all possible scheduling conflicts automatically</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-8-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(8,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue to Section 9 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section" id="s9">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">9</span> Common Calendar Management Mistakes</div>
+
+  <p>Most calendar disasters trace back to a handful of repeat mistakes. Learning to recognize them in your own habits &mdash; before a client has to point them out &mdash; is what separates a VA who gets trusted with more responsibility from one who does not.</p>
+
+  <h2>The Big Four Mistakes</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:26%"><col style="width:74%"></colgroup>
+    <tr><th>Mistake</th><th>Why It Hurts</th></tr>
+    <tr><td>Double-booking</td><td>Forces the client to disappoint one party, damaging a relationship that took time to build</td></tr>
+    <tr><td>Ignoring time zone differences</td><td>Causes missed or mistimed meetings, and signals carelessness to external contacts</td></tr>
+    <tr><td>Forgetting to send updated invites after a change</td><td>Leaves attendees with stale information, leading to no-shows or confusion at the wrong time</td></tr>
+    <tr><td>Packing the calendar with zero breathing room</td><td>Leaves no time to actually do the work meetings generate, hurting the client's real productivity</td></tr>
+  </table>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Most of these mistakes are not one-time accidents &mdash; they are habits. A VA who rushes through bookings without double-checking will repeat the same error across multiple clients until the habit is deliberately corrected.</p>
+  </div>
+
+  <h3>Why Self-Auditing Matters</h3>
+  <p>The best VAs periodically review their own recent bookings the way an editor reviews their own writing &mdash; looking specifically for the mistakes they know they are prone to, rather than assuming everything is fine because nothing has gone wrong yet.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA noticed she kept forgetting to resend invites after moving meetings. Instead of hoping she would remember next time, she added "resend updated invite" as a fixed step in her rescheduling checklist &mdash; and the mistake stopped happening entirely.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Of the four mistakes above, honestly identify the one you are most likely to make, and write one concrete habit that would prevent it.</p>
+  </div>
+
+  <div class="mini-game" id="game9">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg> Mistake Spotter</div>
+    <div class="mg-inst">Select every VA behavior below that is a calendar management mistake, then submit.</div>
+    <div class="check-items" id="g9-items"></div>
+    <button class="mg-btn" onclick="checkGameSubmit('g9')">Submit Selections</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="checkGameInit('g9')">Reset</button>
+    <div class="mg-result" id="g9-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-9">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 9 Knowledge Check</span></div>
+    <div id="cp-9-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-9-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-9-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is it useful for a VA to periodically self-audit their own recent bookings?</p>
+        <div class="cp-opts" id="cp-9-opts">
+          <label><input type="radio" name="cp9" value="a"> Repeat mistakes are habits, and self-auditing catches them before a client has to point them out</label>
+          <label><input type="radio" name="cp9" value="b"> Self-auditing is only necessary if a client complains first</label>
+          <label><input type="radio" name="cp9" value="c"> Mistakes never repeat once made a single time</label>
+          <label><input type="radio" name="cp9" value="d"> Only new VAs need to check their own work</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-9-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(9,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-9-cont" onclick="unlockSection(10)">Continue to Section 10 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 10 ===== -->
+<div class="section" id="s10">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">10</span> Building a Daily and Weekly Calendar Review Routine</div>
+
+  <p>Every habit covered in this lesson comes together in one simple routine: a quick daily glance and a slightly longer weekly look-ahead. This is the safety net that catches problems while they are still easy to fix.</p>
+
+  <h2>The Daily Glance</h2>
+  <p>Each morning, before the client's day starts, scan the next 24 hours for anything that looks wrong &mdash; a conflict, a missing location, an unconfirmed attendee. This takes only a few minutes but catches the vast majority of same-day surprises.</p>
+
+  <h2>The Weekly Look-Ahead</h2>
+  <p>Once a week, usually during the Friday admin block set up in Section 6, scan the coming seven to fourteen days. This is where you catch problems the daily glance cannot &mdash; a recurring meeting that overlaps with a newly booked trip, a client's stated availability that has quietly drifted, or a cluster of back-to-back days with no focus time at all.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Definition</div>
+    <p>A <strong>calendar review routine</strong> is a fixed, repeatable habit of checking a client's schedule at set intervals &mdash; daily and weekly &mdash; specifically to catch conflicts and problems before they reach the client.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Make It Non-Negotiable</div>
+    <p>Put both reviews on your own calendar as recurring blocks. A review routine that depends on "remembering to do it" eventually gets skipped during a busy week &mdash; exactly when it is needed most.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>During a routine Friday look-ahead, a VA spotted that a client's newly booked flight overlapped with a recurring team meeting two weeks out &mdash; something no one had noticed when the flight was booked. She moved the meeting quietly, days before it would have become a problem.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Block two recurring times on your own calendar right now &mdash; a short daily glance and a slightly longer weekly look-ahead &mdash; so this routine becomes automatic from day one.</p>
+  </div>
+
+  <div class="mini-game" id="game10">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Weekly Review Routine Sequencer</div>
+    <div class="mg-inst">Drag each task into the correct list, then arrange each list from first to last.</div>
+    <div class="drag-pool" id="g10-pool"></div>
+    <div class="dualseq-wrap">
+      <div>
+        <div class="dualseq-col-label">Daily Glance</div>
+        <div class="seq-drop" id="g10-drop-daily" ondragover="event.preventDefault();event.currentTarget.classList.add('drag-over')" ondragleave="event.currentTarget.classList.remove('drag-over')" ondrop="dualseqDrop(event,'g10','daily')"></div>
+      </div>
+      <div>
+        <div class="dualseq-col-label">Weekly Look-Ahead</div>
+        <div class="seq-drop" id="g10-drop-weekly" ondragover="event.preventDefault();event.currentTarget.classList.add('drag-over')" ondragleave="event.currentTarget.classList.remove('drag-over')" ondrop="dualseqDrop(event,'g10','weekly')"></div>
+      </div>
+    </div>
+    <button class="mg-btn" onclick="dualseqCheck('g10')">Check My Routine</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dualseqInit('g10')">Reset</button>
+    <div class="mg-result" id="g10-result"></div>
+  </div>
+
+  <div class="yt-wrap">
+    <div class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/5Et7W1o7oWA?rel=0&enablejsapi=1" title="Calendar & Schedule Management — Full Walkthrough" allowfullscreen></iframe></div>
+    <div class="yt-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 📺 Watch: Calendar &amp; Schedule Management — Full Walkthrough</div>
+  </div>
+
+  <div class="checkpoint" id="cp-10">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 10 Knowledge Check</span></div>
+    <div id="cp-10-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-10-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-10-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA put daily and weekly calendar reviews on their own calendar as recurring blocks?</p>
+        <div class="cp-opts" id="cp-10-opts">
+          <label><input type="radio" name="cp10" value="a"> A routine that depends only on remembering tends to get skipped during busy weeks, exactly when it matters most</label>
+          <label><input type="radio" name="cp10" value="b"> Recurring blocks are required by every calendar platform</label>
+          <label><input type="radio" name="cp10" value="c"> Clients prefer VAs who review calendars only once a month</label>
+          <label><input type="radio" name="cp10" value="d"> Daily and weekly reviews are the same task and only one is needed</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-10-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(10,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-10-cont" onclick="unlockFinal()">See Key Takeaways →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== FINAL BLOCK ===== -->
+<div class="final-block" id="final-block">
+  <div class="takeaways">
+    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg> Key Takeaways</h3>
+    <ul class="checklist">
+      <li>Calendar management is a high-trust task &mdash; a missed meeting or double-booking directly costs the client time and reputation</li>
+      <li>Always learn a client's platform, meeting-length preferences, buffer habits, and working hours before making changes</li>
+      <li>Set up a new client's calendar with clear categories, colors, reminders, and confirmed access permissions from day one</li>
+      <li>Check true availability, travel time, and time zones before confirming any meeting</li>
+      <li>Use overlays to manage multiple calendars, and always double-check time zone conversions with international contacts</li>
+      <li>Set recurring meetings correctly and protect focus time by marking it busy, not free</li>
+      <li>Handle last-minute changes with prompt notice, alternative times, and fully updated invites everywhere</li>
+      <li>Booking links cut down endless back-and-forth &mdash; set them up with real buffers and accurate availability</li>
+      <li>Watch for the big four repeat mistakes: double-booking, ignoring time zones, forgetting updated invites, and zero breathing room</li>
+      <li>A simple daily glance and weekly look-ahead routine catches most problems before they ever reach the client</li>
+    </ul>
+  </div>
+  <div class="complete-wrap">
+    <p>You have completed LES020. Mark this lesson as complete to unlock the next lesson in Module 7.</p>
+    <button class="btn-complete" id="btn-mark-complete" onclick="markLessonComplete()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Mark Lesson as Complete</button>
+    <div id="complete-msg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:6px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Lesson marked complete!</div>
+  </div>
+</div>
+
+</div>
+<script>
+const LESSON_ID = "LES020";
+const SAVE_KEY = "lhph_LES020";
+let TOTAL_SECTIONS = 1;
+
+let state = {
+  sectionsUnlocked: 1,
+  sectionsDone: [],
+  cpPassed: [],
+  finalUnlocked: false,
+  lessonCompleted: false
+};
+
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) { const saved = JSON.parse(raw); state = Object.assign({}, state, saved); }
+  } catch(e) {}
+}
+
+function updateProgress() {
+  const label = document.getElementById("progress-label");
+  const pct = document.getElementById("progress-pct");
+  const fill = document.getElementById("progress-fill");
+  const done = state.sectionsDone.length;
+  const percent = Math.round((done / TOTAL_SECTIONS) * 100);
+  label.textContent = state.finalUnlocked ? "Lesson Complete Area" : ("Section " + state.sectionsUnlocked + " of " + TOTAL_SECTIONS);
+  pct.textContent = percent + "% complete";
+  fill.style.width = percent + "%";
+}
+
+function updateTOC() {
+  document.querySelectorAll(".toc-list a").forEach(a => {
+    const n = parseInt(a.dataset.toc, 10);
+    a.classList.remove("toc-locked", "toc-current", "toc-done");
+    if (state.sectionsDone.indexOf(n) !== -1) { a.classList.add("toc-done"); }
+    else if (n === state.sectionsUnlocked) { a.classList.add("toc-current"); }
+    else if (n > state.sectionsUnlocked) { a.classList.add("toc-locked"); }
+  });
+}
+
+function unlockSection(n) {
+  if (!state.sectionsDone.includes(n - 1) && n > 1) { state.sectionsDone.push(n - 1); }
+  state.sectionsUnlocked = Math.max(state.sectionsUnlocked, n);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const target = document.getElementById("s" + n);
+  if (target) { target.classList.add("is-visible"); target.scrollIntoView({behavior:"smooth", block:"start"}); }
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockFinal() {
+  if (!state.sectionsDone.includes(TOTAL_SECTIONS)) { state.sectionsDone.push(TOTAL_SECTIONS); }
+  state.finalUnlocked = true;
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const fb = document.getElementById("final-block");
+  fb.classList.add("is-visible");
+  fb.scrollIntoView({behavior:"smooth", block:"start"});
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockCP(n) {
+  const locked = document.getElementById("cp-" + n + "-locked");
+  const content = document.getElementById("cp-" + n + "-content");
+  if (locked) locked.style.display = "none";
+  if (content) content.style.display = "block";
+}
+
+function checkAnswer(n, correctVal) {
+  const opts = document.querySelectorAll("input[name=cp" + n + "]");
+  let chosen = null;
+  opts.forEach(o => { if (o.checked) chosen = o.value; });
+  const fb = document.getElementById("cp-" + n + "-fb");
+  const labels = document.querySelectorAll("#cp-" + n + "-opts label");
+  labels.forEach(l => l.classList.remove("opt-correct", "opt-incorrect"));
+  if (!chosen) {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Please choose an answer first.";
+    return;
+  }
+  if (chosen === correctVal) {
+    fb.className = "checkpoint-feedback fb-correct";
+    fb.style.display = "block";
+    fb.textContent = "Correct! Great work.";
+    opts.forEach(o => { if (o.value === correctVal) o.closest("label").classList.add("opt-correct"); });
+    document.getElementById("cp-" + n + "-passed").style.display = "flex";
+    document.getElementById("cp-" + n + "-cont").style.display = "inline-flex";
+    if (!state.cpPassed.includes(n)) { state.cpPassed.push(n); }
+    save();
+  } else {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Not quite — review the section above and try again.";
+    opts.forEach(o => {
+      if (o.value === chosen) o.closest("label").classList.add("opt-incorrect");
+    });
+  }
+}
+
+function markLessonComplete() {
+  state.lessonCompleted = true;
+  save();
+  document.getElementById("btn-mark-complete").disabled = true;
+  document.getElementById("complete-msg").style.display = "block";
+  try{window.parent.postMessage({action:"lessonComplete"},"*");}catch(e){}
+}
+
+function restoreUI() {
+  if (state.lessonCompleted) {
+    document.querySelectorAll(".section").forEach(s => s.classList.add("is-visible"));
+    document.getElementById("final-block").classList.add("is-visible");
+    for (let i = 1; i <= TOTAL_SECTIONS; i++) {
+      unlockCP(i);
+      const passedNote = document.getElementById("cp-" + i + "-passed");
+      if (passedNote) passedNote.style.display = "flex";
+      const cont = document.getElementById("cp-" + i + "-cont");
+      if (cont) cont.style.display = "inline-flex";
+    }
+    document.getElementById("btn-mark-complete").disabled = true;
+    document.getElementById("complete-msg").style.display = "block";
+    state.sectionsUnlocked = TOTAL_SECTIONS;
+    state.finalUnlocked = true;
+    updateProgress(); updateTOC();
+    return;
+  }
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const cur = document.getElementById("s" + state.sectionsUnlocked);
+  if (cur) cur.classList.add("is-visible");
+  if (state.finalUnlocked) { document.getElementById("final-block").classList.add("is-visible"); }
+  state.cpPassed.forEach(n => {
+    unlockCP(n);
+    const passedNote = document.getElementById("cp-" + n + "-passed");
+    if (passedNote) passedNote.style.display = "flex";
+    const cont = document.getElementById("cp-" + n + "-cont");
+    if (cont) cont.style.display = "inline-flex";
+  });
+  updateProgress(); updateTOC();
+}
+
+/* ============ CONFETTI ============ */
+function confettiBurst() {
+  const colors = ["#5a8a6a","#8fb89c","#f0a868","#ffffff"];
+  for (let i = 0; i < 16; i++) {
+    const c = document.createElement("div");
+    c.style.position = "fixed";
+    c.style.left = (40 + Math.random()*20) + "vw";
+    c.style.top = "40vh";
+    c.style.width = "8px"; c.style.height = "8px";
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = "2px";
+    c.style.zIndex = 5000;
+    c.style.transition = "transform 1s ease, opacity 1s ease";
+    document.body.appendChild(c);
+    requestAnimationFrame(() => {
+      c.style.transform = "translate(" + ((Math.random()-0.5)*200) + "px," + (200 + Math.random()*200) + "px) rotate(" + (Math.random()*720) + "deg)";
+      c.style.opacity = "0";
+    });
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+/* ============ GENERIC DRAG-ZONE ENGINE (2 or 3 zones) ============ */
+const dzData = {};
+function dzMakeCard(text) {
+  const el = document.createElement("div");
+  el.className = "drag-card";
+  el.draggable = true;
+  el.textContent = text;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  el.addEventListener("touchstart", () => { el.dataset.touching = "1"; }, {passive:true});
+  return el;
+}
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
+function dzLeave(e) { e.currentTarget.classList.remove("drag-over"); }
+function dzDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const dragging = document.querySelector(".drag-card.dragging") || Array.from(document.querySelectorAll(".drag-card")).find(c => c.textContent === text);
+  if (dragging) { e.currentTarget.appendChild(dragging); }
+}
+function dzInit(gid) {
+  const conf = dzData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  pool.innerHTML = "";
+  conf.zones.forEach(z => {
+    const zone = document.getElementById(gid + "-zone-" + z);
+    if (zone) { Array.from(zone.children).forEach(c => { if (c.classList && c.classList.contains("drag-card")) c.remove(); }); }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => pool.appendChild(dzMakeCard(item.text)));
+}
+function dzCheck(gid) {
+  const conf = dzData[gid];
+  const zoneEls = conf.zones.map(z => document.getElementById(gid + "-zone-" + z));
+  let correct = 0, total = conf.items.length, placed = 0;
+  conf.items.forEach(item => {
+    for (let zi = 0; zi < zoneEls.length; zi++) {
+      const zone = zoneEls[zi];
+      const cards = Array.from(zone.querySelectorAll(".drag-card"));
+      const card = cards.find(c => c.textContent === item.text);
+      if (card) {
+        placed++;
+        if (conf.zones[zi] === item.zone) { correct++; card.classList.remove("wrong-shake"); void card.offsetWidth; card.classList.add("correct-flash"); }
+        else { card.classList.remove("correct-flash"); void card.offsetWidth; card.classList.add("wrong-shake"); }
+      }
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (placed < total) {
+    result.className = "mg-result lose";
+    result.textContent = "Place all " + total + " items into a zone first (" + placed + " placed).";
+    return;
+  }
+  if (correct === total) {
+    result.className = "mg-result win";
+    result.textContent = "All " + total + " correct! Excellent sorting.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + total + " correct. Check the shaking cards and try again.";
+  }
+}
+
+/* ============ GENERIC SEQUENCER ENGINE ============ */
+const seqData = {};
+function seqMakeItem(text, i) {
+  const el = document.createElement("div");
+  el.className = "step-item";
+  el.draggable = true;
+  el.dataset.text = text;
+  el.innerHTML = "<span class='step-num'>" + (i+1) + "</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  return el;
+}
+function seqRenumber(container) {
+  Array.from(container.children).forEach((el, i) => {
+    const numSpan = el.querySelector(".step-num");
+    if (numSpan) numSpan.textContent = i + 1;
+  });
+}
+function seqInit(gid) {
+  const conf = seqData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  const drop = document.getElementById(gid + "-drop");
+  pool.innerHTML = ""; drop.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach((t, i) => pool.appendChild(seqMakeItem(t, i)));
+  pool.addEventListener("dragover", e => e.preventDefault());
+  pool.addEventListener("drop", e => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+    if (dragging) pool.appendChild(dragging);
+    seqRenumber(drop);
+  });
+}
+function seqDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const drop = document.getElementById(gid + "-drop");
+  const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+  if (dragging) { drop.appendChild(dragging); seqRenumber(drop); }
+}
+function seqCheck(gid) {
+  const conf = seqData[gid];
+  const drop = document.getElementById(gid + "-drop");
+  const items = Array.from(drop.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  if (items.length < conf.order.length) {
+    result.className = "mg-result lose";
+    result.textContent = "Drag all " + conf.order.length + " steps into the sequence first.";
+    return;
+  }
+  let correct = true;
+  for (let i = 0; i < conf.order.length; i++) { if (items[i] !== conf.order[i]) { correct = false; break; } }
+  if (correct) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect order! Well done.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "That order is not quite right yet. Rearrange and check again.";
+    Array.from(drop.children).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+  }
+}
+
+/* ============ GENERIC MATCH ENGINE ============ */
+const matchData = {};
+let matchSel = {};
+function matchInit(gid) {
+  const conf = matchData[gid];
+  const left = document.getElementById(gid + "-left");
+  const right = document.getElementById(gid + "-right");
+  left.innerHTML = ""; right.innerHTML = "";
+  matchSel[gid] = { left: null, matched: 0 };
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const leftShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  const rightShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  leftShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.term; el.dataset.key = p.term;
+    el.onclick = () => matchClickLeft(gid, el, p.term);
+    left.appendChild(el);
+  });
+  rightShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.def; el.dataset.key = p.term;
+    el.onclick = () => matchClickRight(gid, el, p.term);
+    right.appendChild(el);
+  });
+  document.getElementById(gid + "-score").textContent = "Matched: 0 / " + conf.pairs.length;
+}
+function matchClickLeft(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  document.querySelectorAll("#" + gid + "-left .match-item").forEach(e => e.classList.remove("selected"));
+  el.classList.add("selected");
+  matchSel[gid].left = term;
+}
+function matchClickRight(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  const sel = matchSel[gid].left;
+  if (!sel) return;
+  const conf = matchData[gid];
+  const leftEl = document.querySelector("#" + gid + "-left .match-item.selected");
+  if (sel === term) {
+    el.classList.remove("selected"); el.classList.add("matched");
+    if (leftEl) leftEl.classList.add("matched");
+    matchSel[gid].matched++;
+    matchSel[gid].left = null;
+    document.getElementById(gid + "-score").textContent = "Matched: " + matchSel[gid].matched + " / " + conf.pairs.length;
+    if (matchSel[gid].matched === conf.pairs.length) {
+      const result = document.getElementById(gid + "-result");
+      result.className = "mg-result win";
+      result.textContent = "All terms matched correctly!";
+      confettiBurst();
+      unlockCP(conf.cp);
+    }
+  } else {
+    el.classList.add("wrong");
+    if (leftEl) leftEl.classList.add("wrong");
+    setTimeout(() => { el.classList.remove("wrong"); if (leftEl) { leftEl.classList.remove("wrong", "selected"); } }, 600);
+    matchSel[gid].left = null;
+  }
+}
+
+/* ============ GENERIC AUDIT / CLICK-TO-FLAG ENGINE ============ */
+const auditData = {};
+function auditInit(gid) {
+  const conf = auditData[gid];
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "audit-item"; el.dataset.problem = item.problem; el.dataset.done = "0";
+    el.innerHTML = "<span class='audit-icon'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg></span><span class='audit-text'>" + item.text + "</span><span class='audit-flag'>Flagged</span>";
+    el.addEventListener("click", () => auditClick(gid, el, item));
+    container.appendChild(el);
+  });
+}
+function auditClick(gid, el, item) {
+  if (el.dataset.done === "1") return;
+  if (item.problem) {
+    el.dataset.done = "1"; el.classList.add("flagged");
+  } else {
+    el.style.background = "rgba(143,184,156,0.18)";
+    setTimeout(() => { el.style.background = ""; }, 500);
+  }
+}
+function auditCheck(gid) {
+  const conf = auditData[gid];
+  const flagged = document.querySelectorAll("#" + gid + "-items .audit-item.flagged").length;
+  const totalProblems = conf.items.filter(i => i.problem).length;
+  const result = document.getElementById(gid + "-result");
+  if (flagged < totalProblems) {
+    result.className = "mg-result lose";
+    result.textContent = "Found " + flagged + " of " + totalProblems + " conflicts. Keep looking.";
+    return;
+  }
+  result.className = "mg-result win";
+  result.textContent = "All " + totalProblems + " conflicts found! Sharp eye.";
+  confettiBurst();
+  unlockCP(conf.cp);
+}
+
+/* ============ GENERIC SCENARIO / VERDICT-CARD CAROUSEL ENGINE ============ */
+const caseData = {};
+let caseState = {};
+function caseInit(gid) {
+  caseState[gid] = { idx: 0, score: 0, locked: false };
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  caseRender(gid);
+}
+function caseRender(gid) {
+  const conf = caseData[gid];
+  const st = caseState[gid];
+  const stage = document.getElementById(gid + "-stage");
+  const c = conf.cases[st.idx];
+  let html = "<div style='font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px'>Scenario " + (st.idx+1) + " of " + conf.cases.length + "</div>";
+  html += "<div style='font-size:13px;color:var(--white);margin-bottom:12px;line-height:1.6'>" + c.prompt + "</div>";
+  html += "<div class='verdict-grid'>";
+  c.options.forEach((opt, oi) => {
+    html += "<div class='verdict-card' data-oi='" + oi + "' onclick='caseAnswer(\"" + gid + "\"," + oi + ")'><div class='verdict-title'>" + opt.text + "</div></div>";
+  });
+  html += "</div>";
+  stage.innerHTML = html;
+}
+function caseAnswer(gid, oi) {
+  const conf = caseData[gid];
+  const st = caseState[gid];
+  if (st.locked) return;
+  st.locked = true;
+  const c = conf.cases[st.idx];
+  const cards = document.querySelectorAll("#" + gid + "-stage .verdict-card");
+  cards.forEach(card => { card.onclick = null; });
+  const chosen = c.options[oi];
+  const correctIdx = c.options.findIndex(o => o.correct);
+  cards[oi].classList.add(chosen.correct ? "correct-v" : "wrong-v");
+  if (!chosen.correct) { cards[correctIdx].classList.add("correct-v"); }
+  if (chosen.correct) { st.score++; }
+  setTimeout(() => {
+    st.idx++;
+    st.locked = false;
+    if (st.idx < conf.cases.length) {
+      caseRender(gid);
+    } else {
+      caseFinish(gid);
+    }
+  }, 900);
+}
+function caseFinish(gid) {
+  const conf = caseData[gid];
+  const st = caseState[gid];
+  const result = document.getElementById(gid + "-result");
+  const stage = document.getElementById(gid + "-stage");
+  stage.innerHTML = "";
+  if (st.score === conf.cases.length) {
+    result.className = "mg-result win";
+    result.textContent = "All " + conf.cases.length + " scenarios correct! Excellent judgment.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "You got " + st.score + " of " + conf.cases.length + " correct. Click Try Again to redo the scenarios.";
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "mg-btn";
+    retryBtn.textContent = "Try Again";
+    retryBtn.onclick = () => caseInit(gid);
+    stage.appendChild(retryBtn);
+  }
+}
+
+/* ============ GENERIC METER / REVEAL ENGINE ============ */
+const meterData = {};
+let meterAdded = {};
+function meterInit(gid) {
+  const conf = meterData[gid];
+  meterAdded[gid] = 0;
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  document.getElementById(gid + "-fill").style.width = "0%";
+  document.getElementById(gid + "-pct").textContent = "0% complete";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  conf.items.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "meter-item";
+    el.style.display = "block"; el.style.width = "100%";
+    el.innerHTML = "<strong>" + item.text + "</strong>";
+    el.onclick = () => {
+      if (el.classList.contains("added")) return;
+      el.classList.add("added");
+      el.innerHTML = "<strong>" + item.text + "</strong><div style='margin-top:4px;font-weight:400;font-size:11px;opacity:.85'>" + item.note + "</div>";
+      meterAdded[gid]++;
+      const pct = Math.round((meterAdded[gid] / conf.items.length) * 100);
+      document.getElementById(gid + "-fill").style.width = pct + "%";
+      document.getElementById(gid + "-pct").textContent = pct + "% complete";
+      if (meterAdded[gid] === conf.items.length) {
+        result.className = "mg-result win";
+        result.textContent = "Booking link fully configured! This setup eliminates the back-and-forth.";
+        confettiBurst();
+        unlockCP(conf.cp);
+      }
+    };
+    container.appendChild(el);
+  });
+}
+
+/* ============ GENERIC CHECKBOX MULTI-SELECT ENGINE ============ */
+const checkGameData = {};
+function checkGameInit(gid) {
+  const conf = checkGameData[gid];
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "check-item"; el.dataset.problem = item.problem; el.dataset.picked = "0";
+    el.innerHTML = "<span class='check-box'></span><span>" + item.text + "</span>";
+    el.onclick = () => {
+      const picked = el.dataset.picked === "1";
+      el.dataset.picked = picked ? "0" : "1";
+      el.classList.toggle("picked");
+    };
+    container.appendChild(el);
+  });
+}
+function checkGameSubmit(gid) {
+  const conf = checkGameData[gid];
+  const items = document.querySelectorAll("#" + gid + "-items .check-item");
+  let correctPicks = 0, wrongPicks = 0, totalProblems = conf.items.filter(i => i.problem).length;
+  items.forEach(el => {
+    const picked = el.dataset.picked === "1";
+    const problem = el.dataset.problem === "true";
+    if (picked && problem) correctPicks++;
+    if (picked && !problem) wrongPicks++;
+  });
+  const result = document.getElementById(gid + "-result");
+  if (correctPicks === totalProblems && wrongPicks === 0) {
+    result.className = "mg-result win";
+    result.textContent = "You correctly spotted all " + totalProblems + " mistakes with no false flags!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "Found " + correctPicks + " of " + totalProblems + " mistakes, with " + wrongPicks + " incorrect picks. Adjust and submit again.";
+  }
+}
+
+/* ============ GENERIC DUAL-SEQUENCE ENGINE ============ */
+const dualseqData = {};
+function dualseqMakeItem(text) {
+  const el = document.createElement("div");
+  el.className = "step-item";
+  el.draggable = true;
+  el.dataset.text = text;
+  el.innerHTML = "<span class='step-num'>-</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  return el;
+}
+function dualseqInit(gid) {
+  const conf = dualseqData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  const dropDaily = document.getElementById(gid + "-drop-daily");
+  const dropWeekly = document.getElementById(gid + "-drop-weekly");
+  pool.innerHTML = ""; dropDaily.innerHTML = ""; dropWeekly.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const all = [...conf.daily, ...conf.weekly].sort(() => Math.random() - 0.5);
+  all.forEach(t => pool.appendChild(dualseqMakeItem(t)));
+  pool.addEventListener("dragover", e => e.preventDefault());
+  pool.addEventListener("drop", e => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+    if (dragging) pool.appendChild(dragging);
+    seqRenumber(dropDaily); seqRenumber(dropWeekly);
+  });
+}
+function dualseqDrop(e, gid, which) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const drop = document.getElementById(gid + "-drop-" + which);
+  const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+  if (dragging) { drop.appendChild(dragging); seqRenumber(drop); }
+}
+function dualseqCheck(gid) {
+  const conf = dualseqData[gid];
+  const dropDaily = document.getElementById(gid + "-drop-daily");
+  const dropWeekly = document.getElementById(gid + "-drop-weekly");
+  const dailyItems = Array.from(dropDaily.children).map(el => el.dataset.text);
+  const weeklyItems = Array.from(dropWeekly.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  const totalNeeded = conf.daily.length + conf.weekly.length;
+  if (dailyItems.length + weeklyItems.length < totalNeeded) {
+    result.className = "mg-result lose";
+    result.textContent = "Drag all " + totalNeeded + " tasks into a list first.";
+    return;
+  }
+  let correct = dailyItems.length === conf.daily.length && weeklyItems.length === conf.weekly.length;
+  if (correct) {
+    for (let i = 0; i < conf.daily.length; i++) { if (dailyItems[i] !== conf.daily[i]) { correct = false; break; } }
+  }
+  if (correct) {
+    for (let i = 0; i < conf.weekly.length; i++) { if (weeklyItems[i] !== conf.weekly[i]) { correct = false; break; } }
+  }
+  if (correct) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect routine! Both lists are correctly sorted and ordered.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "Not quite right yet. Check which list each task belongs in, and the order within each list.";
+    Array.from(dropDaily.children).concat(Array.from(dropWeekly.children)).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+  }
+}
+
+/* ============ GAME 1: Calendar Habit Sorter ============ */
+dzData.g1 = { zones: ["good","bad"], cp: 1, items: [
+  { text: "Confirming every booked meeting back to the client in writing", zone: "good" },
+  { text: "Double-checking time zones before sending an invite", zone: "good" },
+  { text: "Leaving buffer time between back-to-back calls", zone: "good" },
+  { text: "Catching a double-booking before the client even notices", zone: "good" },
+  { text: "Booking over a slot that looked empty without checking first", zone: "bad" },
+  { text: "Forgetting to resend an invite after moving a meeting", zone: "bad" },
+  { text: "Assuming a client's meeting length preference without asking", zone: "bad" },
+  { text: "Packing the calendar with zero breathing room", zone: "bad" }
+]};
+
+/* ============ GAME 2: Client Preference Matcher ============ */
+matchData.g2 = { cp: 2, pairs: [
+  { term: "Platform", def: "Client uses Outlook for everything and has never touched Google Calendar" },
+  { term: "Meeting Length", def: "Client prefers 25-minute calls instead of the standard 30" },
+  { term: "Buffer Time", def: "Client wants at least 10 minutes of open time between every call" },
+  { term: "Working Hours", def: "Client will not take any calls after 4pm local time" }
+]};
+
+/* ============ GAME 3: Calendar Setup Day One Builder ============ */
+seqData.g3 = { cp: 3, order: [
+  "Confirm the client's platform, meeting-length, buffer, and working-hour preferences",
+  "Set up color-coded categories for each meeting type",
+  "Set default reminders for all new events",
+  "Confirm and document the exact access permission level",
+  "Set the calendar's working hours to match what the client confirmed"
+]};
+
+/* ============ GAME 4: Double-Booking Spotter ============ */
+auditData.g4 = { cp: 4, items: [
+  { text: "9:00am — Team check-in", problem: false },
+  { text: "9:30am — Client call with Priya (30 min)", problem: true },
+  { text: "9:45am — Vendor call (30 min)", problem: true },
+  { text: "10:30am — Focus time block", problem: false },
+  { text: "1:00pm — Investor call (30 min)", problem: true },
+  { text: "1:15pm — Podcast interview (45 min)", problem: true },
+  { text: "3:00pm — Weekly review block", problem: false }
+]};
+
+/* ============ GAME 5: Time Zone Scenario Matcher ============ */
+caseData.g5 = { cp: 5, cases: [
+  { prompt: "A Sydney investor says they are free \"in the morning.\" You are about to send an invite for 9am Manila time without checking further. What should you do?", options: [
+    { text: "Send the invite as-is since morning sounds correct", correct: false },
+    { text: "Convert 9am Manila time to Sydney time first, and confirm it actually falls within their morning before sending", correct: true },
+    { text: "Ask them to just accept whatever the calendar suggests", correct: false }
+  ]},
+  { prompt: "You are booking a recurring call between a US East Coast client and your Manila-based client, and daylight saving time is about to change in the US. What should you do?", options: [
+    { text: "Assume the meeting time stays exactly the same forever", correct: false },
+    { text: "Reconfirm the converted time around the daylight saving transition instead of assuming it still holds", correct: true },
+    { text: "Cancel the recurring meeting entirely", correct: false }
+  ]},
+  { prompt: "An email just says \"3pm Thursday\" with no time zone mentioned. What should a VA do before booking?", options: [
+    { text: "Book it at 3pm in your own time zone", correct: false },
+    { text: "Ask the sender to clarify which time zone they mean before confirming", correct: true },
+    { text: "Guess based on the area code in their phone number", correct: false }
+  ]}
+]};
+
+/* ============ GAME 6: Calendar Block Sorter ============ */
+dzData.g6 = { zones: ["rec","focus","oneoff"], cp: 6, items: [
+  { text: "Weekly Monday team check-in, same time every week", zone: "rec" },
+  { text: "8:00-10:00am deep-work block, marked busy every weekday", zone: "focus" },
+  { text: "One-time kickoff call with a new vendor", zone: "oneoff" },
+  { text: "Biweekly client strategy call, repeats every other Wednesday", zone: "rec" },
+  { text: "Friday afternoon block reserved for admin and review", zone: "focus" },
+  { text: "Single interview scheduled for next Tuesday only", zone: "oneoff" }
+]};
+
+/* ============ GAME 7: Cancellation Response Chooser ============ */
+caseData.g7 = { cp: 7, cases: [
+  { prompt: "Your client's flight is delayed and they will miss a call in 20 minutes. What is the most professional response?", options: [
+    { text: "Say nothing and let the client miss the call", correct: false },
+    { text: "Immediately message the other party, explain briefly, and offer two alternative times", correct: true }
+  ]},
+  { prompt: "You reschedule a meeting on the client's personal calendar but forget the shared team calendar. What should happen next?", options: [
+    { text: "Leave the shared calendar as-is since the client's calendar is already correct", correct: false },
+    { text: "Update every calendar the event appears on so no one shows up at the wrong time", correct: true }
+  ]},
+  { prompt: "A vendor asks why a meeting moved. How much detail should you share?", options: [
+    { text: "Share every private detail about why the client is unavailable", correct: false },
+    { text: "Give a brief, appropriate reason without oversharing private details", correct: true }
+  ]}
+]};
+
+/* ============ GAME 8: Booking Link Feature Matcher ============ */
+meterData.g8 = { cp: 8, items: [
+  { text: "Availability window matched to real working hours", note: "Solves: bookings landing outside the hours the client actually works" },
+  { text: "Buffer time before and after each bookable slot", note: "Solves: back-to-back bookings sneaking in with no breathing room" },
+  { text: "Minimum notice period setting", note: "Solves: same-hour surprise bookings with no time to prepare" },
+  { text: "Daily booking cap", note: "Solves: an overloaded day from too many bookings through one link" },
+  { text: "Live connection to the real calendar", note: "Solves: the link showing outdated or inaccurate availability" }
+]};
+
+/* ============ GAME 9: Mistake Spotter ============ */
+checkGameData.g9 = { cp: 9, items: [
+  { text: "Double-checks time zones before sending every invite", problem: false },
+  { text: "Books over a slot without confirming it's actually free", problem: true },
+  { text: "Leaves buffer time between back-to-back calls", problem: false },
+  { text: "Forgets to resend the invite after moving a meeting", problem: true },
+  { text: "Confirms every booked meeting back to the client in writing", problem: false },
+  { text: "Packs the calendar with zero breathing room", problem: true },
+  { text: "Reviews the calendar daily and weekly for conflicts", problem: false },
+  { text: "Assumes an empty-looking slot is always genuinely free", problem: true }
+]};
+
+/* ============ GAME 10: Weekly Review Routine Sequencer ============ */
+dualseqData.g10 = { cp: 10,
+  daily: [
+    "Scan the next 24 hours for conflicts",
+    "Check that every meeting has a confirmed location or link",
+    "Confirm no attendee is missing from today's invites"
+  ],
+  weekly: [
+    "Scan the coming 7-14 days for overlapping events",
+    "Check upcoming travel against recurring meetings",
+    "Confirm focus-time blocks are still protected",
+    "Flag any day with zero breathing room to the client"
+  ]
+};
+
+/* ============ SPLASH ANIMATION ============ */
+const spMsgs = [
+  [0, "Initializing LES020..."],
+  [15, "Loading lesson content..."],
+  [30, "Preparing activities and games..."],
+  [50, "Setting up your checkpoints..."],
+  [70, "Almost there..."],
+  [88, "LES020 is ready — launching!"]
+];
+let spStart = null;
+const SP_DURATION = 4000;
+function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+function spAnimate(ts) {
+  if (!spStart) spStart = ts;
+  const raw = Math.min((ts - spStart) / SP_DURATION, 1);
+  const pct = Math.round(easeInOut(raw) * 100);
+  document.getElementById("sp-fill").style.width = pct + "%";
+  document.getElementById("sp-pct").textContent = pct + "%";
+  let msg = spMsgs[0][1];
+  for (const [threshold, text] of spMsgs) { if (pct >= threshold) msg = text; }
+  document.getElementById("sp-msg").textContent = msg;
+  if (raw < 1) { requestAnimationFrame(spAnimate); }
+  else {
+    const sp = document.getElementById("splash");
+    sp.classList.add("fade-out");
+    setTimeout(() => { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 700);
+  }
+}
+
+/* ============ INIT ============ */
+window.addEventListener("DOMContentLoaded", () => {
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+  if (window.location.search.indexOf("completed=1") !== -1) {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      let s = raw ? JSON.parse(raw) : {};
+      s.lessonCompleted = true;
+      s.sectionsUnlocked = TOTAL_SECTIONS;
+      s.finalUnlocked = true;
+      s.sectionsDone = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.sectionsDone.push(i);
+      s.cpPassed = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.cpPassed.push(i);
+      localStorage.setItem(SAVE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+  load();
+  restoreUI();
+  dzInit("g1");
+  matchInit("g2");
+  seqInit("g3");
+  auditInit("g4");
+  caseInit("g5");
+  dzInit("g6");
+  caseInit("g7");
+  meterInit("g8");
+  checkGameInit("g9");
+  dualseqInit("g10");
+  requestAnimationFrame(spAnimate);
+});
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

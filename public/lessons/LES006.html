@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p950:#1a0533;--p900:#2d0f54;--p800:#4c1a87;--p700:#6d28d9;
+  --p600:#7c3aed;--p500:#8b5cf6;--p400:#a78bfa;--p300:#c4b5fd;
+  --p100:#ede9fe;--p50:#f5f3ff;
+  --i500:#6366f1;--i600:#4f46e5;
+  --g500:#22c55e;--g400:#4ade80;--g600:#16a34a;
+  --a500:#f59e0b;--r500:#ef4444;
+  --s900:#0f172a;--s800:#1e293b;--s700:#334155;--s600:#475569;
+  --s500:#64748b;--s400:#94a3b8;--s300:#cbd5e1;--s200:#e2e8f0;
+  --s100:#f1f5f9;--s50:#f8fafc;--w:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--s800);background:var(--s50);padding:0 0 60px;line-height:1.6;font-size:14px}
+.topbar{background:var(--w);border-bottom:1px solid var(--s200);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar img{height:28px}.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--s400);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,var(--p950) 0%,var(--p800) 45%,var(--i500) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--w);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.hero::after{content:"🎯";position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:90px;opacity:.07;pointer-events:none}
+.hero-tag{background:rgba(255,255,255,.12);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.18);color:var(--p300);position:relative}
+.hero h1{font-size:30px;font-weight:900;line-height:1.2;margin-bottom:12px;position:relative;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;position:relative;color:rgba(255,255,255,.75);margin-bottom:0!important}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;position:relative}
+.hero-meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.progress-wrap{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--p600);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--p700),var(--i500));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--w);border:1px solid var(--s200);border-left:3px solid var(--p500);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--p700);background:var(--p50)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--p700);font-weight:700;background:var(--p50)}
+.toc-list li a.toc-current::before{background:var(--p500)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.toc-status{margin-left:auto;font-size:11px}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-title{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--p100);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--p700),var(--i500));color:var(--w);font-size:10px;font-weight:800;flex-shrink:0}
+.card{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-purple{background:var(--p50);border-color:rgba(139,92,246,.3)}
+.card-green{background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.25)}
+.card-amber{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--s800);font-weight:700}
+em{color:var(--p700);font-style:normal;font-weight:600}
+.img-block{border-radius:12px;overflow:hidden;margin-bottom:16px;border:1px solid var(--s200)}
+.img-block img{width:100%;display:block;object-fit:cover;max-height:240px}
+.img-caption{padding:10px 16px;font-size:12px;color:var(--s500);background:var(--w);border-top:1px solid var(--s200)}
+.definition{border-left:3px solid var(--p500);padding:16px 20px;background:var(--p50);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.definition p{font-size:13px;color:var(--s700);font-style:italic;margin:0;line-height:1.75}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--p600),var(--i500))}
+.stat-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--p700),var(--i500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.shift-table{width:100%;border-collapse:collapse;font-size:13px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0}
+.shift-table th{padding:12px 16px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--s200)}
+.shift-table th:first-child{background:#fef2f2;color:var(--r500)}
+.shift-table th:last-child{background:#f0fdf4;color:var(--g600)}
+.shift-table td{padding:12px 16px;border-bottom:1px solid var(--s100);color:var(--s600);vertical-align:top}
+.shift-table tr:last-child td{border-bottom:none}
+.col-bad{color:var(--r500)}.col-good{color:var(--g600)}
+.niche-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0;table-layout:fixed}
+.niche-table th{background:var(--p950);color:rgba(255,255,255,.75);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.niche-table th:nth-child(1){width:20%}.niche-table th:nth-child(2){width:22%}
+.niche-table th:nth-child(3){width:40%}.niche-table th:nth-child(4){width:18%}
+.niche-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.niche-table tr:last-child td{border-bottom:none}
+.niche-table tr:hover td{background:var(--p50)}
+.niche-tag{background:linear-gradient(135deg,var(--p700),var(--i500));color:var(--w);padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;line-height:1.5}
+.demand-high{color:var(--g600);font-size:11px;font-weight:700}
+.demand-med{color:var(--a500);font-size:11px;font-weight:700}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.pillar{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:18px 14px;text-align:center;transition:all .2s}
+.pillar:hover{border-color:var(--p400);transform:translateY(-3px);box-shadow:0 4px 16px rgba(109,40,217,.12)}
+.pillar-icon{font-size:26px;margin-bottom:8px}.pillar-num{font-size:10px;font-weight:800;color:var(--p500);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.pillar-title{font-size:13px;font-weight:700;color:var(--s800);margin-bottom:5px}.pillar-desc{font-size:11px;color:var(--s500);line-height:1.6}
+.persona-card{background:var(--w);border:1px solid var(--s200);border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 4px 16px rgba(109,40,217,.12)}
+.persona-header{background:linear-gradient(135deg,var(--p950),var(--p700));padding:22px 26px;color:var(--w);display:flex;align-items:center;gap:18px}
+.persona-avatar{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:2px solid rgba(255,255,255,.25)}
+.persona-name{font-size:20px;font-weight:800}.persona-role{font-size:12px;color:var(--p300);margin-top:3px}
+.persona-body{padding:22px 26px}.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.persona-field label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px}
+.persona-field p{font-size:13px;color:var(--s600);margin:0;line-height:1.65}
+.pain-gain{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pain-box{background:#fef2f2;border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:18px 20px}
+.gain-box{background:#f0fdf4;border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:18px 20px}
+.pain-box .box-label{font-size:10px;font-weight:800;color:var(--r500);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.gain-box .box-label{font-size:10px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.pain-gain ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.pain-gain ul li{font-size:12px;color:var(--s600);line-height:1.55;padding-left:16px;position:relative}
+.pain-box ul li::before{content:"•";position:absolute;left:0;color:var(--r500)}
+.gain-box ul li::before{content:"•";position:absolute;left:0;color:var(--g500)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:12px}
+.checklist li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--s600);line-height:1.7}
+.check-icon{width:20px;height:20px;border-radius:5px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;color:var(--g600)}
+.timeline{list-style:none;position:relative;padding-left:30px;margin-bottom:16px}
+.timeline::before{content:"";position:absolute;left:10px;top:10px;bottom:10px;width:2px;background:linear-gradient(to bottom,var(--p500),var(--p100))}
+.tl-item{position:relative;margin-bottom:26px}.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-30px;top:4px;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--p700),var(--i500));border:3px solid var(--s50);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--w)}
+.tl-time{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tl-title{font-size:14px;font-weight:700;color:var(--s800);margin-bottom:5px}
+.tl-body{font-size:13px;color:var(--s500);line-height:1.7;background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:14px 16px;margin-top:8px}
+.tip-box,.warn-box,.success-box,.scenario-box{border-radius:12px;padding:18px 20px;margin:16px 0;display:flex;gap:14px}
+.tip-box{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-left:3px solid var(--a500)}
+.warn-box{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-left:3px solid var(--r500)}
+.success-box{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-left:3px solid var(--g500)}
+.scenario-box{background:var(--p50);border:1px solid rgba(139,92,246,.2);border-left:3px solid var(--p500)}
+.tip-icon,.warn-icon,.success-icon,.scenario-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.tip-label{color:var(--a500)}.warn-label{color:var(--r500)}.success-label{color:var(--g600)}.scenario-label{color:var(--p600)}
+.tip-label,.warn-label,.success-label,.scenario-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.tip-body p,.warn-body p,.success-body p,.scenario-body p{font-size:13px;color:var(--s600);margin:0;line-height:1.7}
+.quote-box{border-left:3px solid var(--p400);padding:16px 20px;background:var(--p50);border-radius:0 12px 12px 0;margin:12px 0}
+.quote-box p{font-size:13px;color:var(--s700);font-style:italic;margin:0 0 8px;line-height:1.7}
+.quote-author{font-size:11px;font-weight:700}
+.takeaways{background:linear-gradient(135deg,var(--p950),var(--p800));border-radius:16px;padding:28px;margin-bottom:24px;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.takeaways h3{font-size:15px;font-weight:800;color:var(--w);margin-bottom:20px}
+.takeaway-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.takeaway-list li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:rgba(255,255,255,.75);line-height:1.75}
+.tk-num{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--p300);flex-shrink:0;margin-top:1px}
+.yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--s200);margin-bottom:10px}
+.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.yt-label{font-size:12px;color:var(--s400);text-align:center;margin-bottom:20px}
+.worksheet{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:24px;margin:16px 0}
+.worksheet-title{font-size:14px;font-weight:800;color:var(--s800);margin-bottom:4px}
+.worksheet-sub{font-size:12px;color:var(--s400);margin-bottom:18px}
+.ws-field{margin-bottom:14px}
+.ws-field label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:6px}
+.ws-field input,.ws-field textarea{width:100%;background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--s800);font-family:inherit;outline:none;transition:border-color .15s}
+.ws-field input:focus,.ws-field textarea:focus{border-color:var(--p400);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
+.ws-field textarea{min-height:72px;resize:vertical}
+.complete-wrap{margin-top:28px;padding:32px;background:linear-gradient(135deg,var(--p950),var(--p800));border-radius:16px;text-align:center;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.complete-wrap p{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:20px}
+.btn-complete{display:inline-flex;align-items:center;gap:10px;background:var(--g500);color:var(--w);border:none;border-radius:12px;padding:16px 40px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,197,94,.4);font-family:inherit}
+.btn-complete:hover{background:var(--g600);transform:translateY(-2px)}
+.btn-complete:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.5);cursor:not-allowed;box-shadow:none;transform:none}
+#complete-msg{margin-top:16px;font-size:13px;color:var(--g400);display:none;font-weight:600}
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--s200),transparent);margin:28px 0}
+/* CHECKPOINT */
+.checkpoint{margin-top:0;background:linear-gradient(135deg,var(--p950),var(--p900));border-radius:16px;overflow:hidden;border:1px solid rgba(139,92,246,.3);box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.cp-locked{padding:24px;text-align:center}
+.cp-lock-icon{font-size:36px;margin-bottom:10px}
+.cp-lock-msg{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+.cp-lock-msg strong{color:var(--p300)}
+.cp-content{padding:24px 26px;display:none}
+.checkpoint-header{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--p400);margin-bottom:12px}
+.checkpoint-q{font-size:15px;font-weight:700;color:var(--w);margin-bottom:18px;line-height:1.5}
+.checkpoint-options{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.checkpoint-options label{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.8);cursor:pointer;transition:all .15s}
+.checkpoint-options label:hover{background:rgba(255,255,255,.1);border-color:rgba(139,92,246,.5)}
+.checkpoint-options label.opt-correct{background:rgba(34,197,94,.2);border-color:var(--g500);color:var(--w)}
+.checkpoint-options label.opt-incorrect{background:rgba(239,68,68,.2);border-color:var(--r500);color:var(--w)}
+.checkpoint-options input{accent-color:var(--p400)}
+.checkpoint-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-check{background:var(--w);color:var(--p800);border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-check:hover{background:var(--p100)}
+.checkpoint-feedback{font-size:13px;font-weight:600;margin-top:8px;display:none}
+.checkpoint-feedback.fb-correct{color:var(--g400)}.checkpoint-feedback.fb-incorrect{color:#fca5a5}
+.btn-continue{display:none;align-items:center;gap:8px;background:var(--g500);color:var(--w);border:none;border-radius:8px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;margin-top:14px;font-family:inherit;transition:all .15s}
+.btn-continue:hover{background:var(--g600)}
+.checkpoint.is-passed{background:linear-gradient(135deg,#052e16,#14532d);border-color:rgba(34,197,94,.3)}
+.cp-passed-note{display:none;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--g400);margin-top:8px}
+/* MINI GAME */
+.mini-game{background:linear-gradient(135deg,var(--p950),var(--p900));border:1px solid rgba(139,92,246,.35);border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-badge{background:linear-gradient(135deg,var(--p600),var(--i500));color:var(--w);font-size:10px;font-weight:800;padding:4px 12px;border-radius:99px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;margin-bottom:10px}
+.mg-title{font-size:15px;font-weight:800;color:var(--w);margin-bottom:4px}
+.mg-desc{font-size:12px;color:var(--p300);margin-bottom:16px}
+.mg-result{font-size:13px;font-weight:700;margin-top:14px;min-height:20px;text-align:center}
+.mg-result.win{color:var(--g400)}.mg-result.lose{color:#fca5a5}
+.mg-btn{background:rgba(255,255,255,.12);color:var(--w);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.mg-btn:hover{background:rgba(255,255,255,.2)}
+.mg-btn.primary{background:linear-gradient(135deg,var(--p600),var(--i500));border-color:transparent}
+/* DRAG SORT */
+.sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sort-zone{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:12px;min-height:110px;transition:all .2s}
+.sort-zone.drag-over{border-color:var(--p400);background:rgba(139,92,246,.15)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.zone-label.bad{color:var(--r500)}.zone-label.good{color:var(--g400)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--w);cursor:grab;user-select:none;line-height:1.4;transition:all .15s}
+.drag-card:hover{background:rgba(255,255,255,.18);transform:scale(1.02)}
+.drag-card:active{cursor:grabbing}
+.drag-card.dragging{opacity:.4}
+/* TRUE FALSE */
+.tf-question{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+.tf-text{font-size:13px;color:var(--w);margin-bottom:10px;line-height:1.5}
+.tf-btns{display:flex;gap:8px}
+.tf-btn{flex:1;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.tf-btn.true-btn{background:rgba(34,197,94,.2);color:var(--g400);border:1px solid rgba(34,197,94,.3)}
+.tf-btn.false-btn{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.tf-btn.sel-correct{background:rgba(34,197,94,.5);color:var(--w);border-color:var(--g500)}
+.tf-btn.sel-wrong{background:rgba(239,68,68,.4);color:var(--w);border-color:var(--r500)}
+.tf-score{font-size:12px;color:var(--p300);text-align:right;margin-bottom:10px}
+/* DRAG ORDER */
+.step-pool,.step-drop-zone{display:flex;flex-direction:column;gap:8px}
+.step-drop-zone{min-height:120px;background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.14);border-radius:12px;padding:12px;margin-bottom:10px;transition:all .2s}
+.step-drop-zone.drag-over{border-color:var(--p400);background:rgba(139,92,246,.1)}
+.step-item{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--w);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.16)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--p300);flex-shrink:0}
+.step-drop-label{font-size:10px;font-weight:700;color:var(--p400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+/* MATCH PAIRS */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:var(--p400);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--w);cursor:pointer;transition:all .18s;min-height:48px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.13);border-color:var(--p400)}
+.match-item.selected{background:rgba(139,92,246,.3);border-color:var(--p400)}
+.match-item.matched{background:rgba(34,197,94,.18);border-color:var(--g500);cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.18);border-color:var(--r500)}
+.match-score{font-size:12px;color:var(--p300);margin-top:10px;text-align:center}
+/* WORD CHIPS */
+.word-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.word-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--w);cursor:pointer;user-select:none;transition:all .15s}
+.word-chip:hover{background:rgba(139,92,246,.3);border-color:var(--p400)}
+.word-chip.used{opacity:.28;cursor:not-allowed;pointer-events:none}
+.niche-output{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:14px 16px;min-height:54px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;transition:all .2s}
+.niche-output.filled{color:var(--w);border-color:var(--p400);background:rgba(139,92,246,.08)}
+.chip-inline{background:rgba(139,92,246,.4);border-radius:4px;padding:1px 6px;margin:0 2px;color:var(--w)}
+/* SCENARIO SORT */
+.scenario-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.sc-card{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px}
+.sc-text{font-size:12px;color:var(--w);line-height:1.6;margin-bottom:8px}
+.sc-btns{display:flex;gap:6px}
+.sc-btn{flex:1;border:none;border-radius:6px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.sc-btn.good-btn{background:rgba(34,197,94,.2);color:var(--g400);border:1px solid rgba(34,197,94,.3)}
+.sc-btn.bad-btn{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.sc-card.done-good{background:rgba(34,197,94,.12);border-color:var(--g500)}
+.sc-card.done-bad{background:rgba(239,68,68,.08);border-color:var(--r500)}
+.sc-reveal{font-size:11px;font-weight:700;margin-top:6px;display:none;line-height:1.5}
+.sc-card.done-good .sc-reveal{display:block;color:var(--g400)}
+.sc-card.done-bad .sc-reveal{display:block;color:#fca5a5}
+/* PITCH BUILDER */
+.pitch-parts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.pitch-part{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.pitch-part:hover{background:rgba(255,255,255,.14);border-color:var(--p400)}
+.pitch-part.placed{background:rgba(34,197,94,.1);border-color:var(--g500);cursor:default;opacity:.55}
+.pitch-part.wrong-pick{border-color:var(--r500)!important;animation:shake .3s}
+.pitch-part-label{font-size:10px;font-weight:800;color:var(--p300);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.pitch-part-text{font-size:12px;color:var(--w);line-height:1.4}
+.pitch-output-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:12px;min-height:70px}
+.pitch-output-label{font-size:10px;font-weight:800;color:var(--p400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.pitch-built{display:flex;flex-direction:column;gap:6px}
+.pitch-built-item{background:rgba(139,92,246,.2);border:1px solid var(--p500);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--w);animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110px) rotate(720deg);opacity:0}}
+.confetti-p{position:absolute;border-radius:2px;animation:confettiFall 1s ease-out forwards;pointer-events:none}
+@media(max-width:640px){
+  .stat-row,.pillars,.pain-gain,.sort-zones,.match-grid,.persona-grid,.pitch-parts{grid-template-columns:1fr}
+  .hero h1{font-size:24px}.wrap{padding:16px 14px 0}.hero{padding:28px 22px}
+  .niche-table{font-size:11px}.niche-table th,.niche-table td{padding:8px 8px}
+}
+</style>
+<style>
+:root{--buf:#2c4bff;--meta:#0866ff;}
+.card-blue{background:rgba(99,102,241,.05);border-color:rgba(99,102,241,.25)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0}
+.data-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);table-layout:fixed}
+.data-table th{background:var(--p950);color:rgba(255,255,255,.75);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.data-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--p50)}
+.tag{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;line-height:1.5}
+.tag-buf{background:rgba(44,75,255,.15);color:#2c4bff}
+.tag-meta{background:rgba(8,102,255,.15);color:#0866ff}
+.tag-both{background:rgba(139,92,246,.15);color:var(--p600)}
+.flip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;perspective:1000px}
+.flip-card{height:130px;cursor:pointer}
+.flip-card-inner{width:100%;height:100%;position:relative;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip-card.flipped .flip-card-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;flex-direction:column;gap:6px}
+.flip-front{background:linear-gradient(135deg,rgba(109,40,217,.4),rgba(99,102,241,.3));border:2px solid rgba(139,92,246,.4)}
+.flip-back{background:linear-gradient(135deg,rgba(34,197,94,.2),rgba(22,163,74,.15));border:2px solid rgba(34,197,94,.4);transform:rotateY(180deg)}
+.flip-front-icon{font-size:24px}
+.flip-front-label{font-size:11px;font-weight:700;color:var(--p300)}
+.flip-hint{font-size:9px;color:rgba(255,255,255,.4)}
+.flip-back-text{font-size:11px;color:var(--w);line-height:1.5;font-weight:600}
+.bar-chart{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-lbl{font-size:11px;font-weight:600;color:var(--p300);width:90px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;background:rgba(255,255,255,.07);border-radius:99px;height:22px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--p700),var(--i500));width:0%;transition:width 1s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.bar-val-txt{font-size:10px;font-weight:800;color:var(--w)}
+.wf-progress{height:4px;background:rgba(255,255,255,.1);border-radius:99px;margin-bottom:12px;overflow:hidden}
+.wf-progress-fill{height:100%;background:linear-gradient(90deg,var(--p600),var(--g500));border-radius:99px;width:0%;transition:width .4s ease}
+.wf-out-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:12px;min-height:60px}
+.wf-out-label{font-size:10px;font-weight:800;color:var(--p400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.wf-built-item{background:rgba(139,92,246,.2);border:1px solid var(--p500);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--w);animation:slideIn .3s ease;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.wf-step-num-b{width:20px;height:20px;border-radius:50%;background:var(--p600);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--w);flex-shrink:0}
+.wf-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.wf-chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--w);cursor:pointer;transition:all .2s}
+.wf-chip:hover{background:rgba(139,92,246,.3);transform:translateY(-1px)}
+.wf-chip.used{opacity:.28;pointer-events:none}
+.wf-chip.wrong-wf{animation:shake .3s;border-color:var(--r500)!important}
+.sched-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.sched-day{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.15);border-radius:10px;min-height:75px;padding:6px;transition:all .2s}
+.sched-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--p300);text-align:center;margin-bottom:3px}
+.sched-day.dg-over{border-color:var(--p400);background:rgba(139,92,246,.15)}
+.sched-day.has-post{border-style:solid;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
+.sched-chip-item{background:linear-gradient(135deg,var(--p700),var(--i500));border-radius:5px;padding:3px 5px;font-size:9px;font-weight:700;color:var(--w);margin-bottom:3px;animation:popIn .2s ease;line-height:1.3}
+.sched-source{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.sched-draggable{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 11px;font-size:11px;color:var(--w);cursor:grab;user-select:none;transition:all .2s}
+.sched-draggable:hover{background:rgba(139,92,246,.3);transform:translateY(-2px)}
+.sched-draggable.dragging{opacity:.4}
+.sched-draggable.used{opacity:.25;pointer-events:none}
+.sort-zones-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.mistake-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.mistake-item{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--w);cursor:pointer;transition:all .2s;line-height:1.5;display:flex;align-items:flex-start;gap:10px}
+.mistake-item:hover{background:rgba(255,255,255,.13);border-color:var(--p400)}
+.mi-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--p300);flex-shrink:0}
+.mistake-item.m-bad{background:rgba(239,68,68,.15);border-color:var(--r500)}
+.mistake-item.m-ok{background:rgba(34,197,94,.1);border-color:var(--g500)}
+.mistake-item.m-warn{border-color:var(--a500)!important}
+.bar-q-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px;margin-bottom:10px}
+.bar-q-text{font-size:13px;color:var(--w);margin-bottom:10px;line-height:1.5}
+.bar-opts-wrap{display:flex;flex-direction:column;gap:6px}
+.bar-opt-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:9px 14px;font-size:12px;color:var(--w);cursor:pointer;transition:all .2s;text-align:left;font-family:inherit}
+.bar-opt-btn:hover{background:rgba(139,92,246,.25);border-color:var(--p400)}
+.bar-opt-btn.opt-c{background:rgba(34,197,94,.2);border-color:var(--g500)}
+.bar-opt-btn.opt-w{background:rgba(239,68,68,.15);border-color:var(--r500);animation:shake .3s}
+.yt-divider{height:1px;background:linear-gradient(to right,transparent,var(--s200),transparent);margin:20px 0}
+.bounce-in{animation:popIn .35s cubic-bezier(.36,.07,.19,.97)}
+@keyframes popIn{0%{transform:scale(.5) translateY(-8px);opacity:0}70%{transform:scale(1.1);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes flashRed{0%,100%{box-shadow:none}50%{box-shadow:0 0 18px rgba(239,68,68,.6)}}
+@media(max-width:640px){
+  .sort-zones-3,.flip-grid{grid-template-columns:1fr}
+  .sched-grid{grid-template-columns:repeat(4,1fr)}
+  .sched-source,.wf-chips,.drag-pool,.word-chips{flex-direction:column}
+  .tbl-wrap{overflow-x:auto}
+  .sort-zones{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:1fr}
+  .pillars{grid-template-columns:1fr}
+  .pain-gain{grid-template-columns:1fr}
+  .stat-row{grid-template-columns:1fr}
+}
+
+/* SPLASH */
+#les-splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:linear-gradient(160deg,#1a0533 0%,#2d0f54 60%,#0d0d1f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;transition:opacity 0.7s,visibility 0.7s;}
+#les-splash.done{opacity:0;visibility:hidden;pointer-events:none;}
+.sp-eye{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c4b5fd;margin-bottom:16px;}
+.sp-img{width:min(360px,88vw);border-radius:16px;overflow:hidden;border:2px solid rgba(139,92,246,.4);box-shadow:0 0 60px rgba(109,40,217,.5);margin-bottom:22px;}
+.sp-img img{width:100%;display:block;}
+.sp-title{font-size:17px;font-weight:800;color:#fff;text-align:center;margin-bottom:6px;font-family:Inter,sans-serif;}
+.sp-sub{font-size:12px;color:rgba(255,255,255,.45);text-align:center;margin-bottom:20px;font-family:Inter,sans-serif;}
+.sp-track{width:min(320px,80vw);height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-bottom:10px;}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,#7c3aed,#6366f1,#a78bfa);border-radius:99px;}
+.sp-row{display:flex;justify-content:space-between;width:min(320px,80vw);}
+.sp-msg{font-size:11px;color:#c4b5fd;font-weight:600;font-family:Inter,sans-serif;}
+.sp-pct{font-size:13px;color:#c4b5fd;font-weight:800;font-family:Inter,sans-serif;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<div id="les-splash">
+  <div class="sp-eye">LearnHub PH &nbsp;&middot;&nbsp; Module 2 &nbsp;&middot;&nbsp; Lesson 3</div>
+  <div class="sp-img"><img src="data:image/jpeg;base64,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AouFhvT2qWMdMjioxng4qaNecHJpSY0i7bj5hiuk01eRXPWyndxXT6YvQ1xVnocmK0idFaD5RWgnHNU7ZflFXF6V5stz5eq9Rw60tIKWoMQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigDLmGQaybtODW3KvFZdynB4rpgztw8rM5e9Q5PFYdwnzGumvYzycVg3SYJrvoyPo6U7ozupqRfamuCDwKVDzzXS9jpiSj7pPNMZQegPNPUcc08qCOgqLmtinJGcZxUJXBzV9k+bI6VE8ZNXGRm4FQcHpT1c4605o+M96YUIPFaXTIs0SiYjjJp3nnuear7e/NJg9qXKh8zLHnnkZpjSk8c1HtOaUIetFkhXbAue/wBKTBNSrFk9KlSEngik5JDUWyJYvzqZYuOlTrD7cVIIxis3M0ULFfyxTGU49MVaKc4B/GoWUZ+vrSTKaIQMdRUkQ5pAowDzU8SZP402ybF6zTLA11OnR4AzXP2MeXFdXp8eAK4a8jysfUsrGvAuFqyOgqKIYAqauBnzc3dijpRRRUkBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFSQcVQuEBzWk44qpMnHStYs6KUrM527iyDWBdRYJrrLqLIPFYV5D14rspSPdw9S6RzcqENjtUYGDV64i71UYYOK7k7o9GEhykdamHTp1qunLHip0I9alnTFjtoOOKa0ZPvUg547Gn4yOtTcGyo0XHNNMParm3I4oKj0p8zJ0KHk9BzxR5OPXFXvLFL5YA6U+di90pCCnrAcZq2EA9qcEHYUudic4orLD045qZIgDxUu30pccf4Urmcq/Yj2ClI7/0qTHSkI9BSM/atshYfSoGXrVk9Oox9ajIyelNOx1QldEAXJ6VZhQ7hTVTnNXIIwxAxSkxTkoo09Ph+YcV1FlHhRWNp0GMcV0dumFFcFaR81javMy0gp/emqMCniuVnksKKKKQgooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z" alt="Scheduling with Buffer & Meta Business Suite"></div>
+  <div class="sp-title">Scheduling with Buffer & Meta Business Suite</div>
+  <div class="sp-sub">Hang tight &mdash; Module 2 Lesson 3 is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES006...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 2 &nbsp;&middot;&nbsp; Lesson 3</span>
+</div>
+<div class="wrap">
+<div class="hero">
+  <div class="hero-tag">&#128197; MODULE 2 &nbsp;&middot;&nbsp; LESSON 3 OF 3</div>
+  <h1>Scheduling with Buffer &amp; Meta Business Suite</h1>
+  <p class="hero-sub">Manual posting is the fastest way to burn out as an SMM VA. This lesson teaches you to master two industry-standard scheduling tools so your content goes live automatically, your clients stay consistent, and your time is protected. You leave this lesson fully equipped to set up and manage both tools for any paying client immediately.</p>
+  <div class="hero-meta">
+    <span>&#128214; ~50 min</span><span>&#127919; Beginner to Intermediate</span><span>&#127909; 2 Videos</span><span>&#127918; 12 Activities</span><span>&#129504; 12 Checkpoints</span>
+  </div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 12</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+<div class="toc">
+  <div class="toc-title">&#128203; What is in this lesson</div>
+  <p class="toc-sub">Read the section &rarr; Complete the activity &rarr; Pass the checkpoint &rarr; Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. What Buffer is and why VAs use it over manual posting</a></li>
+    <li><a href="#s2" data-toc="2">2. Setting up Buffer and connecting client social profiles</a></li>
+    <li><a href="#s3" data-toc="3">3. Writing, designing, and scheduling a post inside Buffer</a></li>
+    <li><a href="#s4" data-toc="4">4. Buffer queue, optimal timing, and posting hours by platform</a></li>
+    <li><a href="#s5" data-toc="5">5. What Meta Business Suite is and how it differs from Buffer</a></li>
+    <li><a href="#s6" data-toc="6">6. Navigating Meta Business Suite &mdash; tabs and features</a></li>
+    <li><a href="#s7" data-toc="7">7. Scheduling posts inside Meta Business Suite step by step</a></li>
+    <li><a href="#s8" data-toc="8">8. Using the Planner view to manage a full month of content</a></li>
+    <li><a href="#s9" data-toc="9">9. Reading analytics in Buffer and Meta Business Suite</a></li>
+    <li><a href="#s10" data-toc="10">10. Choosing between Buffer and Meta Business Suite</a></li>
+    <li><a href="#s11" data-toc="11">11. Common scheduling mistakes and how to avoid every one</a></li>
+    <li><a href="#s12" data-toc="12">12. Building a repeatable weekly scheduling workflow</a></li>
+  </ul>
+</div>
+<div class="section is-visible" id="s1" data-section="1">
+  <div class="section-title"><span class="sec-badge">1</span>&#128309; What Buffer is and why VAs use it over manual posting</div>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Buffer</strong> is a social media scheduling and analytics platform that lets you write posts once, connect multiple social accounts across platforms, and publish content automatically at pre-set times &mdash; without ever logging in to each platform manually. It is one of the most widely used tools in the global SMM VA industry.</p>
+  </div>
+  <div class="card">
+    <p>When a new VA asks "why can't I just post directly on Instagram every day?" the answer is always the same: manual posting chains you to a clock. You must be available at exactly 8am, noon, and 6pm every day for every client. Miss one window and the content does not go out. Take a sick day and the page goes silent. Go on a trip and the client's engagement collapses. Buffer removes that dependency entirely &mdash; posts publish on schedule whether you are working, sleeping, or traveling.</p>
+    <p>Beyond scheduling, Buffer gives you a single unified dashboard to manage multiple platforms for multiple clients from one login. Instead of opening Instagram, Facebook, then LinkedIn in separate tabs and manually copying captions each time, Buffer lets you write a post once and send customized versions to all connected platforms simultaneously.</p>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Social platforms Buffer connects to: Instagram, Facebook, LinkedIn, TikTok, Pinterest, X, and more</div></div>
+    <div class="stat"><div class="stat-num">3x</div><div class="stat-label">Faster deployment when using Buffer vs manually logging into each platform to post one at a time</div></div>
+    <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Buffer free tier: 3 connected channels, 10 scheduled posts per channel &mdash; enough for a first client</div></div>
+  </div>
+  <div class="card card-purple">
+    <p><strong>Key reasons professional SMM VAs use Buffer:</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">&#10003;</div><div><strong>Post-and-forget scheduling.</strong> Queue posts days or weeks ahead. Buffer publishes automatically at the exact scheduled time &mdash; no reminders, no alarms, no manual action on posting day.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Multi-client dashboard.</strong> Switch between client channels instantly without logging in and out of different accounts. Each client gets their own channel group inside one Buffer workspace.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Optimal timing suggestions.</strong> Buffer analyzes each account's audience engagement history and recommends the best times to post &mdash; platform by platform, account by account.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Cross-posting with customization.</strong> Write a core post and push it to Instagram, Facebook, and LinkedIn with per-platform caption edits so each version is native to that platform, not a copy-paste.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Team collaboration.</strong> Buffer paid plans allow team members to draft posts and a manager to approve before publishing &mdash; ideal for VA teams or agencies with a review step.</div></li>
+    </ul>
+  </div>
+  <div class="shift-table">
+    <thead><tr><th>&#10060; Manual Posting &mdash; High Risk</th><th>&#9989; Buffer Scheduling &mdash; Professional</th></tr></thead>
+    <tbody>
+      <tr><td class="col-bad">Must be online at every exact posting time, every day, for every client</td><td class="col-good">Posts publish automatically at scheduled times &mdash; no daily presence needed</td></tr>
+      <tr><td class="col-bad">One sick day = one missed post = visible posting gap on client page</td><td class="col-good">Posts go live even when you are sick, traveling, or completely offline</td></tr>
+      <tr><td class="col-bad">3 clients = 9+ platform logins every morning before you do any other work</td><td class="col-good">All client channels in one Buffer dashboard &mdash; single login, instant switching</td></tr>
+      <tr><td class="col-bad">Copy-pasting captions to each platform wastes 30&ndash;45 min per batch session</td><td class="col-good">Write once, customize per platform, publish to all in one click</td></tr>
+      <tr><td class="col-bad">No data on whether your post times are actually reaching the audience</td><td class="col-good">Buffer shows best times based on real follower activity data for each account</td></tr>
+    </tbody>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <div class="tip-body"><div class="tip-label">Buffer Pricing for VAs</div>
+    <p>Buffer Free: 3 channels, 10 posts per channel &mdash; for a first client or practice. Buffer Essentials: $6/month per channel &mdash; unlimited posts and analytics. Most VAs managing 2+ clients use the paid tier and pass the cost to the client as a tool expense in the service agreement. On 3 channels that is $18/month &mdash; a tiny cost compared to the hours saved.</p></div>
+  </div>
+<div class="mini-game" id="game1">
+  <span class="mg-badge">&#128309; Activity 1 &mdash; Buffer vs Manual: Sort the Statements</span>
+  <div class="mg-title">Drag each card to the correct bin</div>
+  <div class="mg-desc">Sort all 6 statements correctly into Manual Posting or Buffer Scheduling to unlock the checkpoint. Cards that land in the right zone bounce green.</div>
+  <div class="drag-pool" id="g1-pool"></div>
+  <div class="sort-zones">
+    <div class="sort-zone" id="zone-manual" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g1Drop(event,'manual')">
+      <div class="zone-label bad">&#128241; Manual Posting</div>
+    </div>
+    <div class="sort-zone" id="zone-buffer" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g1Drop(event,'buffer')">
+      <div class="zone-label good">&#128309; Buffer Scheduling</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="mg-btn primary" onclick="g1Check()">Check Sort &#10003;</button>
+    <button class="mg-btn" onclick="g1Init()" style="margin-left:8px">&#8634; Reset</button>
+  </div>
+  <div class="mg-result" id="g1-result"></div>
+</div>
+<div class="checkpoint" id="cp-1">
+  <div class="cp-locked" id="cp-1-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-1-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 1</div>
+    <p class="checkpoint-q">A client asks why you need Buffer instead of posting directly to Instagram every day. Which is the most complete and accurate response?</p>
+    <div class="checkpoint-options" id="cp-1-opts">
+      <label><input type="radio" name="cp1" value="a"> Buffer looks more professional and clients expect VAs to use scheduling tools.</label>
+      <label><input type="radio" name="cp1" value="b"> Buffer allows posts to publish automatically at the best times without me needing to be online &mdash; protecting your posting consistency even when I am sick, traveling, or managing other clients, and giving us real data on when your audience is most active.</label>
+      <label><input type="radio" name="cp1" value="c"> Instagram algorithm prefers scheduled posts over manual posts, so Buffer directly improves your reach.</label>
+      <label><input type="radio" name="cp1" value="d"> Buffer is free so it saves the client money compared to posting manually.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(1,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-1-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-1-fb"></div>
+    <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s2" data-section="2">
+  <div class="section-title"><span class="sec-badge">2</span>&#9881;&#65039; Setting up Buffer and connecting client social profiles</div>
+  <div class="card">
+    <p>Before you schedule a single post, you need to complete the Buffer setup process for your client. This takes 15&ndash;30 minutes the first time &mdash; and zero extra time for every client after that because the process is identical. Key principle: <strong>always set up Buffer under your own Buffer account, not the client's</strong>. This keeps you in control and prevents the client from accidentally disconnecting channels or changing settings mid-month.</p>
+  </div>
+  <ul class="timeline">
+    <li class="tl-item"><div class="tl-dot">1</div><div class="tl-time">Step 1 &mdash; Create Your Buffer Workspace</div><div class="tl-title">Go to buffer.com and sign up with your professional email</div><div class="tl-body">Use your own email &mdash; not the client's. During onboarding select "I manage social media for others" so Buffer configures the right workspace type. Name the workspace with your business name (e.g. "Ana Santos Social Media") so it can eventually hold multiple clients cleanly.</div></li>
+    <li class="tl-item"><div class="tl-dot">2</div><div class="tl-time">Step 2 &mdash; Add a New Channel</div><div class="tl-title">Click "Connect Channel" and choose the platform</div><div class="tl-body">From the left sidebar click "+ New Channel." Select the platform: Instagram, Facebook Page, LinkedIn, TikTok, Pinterest, or X. Buffer redirects to that platform's login screen &mdash; log in with the client's credentials or connect Instagram through the client's Facebook Page. Always confirm with the client before logging into their accounts on your device.</div></li>
+    <li class="tl-item"><div class="tl-dot">3</div><div class="tl-time">Step 3 &mdash; Authorize Buffer Access</div><div class="tl-title">Grant Buffer permission to publish on behalf of the account</div><div class="tl-body">Each platform shows an authorization screen listing what Buffer is requesting. For Instagram: "Manage your business" and "Publish content" are required. Buffer does NOT request access to private messages or passwords &mdash; only publishing and analytics permissions. Clients who worry about security can be shown the exact permissions list before you authorize.</div></li>
+    <li class="tl-item"><div class="tl-dot">4</div><div class="tl-time">Step 4 &mdash; Configure Channel Settings</div><div class="tl-title">Set timezone, default posting times, and queue schedule</div><div class="tl-body">Once connected: (1) Set timezone to match the client's target audience location, not yours. (2) Add 1&ndash;5 default time slots per active day &mdash; these auto-fill when you use "Add to Queue." (3) Set which days are active posting days. For a client posting 5x per week Mon&ndash;Fri, set 5 active days with 1 slot per day.</div></li>
+    <li class="tl-item"><div class="tl-dot">5</div><div class="tl-time">Step 5 &mdash; Test with a Verification Post</div><div class="tl-title">Schedule one test post 5 minutes ahead and verify it publishes correctly</div><div class="tl-body">Write a short test caption, add a placeholder image, and schedule it 5 minutes in the future. Wait and confirm it published on the platform. If it fails, Buffer shows an error message. Never batch-schedule 20 posts on a newly connected channel without running this verification step first.</div></li>
+  </ul>
+  <div class="warn-box">
+    <div class="warn-icon">&#9888;&#65039;</div>
+    <div class="warn-body"><div class="warn-label">Instagram Business Account Required</div>
+    <p>Buffer can only auto-publish to Instagram Business or Creator accounts &mdash; not personal accounts. If a client has a personal account, they must convert it first: Instagram Settings &rarr; Account &rarr; Switch to Professional Account (free, reversible). Without this, Buffer can only send a push notification requiring manual publishing from the client's phone. Always check account type during onboarding.</p></div>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <div class="tip-body"><div class="tip-label">Reconnecting Expired Channels</div>
+    <p>Social platforms expire third-party authorizations every 60&ndash;90 days for security. When this happens, Buffer shows a yellow warning icon next to the channel. Reconnect immediately by clicking the channel and selecting "Reconnect." Add a monthly calendar reminder to check all channel statuses proactively. A disconnected channel is the number one cause of missed posts that clients attribute to the VA.</p></div>
+  </div>
+<div class="mini-game" id="game2">
+  <span class="mg-badge">&#128290; Activity 2 &mdash; Sequence the Setup Steps</span>
+  <div class="mg-title">Put the 5 Buffer setup steps in the correct order</div>
+  <div class="mg-desc">Drag all 5 steps into the drop zone in the correct sequence &mdash; from account creation to verified first post. Getting the order wrong blocks real setups from working.</div>
+  <div class="step-pool" id="g2-pool"></div>
+  <div class="step-drop-zone" id="g2-drop" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g2Drop(event)">
+    <div class="step-drop-label">Drop steps here in the correct order &darr;</div>
+  </div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="mg-btn primary" onclick="g2Check()">Check Order &#10003;</button>
+    <button class="mg-btn" onclick="g2Init()" style="margin-left:8px">&#8634; Reset</button>
+  </div>
+  <div class="mg-result" id="g2-result"></div>
+</div>
+<div class="checkpoint" id="cp-2">
+  <div class="cp-locked" id="cp-2-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-2-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 2</div>
+    <p class="checkpoint-q">You connect a client's Instagram account to Buffer but discover it is a personal account, not a Business account. What must happen before Buffer can auto-publish posts?</p>
+    <div class="checkpoint-options" id="cp-2-opts">
+      <label><input type="radio" name="cp2" value="a"> Nothing &mdash; Buffer works the same for all Instagram account types including personal accounts.</label>
+      <label><input type="radio" name="cp2" value="b"> The client must upgrade to Instagram Premium to enable third-party publishing.</label>
+      <label><input type="radio" name="cp2" value="c"> The client must convert their account to a Business or Creator account (free, in Instagram Settings). Without this Buffer can only send a push notification requiring manual publishing.</label>
+      <label><input type="radio" name="cp2" value="d"> You must create a brand new Instagram Business account and migrate the followers across.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(2,'c')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-2-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-2-fb"></div>
+    <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s3" data-section="3">
+  <div class="section-title"><span class="sec-badge">3</span>&#9997;&#65039; Writing, designing, and scheduling a post inside Buffer</div>
+  <div class="card">
+    <p>Once channels are connected and the queue is configured, scheduling a post in Buffer is a clean 6-step workflow. Understanding every step is essential &mdash; this is the core action you repeat dozens of times per client per month. Speed and accuracy here directly determine how efficiently your batch sessions run.</p>
+  </div>
+  <ul class="timeline">
+    <li class="tl-item"><div class="tl-dot">1</div><div class="tl-time">Step 1 &mdash; Open the Composer</div><div class="tl-title">Click "Create Post" from the Buffer dashboard or queue view</div><div class="tl-body">The composer opens in the center panel. On the left, select which channel(s) the post goes to. You can select multiple channels simultaneously &mdash; Buffer shows a separate preview for each platform so you can see exactly how the post will look before scheduling.</div></li>
+    <li class="tl-item"><div class="tl-dot">2</div><div class="tl-time">Step 2 &mdash; Write the Caption</div><div class="tl-title">Paste the caption and use "Customize for each channel" for platform variations</div><div class="tl-body">When multiple platforms are selected, click "Customize for each channel" to write platform-specific captions. A longer hashtag-heavy version for Instagram; a shorter, link-based version for Facebook; a professional tone for LinkedIn. Always use this toggle when cross-posting &mdash; identical captions across all platforms signal laziness and reduce performance on each one.</div></li>
+    <li class="tl-item"><div class="tl-dot">3</div><div class="tl-time">Step 3 &mdash; Upload Media</div><div class="tl-title">Add the image, video, or carousel from your device or Drive</div><div class="tl-body">Buffer accepts JPEG, PNG, GIF, and MP4. For Instagram carousels, click "+" to add multiple images in order. Buffer checks image dimensions and warns if the aspect ratio is wrong (Instagram Feed requires 1:1 or 4:5, Reels require 9:16). Fix size issues in Canva before re-uploading &mdash; never force an incorrect ratio through.</div></li>
+    <li class="tl-item"><div class="tl-dot">4</div><div class="tl-time">Step 4 &mdash; Add Hashtags</div><div class="tl-title">Use the First Comment feature for Instagram to keep captions clean</div><div class="tl-body">Buffer has a "First Comment" feature that posts hashtags as the first comment automatically rather than at the bottom of the caption. Use this when the client prefers a clean caption aesthetic. For Facebook and LinkedIn, hashtags go in the caption body &mdash; but use only 3&ndash;5 on those platforms. Never use 15 hashtags on LinkedIn.</div></li>
+    <li class="tl-item"><div class="tl-dot">5</div><div class="tl-time">Step 5 &mdash; Set the Schedule</div><div class="tl-title">Choose "Add to Queue," "Schedule for specific time," or "Publish Now"</div><div class="tl-body">"Add to Queue" fills the next available pre-configured time slot. "Schedule for specific time" lets you pick an exact date and time &mdash; use this for launch announcements or event posts. "Publish Now" immediately publishes to the live platform &mdash; only use this for genuinely urgent content, never for batch content.</div></li>
+    <li class="tl-item"><div class="tl-dot">6</div><div class="tl-time">Step 6 &mdash; Review the Queue</div><div class="tl-title">Scan every queued row: channel, caption, image, date, and time</div><div class="tl-body">After scheduling all posts for the month, open the Queue view and scan every row. Check: correct caption, correct image thumbnail, correct date and time, correct channel. This 5-minute review catches errors before they go live. A common mistake is scheduling a post to the wrong channel &mdash; the queue view makes this immediately visible.</div></li>
+  </ul>
+  <div class="scenario-box">
+    <div class="scenario-icon">&#127916;</div>
+    <div class="scenario-body"><div class="scenario-label">Batch Session in Practice</div>
+    <p>Ana finishes her batch and opens Buffer. She selects Instagram, then works through 20 posts: paste caption &rarr; upload graphic &rarr; add hashtags to first comment &rarr; click "Schedule for specific time" &rarr; pick date from the content calendar &rarr; Save. Each post takes about 90 seconds. 20 posts = 30 minutes. She then scans the queue, spot-checks 5 random entries for accuracy, and sends the client: "All 20 posts are scheduled for October. First post goes live Monday the 1st at 8am." Done.</p></div>
+  </div>
+<div class="mini-game" id="game3">
+  <span class="mg-badge">&#128197; Activity 3 &mdash; Scheduling Simulator</span>
+  <div class="mg-title">Drag posts into the correct weekly time slots</div>
+  <div class="mg-desc">This client posts Mon/Wed/Fri at 8am (educational) and Tue/Thu at 12pm (engagement). Drag each post type to the matching day. Weekends stay empty. Fill all 5 weekdays correctly to unlock the checkpoint.</div>
+  <div class="sched-source" id="g3-source"></div>
+  <div class="sched-grid" id="g3-grid"></div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="mg-btn primary" onclick="g3Check()">Check Schedule &#10003;</button>
+    <button class="mg-btn" onclick="g3Init()" style="margin-left:8px">&#8634; Reset</button>
+  </div>
+  <div class="mg-result" id="g3-result"></div>
+</div>
+<div class="checkpoint" id="cp-3">
+  <div class="cp-locked" id="cp-3-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-3-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 3</div>
+    <p class="checkpoint-q">During a batch session you are scheduling 20 posts into Buffer. For which type of post should you use 'Publish Now' instead of 'Add to Queue'?</p>
+    <div class="checkpoint-options" id="cp-3-opts">
+      <label><input type="radio" name="cp3" value="a"> All 20 posts &mdash; publishing immediately ensures none are delayed by queue timing.</label>
+      <label><input type="radio" name="cp3" value="b"> Educational posts &mdash; they perform better when published immediately.</label>
+      <label><input type="radio" name="cp3" value="c"> Only for genuinely urgent or time-sensitive content such as a breaking announcement. All batch content should always use 'Add to Queue' or 'Schedule for specific time,' never 'Publish Now.'</label>
+      <label><input type="radio" name="cp3" value="d"> Posts with videos &mdash; Buffer schedules images but publishes videos immediately.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(3,'c')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-3-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-3-fb"></div>
+    <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s4" data-section="4">
+  <div class="section-title"><span class="sec-badge">4</span>&#9201;&#65039; Buffer queue, optimal timing, and best posting hours by platform</div>
+  <div class="card">
+    <p>The Buffer queue is not just a list of scheduled posts &mdash; it is a strategic publishing engine. Understanding how the queue works, how to reorder it, and how to use Buffer's optimal timing data is what separates a VA who just schedules posts from one who maximizes client results from every post queued. Buffer's Optimal Timing feature analyzes the engagement history of each connected account to identify the specific hours when that account's followers are most active &mdash; account-specific data, not generic industry averages.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar"><div class="pillar-icon">&#128203;</div><div class="pillar-num">Queue</div><div class="pillar-title">Publishing Queue</div><div class="pillar-desc">Chronological list of all posts waiting to go live. Drag to reorder anytime. Delete or edit any post before it publishes. Gaps are visible instantly.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128336;</div><div class="pillar-num">Queue</div><div class="pillar-title">Custom Time Slots</div><div class="pillar-desc">Define recurring posting times per channel. "Add to Queue" auto-fills the next available slot &mdash; no manual time-picking needed during batch sessions.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#9889;</div><div class="pillar-num">Queue</div><div class="pillar-title">Optimal Timing</div><div class="pillar-desc">Buffer suggests the top 5&ndash;7 best posting times per week based on your account's specific follower engagement data. Essentials plan and above.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128260;</div><div class="pillar-num">Queue</div><div class="pillar-title">Shuffle Queue</div><div class="pillar-desc">Randomizes post order so the same content pillar does not always publish back-to-back. Useful after batch-creating content by pillar type.</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <table class="data-table">
+      <colgroup><col style="width:22%"><col style="width:20%"><col style="width:20%"><col style="width:38%"></colgroup>
+      <thead><tr><th>Platform</th><th>Best Days</th><th>Peak Hours</th><th>Notes for SMM VAs</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Instagram Feed</strong></td><td>Mon, Wed, Fri</td><td>7&ndash;9am, 6&ndash;8pm</td><td>Morning and evening commute windows consistently outperform midday for reach and saves</td></tr>
+        <tr><td><strong>Instagram Reels</strong></td><td>Tue, Thu, Sat</td><td>9am&ndash;12pm</td><td>Reels discovery is algorithm-driven more than time-dependent &mdash; morning publishing still gives early velocity</td></tr>
+        <tr><td><strong>Facebook Page</strong></td><td>Wed, Thu, Fri</td><td>1pm&ndash;4pm</td><td>Facebook audience skews older &mdash; post during work break hours for best organic reach</td></tr>
+        <tr><td><strong>LinkedIn</strong></td><td>Tue, Wed, Thu</td><td>8&ndash;10am, 12&ndash;1pm</td><td>Never post on weekends &mdash; LinkedIn is professional with very low weekend activity. Avoid Mondays too.</td></tr>
+        <tr><td><strong>TikTok</strong></td><td>Tue, Thu, Fri</td><td>7&ndash;9am, 7&ndash;9pm</td><td>Buffer supports TikTok via mobile notification push on some plans &mdash; verify before onboarding TikTok clients</td></tr>
+        <tr><td><strong>Pinterest</strong></td><td>Sat, Sun</td><td>8&ndash;11pm</td><td>Pinterest has the highest weekend and evening activity of any major platform &mdash; batch pins weekly</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <div class="tip-body"><div class="tip-label">Use Account Data, Not Generic Guides</div>
+    <p>The table above is a starting point, not a final answer. After 30 days of posting, use Buffer analytics to see which specific times generated the most engagement for your client's account. Adjust queue time slots accordingly. An Instagram wellness coach with an audience of early-rising moms in Manila may perform best at 5:30am &mdash; completely different from the industry average of 7am. Your job is to find the optimal time for that specific account.</p></div>
+  </div>
+<div class="mini-game" id="game4">
+  <span class="mg-badge">&#9998;&#65039; Activity 4 &mdash; True or False: Queue and Timing</span>
+  <div class="mg-title">Answer 5 true/false questions about Buffer queue features</div>
+  <div class="mg-desc">Read each statement and click TRUE or FALSE. All 5 must be correct to unlock the checkpoint. Correct answers show an explanation; wrong answers shake red.</div>
+  <div class="tf-score" id="g4-score">Score: 0 / 5</div>
+  <div id="g4-qs"></div>
+  <div class="mg-result" id="g4-result"></div>
+</div>
+<div class="checkpoint" id="cp-4">
+  <div class="cp-locked" id="cp-4-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-4-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 4</div>
+    <p class="checkpoint-q">You batch-create 12 posts for a LinkedIn client and add them all to the queue. You notice 4 are scheduled for Saturday and Sunday. What should you do?</p>
+    <div class="checkpoint-options" id="cp-4-opts">
+      <label><input type="radio" name="cp4" value="a"> Leave them &mdash; LinkedIn weekend posts sometimes perform well and it is worth testing.</label>
+      <label><input type="radio" name="cp4" value="b"> Reschedule the 4 weekend posts to Tuesday through Thursday, since LinkedIn is a professional platform with very low weekend engagement and weekend posts waste prime content slots.</label>
+      <label><input type="radio" name="cp4" value="c"> Delete the 4 weekend posts and reduce the total to 8 posts per month.</label>
+      <label><input type="radio" name="cp4" value="d"> Ask the client if they want to keep the weekend posts before making any changes.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(4,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-4-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-4-fb"></div>
+    <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s5" data-section="5">
+  <div class="section-title"><span class="sec-badge">5</span>&#128311; What Meta Business Suite is and how it differs from Buffer</div>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p><strong>Meta Business Suite</strong> (business.facebook.com) is Meta's free native management tool for Facebook Pages and connected Instagram Business accounts. It is built directly into the Meta ecosystem &mdash; no third-party connection required &mdash; and provides scheduling, inbox management, analytics, ad management, and audience insights all in one place. It is completely free with no subscription required.</p>
+  </div>
+  <div class="card">
+    <p>The fundamental difference between Buffer and Meta Business Suite is scope and ecosystem. Buffer is a cross-platform tool connecting Instagram, LinkedIn, TikTok, Pinterest, X, and more from one external dashboard. Meta Business Suite is a native tool managing only Facebook and Instagram &mdash; but it manages them deeper: comment management, DM inbox, paid ad integration, Facebook Stories scheduling, and native audience data that Meta does not share with third-party apps.</p>
+    <p>For clients whose entire presence is Facebook and Instagram only, Meta Business Suite is often the better primary tool. For clients posting across multiple platforms including LinkedIn and TikTok, Buffer is essential. Most professional SMM VAs use both: Meta Business Suite for Facebook and Instagram management, and Buffer for all other platforms.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="data-table">
+      <colgroup><col style="width:28%"><col style="width:36%"><col style="width:36%"></colgroup>
+      <thead><tr><th>Feature</th><th>Buffer</th><th>Meta Business Suite</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Platforms</strong></td><td>Instagram, Facebook, LinkedIn, TikTok, Pinterest, X, and more</td><td>Facebook Pages and Instagram Business only</td></tr>
+        <tr><td><strong>Cost</strong></td><td>Free (3 channels) or $6/mo per channel</td><td>Completely free &mdash; no subscription ever</td></tr>
+        <tr><td><strong>Inbox management</strong></td><td>Basic &mdash; comments only on paid plan</td><td>Full unified inbox: DMs, comments, Messenger, Instagram messages all in one place</td></tr>
+        <tr><td><strong>Ad management</strong></td><td>None</td><td>Full ad creation, boosting, and reporting</td></tr>
+        <tr><td><strong>Planner view</strong></td><td>Queue list only in free tier &mdash; no calendar view</td><td>Full calendar Planner view showing all scheduled content by month</td></tr>
+        <tr><td><strong>Analytics depth</strong></td><td>Standard engagement and reach data</td><td>Deep native insights: demographics, video retention, story taps, ad performance</td></tr>
+        <tr><td><strong>Best for</strong></td><td>Multi-platform clients, cross-posting, team collaboration</td><td>Facebook-and-Instagram-only clients, inbox management, ad reporting</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="success-box">
+    <div class="success-icon">&#9989;</div>
+    <div class="success-body"><div class="success-label">The Professional VA Dual-Tool Setup</div>
+    <p>For most SMM VA clients: use Meta Business Suite to schedule Facebook and Instagram content natively, manage the inbox, and read deep platform analytics. Use Buffer for all other platforms and for cross-platform queue management. Both are free or low-cost and complement each other perfectly. This setup gives you the best of both ecosystems without paying for features you do not need.</p></div>
+  </div>
+<div class="mini-game" id="game5">
+  <span class="mg-badge">&#128279; Activity 5 &mdash; Feature Matcher</span>
+  <div class="mg-title">Match each feature to the correct tool</div>
+  <div class="mg-desc">Click a feature on the left, then click the matching tool on the right. Match all 5 pairs correctly to unlock the checkpoint. Correct matches turn green instantly.</div>
+  <div class="match-grid">
+    <div><div class="match-col-label">&#128295; Feature</div><div class="match-items" id="g5-left"></div></div>
+    <div><div class="match-col-label">&#128736;&#65039; Tool</div><div class="match-items" id="g5-right"></div></div>
+  </div>
+  <div class="match-score" id="g5-score">Matched: 0 / 5</div>
+  <div class="mg-result" id="g5-result"></div>
+</div>
+<div class="checkpoint" id="cp-5">
+  <div class="cp-locked" id="cp-5-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-5-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 5</div>
+    <p class="checkpoint-q">A client runs a Facebook Page and Instagram account, posts on LinkedIn 3x per week, and wants unified inbox management for their DMs and comments. Which tool setup is most appropriate?</p>
+    <div class="checkpoint-options" id="cp-5-opts">
+      <label><input type="radio" name="cp5" value="a"> Use only Buffer for everything including inbox management across all platforms.</label>
+      <label><input type="radio" name="cp5" value="b"> Use only Meta Business Suite since it is free and handles Facebook and Instagram together.</label>
+      <label><input type="radio" name="cp5" value="c"> Use Meta Business Suite for Facebook and Instagram scheduling plus inbox management, and Buffer for LinkedIn scheduling since Meta Business Suite does not support LinkedIn.</label>
+      <label><input type="radio" name="cp5" value="d"> Use a premium tool like Hootsuite instead since it covers all three platforms in one subscription.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(5,'c')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-5-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-5-fb"></div>
+    <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s6" data-section="6">
+  <div class="section-title"><span class="sec-badge">6</span>&#128506;&#65039; Navigating Meta Business Suite &mdash; tabs and features explained</div>
+  <div class="card">
+    <p>First-time users of Meta Business Suite often feel overwhelmed by the number of tabs &mdash; Planner, Posts, Inbox, Insights, Ads, Commerce, and more. The trick is knowing exactly which tabs matter for an SMM VA daily workflow and which ones you can ignore initially. The five core tabs you will use in 90% of your work are: Home, Planner, Posts and Stories, Inbox, and Insights.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar"><div class="pillar-icon">&#127968;</div><div class="pillar-num">Tab 1</div><div class="pillar-title">Home</div><div class="pillar-desc">Dashboard overview showing recent activity, post performance, and notifications. Use it as a daily status check when logging in for a client.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128197;</div><div class="pillar-num">Tab 2</div><div class="pillar-title">Planner</div><div class="pillar-desc">Full month-view calendar of all scheduled and published content for Facebook and Instagram. Your most-used tab &mdash; see, create, and rearrange scheduled posts from here.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128221;</div><div class="pillar-num">Tab 3</div><div class="pillar-title">Posts and Stories</div><div class="pillar-desc">List view of all published, scheduled, and draft content. Filter by type, status, and date range. Use for bulk management and review after batch sessions.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128172;</div><div class="pillar-num">Tab 4</div><div class="pillar-title">Inbox</div><div class="pillar-desc">Unified inbox combining Facebook Messenger, Instagram DMs, Facebook comments, and Instagram comments. The most powerful inbox tool available &mdash; no third-party app matches its depth.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128202;</div><div class="pillar-num">Tab 5</div><div class="pillar-title">Insights</div><div class="pillar-desc">Native Meta analytics: reach, impressions, engagement, follower demographics, video retention, and story performance. More detailed than Buffer for Facebook and Instagram specifically.</div></div>
+    <div class="pillar"><div class="pillar-icon">&#128227;</div><div class="pillar-num">Tab 6</div><div class="pillar-title">Ads Center</div><div class="pillar-desc">Create, manage, and report on boosted posts and ad campaigns. Only relevant if the client runs paid advertising. Skip this tab entirely for organic-only contracts.</div></div>
+  </div>
+  <div class="card card-purple">
+    <p><strong>How to connect Instagram to Meta Business Suite:</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">&#10003;</div><div>The Instagram account must be a Business or Creator account AND must be linked to a Facebook Page. Go to Instagram Settings &rarr; Account &rarr; Linked Accounts &rarr; Facebook, and connect the relevant Page. Once linked, both accounts appear together in Meta Business Suite automatically.</div></li>
+      <li><div class="check-icon">&#10003;</div><div>Switch between client accounts via the account selector in the top-left corner. Each client needs their own Meta Business Suite access &mdash; either you are added as a Page admin or the client gives you access through their Business Manager.</div></li>
+      <li><div class="check-icon">&#10003;</div><div>The correct VA permission level is <strong>Editor</strong> on the Facebook Page &mdash; not Admin. Editor can create and schedule posts, manage inbox, and view insights. Admin can change Page settings and add or remove users. The client keeps Admin; you operate as Editor.</div></li>
+    </ul>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <div class="tip-body"><div class="tip-label">Mobile vs Desktop Meta Business Suite</div>
+    <p>Always use the desktop version (business.facebook.com) for scheduling and Planner work &mdash; it has the full feature set. The mobile app is useful for quick inbox replies and notifications on the go but has a reduced feature set that does not show all scheduling options. Do your core scheduling work on desktop; use the app for responsive inbox management between sessions.</p></div>
+  </div>
+<div class="mini-game" id="game6">
+  <span class="mg-badge">&#128311; Activity 6 &mdash; Tab Identifier: True or False?</span>
+  <div class="mg-title">Which Meta Business Suite tab handles each task?</div>
+  <div class="mg-desc">Read each statement about which tab to use for a given task. Click TRUE or FALSE. All 5 must be correct to unlock the checkpoint.</div>
+  <div class="tf-score" id="g6-score">Score: 0 / 5</div>
+  <div id="g6-qs"></div>
+  <div class="mg-result" id="g6-result"></div>
+</div>
+<div class="checkpoint" id="cp-6">
+  <div class="cp-locked" id="cp-6-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-6-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 6</div>
+    <p class="checkpoint-q">A client asks you to reply to Instagram DMs and Facebook comments every morning. Which Meta Business Suite tab do you use, and what is its key advantage?</p>
+    <div class="checkpoint-options" id="cp-6-opts">
+      <label><input type="radio" name="cp6" value="a"> The Posts tab &mdash; it shows all comments on posts in one place for easy management.</label>
+      <label><input type="radio" name="cp6" value="b"> The Inbox tab &mdash; it combines Facebook Messenger, Instagram DMs, Facebook comments, and Instagram comments in one unified view so you never miss a message by checking platforms separately.</label>
+      <label><input type="radio" name="cp6" value="c"> The Insights tab &mdash; it shows which posts received the most comments so you can prioritize those first.</label>
+      <label><input type="radio" name="cp6" value="d"> The Home tab &mdash; it shows recent notifications including all comments and messages as they arrive.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(6,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-6-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-6-fb"></div>
+    <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s7" data-section="7">
+  <div class="section-title"><span class="sec-badge">7</span>&#128228; Scheduling posts inside Meta Business Suite step by step</div>
+  <div class="card">
+    <p>Scheduling inside Meta Business Suite is native &mdash; no third-party connection, no authorization refresh, and no risk of a disconnected channel causing a missed post. For Facebook and Instagram content, native scheduling through Meta Business Suite is the most reliable method available. Here is the complete step-by-step workflow.</p>
+  </div>
+  <ul class="timeline">
+    <li class="tl-item"><div class="tl-dot">1</div><div class="tl-time">Step 1 &mdash; Access the Create Post Screen</div><div class="tl-title">From the Planner or Posts tab, click "Create Post" in the top-right corner</div><div class="tl-body">The composer opens. At the top, select which account(s) the post goes to: Facebook Page, Instagram, or both simultaneously. Selecting both shows a split preview &mdash; left for Facebook, right for Instagram &mdash; so you see exactly how the same content appears on each platform before scheduling.</div></li>
+    <li class="tl-item"><div class="tl-dot">2</div><div class="tl-time">Step 2 &mdash; Choose Content Type</div><div class="tl-title">Select Post, Reel, or Story from the content type tabs</div><div class="tl-body">Post: standard feed content &mdash; single image, multiple images, video, or text-only. Reel: requires vertical 9:16 video, supports audio selection and caption. Story: 9:16 ratio, 15-second max duration, disappears after 24 hours. Always select the correct content type first &mdash; switching after adding media resets the composer.</div></li>
+    <li class="tl-item"><div class="tl-dot">3</div><div class="tl-time">Step 3 &mdash; Write Caption and Add Media</div><div class="tl-title">Paste the caption, upload media, and add alt text for accessibility</div><div class="tl-body">Paste the caption from your content calendar. Upload media from your device or connected cloud storage. For Instagram posts, add alt text by clicking "Edit" next to the image after uploading and writing a 1&ndash;2 sentence image description. This improves accessibility and can improve discoverability &mdash; a professional detail most VAs skip.</div></li>
+    <li class="tl-item"><div class="tl-dot">4</div><div class="tl-time">Step 4 &mdash; Add Hashtags and Location</div><div class="tl-title">Add hashtags in the caption, and a location tag if the client has a physical business</div><div class="tl-body">For clients with physical locations (cafes, studios, retail stores), adding a location tag to every post increases local discoverability significantly. Click "Add Location" in the composer and search for the business address. For service-based online businesses, a city-level location tag can still attract a local audience.</div></li>
+    <li class="tl-item"><div class="tl-dot">5</div><div class="tl-time">Step 5 &mdash; Schedule the Post</div><div class="tl-title">Click the arrow next to "Publish" and select "Schedule" &mdash; then pick date and time</div><div class="tl-body">The Publish button has a dropdown arrow. Click it, select "Schedule Post," and a date and time picker appears. Select the date and time from your content calendar. Meta Business Suite shows the time in the account's configured timezone &mdash; always verify this matches your intended publish time before confirming. Click "Schedule" and the post appears in the Planner view.</div></li>
+    <li class="tl-item"><div class="tl-dot">6</div><div class="tl-time">Step 6 &mdash; Verify in Planner</div><div class="tl-title">Switch to Planner view and confirm the post appears on the correct date</div><div class="tl-body">After scheduling, go immediately to the Planner tab and find the scheduled date. If the post does not appear, the scheduling did not complete &mdash; go back and reschedule. After a full month batch, scan the Planner to spot any empty dates, double-posted days, or content placement errors before the client's approval review.</div></li>
+  </ul>
+  <div class="warn-box">
+    <div class="warn-icon">&#9888;&#65039;</div>
+    <div class="warn-body"><div class="warn-label">Instagram Reel Scheduling and Licensed Audio</div>
+    <p>Meta Business Suite can schedule Instagram Reels but with one limitation: the audio track must be original audio or audio you own. Meta's licensed music library is not available for scheduled Reels &mdash; it only works on manually published Reels. If a client's Reel requires a trending licensed song, it must be published manually at the planned posting time. Always clarify this with clients who rely heavily on trending audio in their Reels content.</p></div>
+  </div>
+<div class="mini-game" id="game7">
+  <span class="mg-badge">&#9881;&#65039; Activity 7 &mdash; Workflow Builder</span>
+  <div class="mg-title">Click the 6 scheduling steps in the correct order</div>
+  <div class="mg-desc">Build the complete Meta Business Suite post-scheduling workflow by clicking each step in the right sequence. The progress bar fills as you go. A wrong click shakes red and you must find the correct next step.</div>
+  <div class="wf-progress"><div class="wf-progress-fill" id="g7-pbar"></div></div>
+  <div class="wf-out-box">
+    <div class="wf-out-label">Your workflow builds here as you click steps in order...</div>
+    <div id="g7-out"></div>
+  </div>
+  <div class="wf-chips" id="g7-chips"></div>
+  <div style="text-align:center;margin-top:8px">
+    <button class="mg-btn" onclick="g7Init()">&#8634; Start Over</button>
+  </div>
+  <div class="mg-result" id="g7-result"></div>
+</div>
+<div class="checkpoint" id="cp-7">
+  <div class="cp-locked" id="cp-7-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-7-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 7</div>
+    <p class="checkpoint-q">A client's Instagram Reel uses a trending licensed song from Meta's music library. You try to schedule it in Meta Business Suite but cannot add the licensed audio. What is the correct professional response?</p>
+    <div class="checkpoint-options" id="cp-7-opts">
+      <label><input type="radio" name="cp7" value="a"> Skip the song &mdash; post the Reel without audio since consistent scheduling is more important than the music.</label>
+      <label><input type="radio" name="cp7" value="b"> Use original or royalty-free audio for the scheduled version, note this limitation to the client, or schedule the Reel without audio and manually publish with the trending song at the planned posting time.</label>
+      <label><input type="radio" name="cp7" value="c"> Use Buffer instead since Buffer supports all licensed music for scheduled Reels.</label>
+      <label><input type="radio" name="cp7" value="d"> Tell the client that trending licensed songs cannot be used on Instagram Reels at all &mdash; ever.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(7,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-7-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-7-fb"></div>
+    <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s8" data-section="8">
+  <div class="section-title"><span class="sec-badge">8</span>&#128197; Using the Planner view to manage a full month of content</div>
+  <div class="card">
+    <p>The Planner view in Meta Business Suite is the closest thing to a live content calendar any social media tool offers natively. Unlike Buffer's queue list, the Planner shows a month-at-a-glance calendar where every scheduled post appears as a thumbnail on its posting date &mdash; making gaps, double posts, and imbalances immediately visible without scrolling through a list.</p>
+    <p>After scheduling all posts for a month, open the Planner and spend 3 minutes scanning the calendar view. You will immediately spot: empty weeks, back-to-back promotional posts, content type mismatches, or a gap caused by a missed scheduling step. No tool can replace this visual check.</p>
+  </div>
+  <div class="card card-green">
+    <p><strong>What you can do inside the Planner view:</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">&#10003;</div><div><strong>View all scheduled content for Facebook and Instagram together.</strong> Toggle between month, week, and day views. Month view is the most useful for the bird's-eye quality check after a batch session.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Click any post thumbnail to edit it directly.</strong> Edit the caption, swap the media, adjust the time, or delete the post entirely &mdash; without going back to the main composer. Minor adjustments take seconds from the Planner.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Drag posts between dates.</strong> If a post landed on the wrong date or the content order needs rebalancing, drag the thumbnail to the correct date &mdash; no deletion and rescheduling required.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Create new posts directly from the Planner.</strong> Click any empty calendar date to open the composer pre-filled with that date &mdash; faster than going to the main Create Post screen and manually entering the date.</div></li>
+      <li><div class="check-icon">&#10003;</div><div><strong>Screenshot and share with clients for approval.</strong> A Planner screenshot showing a full month of content thumbnails gives clients a visual overview they can scan in seconds &mdash; far more satisfying than a text list. Clients who can see their month visually approve faster.</div></li>
+    </ul>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-icon">&#127916;</div>
+    <div class="scenario-body"><div class="scenario-label">The Planner Review in Practice</div>
+    <p>After scheduling 20 posts for October, Ana opens the Planner and scans the month view. In 3 minutes she spots: October 14 has two posts scheduled on the same day; October 21 is empty (a Wednesday &mdash; a key posting day); and the first five posts are all educational with no engagement post in between. She drags one October 14 post to October 21, changes October 6 from educational to an engagement post, and the calendar is balanced. This kind of quality control is only visible in a calendar layout &mdash; a list view would never catch it as quickly.</p></div>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <div class="tip-body"><div class="tip-label">Use the Planner Screenshot as Your Approval Visual</div>
+    <p>Screenshot the Planner at the end of every batch session and include it in your approval message. A screenshot of a full month of content thumbnails is a powerful proof-of-work visual that instantly builds client confidence. Clients who see their month displayed professionally approve faster and trust your process more deeply.</p></div>
+  </div>
+<div class="mini-game" id="game8">
+  <span class="mg-badge">&#128269; Activity 8 &mdash; Spot the Scheduling Problems</span>
+  <div class="mg-title">Find the 3 mistakes in this client Planner description</div>
+  <div class="mg-desc">3 of the 5 statements below describe scheduling problems that need to be fixed. 2 describe correct professional setups. Click only the mistakes. Red flash = real problem found. Amber = that one is actually fine. Find all 3 to unlock the checkpoint.</div>
+  <div style="font-size:12px;color:var(--p300);text-align:right;margin-bottom:8px" id="g8-score">Found: 0 / 3 problems</div>
+  <div class="mistake-list" id="g8-list"></div>
+  <div style="text-align:center;margin-top:10px">
+    <button class="mg-btn primary" onclick="g8Check()">Submit Findings &#10003;</button>
+    <button class="mg-btn" onclick="g8Init()" style="margin-left:8px">&#8634; Reset</button>
+  </div>
+  <div class="mg-result" id="g8-result"></div>
+</div>
+<div class="checkpoint" id="cp-8">
+  <div class="cp-locked" id="cp-8-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-8-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 8</div>
+    <p class="checkpoint-q">After scheduling a full month, you open the Planner and notice October 9 has two posts scheduled and October 16 is completely empty. What is the fastest way to fix this inside the Planner view?</p>
+    <div class="checkpoint-options" id="cp-8-opts">
+      <label><input type="radio" name="cp8" value="a"> Delete one of the October 9 posts and go back to the composer to create a new post for October 16.</label>
+      <label><input type="radio" name="cp8" value="b"> Drag one of the October 9 post thumbnails directly to October 16 in the Planner calendar &mdash; no deletion or recreation needed.</label>
+      <label><input type="radio" name="cp8" value="c"> Leave the double post on October 9 and add a brand new post for October 16 without removing anything.</label>
+      <label><input type="radio" name="cp8" value="d"> Click October 9 to open the queue list and manually retype the missing October 16 post from scratch.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(8,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-8-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-8-fb"></div>
+    <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<div class="section" id="s9" data-section="9">
+  <div class="section-title"><span class="sec-badge">9</span>&#128202; Reading analytics in Buffer and Meta Business Suite</div>
+  <div class="card">
+    <p>Scheduling content is only half the job of a professional SMM VA. The other half is reading what happens after content goes live &mdash; and using that data to improve next month's strategy. Analytics are not optional decoration on your service. They are the evidence that your strategy is working, the tool that helps you optimize, and the report that keeps clients renewing their contracts month after month.</p>
+    <p>Both Buffer and Meta Business Suite provide analytics, but they measure different things at different depths. Knowing which metrics to read in each tool &mdash; and what those numbers actually mean for the client's business &mdash; is what distinguishes a reporting VA from a posting VA.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="data-table">
+      <colgroup><col style="width:22%"><col style="width:18%"><col style="width:60%"></colgroup>
+      <thead><tr><th>Metric</th><th>Found In</th><th>What It Tells You and Why It Matters</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Reach</strong></td><td><span class="tag tag-both">Both</span></td><td>Total unique accounts that saw the post. Rising reach = growing visibility. Declining reach = algorithm deprioritizing this content type or posting frequency needs adjustment.</td></tr>
+        <tr><td><strong>Impressions</strong></td><td><span class="tag tag-both">Both</span></td><td>Total times the post was displayed including repeat views. Always higher than reach. High impressions with low reach = content is re-shown to the same audience rather than reaching new people.</td></tr>
+        <tr><td><strong>Engagement Rate</strong></td><td><span class="tag tag-buf">Buffer</span></td><td>Total engagements divided by reach. The most important single metric. Instagram industry average is 1&ndash;3%. Below 1% consistently = content is not resonating with the audience.</td></tr>
+        <tr><td><strong>Saves</strong></td><td><span class="tag tag-meta">Meta Suite</span></td><td>Posts saved by the viewer for later. Saves are the highest-value engagement signal on Instagram &mdash; they tell the algorithm the content is genuinely valuable, driving organic reach far more than likes.</td></tr>
+        <tr><td><strong>Shares and Sends</strong></td><td><span class="tag tag-both">Both</span></td><td>How many times the post was shared to Stories or sent via DM. Shares drive organic reach more powerfully than any other engagement type on most platforms.</td></tr>
+        <tr><td><strong>Follower Growth</strong></td><td><span class="tag tag-meta">Meta Suite</span></td><td>Net new followers gained in the reporting period. Consistent content should produce slow steady growth. Sharp drops indicate a post with a divisive angle that caused unfollows &mdash; worth reviewing.</td></tr>
+        <tr><td><strong>Top Posts</strong></td><td><span class="tag tag-buf">Buffer</span></td><td>Buffer ranks posts by engagement in the Analytics tab. Review top 3 and bottom 3 monthly. Top performers reveal which content type and topic your audience values most for next month's strategy.</td></tr>
+        <tr><td><strong>Best Time to Post</strong></td><td><span class="tag tag-buf">Buffer</span></td><td>Based on historical engagement data, Buffer shows which hours generated the most engagement. Use this to update queue time slots every 60 days as audience patterns shift.</td></tr>
+        <tr><td><strong>Audience Demographics</strong></td><td><span class="tag tag-meta">Meta Suite</span></td><td>Age, gender, top cities, top countries of the follower base. Confirms whether content is reaching the intended target audience or has drifted to an unintended demographic over time.</td></tr>
+        <tr><td><strong>Video Retention</strong></td><td><span class="tag tag-meta">Meta Suite</span></td><td>For Reels and video posts &mdash; shows at which second viewers drop off. If 80% leave within 2 seconds, the hook needs to be stronger. Critical data for Reel content optimization.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="success-box">
+    <div class="success-icon">&#9989;</div>
+    <div class="success-body"><div class="success-label">The Monthly Analytics Report Template</div>
+    <p>Send your client a simple monthly analytics report covering: Total Reach (vs last month), Engagement Rate (vs last month), Top 3 Performing Posts with engagement numbers, Follower Growth net gain or loss, and one strategic recommendation based on the data. This report takes 20 minutes to compile and is the single most powerful client retention tool a VA can offer &mdash; it proves your value with data every single month.</p></div>
+  </div>
+<div class="mini-game" id="game9">
+  <span class="mg-badge">&#128202; Activity 9 &mdash; Analytics Chart Reader</span>
+  <div class="mg-title">Read the animated bar chart and answer the question</div>
+  <div class="mg-desc">The bars below show last month's performance for a client's Instagram account. Watch them animate in, then answer the interpretation question to unlock the checkpoint.</div>
+  <div class="bar-chart" id="g9-chart"></div>
+  <div id="g9-q"></div>
+  <div class="mg-result" id="g9-result"></div>
+</div>
+<div class="checkpoint" id="cp-9">
+  <div class="cp-locked" id="cp-9-locked"><div class="cp-lock-icon">&#128274;</div><div class="cp-lock-msg">Complete the activity above to unlock this checkpoint.</div></div>
+  <div class="cp-content" id="cp-9-content">
+    <div class="checkpoint-header">&#129504; Knowledge Checkpoint &middot; Section 9</div>
+    <p class="checkpoint-q">Buffer analytics show that educational carousel posts consistently get 3x more saves than single-image promotional posts, but promotional posts get more likes. What strategic recommendation should you make?</p>
+    <div class="checkpoint-options" id="cp-9-opts">
+      <label><input type="radio" name="cp9" value="a"> Increase promotional posts since they get more likes, which is the most important engagement metric.</label>
+      <label><input type="radio" name="cp9" value="b"> Increase educational carousels &mdash; saves are the highest-value engagement signal on Instagram, telling the algorithm the content is genuinely useful. More saves drive more organic reach than likes, making carousels the higher-priority content type for long-term growth.</label>
+      <label><input type="radio" name="cp9" value="c"> Keep the current ratio since both types are performing and changing anything risks a total engagement drop.</label>
+      <label><input type="radio" name="cp9" value="d"> Switch entirely to carousels and eliminate promotional posts completely to maximize saves every month.</label>
+    </div>
+    <div class="checkpoint-actions">
+      <button class="btn-check" onclick="checkAnswer(9,'b')">&#10003; Check Answer</button>
+      <div class="cp-passed-note" id="cp-9-passed">&#9989; Correct!</div>
+    </div>
+    <div class="checkpoint-feedback" id="cp-9-fb"></div>
+    <button class="btn-continue" id="cp-9-cont" onclick="unlockSection(10)">Continue &rarr;</button>
+  </div>
+</div>
+</div>
+<div class="divider"></div>
+<script>
+(function(){
+  var MSGS=[
+    [0,'Initializing LES006...'],
+    [15,'Loading lesson content...'],
+    [30,'Preparing activities and games...'],
+    [50,'Setting up your checkpoints...'],
+    [70,'Almost there...'],
+    [88,'LES006 is ready - launching!'],
+  ];
+  var fill=document.getElementById('sp-fill');
+  var msg=document.getElementById('sp-msg');
+  var pct=document.getElementById('sp-pct');
+  var splash=document.getElementById('les-splash');
+  var start=null; var DUR=4000;
+  function step(ts){
+    if(!start)start=ts;
+    var p=Math.min((ts-start)/DUR,1);
+    var v=Math.round(p<0.5?2*p*p*100:(-1+(4-2*p)*p)*100);
+    if(fill)fill.style.width=v+'%';
+    if(pct)pct.textContent=v+'%';
+    for(var i=MSGS.length-1;i>=0;i--){if(v>=MSGS[i][0]){if(msg)msg.textContent=MSGS[i][1];break;}}
+    if(p<1){requestAnimationFrame(step);}
+    else{setTimeout(function(){if(splash)splash.classList.add('done');},400);}
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+<script>
+/* AUTO-UNLOCK IF COMPLETED */
+(function(){
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var key = 'lhph_LES006';
+    if(params.get('completed') === '1') {
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e){}
+      saved.lessonCompleted = true; saved.lessonDone = true;
+      var total = document.querySelectorAll('.section[id^="s"]').length || 9;
+      saved.unlockedUpTo = total; saved.sectionsUnlocked = total;
+      saved.finalUnlocked = true;
+      var arr = [], g = {};
+      for(var i=1;i<=total;i++){ arr.push(i); g[i]=true; }
+      saved.sectionsDone = arr; saved.cpPassed = arr;
+      saved.passed = g; saved.gamePassed = g;
+      localStorage.setItem(key, JSON.stringify(saved));
+    }
+  } catch(e){}
+})();
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body></html>

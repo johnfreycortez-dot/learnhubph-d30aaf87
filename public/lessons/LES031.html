@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES031 — Social Media Post Design</title>
+<style>
+  :root{
+    --rose:#d45f7a;
+    --rose-dark:#c04060;
+    --blush:#f7a8b8;
+    --soft-blush:#fce4ec;
+    --bg:#fff8f9;
+    --card-header:#fff0f3;
+    --ink:#3d1a22;
+    --orange:#f4a261;
+    --orange-dark:#dd8f4e;
+    --warn-bg:#fff3ee;
+    --warn:#d97748;
+    --scenario-bg:#fdf0f4;
+    --green:#2d8a50;
+    --green-bg:#d4f7e0;
+    --red-bg:#fde8e8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ color:var(--ink); margin:0 0 12px; font-weight:800; }
+  p{ margin:0 0 14px; font-size:15px; }
+  a{ color:var(--rose); }
+  img{max-width:100%;display:block;}
+
+  /* ---------- SPLASH ---------- */
+  #splash{
+    position:fixed; inset:0; z-index:9999;
+    background:linear-gradient(160deg, #fce4ec 0%, #fff8f9 60%, #fdf0f4 100%);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; padding:24px; text-align:center;
+    transition:opacity .5s ease;
+  }
+  #splash.fade-out{ opacity:0; pointer-events:none; }
+  .splash-card{ max-width:460px; width:100%; }
+  .splash-eyebrow{
+    font-size:11px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--rose); margin-bottom:18px;
+  }
+  .splash-thumb-wrap{
+    border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(212,95,122,0.18);
+    margin:0 auto 22px; border:0.5px solid var(--blush);
+    display:inline-block;
+  }
+  .splash-thumb-wrap img{ width:320px; max-width:100%; height:auto; display:block; }
+  .splash-card h1{ font-size:clamp(22px,5vw,28px); margin-bottom:8px; }
+  .splash-sub{ font-size:14px; color:#8a5361; margin-bottom:26px; }
+  .splash-bar-track{
+    width:100%; height:8px; border-radius:99px; background:#fff; border:0.5px solid var(--blush);
+    overflow:hidden; margin-bottom:14px;
+  }
+  .splash-bar-fill{
+    height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg, var(--rose), var(--blush), var(--soft-blush));
+  }
+  .splash-msg{ font-size:13px; color:#8a5361; font-weight:600; min-height:18px; }
+
+  /* ---------- TOPBAR ---------- */
+  #topbar{
+    position:sticky; top:0; z-index:500;
+    background:#fff; border-bottom:2px solid var(--rose);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 20px; gap:12px;
+  }
+  #topbar .brand{ display:flex; align-items:center; gap:10px; }
+  #topbar .brand img{ height:26px; width:auto; }
+  #topbar .lesson-tag{ font-size:12px; color:#8a5361; font-weight:700; }
+  #topbar .progress-wrap{ flex:1; max-width:320px; display:flex; align-items:center; gap:10px; }
+  #topbar .progress-track{
+    flex:1; height:8px; border-radius:99px; background:var(--soft-blush); overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; border-radius:99px;
+    background:linear-gradient(90deg, var(--rose), var(--blush), var(--soft-blush));
+    transition:width 0.6s cubic-bezier(0.22,1,0.36,1);
+  }
+  #topbar .progress-pct{ font-size:12px; font-weight:800; color:var(--rose); min-width:34px; text-align:right; }
+  #menuToggle{
+    display:none; background:var(--soft-blush); border:0.5px solid var(--blush); border-radius:8px;
+    width:36px; height:36px; align-items:center; justify-content:center; cursor:pointer; color:var(--rose);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  #layout{ display:flex; max-width:1280px; margin:0 auto; align-items:flex-start; }
+  #toc{
+    width:270px; flex-shrink:0; position:sticky; top:57px; max-height:calc(100vh - 57px);
+    overflow-y:auto; padding:20px 14px; border-right:0.5px solid var(--blush);
+  }
+  #toc h4{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#8a5361; margin-bottom:10px; }
+  .toc-item{
+    display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px;
+    border-left:3px solid transparent; cursor:pointer; font-size:13px; font-weight:600; color:#8a5361;
+    transition:background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .toc-item:hover{ background:var(--card-header); }
+  .toc-item.active{ border-left-color:var(--rose); background:var(--soft-blush); color:var(--ink); }
+  .toc-item.locked{ color:#c9adb3; cursor:not-allowed; }
+  .toc-dot{
+    width:20px; height:20px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    background:#eee; color:#fff; font-size:10px; font-weight:800; border:1.5px solid var(--blush);
+    transition:background 0.3s ease, transform 0.3s ease;
+  }
+  .toc-dot.done{ background:var(--rose); border-color:var(--rose); transform:scale(1.1); }
+  .toc-dot.locked{ background:#f1f1f1; border-color:#ddd; color:#bbb; }
+  .toc-dot svg{ width:11px; height:11px; }
+
+  main{ flex:1; min-width:0; padding:28px 24px 80px; }
+
+  /* ---------- SECTION CARD ---------- */
+  .section{ margin-bottom:28px; opacity:0; }
+  .section.is-visible{ animation: sectionSlideIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards; }
+  @keyframes sectionSlideIn{ from{opacity:0; transform:translateY(24px);} to{opacity:1; transform:translateY(0);} }
+  .section-card{
+    background:#fff; border:0.5px solid var(--blush); border-radius:16px; overflow:hidden;
+    box-shadow:0 4px 24px rgba(212,95,122,0.08);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .section-card:hover{ transform:translateY(-2px); box-shadow:0 8px 32px rgba(212,95,122,0.12); }
+  .section-head{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); border-bottom:0.5px solid var(--blush);
+    padding:18px 24px; display:flex; align-items:center; gap:14px;
+  }
+  .sec-badge{
+    width:36px; height:36px; border-radius:8px; background:var(--rose); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex-shrink:0;
+  }
+  .section-head h2{ font-size:clamp(17px,2.4vw,21px); margin:0; }
+  .section-body{ padding:24px; }
+  .section-body h3{ font-size:16px; margin-top:22px; }
+  .section-body ul, .section-body ol{ padding-left:20px; font-size:15px; }
+  .section-body li{ margin-bottom:6px; }
+
+  /* ---------- CALLOUT BOXES ---------- */
+  .def-box, .tip-box, .warn-box, .scenario-box{
+    border-radius:10px; padding:14px 16px; margin:16px 0; font-size:14px;
+    animation: boxFadeUp 0.4s ease forwards; animation-delay: calc(var(--box-index, 0) * 0.08s); opacity:0;
+    display:flex; gap:10px;
+  }
+  @keyframes boxFadeUp{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+  .def-box{ background:var(--card-header); border-left:3px solid var(--rose); }
+  .tip-box{ background:#fff8f0; border-left:3px solid var(--orange); }
+  .warn-box{ background:var(--warn-bg); border-left:3px solid var(--warn); }
+  .scenario-box{ background:var(--scenario-bg); border-left:3px solid var(--blush); }
+  .box-icon{ flex-shrink:0; width:20px; height:20px; margin-top:1px; }
+  .def-box .box-icon, .def-box b{ color:var(--rose); }
+  .tip-box .box-icon, .tip-box b{ color:var(--orange-dark); }
+  .warn-box .box-icon, .warn-box b{ color:var(--warn); }
+  .scenario-box .box-icon, .scenario-box b{ color:#c25a76; }
+  .box-icon svg{ width:100%; height:100%; }
+  .box-label{ font-weight:800; text-transform:uppercase; font-size:11px; letter-spacing:0.06em; display:block; margin-bottom:4px; }
+
+  /* ---------- TABLES ---------- */
+  .table-wrap{ overflow-x:auto; margin:16px 0; border-radius:10px; border:0.5px solid var(--blush); }
+  table{ width:100%; border-collapse:collapse; table-layout:fixed; font-size:13px; min-width:620px; }
+  thead th{
+    background:var(--card-header); color:var(--rose); text-align:left; padding:10px 12px;
+    font-size:11px; text-transform:uppercase; letter-spacing:0.04em; border-bottom:0.5px solid var(--blush);
+  }
+  tbody td{ padding:10px 12px; border-bottom:1px dashed var(--soft-blush); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:none; }
+
+  /* ---------- MOCKUPS ---------- */
+  .mockup-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--rose);
+    font-weight:800; margin:20px 0 8px;
+  }
+  .mockup-frame{
+    position:relative; border:1px solid var(--blush); border-radius:12px; overflow:hidden;
+    background:#fff; margin-bottom:10px;
+  }
+  .legend-wrap{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:10px; padding:12px 16px; margin-bottom:16px;
+  }
+  .legend{ list-style:none; padding:0; margin:0; counter-reset:leg; }
+  .legend li{ counter-increment:leg; padding:6px 0 6px 30px; position:relative; font-size:13px; border-bottom:1px dashed var(--soft-blush); }
+  .legend li:last-child{ border-bottom:none; }
+  .legend li::before{
+    content:counter(leg); position:absolute; left:0; top:6px; width:20px; height:20px; border-radius:50%;
+    background:var(--rose); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;
+  }
+  .legend b{ color:var(--rose); }
+
+  .callout{
+    position:absolute; width:22px; height:22px; border-radius:50%;
+    background:var(--rose); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800;
+    box-shadow:0 2px 6px rgba(0,0,0,.25); z-index:5;
+    cursor:pointer; border:none; padding:0;
+    animation:calloutPulse 2.6s ease-in-out infinite;
+    transition:transform .15s ease;
+  }
+  .callout:hover, .callout:focus-visible{ transform:scale(1.15); animation-play-state:paused; }
+  .callout:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+  @keyframes calloutPulse{
+    0%,100%{ box-shadow:0 2px 6px rgba(0,0,0,.25), 0 0 0 0 rgba(212,95,122,.55); }
+    50%{ box-shadow:0 2px 6px rgba(0,0,0,.25), 0 0 0 7px rgba(212,95,122,0); }
+  }
+  .callout-tip{
+    position:fixed; z-index:9990; background:var(--ink); color:#fff;
+    font-size:12.5px; line-height:1.5; padding:10px 13px;
+    border-radius:10px; max-width:240px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    opacity:0; pointer-events:none;
+    transform:translateY(6px);
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .callout-tip.show{ opacity:1; transform:translateY(0); }
+  .callout-tip b{ color:var(--blush); }
+
+  /* ---------- CANVA MOCKUP SPECIFIC ---------- */
+  .canva-mock{ font-size:12px; }
+  .canva-topbar{
+    background:linear-gradient(90deg, var(--rose), #e07f95);
+    color:#fff; display:flex; align-items:center; gap:16px; padding:8px 14px; font-size:11px; font-weight:700;
+  }
+  .canva-topbar .grow{ flex:1; }
+  .canva-topbar .share-btn{ background:#fff; color:var(--rose); border-radius:6px; padding:4px 12px; font-weight:800; }
+  .canva-toolbar{
+    display:flex; align-items:center; gap:10px; padding:7px 14px; border-bottom:0.5px solid var(--blush);
+    background:#fff; flex-wrap:wrap; font-size:11px; color:#8a5361;
+  }
+  .canva-toolbar span{ padding:4px 8px; border-radius:5px; background:var(--card-header); }
+  .canva-body{ display:flex; }
+  .canva-sidebar{
+    width:64px; flex-shrink:0; background:var(--card-header); border-right:0.5px solid var(--blush);
+    display:flex; flex-direction:column; align-items:center; gap:14px; padding:14px 0;
+  }
+  .canva-sidebar .icn{
+    display:flex; flex-direction:column; align-items:center; gap:3px; color:#8a5361; font-size:9px; font-weight:700;
+  }
+  .canva-sidebar .icn svg{ width:18px; height:18px; }
+  .canva-canvas{
+    flex:1; background:#fdf6f7; display:flex; align-items:center; justify-content:center; padding:24px; min-height:260px;
+    position:relative;
+  }
+  .canva-sample-post{
+    width:180px; height:180px; border-radius:8px; background:linear-gradient(135deg,#fce4ec,#fdf0f4);
+    border:1px solid var(--blush); position:relative; display:flex; flex-direction:column; justify-content:flex-end; padding:12px;
+    box-shadow:0 6px 20px rgba(212,95,122,0.15);
+  }
+  .canva-sample-post .headline{ font-weight:800; font-size:14px; color:var(--ink); }
+  .canva-sample-post .cta{ margin-top:6px; background:var(--rose); color:#fff; font-size:9px; font-weight:800; padding:4px 8px; border-radius:5px; display:inline-block; width:fit-content; }
+
+  /* ---------- PLATFORM DIMENSION PANEL ---------- */
+  .dim-panel{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:20px; }
+  .dim-card{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:10px; padding:12px;
+    display:flex; flex-direction:column; align-items:center; gap:8px; position:relative;
+  }
+  .dim-shape{ background:#fff; border:1.5px solid var(--rose); border-radius:4px; }
+  .dim-card .plat-name{ font-weight:800; font-size:12px; }
+  .dim-card .plat-size{ font-size:11px; color:#8a5361; }
+  @media (max-width:640px){ .dim-panel{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ---------- HIERARCHY DIAGRAM ---------- */
+  .hier-diagram{
+    padding:20px; display:flex; justify-content:center;
+  }
+  .hier-post{
+    width:260px; height:320px; border-radius:12px; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#fce4ec,#fdf0f4); border:1px solid var(--blush);
+  }
+  .hier-hero{ position:absolute; inset:0; background:linear-gradient(160deg,#f7a8b8,#e07f95); opacity:0.5; }
+  .hier-headline{ position:absolute; top:30px; left:16px; right:16px; font-weight:800; font-size:20px; color:#fff; }
+  .hier-subhead{ position:absolute; top:78px; left:16px; right:16px; font-size:11px; color:#fff; }
+  .hier-cta{ position:absolute; bottom:44px; left:16px; background:#fff; color:var(--rose); font-weight:800; font-size:10px; padding:6px 12px; border-radius:6px; }
+  .hier-logo{ position:absolute; bottom:14px; right:14px; width:24px; height:24px; border-radius:5px; background:#fff; }
+
+  /* ---------- GAME CARD ---------- */
+  .game-card{
+    background:var(--card-header); border:0.5px solid var(--blush); border-radius:12px; padding:18px; margin:20px 0;
+  }
+  .game-label{
+    display:flex; align-items:center; gap:10px; font-weight:800; font-size:13px; color:var(--rose);
+    border-left:3px solid var(--rose); padding-left:10px; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .game-label svg{ width:16px; height:16px; }
+  .game-instructions{ font-size:13px; color:#8a5361; margin-bottom:14px; }
+  .game-feedback{ font-size:13px; font-weight:700; margin-top:10px; min-height:18px; }
+  .game-feedback.ok{ color:var(--green); }
+  .game-feedback.bad{ color:#c0392b; }
+
+  .draggable{
+    background:#fff; border:1.5px solid var(--blush); border-radius:8px; padding:9px 12px; font-size:13px; font-weight:600;
+    cursor:grab; user-select:none; transition:transform 0.2s ease, box-shadow 0.2s ease; touch-action:none;
+  }
+  .draggable:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(212,95,122,0.2); }
+  .draggable.dragging{ opacity:0.5; transform:scale(1.04); }
+  .drop-zone{
+    background:#fff; border:2px dashed var(--blush); border-radius:10px; padding:12px; min-height:52px; font-size:12px;
+    display:flex; flex-direction:column; gap:6px; transition:border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .drop-zone.drag-over{ border-color:var(--rose); background:var(--card-header); box-shadow:0 0 0 3px rgba(212,95,122,0.15); }
+  .drop-zone-label{ font-weight:800; font-size:11px; text-transform:uppercase; color:#8a5361; margin-bottom:4px; }
+
+  .clickable-chip{
+    display:inline-block; background:#fff; border:1.5px solid var(--blush); border-radius:8px; padding:8px 12px; margin:4px;
+    font-size:13px; font-weight:600; cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .clickable-chip:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(212,95,122,0.18); }
+  .clickable-chip.correct-hit{ animation:correctBounce 0.5s ease forwards; }
+  .clickable-chip.wrong-hit{ animation:wrongShake 0.5s ease; }
+  .clickable-chip.struck{ text-decoration:line-through; opacity:0.55; }
+
+  @keyframes correctBounce{
+    0%{ transform:scale(1); }
+    40%{ transform:scale(1.08); background:var(--green-bg); }
+    70%{ transform:scale(0.97); }
+    100%{ transform:scale(1); background:var(--green-bg); border-color:var(--green); }
+  }
+  @keyframes wrongShake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px); background:var(--red-bg); }
+    40%{ transform:translateX(6px); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(4px); background:var(--red-bg); }
+  }
+  @keyframes cpUnlockPop{
+    0%{ transform:scale(0.92); opacity:0; }
+    60%{ transform:scale(1.03); }
+    100%{ transform:scale(1); opacity:1; }
+  }
+  @keyframes confettiFall{
+    0%{ transform:translateY(0) rotate(0deg) scale(1); opacity:1; }
+    100%{ transform:translateY(-80px) rotate(720deg) scale(0.3); opacity:0; }
+  }
+  .confetti-piece{ position:absolute; width:8px; height:8px; border-radius:2px; pointer-events:none; animation:confettiFall 0.9s ease-out forwards; }
+
+  .game-btn{
+    background:linear-gradient(135deg, var(--rose), var(--rose-dark)); color:#fff; border:none; border-radius:8px;
+    padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer; transition:opacity 0.2s;
+  }
+  .game-btn:hover{ opacity:0.9; }
+  .game-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .game-btn.secondary{ background:#fff; color:var(--rose); border:1.5px solid var(--rose); }
+
+  /* ---------- CHECKPOINT ---------- */
+  .checkpoint{ background:#fff; border:0.5px solid var(--blush); border-radius:12px; margin:20px 0; overflow:hidden; }
+  .cp-header{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); padding:12px 18px; display:flex; align-items:center; gap:10px;
+    font-weight:800; font-size:13px; color:var(--rose); text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .cp-header svg{ width:18px; height:18px; }
+  .cp-locked{ padding:24px; text-align:center; color:#8a5361; font-size:13px; }
+  .cp-locked svg{ width:28px; height:28px; color:var(--blush); margin-bottom:8px; }
+  .cp-content{ padding:20px; display:none; animation:cpUnlockPop 0.5s ease forwards; }
+  .cp-question{ font-weight:700; font-size:14px; margin-bottom:14px; }
+  .cp-opt{
+    display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--blush); border-radius:8px;
+    padding:10px 14px; margin-bottom:8px; font-size:13.5px; cursor:pointer; transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cp-opt:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(212,95,122,0.15); }
+  .cp-opt.correct{ animation:correctBounce 0.5s ease forwards; }
+  .cp-opt.wrong{ animation:wrongShake 0.5s ease; }
+  .cp-passed{ display:none; text-align:center; padding:10px 0; }
+  .cp-passed svg{ width:32px; height:32px; color:var(--green); margin-bottom:6px; }
+  .cp-passed p{ font-weight:700; color:var(--green); }
+
+  /* ---------- ACTION STEP ---------- */
+  .action-step{
+    background:linear-gradient(135deg, #fff0f3, #fce4ec); border:0.5px solid var(--blush); border-radius:10px;
+    padding:14px 18px; margin-top:18px; font-size:13.5px;
+  }
+  .action-step b{ color:var(--rose); display:flex; align-items:center; gap:6px; margin-bottom:4px; text-transform:uppercase; font-size:11px; letter-spacing:0.05em; }
+  .action-step svg{ width:15px; height:15px; }
+
+  /* ---------- VIDEO ---------- */
+  .yt-label{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; color:var(--rose); margin:18px 0 10px; }
+  .yt-label svg{ width:18px; height:18px; }
+  .yt-wrap{ position:relative; width:100%; padding-bottom:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--blush); }
+  .yt-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-continue{
+    background:linear-gradient(135deg, var(--orange), var(--orange-dark)); color:#fff; border:none; border-radius:10px;
+    padding:12px 22px; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    animation:btnPulse 2s ease-in-out infinite;
+  }
+  @keyframes btnPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(212,95,122,0.4); } 50%{ box-shadow:0 0 0 8px rgba(212,95,122,0); } }
+  .btn-continue svg{ width:16px; height:16px; }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--rose), var(--rose-dark)); color:#fff; border:none; border-radius:10px;
+    padding:14px 26px; font-size:15px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary svg{ width:18px; height:18px; }
+  .btn-primary:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---------- FINAL BLOCK ---------- */
+  #final-block{ display:none; }
+  .takeaways{ background:#fff; border:0.5px solid var(--blush); border-radius:16px; padding:26px; box-shadow:0 4px 24px rgba(212,95,122,0.08); margin-bottom:24px; }
+  .takeaways h2{ display:flex; align-items:center; gap:10px; }
+  .takeaways h2 svg{ width:24px; height:24px; color:var(--rose); }
+  .takeaways ul{ padding-left:20px; }
+  .complete-wrap{ text-align:center; padding:30px 0 10px; }
+  #lessonCompleteMsg{ display:none; margin-top:14px; font-weight:700; color:var(--green); }
+
+  .section.locked-section .section-body{ opacity:0.4; pointer-events:none; filter:blur(1px); }
+
+  @media (max-width:900px){
+    #toc{
+      position:fixed; left:0; top:57px; bottom:0; z-index:400; background:#fff; width:78vw; max-width:300px;
+      transform:translateX(-100%); transition:transform 0.3s ease; box-shadow:4px 0 20px rgba(0,0,0,0.1);
+    }
+    #toc.open{ transform:translateX(0); }
+    #menuToggle{ display:flex; }
+    #topbar .progress-wrap{ display:none; }
+  }
+  @media (max-width:640px){
+    .dim-panel{ grid-template-columns:1fr 1fr; }
+    .canva-body{ flex-direction:column; }
+    .canva-sidebar{ width:100%; flex-direction:row; justify-content:center; flex-wrap:wrap; }
+    main{ padding:20px 14px 60px; }
+    .section-body{ padding:18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<div id="splash">
+  <div class="splash-card">
+    <div class="splash-eyebrow">LearnHub PH · Module 11 · Lesson 1</div>
+    <div class="splash-thumb-wrap">
+      <img src="data:image/jpeg;base64,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" alt="Graphic Designer — Social Media Post Design" width="320">
+    </div>
+    <h1>Social Media Post Design</h1>
+    <div class="splash-sub">Hang tight — Module 11 Lesson 1 is being prepared</div>
+    <div class="splash-bar-track"><div class="splash-bar-fill" id="splashBarFill"></div></div>
+    <div class="splash-msg" id="splashMsg">Initializing LES031…</div>
+  </div>
+</div>
+
+<div id="topbar">
+  <button id="menuToggle" aria-label="Toggle lesson menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <div class="brand">
+    <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+    <span class="lesson-tag">LES031 · Module 11, Lesson 1</span>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+</div>
+
+<div id="layout">
+  <nav id="toc">
+    <h4>Lesson Sections</h4>
+    <div class="toc-item" data-target="s1"><span class="toc-dot" id="toc-dot-1">1</span><span>Why Post Design Matters for a VA</span></div>
+    <div class="toc-item" data-target="s2"><span class="toc-dot" id="toc-dot-2">2</span><span>Platform Requirements &amp; Canvas Dimensions</span></div>
+    <div class="toc-item" data-target="s3"><span class="toc-dot" id="toc-dot-3">3</span><span>Visual Hierarchy</span></div>
+    <div class="toc-item" data-target="s4"><span class="toc-dot" id="toc-dot-4">4</span><span>Brand Consistency</span></div>
+    <div class="toc-item" data-target="s5"><span class="toc-dot" id="toc-dot-5">5</span><span>Typography for Social Posts</span></div>
+    <div class="toc-item" data-target="s6"><span class="toc-dot" id="toc-dot-6">6</span><span>Images &amp; Graphics</span></div>
+    <div class="toc-item" data-target="s7"><span class="toc-dot" id="toc-dot-7">7</span><span>Color in Post Design</span></div>
+    <div class="toc-item" data-target="s8"><span class="toc-dot" id="toc-dot-8">8</span><span>Designing Different Post Types</span></div>
+    <div class="toc-item" data-target="s9"><span class="toc-dot" id="toc-dot-9">9</span><span>Building a Template System</span></div>
+    <div class="toc-item" data-target="s10"><span class="toc-dot" id="toc-dot-10">10</span><span>Designing for Feed Aesthetics</span></div>
+    <div class="toc-item" data-target="s11"><span class="toc-dot" id="toc-dot-11">11</span><span>Quality Control Before Delivery</span></div>
+    <div class="toc-item" data-target="s12"><span class="toc-dot" id="toc-dot-12">12</span><span>Your Personal Design Checklist</span></div>
+  </nav>
+
+  <main id="main">
+  <div class="section" id="s1">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">1</div><h2>Why Social Media Post Design Is One of the Highest-Demand Skills for a Design VA</h2></div>
+      <div class="section-body">
+        <p>Every client running a business today is expected to post consistently — feed posts, stories, carousels, announcements — often several times a week across two or three platforms at once. That volume of content has to look like it came from one brand, every single time, or it quietly damages the very recognition the client is trying to build.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Brand recognition through design is the ability of a viewer to identify whose post they're looking at within a fraction of a second — before reading a single word — because the colors, fonts, and layout are unmistakably consistent.</div>
+        </div>
+
+        <p>This is exactly why post design is such a valuable skill for a Virtual Assistant to offer. A VA who can take a rough content idea and turn it into an on-brand, publish-ready graphic — without needing a designer to double-check every file — saves the client hours every week and removes an entire bottleneck from their content pipeline. That independence is what clients pay premium rates for.</p>
+
+        <h3>Generic content vs. content that performs</h3>
+        <p>There is a real difference between a VA who can technically use Canva and one who produces content that performs. A generic VA copies a template, swaps in the client's logo, and calls it done. A high-value VA understands why the layout works, adjusts it to fit the brand's actual personality, and thinks about how the post will look next to the client's other recent posts — not just on its own.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>When you take on a new design VA client, ask to see their last 20 posts before you design anything. That short review tells you more about their real brand than any style guide document.</div>
+        </div>
+
+        <div class="scenario-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A coaching client hires two VAs over the course of a year. The first one designs each post individually whenever asked, with no consistent system. The second builds a repeatable template library in the first week and delivers posts same-day, always on-brand. Only one of them gets the retainer renewed.</div>
+        </div>
+
+        <h3>What this lesson will build toward</h3>
+        <p>By the end of this lesson you will be able to design any common post type for any client, apply their brand guidelines without being told to every time, build a reusable template system, and run a quality check before anything goes out the door — all skills that separate a dependable design VA from someone who is still learning the tool.</p>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Client Value Sorter</div>
+          <div class="game-instructions">Click each statement that describes a habit of a HIGH-VALUE design VA. Leave the generic-VA habits unclicked. You need to correctly select all 4 high-value habits to pass.</div>
+          <div id="g1-chips"></div>
+          <button class="game-btn" id="g1-check" style="margin-top:12px;">Check My Selections</button>
+          <div class="game-feedback" id="g1-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-1">
+          <div class="cp-header" id="cp-1-locked-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-1-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-1-content">
+            <div class="cp-question">What is the main reason clients pay premium rates for a design VA who works independently on post design?</div>
+            <div id="cp-1-opts">
+              <button class="cp-opt" data-idx="0">It removes a bottleneck from the content pipeline by not requiring a designer to check every file</button>
+              <button class="cp-opt" data-idx="1">It means the client no longer needs to review any posts before they are published</button>
+              <button class="cp-opt" data-idx="2">It allows the client to stop posting on social media altogether</button>
+              <button class="cp-opt" data-idx="3">It guarantees the posts will get more likes than posts from a full-time designer</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-1-fb"></div>
+            <div class="cp-passed" id="cp-1-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-1-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Pick one business you follow on Instagram or Facebook and scroll through their last 15 posts. Write down three things that stay consistent across every post — this is the brand recognition system you'll be learning to build for your own clients.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s2">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">2</div><h2>Understanding Platform Requirements and Canvas Dimensions</h2></div>
+      <div class="section-body">
+        <p>Before you design a single pixel, you need the right canvas. Designing at the wrong size is one of the most common mistakes a new design VA makes — it results in blurry exports, awkward cropping when the platform resizes your file automatically, and text or logos that get cut off entirely.</p>
+
+        <div class="mockup-label">Interface Overview — Canva</div>
+        <div class="mockup-frame canva-mock" id="canvaMock">
+          <div class="canva-topbar">
+            <span>File</span><span style="position:relative;">Resize
+              <div class="callout" style="top:-6px; left:100%; margin-left:4px;" tabindex="0" role="button" aria-label="Resize" data-tip="Resize — Switch your canvas to a different platform's dimensions without starting over.">2</div>
+            </span><span>Editing</span><div class="grow"></div>
+            <div class="share-btn">Share</div>
+          </div>
+          <div class="canva-toolbar">
+            <span>Font</span><span>Size</span><span>Text Color</span><span>B</span><span>I</span><span>U</span><span>Align</span><span>Effects</span><span>Position</span>
+          </div>
+          <div class="canva-body">
+            <div class="canva-sidebar">
+              <div class="icn" style="position:relative;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Templates
+                <div class="callout" style="top:-8px; right:-8px;" tabindex="0" role="button" aria-label="Templates panel" data-tip="Templates — Browse pre-built layouts sized correctly for the platform you selected.">1</div>
+              </div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>Elements</div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Text</div>
+              <div class="icn" style="position:relative;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></svg>Brand
+                <div class="callout" style="top:-8px; right:-8px;" tabindex="0" role="button" aria-label="Brand kit" data-tip="Brand Kit — Apply saved brand colors and fonts to any element in one click.">3</div>
+              </div>
+              <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v14M6 9l6-6 6 6"/><rect x="4" y="19" width="16" height="2"/></svg>Uploads</div>
+            </div>
+            <div class="canva-canvas">
+              <div class="canva-sample-post">
+                <div class="headline">Design Tip</div>
+                <div class="cta">Learn More</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="legend-wrap">
+          <ul class="legend">
+            <li><b>Templates</b> — starting layouts already sized for the platform you've chosen</li>
+            <li><b>Resize</b> — changes canvas dimensions to match a different platform without losing your design</li>
+            <li><b>Brand Kit</b> — applies the client's saved colors, fonts, and logo in one click</li>
+          </ul>
+        </div>
+
+        <h3>Correct dimensions for every major platform</h3>
+        <p>Every platform crops or scales images differently. Designing at the platform's native dimension keeps your work sharp and prevents important elements from being cropped out when the post publishes.</p>
+
+        <div class="mockup-label">Interface Overview — Platform Dimension Reference</div>
+        <div class="mockup-frame">
+          <div class="dim-panel">
+            <div class="dim-card"><div class="dim-shape" style="width:50px;height:50px;"></div><span class="plat-name">IG Feed</span><span class="plat-size">1080×1080</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="Instagram Feed" data-tip="Instagram Feed — Square format, safest for maximum grid visibility.">1</div></div>
+            <div class="dim-card"><div class="dim-shape" style="width:34px;height:60px;"></div><span class="plat-name">IG Story</span><span class="plat-size">1080×1920</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="Instagram Story" data-tip="Instagram Story — Vertical full-screen, keep text out of the top and bottom 250px.">2</div></div>
+            <div class="dim-card"><div class="dim-shape" style="width:58px;height:31px;"></div><span class="plat-name">Facebook</span><span class="plat-size">1200×630</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="Facebook Post" data-tip="Facebook Post — Landscape, keep headline text away from the left corner where profile info overlaps.">3</div></div>
+            <div class="dim-card"><div class="dim-shape" style="width:58px;height:30px;"></div><span class="plat-name">LinkedIn</span><span class="plat-size">1200×627</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="LinkedIn Post" data-tip="LinkedIn Post — Landscape, near-identical to Facebook so one design often works for both.">4</div></div>
+            <div class="dim-card"><div class="dim-shape" style="width:60px;height:34px;"></div><span class="plat-name">X / Twitter</span><span class="plat-size">1600×900</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="Twitter/X Post" data-tip="Twitter/X Post — Wide format, gets cropped aggressively in-feed so keep key text centered.">5</div></div>
+            <div class="dim-card"><div class="dim-shape" style="width:36px;height:54px;"></div><span class="plat-name">Pinterest</span><span class="plat-size">1000×1500</span><div class="callout" style="top:4px; right:4px;" tabindex="0" role="button" aria-label="Pinterest Pin" data-tip="Pinterest Pin — Tall vertical format performs best in the Pinterest feed algorithm.">6</div></div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <colgroup><col style="width:16%"><col style="width:22%"><col style="width:12%"><col style="width:12%"><col style="width:38%"></colgroup>
+            <thead><tr><th>Platform</th><th>Format Name</th><th>Width</th><th>Height</th><th>Safe Zone Rule</th></tr></thead>
+            <tbody>
+              <tr><td>Instagram</td><td>Feed (square)</td><td>1080</td><td>1080</td><td>Keep text 60px from every edge</td></tr>
+              <tr><td>Instagram</td><td>Story / Reel</td><td>1080</td><td>1920</td><td>Avoid top and bottom 250px (UI overlap)</td></tr>
+              <tr><td>Facebook</td><td>Feed post</td><td>1200</td><td>630</td><td>Keep CTA away from bottom-right corner</td></tr>
+              <tr><td>LinkedIn</td><td>Feed post</td><td>1200</td><td>627</td><td>Keep headline centered, avoid edges</td></tr>
+              <tr><td>Twitter / X</td><td>Feed post</td><td>1600</td><td>900</td><td>Center key text — edges crop on mobile</td></tr>
+              <tr><td>Pinterest</td><td>Pin</td><td>1000</td><td>1500</td><td>Keep CTA in the lower third</td></tr>
+              <tr><td>YouTube</td><td>Thumbnail</td><td>1280</td><td>720</td><td>Keep faces and text out of bottom-right (timestamp)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="warn-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Never stretch an existing design to fit a new platform. Use Canva's Resize tool or rebuild the layout — stretching distorts logos, warps faces in photos, and instantly signals an unpolished VA.</div>
+        </div>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Set up your Canva canvas by clicking Resize in the top toolbar and searching the platform name directly — Canva has pre-built dimension presets for every platform listed above.</div>
+        </div>
+
+        <h3>Game: Platform Dimension Matcher</h3>
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Platform Dimension Matcher</div>
+          <div class="game-instructions">Drag each post type onto the canvas dimension it belongs to. When you drop correctly, the dimension label reveals itself.</div>
+          <div id="g2-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g2-zones" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;"></div>
+          <div class="game-feedback" id="g2-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-2">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-2-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-2-content">
+            <div class="cp-question">Why should a VA use Canva's Resize tool instead of manually stretching an existing design to a new platform size?</div>
+            <div id="cp-2-opts">
+              <button class="cp-opt" data-idx="0">Stretching a design distorts logos and photos and makes the post look unpolished</button>
+              <button class="cp-opt" data-idx="1">Resize is the only way to add a new brand color to the design</button>
+              <button class="cp-opt" data-idx="2">Manually stretching a design takes less time than using the Resize tool</button>
+              <button class="cp-opt" data-idx="3">Canva does not allow designs to be exported unless Resize is used first</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-2-fb"></div>
+            <div class="cp-passed" id="cp-2-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-2-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Open Canva and create six blank canvases — one for each platform dimension in the reference table above. Save them as a personal template starter set you can duplicate for every future client.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s3">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">3</div><h2>Visual Hierarchy in Social Media Posts — Guiding the Eye</h2></div>
+      <div class="section-body">
+        <p>A viewer spends less than a second deciding whether to keep looking at your post. Visual hierarchy is what tells their eye where to look first, second, and third in that split second — and it's the difference between a post that communicates instantly and one that requires effort to read.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Visual hierarchy is the intentional order in which a viewer's eye moves through a design, created by differences in size, contrast, color, and position — not left to chance.</div>
+        </div>
+
+        <p>Every strong post follows the same basic structure: one dominant element that grabs attention first, one supporting element that adds context, and one clear call to action that tells the viewer what to do next. When a design gives equal visual weight to five different elements, the eye doesn't know where to start — and most viewers simply scroll past.</p>
+
+        <h3>Size, contrast, color, and position</h3>
+        <ul>
+          <li><b>Size</b> — the largest element on the page is read first, almost automatically</li>
+          <li><b>Contrast</b> — a bright element against a muted background pulls the eye before anything else</li>
+          <li><b>Color</b> — a single accent color used sparingly draws attention to exactly what matters</li>
+          <li><b>Position</b> — elements placed along natural reading paths get noticed faster than elements tucked in a corner</li>
+        </ul>
+
+        <h3>F-pattern and Z-pattern layouts</h3>
+        <p>Western readers scan in predictable patterns. Text-heavy posts, like educational carousels, tend to follow an F-pattern — the eye moves across the top, then drops down and scans a shorter second line. Simpler, more visual posts often follow a Z-pattern — top-left to top-right, then diagonally down to bottom-left, then across to bottom-right where the CTA usually lives.</p>
+
+        <div class="mockup-label">Interface Overview — Visual Hierarchy Diagram</div>
+        <div class="mockup-frame">
+          <div class="hier-diagram">
+            <div class="hier-post">
+              <div class="hier-hero"></div>
+              <div class="callout" style="top:8px; left:8px;" tabindex="0" role="button" aria-label="Hero image area" data-tip="Hero Image Area — The dominant visual element that establishes mood and grabs the eye first.">1</div>
+              <div class="hier-headline">Grow Your Reach</div>
+              <div class="callout" style="top:26px; right:8px;" tabindex="0" role="button" aria-label="Headline" data-tip="Headline — The largest text on the post, read second, states the core message in a few words.">2</div>
+              <div class="hier-subhead">3 tips for better engagement this week</div>
+              <div class="callout" style="top:74px; right:8px;" tabindex="0" role="button" aria-label="Subheadline" data-tip="Subheadline — Smaller supporting text that adds one layer of context under the headline.">3</div>
+              <div class="hier-cta">Read More</div>
+              <div class="callout" style="bottom:38px; left:70px;" tabindex="0" role="button" aria-label="CTA button" data-tip="CTA Button — The clear next action, placed on the natural end-point of the reading path.">4</div>
+              <div class="hier-logo"></div>
+              <div class="callout" style="bottom:8px; right:2px;" tabindex="0" role="button" aria-label="Logo placement" data-tip="Logo Placement — Small and consistent, reinforcing brand recognition without competing for attention.">5</div>
+            </div>
+          </div>
+        </div>
+        <div class="legend-wrap">
+          <ul class="legend">
+            <li><b>Hero image area</b> — dominant visual that sets the mood, read first</li>
+            <li><b>Headline</b> — largest text, states the core message, read second</li>
+            <li><b>Subheadline</b> — supporting detail, smaller and quieter than the headline</li>
+            <li><b>CTA button</b> — the one clear next action for the viewer</li>
+            <li><b>Logo placement</b> — small, consistent, reinforces the brand without competing for attention</li>
+          </ul>
+        </div>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Squint at your finished design, or zoom out to thumbnail size, and notice what stands out first. If the wrong element wins your attention, your hierarchy needs adjusting before you deliver it.</div>
+        </div>
+
+        <div class="scenario-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A VA designs a promo post where the logo, headline, subheadline, and CTA are all roughly the same size and color. The client says the post "feels flat" but can't explain why. The real issue is a missing hierarchy — nothing tells the eye where to look first.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Visual Hierarchy Ranker</div>
+          <div class="game-instructions">Drag the elements below into the correct order, from most dominant (read first) to least dominant (read last).</div>
+          <div id="g3-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+          <button class="game-btn" id="g3-check" style="margin-top:12px;">Check My Order</button>
+          <div class="game-feedback" id="g3-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-3">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-3-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-3-content">
+            <div class="cp-question">A VA wants to quickly test whether a post's visual hierarchy is working correctly. What is the recommended method?</div>
+            <div id="cp-3-opts">
+              <button class="cp-opt" data-idx="0">Squint at the design or view it at thumbnail size and notice what stands out first</button>
+              <button class="cp-opt" data-idx="1">Ask five friends to memorize the entire post word for word</button>
+              <button class="cp-opt" data-idx="2">Add as many bright colors as possible so everything stands out equally</button>
+              <button class="cp-opt" data-idx="3">Remove the CTA button so the headline is the only element on the page</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-3-fb"></div>
+            <div class="cp-passed" id="cp-3-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-3-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Take a post you've designed before (or a template you like) and label its hierarchy: what's dominant, what's supporting, and what's the CTA. If you can't answer clearly in five seconds, the hierarchy needs work.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s4">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">4</div><h2>Designing with Brand Consistency</h2></div>
+      <div class="section-body">
+        <p>Brand consistency means using only the client's approved colors, fonts, and logo — every single time, on every single post, with no exceptions made for "just this once." A viewer's brain builds brand recognition through repetition; break the pattern even once and you weaken it for every post that came before.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>A Brand Kit is Canva's saved set of a client's official colors, fonts, and logo files, which can be applied to any element in a design with a single click instead of manually re-entering hex codes each time.</div>
+        </div>
+
+        <p>Using the Brand Kit is the fastest way to stay consistent: instead of guessing at a color or hunting for the right font, every swatch and font option is already saved and ready to apply. This also protects you from the easy mistake of using a "close enough" shade of the brand color that is actually slightly off.</p>
+
+        <h3>When a client has no defined brand kit</h3>
+        <p>Not every client arrives with a polished style guide. When that happens, look at their existing materials — their logo file, their website, their best-performing past posts — and extract the colors and fonts that are already in use. Build a simple brand style tile with those swatches and font samples, and get the client to approve it before you design anything else. This single step prevents weeks of back-and-forth revisions later.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Use a free tool like Canva's color palette generator or a browser color picker on the client's logo file to pull exact hex codes rather than guessing by eye.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Never substitute a similar-looking free font for the client's licensed brand font without asking. Even small differences in letterforms are noticeable across a feed of otherwise-consistent posts.</div>
+        </div>
+
+        <div class="scenario-box" style="--box-index:3">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A VA is designing a limited-time sale post and adds a bright red CTA button because red "feels urgent," even though the client's brand kit is navy, white, and gold. The button pulls attention, but it also breaks the pattern the client's audience has learned to recognize.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Brand Consistency Checker</div>
+          <div class="game-instructions">This sample post claims to belong to a client whose brand kit is Navy, White, and Gold only. Click every element listed below that breaks the brand guidelines.</div>
+          <div id="g4-chips"></div>
+          <button class="game-btn" id="g4-check" style="margin-top:12px;">Check My Selections</button>
+          <div class="game-feedback" id="g4-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-4">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-4-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-4-content">
+            <div class="cp-question">When a client has no defined brand kit, what is the recommended first step before designing anything?</div>
+            <div id="cp-4-opts">
+              <button class="cp-opt" data-idx="0">Pick any modern color palette that looks professional and start designing right away</button>
+              <button class="cp-opt" data-idx="1">Extract colors and fonts from the client's existing materials and get a style tile approved first</button>
+              <button class="cp-opt" data-idx="2">Wait until the client hires a professional brand designer before doing any post design work</button>
+              <button class="cp-opt" data-idx="3">Use Canva's default template colors since they are guaranteed to look good</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-4-fb"></div>
+            <div class="cp-passed" id="cp-4-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-4-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Build a simple brand style tile in Canva — three color swatches with hex codes, two font samples, and the logo — for a business you admire. Save it as a reference for how you'll present brand options to your own clients.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s5">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">5</div><h2>Typography in Social Media Post Design</h2></div>
+      <div class="section-body">
+        <p>Text is often the first thing a viewer actually reads on a post, which means typography decisions carry enormous weight. The rule that keeps every post looking clean is simple: use a maximum of two fonts — one for headings, one for body text — and let size and weight do the work of creating variety, not a pile of extra typefaces.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>A two-font system pairs one heading font (bolder, more expressive) with one body font (simple, highly legible), used consistently so every post feels part of the same family.</div>
+        </div>
+
+        <h3>Making text readable over a photo background</h3>
+        <p>Placing text directly on top of a busy photo is one of the most common readability failures. The fix is almost always one of these: a semi-transparent dark overlay behind the text, a solid text box with background fill, a subtle drop shadow, or an outlined text style — each one creates the contrast needed for the words to stand apart from the image behind them.</p>
+
+        <div class="table-wrap">
+          <table>
+            <colgroup><col style="width:20%"><col style="width:20%"><col style="width:16%"><col style="width:14%"><col style="width:30%"></colgroup>
+            <thead><tr><th>Post Type</th><th>Heading Size</th><th>Body Size</th><th>Max Fonts</th><th>Contrast Rule</th></tr></thead>
+            <tbody>
+              <tr><td>Feed post</td><td>60–90pt</td><td>28–36pt</td><td>2</td><td>4.5:1 minimum against background</td></tr>
+              <tr><td>Story / Reel</td><td>70–110pt</td><td>32–40pt</td><td>2</td><td>Add overlay if behind a photo</td></tr>
+              <tr><td>Thumbnail</td><td>90–140pt</td><td>N/A</td><td>1–2</td><td>Must read clearly at small preview size</td></tr>
+              <tr><td>Carousel slide</td><td>50–80pt</td><td>26–32pt</td><td>2</td><td>Consistent size across all slides</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Bold typography-led posts and text-only quote cards can work beautifully as design elements on their own — just keep the type scale consistent with the brand's heading and body font pairing.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Common amateur mistakes: mixing three or more fonts in one post, centering long paragraphs of body text, and using a decorative script font for anything longer than a short headline.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Typography Rule Sorter</div>
+          <div class="game-instructions">Drag each typography choice into the correct zone: "Works for Social" or "Avoid."</div>
+          <div id="g5-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g5-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g5-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-5">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-5-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-5-content">
+            <div class="cp-question">A VA needs to place white text over a busy lifestyle photo and the text is hard to read. What is the most effective fix?</div>
+            <div id="cp-5-opts">
+              <button class="cp-opt" data-idx="0">Switch the text to a decorative script font so it looks more stylish</button>
+              <button class="cp-opt" data-idx="1">Add a semi-transparent dark overlay behind the text to create contrast</button>
+              <button class="cp-opt" data-idx="2">Remove the photo entirely and use a plain white background instead</button>
+              <button class="cp-opt" data-idx="3">Shrink the text so it takes up less space on the photo</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-5-fb"></div>
+            <div class="cp-passed" id="cp-5-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-5-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Pick one heading font and one body font that you'll default to when a client has no brand kit. Test them together on a sample quote card to confirm they pair well at both large and small sizes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s6">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">6</div><h2>Using Images and Graphics Effectively</h2></div>
+      <div class="section-body">
+        <p>The right image can carry a post on its own; the wrong one fights against everything else on the page. Choosing on-brand images means matching the mood, color temperature, and style of the client's existing visual identity — a bright, warm-toned wellness brand shouldn't suddenly feature a cold, moody stock photo.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Color temperature describes whether an image leans warm (oranges, yellows, reds) or cool (blues, greens, grays) — matching this across a client's images is what makes a mixed set of photos still feel like one brand.</div>
+        </div>
+
+        <h3>Adjusting images to fit the brand</h3>
+        <p>Canva's image adjustment tools — brightness, contrast, saturation, and warmth — let you nudge a stock photo closer to the client's palette without replacing it. A small saturation boost or a slight warmth shift is often enough to make an otherwise generic stock image feel intentional. Frames let you crop images into consistent shapes (circles, rounded rectangles) so a set of photos reads as a matched system.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>The rule of odd numbers applies to layered graphics too — grouping three icons or three photo tiles feels more balanced than grouping two or four, because the eye can't split an odd number evenly.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Layering too many graphic elements — icons, shapes, badges, stickers — without a clear reason creates visual clutter that competes with the hierarchy you built in Section 3.</div>
+        </div>
+
+        <p>Reliable free sources like Unsplash and Pexels, and paid libraries built into Canva Pro, both work well as long as you're deliberate about matching mood and color to the brand rather than picking the first attractive photo you see.</p>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Image Selection Judge</div>
+          <div class="game-instructions">For each brand personality described, click the image option that fits better. You'll get instant feedback with a short reason.</div>
+          <div id="g6-area"></div>
+          <div class="game-feedback" id="g6-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-6">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-6-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-6-content">
+            <div class="cp-question">Why does grouping graphic elements in threes tend to look more balanced than grouping them in twos or fours?</div>
+            <div id="cp-6-opts">
+              <button class="cp-opt" data-idx="0">Canva's software only allows exactly three elements to be layered at once</button>
+              <button class="cp-opt" data-idx="1">The eye cannot split an odd number of elements evenly, which reads as more natural and balanced</button>
+              <button class="cp-opt" data-idx="2">Three elements always take up exactly one third of the canvas automatically</button>
+              <button class="cp-opt" data-idx="3">Odd numbers of elements load faster on mobile devices than even numbers</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-6-fb"></div>
+            <div class="cp-passed" id="cp-6-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-6-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Pick a stock photo that doesn't quite match a brand palette you're working with, and use Canva's brightness, saturation, and warmth sliders to pull it closer. Save the before-and-after as a reference for your own workflow.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s7">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">7</div><h2>Color in Social Media Post Design</h2></div>
+      <div class="section-body">
+        <p>A brand's color palette usually has three roles: a primary color for dominant elements, a secondary color for accents, and neutrals for backgrounds and body text. Applying colors according to their role — rather than using all three interchangeably — is what keeps a feed feeling organized instead of chaotic.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Tints and shades are lighter or darker variations of a brand's existing colors — created by mixing in white or black — that let you introduce visual variety without stepping outside the approved palette.</div>
+        </div>
+
+        <h3>Variety without breaking consistency</h3>
+        <p>A content calendar that uses the exact same color arrangement on every post starts to feel repetitive fast. The fix isn't to introduce new colors — it's to vary tints, shades, and the arrangement of the existing palette. A post with a navy background and gold text one day, and a cream background with navy text the next, still reads as the same brand.</p>
+
+        <h3>Color and mood</h3>
+        <p>Warm colors — reds, oranges, yellows — tend to communicate energy, urgency, and excitement, which is why they show up often in promotional and sale posts. Cool colors — blues, greens, purples — tend to communicate calm, trust, and professionalism, which is why they're common in finance, wellness, and B2B branding.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>To make text pop on any background color, check that there's enough brightness difference between the text and the background — dark text on light backgrounds or light text on dark backgrounds, almost never a mid-tone against a mid-tone.</div>
+        </div>
+
+        <div class="warn-box" style="--box-index:2">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Designing without accessibility in mind excludes real viewers. Aim for strong contrast between text and background so people with low vision or color blindness can still read the post clearly.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Color Pairing Game</div>
+          <div class="game-instructions">Click a text color, then click a background color, to test the pairing. Readable combinations flash green with a contrast score; poor pairings flash red. Find 3 readable pairs to pass.</div>
+          <div id="g7-area"></div>
+          <div class="game-feedback" id="g7-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-7">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-7-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-7-content">
+            <div class="cp-question">How can a VA create visual variety across a client's content calendar without breaking brand consistency?</div>
+            <div id="cp-7-opts">
+              <button class="cp-opt" data-idx="0">Introduce a new accent color on every third post to keep the feed interesting</button>
+              <button class="cp-opt" data-idx="1">Use tints, shades, and alternate arrangements of the existing brand palette</button>
+              <button class="cp-opt" data-idx="2">Switch to a completely different color palette once a month</button>
+              <button class="cp-opt" data-idx="3">Keep every post using the exact same colors in the exact same positions</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-7-fb"></div>
+            <div class="cp-passed" id="cp-7-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-7-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Take one brand color palette and create three tint/shade variations of the primary color. Mock up how each could be used as a background for a quote card without leaving the brand's identity.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s8">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">8</div><h2>Designing Different Post Types</h2></div>
+      <div class="section-body">
+        <p>Every post type has its own job to do, and its own set of design rules that make it succeed at that job. A quote card and a promotional post should never look built from the same formula — mixing up the rules is one of the fastest ways for a design to feel off, even if the viewer can't say exactly why.</p>
+
+        <ul>
+          <li><b>Quote cards</b> — typography-led, clean, high contrast, always attribute the source</li>
+          <li><b>Promotional posts</b> — clear offer, a strong CTA, a product or service visual, and a sense of urgency</li>
+          <li><b>Educational / tip posts</b> — structured layout, numbered or bulleted, easy to scan quickly</li>
+          <li><b>Announcement posts</b> — bold headline, one key detail, date or link, always brand-consistent</li>
+          <li><b>User-generated content reposts</b> — frame the original content cleanly and always credit the creator</li>
+          <li><b>Carousel first slides</b> — must work as a standalone image and hook the viewer into swiping</li>
+          <li><b>Story posts</b> — vertical format, interactive elements and link stickers placed away from the top/bottom UI zones</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <colgroup><col style="width:20%"><col style="width:24%"><col style="width:30%"><col style="width:26%"></colgroup>
+            <thead><tr><th>Type</th><th>Primary Goal</th><th>Key Design Rule</th><th>Common Mistake</th></tr></thead>
+            <tbody>
+              <tr><td>Quote card</td><td>Inspire / build trust</td><td>Typography is the hero, high contrast</td><td>No source attribution</td></tr>
+              <tr><td>Promotional</td><td>Drive an offer or sale</td><td>Clear CTA and sense of urgency</td><td>Offer buried in small text</td></tr>
+              <tr><td>Educational</td><td>Teach a quick tip</td><td>Numbered, scannable structure</td><td>Dense paragraphs, no hierarchy</td></tr>
+              <tr><td>Announcement</td><td>Share key news</td><td>One bold headline, one key detail</td><td>Too many competing details</td></tr>
+              <tr><td>UGC repost</td><td>Build community trust</td><td>Clean frame, clear creator credit</td><td>Missing or buried credit</td></tr>
+              <tr><td>Carousel first slide</td><td>Hook the swipe</td><td>Works as a standalone image</td><td>Slide 1 makes no sense alone</td></tr>
+              <tr><td>Story post</td><td>Drive quick action</td><td>Vertical format, safe interactive zones</td><td>Stickers cover key text</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="scenario-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A client asks for a carousel post about "5 Instagram Mistakes." If slide 1 just says "Swipe for tips" with no visual hook, most viewers scroll past before ever seeing slide 2 — the first slide has to work as a complete, compelling post on its own.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Post Type Identifier</div>
+          <div class="game-instructions">Click each described goal, then click the post type it matches. Correct matches flip and reveal the design rule.</div>
+          <div id="g8-area" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;"></div>
+          <div class="game-feedback" id="g8-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-8">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-8-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-8-content">
+            <div class="cp-question">A client asks for a quote card design. Which design rule is most critical for this post type?</div>
+            <div id="cp-8-opts">
+              <button class="cp-opt" data-idx="0">The post must use at least three different fonts for visual interest</button>
+              <button class="cp-opt" data-idx="1">Typography must be the hero — clean, high-contrast, readable, with the source clearly attributed</button>
+              <button class="cp-opt" data-idx="2">The background must always be a solid color with no gradients</button>
+              <button class="cp-opt" data-idx="3">Quote cards must always be square format with no other dimensions allowed</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-8-fb"></div>
+            <div class="cp-passed" id="cp-8-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-8-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Design one example of each post type in the table above for a single fictional brand. Compare them side by side and confirm each one follows its own key design rule.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s9">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">9</div><h2>Building a Content Template System for a Client</h2></div>
+      <div class="section-body">
+        <p>Building reusable templates is one of the highest-value things a design VA can offer, because it turns hours of design work into minutes of fill-in-the-blank editing for future posts. A well-built template system means the client — or another VA — can produce new content without breaking the design.</p>
+
+        <div class="def-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Definition</span>Locking an element in Canva prevents it from being accidentally moved, resized, or recolored — while leaving text boxes and image placeholders unlocked so the client can freely update only the content that's meant to change.</div>
+        </div>
+
+        <h3>Building a 5–8 template set</h3>
+        <p>A useful starting set typically covers a quote card, a promotional post, an educational/tip post, an announcement post, and a story template — enough to handle the vast majority of what a client will need week to week. Fewer templates mean more repetition; too many becomes hard to maintain.</p>
+
+        <h3>What to lock vs. leave editable</h3>
+        <p>Lock the brand logo position, the brand colors, and any fixed layout elements — the structural bones of the design. Leave only the text boxes and image placeholders editable. This protects the design from drifting off-brand over time while still giving the client real flexibility.</p>
+
+        <h3>Template handoff guide</h3>
+        <ul>
+          <li>A short usage guide explaining which elements are editable and which are locked</li>
+          <li>Clear, consistent file names that indicate the post type (e.g. "Template — Quote Card")</li>
+          <li>A version number or date so the client always knows they're using the current file</li>
+          <li>A shared folder or Canva team space so templates don't get lost in individual chats</li>
+          <li>One example of a filled-in template next to the blank version, for reference</li>
+        </ul>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Name and store template files with a consistent prefix like "TPL_" so they're instantly recognizable and never mistaken for a finished, publish-ready post.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Template Element Locker</div>
+          <div class="game-instructions">Click the lock icon next to each element to toggle Locked / Editable. Get all 5 correct, then submit.</div>
+          <div id="g9-list"></div>
+          <button class="game-btn" id="g9-check" style="margin-top:12px;">Submit Template Settings</button>
+          <div class="game-feedback" id="g9-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-9">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-9-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-9-content">
+            <div class="cp-question">A VA is building an Instagram post template for a client. Which elements should be locked before sharing the template?</div>
+            <div id="cp-9-opts">
+              <button class="cp-opt" data-idx="0">All elements — so the client cannot change anything</button>
+              <button class="cp-opt" data-idx="1">Only the text boxes — so the client can swap images freely</button>
+              <button class="cp-opt" data-idx="2">Brand logo position, brand colors, and fixed layout elements — leaving content areas editable</button>
+              <button class="cp-opt" data-idx="3">Nothing — templates should always be fully editable</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-9-fb"></div>
+            <div class="cp-passed" id="cp-9-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-9-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Build one real template in Canva — lock the logo and colors, leave the headline and image editable — and write a three-sentence usage note a client could follow with zero design experience.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s10">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">10</div><h2>Designing for Different Feed Aesthetics</h2></div>
+      <div class="section-body">
+        <p>A client's Instagram grid or LinkedIn feed is judged as a whole, not post by post. Designing each post in isolation, without ever stepping back to see how it sits next to the six posts before it, is one of the most common ways a feed ends up feeling visually inconsistent even when every individual post looks fine.</p>
+
+        <h3>Three common grid approaches</h3>
+        <ul>
+          <li><b>Consistent color palette</b> — every post pulls from the same 3–4 brand colors, creating a cohesive look at a glance</li>
+          <li><b>Alternating post types</b> — a deliberate rhythm, like photo, quote, photo, tip, repeating in a predictable pattern</li>
+          <li><b>Row-by-row theming</b> — each row of three grid tiles shares a visual theme before shifting to the next</li>
+        </ul>
+
+        <div class="scenario-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A VA notices the client's last six posts all used the same dark background. Rather than repeating it again or switching to a totally new palette, the right move is to introduce variety within the brand palette — a light background or alternate color arrangement that still uses the same fonts and colors.</div>
+        </div>
+
+        <p>Before publishing a new post, preview it alongside the client's most recent grid tiles using Canva's Brand Kit view or a third-party grid preview tool. This one habit catches inconsistencies before they go live, when they're still easy to fix.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Keep a running screenshot of the client's last 9 grid tiles in a moodboard file — updating it after every new post makes grid-context checks fast instead of a hunt through the app.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Grid Aesthetic Planner</div>
+          <div class="game-instructions">Drag the six post thumbnails into the grid slots so the sequence alternates evenly between Photo and Quote posts, creating a consistent pattern.</div>
+          <div id="g10-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g10-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:320px;"></div>
+          <button class="game-btn" id="g10-check" style="margin-top:12px;">Check Grid Pattern</button>
+          <div class="game-feedback" id="g10-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-10">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-10-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-10-content">
+            <div class="cp-question">A VA notices the client's last six posts all used the same dark background. What is the most professional next step?</div>
+            <div id="cp-10-opts">
+              <button class="cp-opt" data-idx="0">Ignore the grid view — each post should be designed in isolation</button>
+              <button class="cp-opt" data-idx="1">Use an even darker background to maintain the pattern</button>
+              <button class="cp-opt" data-idx="2">Introduce variety within the brand palette while keeping brand fonts and colors consistent</button>
+              <button class="cp-opt" data-idx="3">Ask the client to approve a completely new color scheme</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-10-fb"></div>
+            <div class="cp-passed" id="cp-10-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-10-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Screenshot a real Instagram grid (yours or a brand you follow) and identify which of the three grid approaches it uses. Note one post that breaks the pattern, if any.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s11">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">11</div><h2>Quality Control — Reviewing Posts Before Delivery</h2></div>
+      <div class="section-body">
+        <p>The gap between a good VA and a great one often comes down to one habit: running a consistent quality check before anything gets sent to the client. A single missed detail — a typo, the wrong dimension, a slightly-off brand color — can undo the trust built by ten perfect deliveries before it.</p>
+
+        <h3>Pre-delivery post design checklist</h3>
+        <div class="table-wrap">
+          <table>
+            <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+            <thead><tr><th>Checklist Item</th><th>Why It Matters</th></tr></thead>
+            <tbody>
+              <tr><td>Correct dimensions</td><td>Prevents cropping and blurry exports on the target platform</td></tr>
+              <tr><td>Brand colors only</td><td>Protects consistency across the client's feed</td></tr>
+              <tr><td>Fonts match brand kit</td><td>Keeps typography recognizable post to post</td></tr>
+              <tr><td>Text is readable</td><td>Ensures the message is understood in under a second</td></tr>
+              <tr><td>Logo present and placed correctly</td><td>Reinforces brand recognition consistently</td></tr>
+              <tr><td>No spelling errors</td><td>A published typo damages the client's credibility instantly</td></tr>
+              <tr><td>No low-resolution images</td><td>Blurry photos read as unprofessional</td></tr>
+              <tr><td>Safe zone respected</td><td>Keeps key elements from being cropped or hidden by platform UI</td></tr>
+              <tr><td>CTA is clear</td><td>Tells the viewer exactly what to do next</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="warn-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div><span class="box-label">Warning</span>Spelling errors are the item most commonly skipped in a rush — and the most damaging, since a typo on a published post is visible to the client's entire audience and hard to fully undo even after a correction.</div>
+        </div>
+
+        <h3>Exporting and presenting to the client</h3>
+        <p>Export in the correct file format for each platform — high-resolution PNG or JPG depending on whether transparency is needed. When presenting work, give the client two or three variations rather than one single option, and briefly explain the design rationale behind each so the client understands the thinking, not just the visuals.</p>
+
+        <div class="tip-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Read the post's text out loud before delivery — reading silently makes it far easier to miss a typo your brain automatically corrects.</div>
+        </div>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Pre-Delivery Checklist Game</div>
+          <div class="game-instructions">Drag the checklist items into the correct review order (top to bottom): Dimensions and export setup first, brand and content checks next, final proofreading last. The delivery button activates once the order is correct.</div>
+          <div id="g11-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g11-slots" style="display:flex; flex-direction:column; gap:8px;"></div>
+          <button class="game-btn" id="g11-deliver" disabled style="margin-top:12px;">Deliver to Client</button>
+          <div class="game-feedback" id="g11-fb"></div>
+        </div>
+
+        <div class="checkpoint" id="cp-11">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-11-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-11-content">
+            <div class="cp-question">Which pre-delivery checklist item is most commonly skipped and most damaging when missed?</div>
+            <div id="cp-11-opts">
+              <button class="cp-opt" data-idx="0">Checking that the canvas dimensions are correct</button>
+              <button class="cp-opt" data-idx="1">Verifying that the font used matches the brand kit</button>
+              <button class="cp-opt" data-idx="2">Proofreading all text for spelling errors — a typo damages the client's credibility</button>
+              <button class="cp-opt" data-idx="3">Confirming the post includes the brand logo</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-11-fb"></div>
+            <div class="cp-passed" id="cp-11-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-11-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Print or save the pre-delivery checklist table above and run it against the very next post you design, start to finish, before you consider it done.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="s12">
+    <div class="section-card">
+      <div class="section-head"><div class="sec-badge">12</div><h2>Building a Personal Design Checklist and Consistent Style</h2></div>
+      <div class="section-body">
+        <p>The pre-delivery checklist from Section 11 protects any single client's brand. A personal design checklist is different — it's the set of habits and standards you build over time as your own design eye develops, and it's what makes your work reliably good across every client, not just the one you're focused on right now.</p>
+
+        <h3>Developing a design eye over time</h3>
+        <p>This happens gradually, through deliberate practice: studying what performs well on each platform, paying attention to what a specific client's audience actually responds to, and building a personal reference library of strong post examples you can return to for inspiration. None of this requires formal design training — it requires consistent attention.</p>
+
+        <div class="tip-box" style="--box-index:0">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.5 4.5-3 6H8c-1.5-1.5-3-3.5-3-6a7 7 0 0 1 7-7z"/></svg></div>
+          <div><span class="box-label">Tip</span>Save a "swipe file" folder of posts you admire, sorted by post type. When you're stuck on a layout, browsing your own swipe file is faster than starting from a blank canvas.</div>
+        </div>
+
+        <h3>Using client feedback to improve</h3>
+        <p>Not all feedback is equally useful. A VA who develops a strong design eye learns to separate real design issues — a genuine readability or brand-consistency problem — from simple personal preference, like a client who just prefers a slightly different shade of blue on a given day. Both deserve a respectful response, but they call for different actions.</p>
+
+        <div class="scenario-box" style="--box-index:1">
+          <div class="box-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><span class="box-label">Scenario</span>A client says "the text feels too small to read on my phone." That's a valid design issue worth fixing immediately. A client who says "can we try purple instead just to see" is expressing a preference — worth a quick mockup, but not evidence that the original design was wrong.</div>
+        </div>
+
+        <p>The mindset behind all of this is continuous improvement: every post you design is a data point, not a final statement. The goal isn't to get every post perfect on the first try forever — it's to keep getting sharper, faster, and more consistent with every client you work with.</p>
+
+        <div class="game-card">
+          <div class="game-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mini-Game: Design Critique Sorter</div>
+          <div class="game-instructions">Drag each client feedback comment into the correct zone: "Valid Design Issue" or "Personal Preference."</div>
+          <div id="g12-drags" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+          <div id="g12-zones" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+          <div class="game-feedback" id="g12-fb"></div>
+        </div>
+
+        <div class="yt-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Watch: Social Media Post Design — Full Walkthrough</div>
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube-nocookie.com/embed/LEEiSUlfgIo?rel=0&amp;enablejsapi=1" title="Social Media Post Design — Full Walkthrough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="checkpoint" id="cp-12">
+          <div class="cp-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Knowledge Checkpoint</div>
+          <div class="cp-locked" id="cp-12-locked">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p>Complete the mini-game above to unlock this checkpoint.</p>
+          </div>
+          <div class="cp-content" id="cp-12-content">
+            <div class="cp-question">What is the core idea behind treating every delivered post as "a data point, not a final statement"?</div>
+            <div id="cp-12-opts">
+              <button class="cp-opt" data-idx="0">Every post is expected to be perfect immediately, with no room for adjustment ever</button>
+              <button class="cp-opt" data-idx="1">A VA should stop asking for client feedback once they feel confident in their design skills</button>
+              <button class="cp-opt" data-idx="2">Design skill improves through continuous attention and learning from each post over time</button>
+              <button class="cp-opt" data-idx="3">Only the very first post a VA designs for a client actually matters for their reputation</button>
+            </div>
+            <div class="cp-fb game-feedback" id="cp-12-fb"></div>
+            <div class="cp-passed" id="cp-12-passed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <p>Checkpoint passed!</p>
+              <button class="btn-continue" id="cp-12-cont">Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-step">
+          <b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Practical Action Step</b>
+          Write your own five-item personal pre-delivery checklist, separate from any single client's brand rules, and commit to running it before every post you ever deliver.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="final-block">
+    <div class="takeaways">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>Key Takeaways</h2>
+      <ul>
+        <li>Always design at the correct platform dimension and respect the safe zone for that platform.</li>
+        <li>A strong visual hierarchy needs one dominant element, one supporting element, and one clear CTA.</li>
+        <li>Brand consistency means only the client's approved colors, fonts, and logo — every single time.</li>
+        <li>Use a maximum of two fonts per post, and add contrast (overlays, text boxes) when text sits over a photo.</li>
+        <li>Choose images that match the client's mood and color temperature, and use adjustment tools to fine-tune them.</li>
+        <li>Apply brand colors by role — primary, secondary, neutral — and vary tints and shades for freshness.</li>
+        <li>Each post type has its own goal and design rule — quote cards, promos, tips, announcements, UGC, carousels, and stories are not interchangeable.</li>
+        <li>A locked, well-documented template system is one of the highest-value deliverables a design VA can build.</li>
+        <li>Design with the whole feed in mind, not just the individual post.</li>
+        <li>Run a pre-delivery checklist every time — proofreading catches the most damaging, most commonly missed errors.</li>
+        <li>Keep developing your own design eye and treat every post as a chance to improve, not a final statement.</li>
+      </ul>
+    </div>
+    <div class="complete-wrap">
+      <button class="btn-primary" id="markCompleteBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Mark as Complete</button>
+      <div id="lessonCompleteMsg">Lesson complete! Great work finishing Social Media Post Design.</div>
+    </div>
+  </div>
+
+  </main>
+</div>
+<script>
+(function(){
+"use strict";
+var LESSON_ID = "LES031";
+var SAVE_KEY = "lhph_LES031";
+var TOTAL_SECTIONS = 0;
+var CP_CORRECT = {1:0,2:0,3:0,4:2,5:1,6:1,7:1,8:1,9:2,10:2,11:2,12:2};
+
+var defaultState = { gamesDone:{}, cpsDone:{}, lessonCompleted:false };
+var state = JSON.parse(JSON.stringify(defaultState));
+
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function load(){
+  try{
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(raw){
+      var parsed = JSON.parse(raw);
+      state = Object.assign({}, defaultState, parsed);
+      state.gamesDone = Object.assign({}, defaultState.gamesDone, parsed.gamesDone || {});
+      state.cpsDone = Object.assign({}, defaultState.cpsDone, parsed.cpsDone || {});
+    }
+  }catch(e){}
+}
+function markLessonComplete(){
+  try{ window.parent.postMessage({action:"lessonComplete"}, "*"); }catch(e){}
+}
+
+/* ---------------- SPLASH ---------------- */
+function runSplash(){
+  var fill = document.getElementById("splashBarFill");
+  var msg = document.getElementById("splashMsg");
+  var steps = [
+    {p:0, t:"Initializing LES031…"},
+    {p:15, t:"Loading lesson content…"},
+    {p:30, t:"Preparing activities and games…"},
+    {p:50, t:"Setting up your checkpoints…"},
+    {p:70, t:"Almost there…"},
+    {p:88, t:"LES031 is ready — launching!"}
+  ];
+  var duration = 4000;
+  var start = null;
+  function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  function frame(ts){
+    if(!start) start = ts;
+    var elapsed = ts - start;
+    var progress = Math.min(elapsed/duration, 1);
+    var eased = ease(progress);
+    var pct = eased*100;
+    fill.style.width = pct + "%";
+    var current = steps[0].t;
+    for(var i=0;i<steps.length;i++){ if(pct>=steps[i].p) current = steps[i].t; }
+    msg.textContent = current;
+    if(progress < 1){
+      requestAnimationFrame(frame);
+    } else {
+      setTimeout(function(){
+        var splash = document.getElementById("splash");
+        splash.classList.add("fade-out");
+        setTimeout(function(){ splash.remove(); }, 550);
+      }, 200);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------- TOC / PROGRESS / SECTION LOCKS ---------------- */
+function updateProgress(){
+  var done = 0;
+  for(var i=1;i<=TOTAL_SECTIONS;i++){ if(state.cpsDone[i]) done++; }
+  var pct = Math.round((done/TOTAL_SECTIONS)*100);
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressPct").textContent = pct + "%";
+}
+
+function updateSectionLocks(){
+  for(var n=1;n<=TOTAL_SECTIONS;n++){
+    var sec = document.getElementById("s"+n);
+    var tocItem = document.querySelector('.toc-item[data-target="s'+n+'"]');
+    var dot = document.getElementById("toc-dot-"+n);
+    var locked = (n>1 && !state.cpsDone[n-1] && !state.lessonCompleted);
+    if(sec){ sec.classList.toggle("locked-section", locked); }
+    if(tocItem){ tocItem.classList.toggle("locked", locked); }
+    if(dot){
+      dot.classList.remove("done","locked");
+      if(state.cpsDone[n]){
+        dot.classList.add("done");
+        dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+      } else if(locked){
+        dot.classList.add("locked");
+        dot.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+      } else {
+        dot.textContent = n;
+      }
+    }
+  }
+}
+
+function initTOC(){
+  var items = document.querySelectorAll(".toc-item");
+  items.forEach(function(it){
+    it.addEventListener("click", function(){
+      if(it.classList.contains("locked")) return;
+      var target = document.getElementById(it.dataset.target);
+      if(target){ target.scrollIntoView({behavior:"smooth", block:"start"}); }
+      document.getElementById("toc").classList.remove("open");
+    });
+  });
+  var menuToggle = document.getElementById("menuToggle");
+  if(menuToggle){
+    menuToggle.addEventListener("click", function(){ document.getElementById("toc").classList.toggle("open"); });
+  }
+}
+
+function observeSections(){
+  var sections = document.querySelectorAll(".section");
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add("is-visible");
+      }
+    });
+  }, {threshold:0.15});
+  sections.forEach(function(s){ io.observe(s); });
+
+  var tocIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var id = entry.target.id;
+      var tocItem = document.querySelector('.toc-item[data-target="'+id+'"]');
+      if(!tocItem) return;
+      if(entry.isIntersecting){
+        document.querySelectorAll(".toc-item.active").forEach(function(t){ t.classList.remove("active"); });
+        tocItem.classList.add("active");
+      }
+    });
+  }, {rootMargin:"-40% 0px -50% 0px"});
+  sections.forEach(function(s){ tocIO.observe(s); });
+}
+
+/* ---------------- CHECKPOINT ENGINE ---------------- */
+function unlockCP(n){
+  var locked = document.getElementById("cp-"+n+"-locked");
+  var content = document.getElementById("cp-"+n+"-content");
+  if(locked) locked.style.display = "none";
+  if(content) content.style.display = "block";
+}
+
+function initCheckpoint(n){
+  var opts = document.querySelectorAll("#cp-"+n+"-opts .cp-opt");
+  opts.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var idx = parseInt(btn.dataset.idx, 10);
+      var correct = CP_CORRECT[n];
+      if(idx === correct){
+        btn.classList.add("correct");
+        opts.forEach(function(o){ o.disabled = true; });
+        var fb = document.getElementById("cp-"+n+"-fb");
+        fb.textContent = "Correct!"; fb.className = "cp-fb game-feedback ok";
+        setTimeout(function(){
+          document.getElementById("cp-"+n+"-opts").style.display = "none";
+          fb.style.display = "none";
+          document.getElementById("cp-"+n+"-passed").style.display = "block";
+          state.cpsDone[n] = true; save();
+          updateProgress(); updateSectionLocks();
+        }, 650);
+      } else {
+        btn.classList.add("wrong");
+        var fb2 = document.getElementById("cp-"+n+"-fb");
+        fb2.textContent = "Not quite — try again."; fb2.className = "cp-fb game-feedback bad";
+        setTimeout(function(){ btn.classList.remove("wrong"); }, 700);
+      }
+    });
+  });
+  var contBtn = document.getElementById("cp-"+n+"-cont");
+  if(contBtn){
+    contBtn.addEventListener("click", function(){
+      if(n < TOTAL_SECTIONS){
+        var next = document.getElementById("s"+(n+1));
+        if(next) next.scrollIntoView({behavior:"smooth", block:"start"});
+      } else {
+        var fb3 = document.getElementById("final-block");
+        fb3.style.display = "block";
+        fb3.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    });
+  }
+  if(state.cpsDone[n]){
+    // already done: show passed state immediately
+    var lockedEl = document.getElementById("cp-"+n+"-locked");
+    var contentEl = document.getElementById("cp-"+n+"-content");
+    if(lockedEl) lockedEl.style.display = "none";
+    if(contentEl) contentEl.style.display = "block";
+    var optsWrap = document.getElementById("cp-"+n+"-opts");
+    if(optsWrap) optsWrap.style.display = "none";
+    var passedEl = document.getElementById("cp-"+n+"-passed");
+    if(passedEl) passedEl.style.display = "block";
+  } else if(state.gamesDone[n]){
+    unlockCP(n);
+  }
+}
+
+/* ---------------- CONFETTI ---------------- */
+var CONFETTI_COLORS = ["#d45f7a","#f7a8b8","#fce4ec","#ffffff"];
+function confettiBurst(container){
+  if(!container) return;
+  var rect = container.getBoundingClientRect();
+  for(var i=0;i<16;i++){
+    var piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+    piece.style.left = (40 + Math.random()*(rect.width-80)) + "px";
+    piece.style.top = (rect.height/2) + "px";
+    piece.style.animationDelay = (Math.random()*0.15) + "s";
+    container.style.position = "relative";
+    container.appendChild(piece);
+    (function(p){ setTimeout(function(){ p.remove(); }, 1100); })(piece);
+  }
+}
+
+function gameComplete(n, containerEl){
+  state.gamesDone[n] = true; save();
+  unlockCP(n);
+  confettiBurst(containerEl);
+}
+
+/* ---------------- GENERIC CLICK-SELECT GAME ---------------- */
+function makeClickSelectGame(opts){
+  // opts: {wrapEl, checkBtn, feedbackEl, chips:[{t,ok}], sectionNum, containerEl, correctMsg, wrongMsg}
+  opts.chips.forEach(function(c){
+    var el = document.createElement("div");
+    el.className = "clickable-chip";
+    el.textContent = c.t;
+    el.dataset.ok = c.ok ? "true" : "false";
+    el.dataset.sel = "false";
+    el.addEventListener("click", function(){
+      if(el.classList.contains("locked-chip")) return;
+      var sel = el.dataset.sel === "true";
+      el.dataset.sel = sel ? "false" : "true";
+      el.style.background = !sel ? "var(--soft-blush)" : "#fff";
+      el.style.borderColor = !sel ? "var(--rose)" : "var(--blush)";
+    });
+    opts.wrapEl.appendChild(el);
+  });
+  opts.checkBtn.addEventListener("click", function(){
+    var els = opts.wrapEl.querySelectorAll(".clickable-chip");
+    var allCorrect = true;
+    els.forEach(function(el){
+      var sel = el.dataset.sel === "true";
+      var ok = el.dataset.ok === "true";
+      if(sel !== ok) allCorrect = false;
+    });
+    if(allCorrect){
+      els.forEach(function(el){ if(el.dataset.ok==="true"){ el.classList.add("correct-hit"); el.classList.add("locked-chip"); } });
+      opts.feedbackEl.textContent = opts.correctMsg;
+      opts.feedbackEl.className = "game-feedback ok";
+      opts.checkBtn.disabled = true;
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else {
+      opts.feedbackEl.textContent = opts.wrongMsg;
+      opts.feedbackEl.className = "game-feedback bad";
+      els.forEach(function(el){ el.classList.add("wrong-hit"); setTimeout(function(){ el.classList.remove("wrong-hit"); }, 600); });
+    }
+  });
+}
+
+/* ---------------- GENERIC MATCHER (drag or click) GAME ---------------- */
+function makeMatcherGame(opts){
+  // opts: {dragsEl, zonesEl, items:[{id,label,zone|matchType}], zones:[{id,label,acceptType}], sectionNum, containerEl, feedbackEl, byType(bool)}
+  var selectedChip = null;
+  opts.items.forEach(function(item){
+    var chip = document.createElement("div");
+    chip.className = "draggable";
+    chip.textContent = item.label;
+    chip.draggable = true;
+    chip.dataset.id = item.id;
+    chip.addEventListener("dragstart", function(e){
+      chip.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", item.id);
+    });
+    chip.addEventListener("dragend", function(){ chip.classList.remove("dragging"); });
+    chip.addEventListener("click", function(){
+      if(chip.parentElement.classList.contains("drop-zone")) return;
+      document.querySelectorAll(".draggable").forEach(function(c){ c.style.boxShadow=""; });
+      chip.style.boxShadow = "0 0 0 3px rgba(212,95,122,0.35)";
+      selectedChip = chip;
+    });
+    chip.addEventListener("touchend", function(e){
+      e.preventDefault();
+      chip.click();
+    });
+    opts.dragsEl.appendChild(chip);
+  });
+  opts.zones.forEach(function(z){
+    var zoneEl = document.createElement("div");
+    zoneEl.className = "drop-zone";
+    zoneEl.dataset.zone = z.id;
+    if(z.acceptType) zoneEl.dataset.accept = z.acceptType;
+    var lbl = document.createElement("div");
+    lbl.className = "drop-zone-label";
+    lbl.textContent = z.label;
+    zoneEl.appendChild(lbl);
+    zoneEl.addEventListener("dragover", function(e){ e.preventDefault(); zoneEl.classList.add("drag-over"); });
+    zoneEl.addEventListener("dragleave", function(){ zoneEl.classList.remove("drag-over"); });
+    zoneEl.addEventListener("drop", function(e){
+      e.preventDefault(); zoneEl.classList.remove("drag-over");
+      var id = e.dataTransfer.getData("text/plain");
+      var chip = document.querySelector('.draggable[data-id="'+id+'"]');
+      if(chip) place(chip, zoneEl);
+    });
+    zoneEl.addEventListener("click", function(){
+      if(selectedChip){ place(selectedChip, zoneEl); selectedChip.style.boxShadow=""; selectedChip=null; }
+    });
+    zoneEl.addEventListener("touchend", function(e){
+      if(selectedChip){ e.preventDefault(); place(selectedChip, zoneEl); selectedChip.style.boxShadow=""; selectedChip=null; }
+    });
+    opts.zonesEl.appendChild(zoneEl);
+  });
+
+  function place(chip, zoneEl){ zoneEl.appendChild(chip); checkAll(); }
+
+  function checkAll(){
+    var allPlaced = true, allCorrect = true;
+    opts.items.forEach(function(item){
+      var chip = document.querySelector('.draggable[data-id="'+item.id+'"]');
+      if(!chip || !chip.parentElement.classList.contains("drop-zone")){ allPlaced = false; return; }
+      var zoneEl = chip.parentElement;
+      var correct = opts.byType ? (zoneEl.dataset.accept === item.matchType) : (zoneEl.dataset.zone === item.zone);
+      if(correct){ chip.classList.remove("wrong-hit"); }
+      else { allCorrect = false; }
+    });
+    if(allPlaced && allCorrect){
+      document.querySelectorAll(".draggable").forEach(function(c){ c.classList.add("correct-hit"); c.draggable=false; c.style.cursor="default"; });
+      if(opts.feedbackEl){ opts.feedbackEl.textContent = "All correct! Great matching."; opts.feedbackEl.className = "game-feedback ok"; }
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else if(allPlaced && !allCorrect){
+      opts.items.forEach(function(item){
+        var chip = document.querySelector('.draggable[data-id="'+item.id+'"]');
+        if(chip && chip.parentElement.classList.contains("drop-zone")){
+          var zoneEl = chip.parentElement;
+          var correct = opts.byType ? (zoneEl.dataset.accept === item.matchType) : (zoneEl.dataset.zone === item.zone);
+          if(!correct){ chip.classList.add("wrong-hit"); setTimeout(function(){ chip.classList.remove("wrong-hit"); }, 700); }
+        }
+      });
+      if(opts.feedbackEl){ opts.feedbackEl.textContent = "Some items are in the wrong zone — check the highlighted ones."; opts.feedbackEl.className = "game-feedback bad"; }
+    }
+  }
+}
+
+/* ---------------- GENERIC REORDER (RANKER) GAME ---------------- */
+function makeReorderGame(opts){
+  // opts: {listEl, items:[{id,label}], correctOrder:[ids...], checkBtn, feedbackEl, sectionNum, containerEl, correctMsg}
+  var shuffled = opts.items.slice().sort(function(){ return Math.random()-0.5; });
+  shuffled.forEach(function(item){
+    var row = document.createElement("div");
+    row.className = "draggable";
+    row.textContent = item.label;
+    row.draggable = true;
+    row.dataset.id = item.id;
+    row.style.cursor = "grab";
+    row.addEventListener("dragstart", function(){ row.classList.add("dragging"); });
+    row.addEventListener("dragend", function(){ row.classList.remove("dragging"); });
+    opts.listEl.appendChild(row);
+  });
+  opts.listEl.addEventListener("dragover", function(e){
+    e.preventDefault();
+    var dragging = opts.listEl.querySelector(".dragging");
+    if(!dragging) return;
+    var afterEl = getDragAfterElement(opts.listEl, e.clientY);
+    if(afterEl == null){ opts.listEl.appendChild(dragging); }
+    else { opts.listEl.insertBefore(dragging, afterEl); }
+  });
+  function getDragAfterElement(container, y){
+    var els = [].slice.call(container.querySelectorAll(".draggable:not(.dragging)"));
+    return els.reduce(function(closest, child){
+      var box = child.getBoundingClientRect();
+      var offset = y - box.top - box.height/2;
+      if(offset < 0 && offset > closest.offset){
+        return {offset: offset, element: child};
+      } else { return closest; }
+    }, {offset: -Infinity}).element;
+  }
+  opts.checkBtn.addEventListener("click", function(){
+    var order = [].slice.call(opts.listEl.querySelectorAll(".draggable")).map(function(el){ return el.dataset.id; });
+    var correct = order.length === opts.correctOrder.length && order.every(function(id,i){ return id === opts.correctOrder[i]; });
+    if(correct){
+      opts.listEl.querySelectorAll(".draggable").forEach(function(el){ el.classList.add("correct-hit"); el.draggable=false; });
+      opts.feedbackEl.textContent = opts.correctMsg;
+      opts.feedbackEl.className = "game-feedback ok";
+      gameComplete(opts.sectionNum, opts.containerEl);
+    } else {
+      opts.listEl.querySelectorAll(".draggable").forEach(function(el){ el.classList.add("wrong-hit"); setTimeout(function(){ el.classList.remove("wrong-hit"); }, 600); });
+      opts.feedbackEl.textContent = "Not quite the right order — drag to rearrange and try again.";
+      opts.feedbackEl.className = "game-feedback bad";
+    }
+  });
+}
+
+/* ---------------- SECTION-SPECIFIC GAME SETUP ---------------- */
+function setupGame1(){
+  makeClickSelectGame({
+    wrapEl: document.getElementById("g1-chips"),
+    checkBtn: document.getElementById("g1-check"),
+    feedbackEl: document.getElementById("g1-fb"),
+    sectionNum: 1,
+    containerEl: document.querySelector("#s1 .game-card"),
+    correctMsg: "Correct! These are the habits of a high-value design VA.",
+    wrongMsg: "Not quite — review your selections and try again.",
+    chips: [
+      {t:"Builds a reusable template system the client can use independently", ok:true},
+      {t:"Reviews the client's last 20 posts before starting new designs", ok:true},
+      {t:"Runs a pre-delivery checklist before sending any post", ok:true},
+      {t:"Adjusts stock photos to match the brand's color temperature", ok:true},
+      {t:"Copies a template and only swaps in the logo", ok:false},
+      {t:"Picks colors that look nice without checking the brand kit", ok:false},
+      {t:"Sends posts without proofreading the text first", ok:false}
+    ]
+  });
+}
+
+function setupGame2(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g2-drags"),
+    zonesEl: document.getElementById("g2-zones"),
+    feedbackEl: document.getElementById("g2-fb"),
+    sectionNum: 2,
+    containerEl: document.querySelector("#s2 .game-card"),
+    items: [
+      {id:"p1", label:"Instagram feed square post", zone:"square"},
+      {id:"p2", label:"Instagram Story", zone:"vertical"},
+      {id:"p3", label:"Facebook feed post", zone:"landscape"},
+      {id:"p4", label:"LinkedIn feed post", zone:"landscape"},
+      {id:"p5", label:"Twitter / X post", zone:"wide"},
+      {id:"p6", label:"Reels cover image", zone:"vertical"}
+    ],
+    zones: [
+      {id:"square", label:"Square — 1080×1080"},
+      {id:"vertical", label:"Vertical — 1080×1920"},
+      {id:"landscape", label:"Landscape — 1200×630"},
+      {id:"wide", label:"Wide — 1600×900"}
+    ]
+  });
+}
+
+function setupGame3(){
+  makeReorderGame({
+    listEl: document.getElementById("g3-list"),
+    checkBtn: document.getElementById("g3-check"),
+    feedbackEl: document.getElementById("g3-fb"),
+    sectionNum: 3,
+    containerEl: document.querySelector("#s3 .game-card"),
+    correctMsg: "Correct order! Hero image first, then headline, then CTA, then logo.",
+    items: [
+      {id:"hero", label:"Hero image / background"},
+      {id:"head", label:"Headline text"},
+      {id:"cta", label:"CTA button"},
+      {id:"logo", label:"Logo mark"}
+    ],
+    correctOrder: ["hero","head","cta","logo"]
+  });
+}
+
+function setupGame4(){
+  makeClickSelectGame({
+    wrapEl: document.getElementById("g4-chips"),
+    checkBtn: document.getElementById("g4-check"),
+    feedbackEl: document.getElementById("g4-fb"),
+    sectionNum: 4,
+    containerEl: document.querySelector("#s4 .game-card"),
+    correctMsg: "Correct! Those three elements break the Navy / White / Gold brand kit.",
+    wrongMsg: "Not quite — this brand kit is Navy, White, and Gold only. Try again.",
+    chips: [
+      {t:"Navy blue header background", ok:false},
+      {t:"Gold accent divider line", ok:false},
+      {t:"Bright red CTA button", ok:true},
+      {t:"White body text", ok:false},
+      {t:"Handwritten script font on the headline", ok:true},
+      {t:"Purple decorative starburst graphic", ok:true},
+      {t:"Gold logo placed bottom right", ok:false}
+    ]
+  });
+}
+
+function setupGame5(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g5-drags"),
+    zonesEl: document.getElementById("g5-zones"),
+    feedbackEl: document.getElementById("g5-fb"),
+    sectionNum: 5,
+    containerEl: document.querySelector("#s5 .game-card"),
+    byType: true,
+    items: [
+      {id:"t1", label:"Two fonts: one heading, one body", matchType:"works"},
+      {id:"t2", label:"Dark overlay behind text on a photo", matchType:"works"},
+      {id:"t3", label:"Three or more different fonts in one post", matchType:"avoid"},
+      {id:"t4", label:"Centered long paragraphs of body text", matchType:"avoid"},
+      {id:"t5", label:"Consistent heading size across a carousel", matchType:"works"},
+      {id:"t6", label:"Script font used for a full paragraph", matchType:"avoid"}
+    ],
+    zones: [
+      {id:"works", label:"Works for Social", acceptType:"works"},
+      {id:"avoid", label:"Avoid", acceptType:"avoid"}
+    ]
+  });
+}
+
+function setupGame6(){
+  var pairs = [
+    {
+      brand:"A calm, high-trust wellness brand",
+      a:"Soft, warm natural-light photo of a person stretching outdoors",
+      b:"High-contrast neon photo of a crowded nightclub",
+      correct:"a",
+      why:"Soft natural light and a calm setting match a wellness brand's mood far better than a high-energy nightclub scene."
+    },
+    {
+      brand:"A bold, high-energy fitness brand",
+      a:"Muted pastel flat-lay of stationery on a desk",
+      b:"Dynamic action shot of an athlete mid-lift with strong contrast",
+      correct:"b",
+      why:"A dynamic, high-contrast action shot matches the energy a fitness brand wants to project."
+    },
+    {
+      brand:"A minimalist, premium finance brand",
+      a:"Clean, uncluttered photo of a laptop and coffee on a neutral desk",
+      b:"Busy photo with dollar bills scattered across the frame",
+      correct:"a",
+      why:"A clean, uncluttered image communicates the calm precision associated with premium finance branding."
+    }
+  ];
+  var area = document.getElementById("g6-area");
+  var solvedCount = 0;
+  pairs.forEach(function(p, idx){
+    var row = document.createElement("div");
+    row.style.marginBottom = "16px";
+    row.innerHTML = '<div style="font-weight:700;font-size:13px;margin-bottom:8px;">Brand personality: '+p.brand+'</div>';
+    var opts = document.createElement("div");
+    opts.style.display = "grid";
+    opts.style.gridTemplateColumns = "1fr 1fr";
+    opts.style.gap = "10px";
+    ["a","b"].forEach(function(k){
+      var card = document.createElement("div");
+      card.className = "clickable-chip";
+      card.style.display = "block";
+      card.style.margin = "0";
+      card.textContent = p[k];
+      card.addEventListener("click", function(){
+        if(card.dataset.done) return;
+        opts.querySelectorAll(".clickable-chip").forEach(function(c){ c.dataset.done = "true"; });
+        if(k === p.correct){
+          card.classList.add("correct-hit");
+          solvedCount++;
+        } else {
+          card.classList.add("wrong-hit");
+          opts.children[k==="a"?1:0].classList.add("correct-hit");
+        }
+        var why = document.createElement("div");
+        why.style.fontSize = "12.5px"; why.style.color = "#8a5361"; why.style.marginTop = "8px";
+        why.textContent = p.why;
+        row.appendChild(why);
+        if(solvedCount === pairs.length){
+          document.getElementById("g6-fb").textContent = "Nice eye! You matched every image to the right brand personality.";
+          document.getElementById("g6-fb").className = "game-feedback ok";
+          gameComplete(6, document.querySelector("#s6 .game-card"));
+        }
+      });
+      opts.appendChild(card);
+    });
+    row.appendChild(opts);
+    area.appendChild(row);
+  });
+}
+
+function setupGame7(){
+  var texts = [
+    {name:"White", hex:"#ffffff"},
+    {name:"Ink", hex:"#3d1a22"},
+    {name:"Rose", hex:"#d45f7a"}
+  ];
+  var bgs = [
+    {name:"Navy", hex:"#1a2740"},
+    {name:"Blush", hex:"#f7a8b8"},
+    {name:"Cream", hex:"#fff8f0"}
+  ];
+  var goodPairs = {"White|Navy":true, "Ink|Blush":true, "Ink|Cream":true, "White|Rose":false, "Rose|Cream":false, "Rose|Blush":false, "White|Blush":false, "Ink|Navy":false, "Rose|Navy":false};
+  var area = document.getElementById("g7-area");
+  var selectedText = null;
+  var foundGood = 0;
+  var textWrap = document.createElement("div");
+  textWrap.style.marginBottom = "10px";
+  textWrap.innerHTML = '<div class="drop-zone-label">Click a text color</div>';
+  var textRow = document.createElement("div"); textRow.style.display="flex"; textRow.style.gap="8px";
+  texts.forEach(function(t){
+    var sw = document.createElement("div");
+    sw.className = "clickable-chip"; sw.textContent = t.name;
+    sw.style.borderColor = t.hex; sw.style.fontWeight="800";
+    sw.addEventListener("click", function(){
+      textRow.querySelectorAll(".clickable-chip").forEach(function(c){ c.style.boxShadow=""; });
+      sw.style.boxShadow = "0 0 0 3px rgba(212,95,122,0.35)";
+      selectedText = t;
+    });
+    textRow.appendChild(sw);
+  });
+  textWrap.appendChild(textRow);
+  area.appendChild(textWrap);
+
+  var bgWrap = document.createElement("div");
+  bgWrap.innerHTML = '<div class="drop-zone-label">Then click a background color</div>';
+  var bgRow = document.createElement("div"); bgRow.style.display="flex"; bgRow.style.gap="8px"; bgRow.style.flexWrap="wrap";
+  bgs.forEach(function(b){
+    var sw = document.createElement("div");
+    sw.style.width="86px"; sw.style.height="52px"; sw.style.borderRadius="8px";
+    sw.style.background = b.hex; sw.style.display="flex"; sw.style.alignItems="center"; sw.style.justifyContent="center";
+    sw.style.cursor="pointer"; sw.style.border="1.5px solid var(--blush)"; sw.style.fontSize="11px"; sw.style.fontWeight="800";
+    sw.style.color = (b.name==="Navy") ? "#fff" : "#3d1a22";
+    sw.textContent = b.name;
+    sw.addEventListener("click", function(){
+      if(!selectedText){ document.getElementById("g7-fb").textContent="Pick a text color first."; document.getElementById("g7-fb").className="game-feedback bad"; return; }
+      var key = selectedText.name+"|"+b.name;
+      var fb = document.getElementById("g7-fb");
+      if(goodPairs[key]){
+        sw.style.boxShadow = "0 0 0 4px rgba(45,138,80,0.4)";
+        fb.textContent = selectedText.name + " on " + b.name + " — strong contrast score! ("+(foundGood+1)+"/3 readable pairs found)";
+        fb.className = "game-feedback ok";
+        foundGood++;
+        if(foundGood >= 3){ gameComplete(7, document.querySelector("#s7 .game-card")); fb.textContent = "You found 3 readable pairs — great contrast instincts!"; }
+      } else {
+        sw.style.boxShadow = "0 0 0 4px rgba(192,57,43,0.35)";
+        setTimeout(function(){ sw.style.boxShadow=""; }, 700);
+        fb.textContent = selectedText.name + " on " + b.name + " — low contrast, hard to read.";
+        fb.className = "game-feedback bad";
+      }
+    });
+    bgRow.appendChild(sw);
+  });
+  bgWrap.appendChild(bgRow);
+  area.appendChild(bgWrap);
+}
+
+function setupGame8(){
+  var pairs = [
+    {goal:"Inspire the audience and build trust with a short line of wisdom", type:"Quote card", rule:"Typography is the hero — clean, high-contrast, source attributed."},
+    {goal:"Drive urgent action on a limited-time offer", type:"Promotional post", rule:"Clear offer, strong CTA, sense of urgency."},
+    {goal:"Teach a quick, scannable tip", type:"Educational post", rule:"Numbered or bulleted, structured for fast scanning."},
+    {goal:"Share important news in one glance", type:"Announcement post", rule:"Bold headline, one key detail, brand-consistent."}
+  ];
+  var shuffledGoals = pairs.slice().sort(function(){ return Math.random()-0.5; });
+  var shuffledTypes = pairs.slice().sort(function(){ return Math.random()-0.5; });
+  var goalCol = document.getElementById("g8-area");
+  var leftCol = document.createElement("div");
+  var rightCol = document.createElement("div");
+  goalCol.appendChild(leftCol); goalCol.appendChild(rightCol);
+  var selectedGoal = null;
+  var matched = 0;
+  shuffledGoals.forEach(function(p){
+    var el = document.createElement("div");
+    el.className = "clickable-chip"; el.style.display="block"; el.style.marginBottom="8px";
+    el.textContent = p.goal;
+    el.addEventListener("click", function(){
+      if(el.dataset.done) return;
+      leftCol.querySelectorAll(".clickable-chip").forEach(function(c){ c.style.boxShadow=""; });
+      el.style.boxShadow = "0 0 0 3px rgba(212,95,122,0.35)";
+      selectedGoal = {el:el, data:p};
+    });
+    leftCol.appendChild(el);
+  });
+  shuffledTypes.forEach(function(p){
+    var el = document.createElement("div");
+    el.className = "clickable-chip"; el.style.display="block"; el.style.marginBottom="8px"; el.style.fontWeight="800";
+    el.textContent = p.type;
+    el.addEventListener("click", function(){
+      if(el.dataset.done || !selectedGoal) return;
+      if(selectedGoal.data.type === p.type){
+        el.classList.add("correct-hit"); selectedGoal.el.classList.add("correct-hit");
+        el.dataset.done = "true"; selectedGoal.el.dataset.done = "true";
+        var note = document.createElement("div");
+        note.style.fontSize="11.5px"; note.style.color="#8a5361"; note.style.margin="-4px 0 8px";
+        note.textContent = "Rule: " + p.rule;
+        el.after(note);
+        matched++;
+        selectedGoal = null;
+        if(matched === pairs.length){
+          document.getElementById("g8-fb").textContent = "All matched! You know the post types and their design rules.";
+          document.getElementById("g8-fb").className = "game-feedback ok";
+          gameComplete(8, document.querySelector("#s8 .game-card"));
+        }
+      } else {
+        el.classList.add("wrong-hit"); setTimeout(function(){ el.classList.remove("wrong-hit"); }, 600);
+      }
+    });
+    rightCol.appendChild(el);
+  });
+}
+
+function setupGame9(){
+  var items = [
+    {id:"logo", label:"Brand logo position", shouldLock:true},
+    {id:"colors", label:"Brand color palette", shouldLock:true},
+    {id:"layout", label:"Fixed layout grid / frame", shouldLock:true},
+    {id:"headline", label:"Headline text box", shouldLock:false},
+    {id:"image", label:"Content image placeholder", shouldLock:false}
+  ];
+  var list = document.getElementById("g9-list");
+  items.forEach(function(it){
+    var row = document.createElement("div");
+    row.style.display = "flex"; row.style.alignItems="center"; row.style.justifyContent="space-between";
+    row.style.background = "#fff"; row.style.border="1.5px solid var(--blush)"; row.style.borderRadius="8px";
+    row.style.padding="10px 14px"; row.style.marginBottom="8px";
+    var label = document.createElement("span"); label.textContent = it.label; label.style.fontSize="13px"; label.style.fontWeight="600";
+    var btn = document.createElement("button");
+    btn.className = "game-btn secondary";
+    btn.dataset.locked = "false";
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="vertical-align:-2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Editable';
+    btn.addEventListener("click", function(){
+      var locked = btn.dataset.locked === "true";
+      btn.dataset.locked = locked ? "false" : "true";
+      btn.innerHTML = !locked
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="vertical-align:-2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="vertical-align:-2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Editable';
+    });
+    row.dataset.id = it.id;
+    row.appendChild(label); row.appendChild(btn);
+    list.appendChild(row);
+  });
+  document.getElementById("g9-check").addEventListener("click", function(){
+    var rows = list.querySelectorAll("div[data-id]");
+    var allCorrect = true;
+    rows.forEach(function(row){
+      var id = row.dataset.id;
+      var item = items.filter(function(i){ return i.id===id; })[0];
+      var btn = row.querySelector("button");
+      var locked = btn.dataset.locked === "true";
+      if(locked !== item.shouldLock) allCorrect = false;
+    });
+    var fb = document.getElementById("g9-fb");
+    if(allCorrect){
+      fb.textContent = "Correct template setup! Structural elements locked, content areas editable.";
+      fb.className = "game-feedback ok";
+      gameComplete(9, document.querySelector("#s9 .game-card"));
+    } else {
+      fb.textContent = "Not quite — lock the logo, colors, and layout; leave text and image areas editable.";
+      fb.className = "game-feedback bad";
+    }
+  });
+}
+
+function setupGame10(){
+  var items = [
+    {id:"ph1", label:"Photo Post A", matchType:"photo"},
+    {id:"qt1", label:"Quote Post A", matchType:"quote"},
+    {id:"ph2", label:"Photo Post B", matchType:"photo"},
+    {id:"qt2", label:"Quote Post B", matchType:"quote"},
+    {id:"ph3", label:"Photo Post C", matchType:"photo"},
+    {id:"qt3", label:"Quote Post C", matchType:"quote"}
+  ];
+  var pattern = ["photo","quote","photo","quote","photo","quote"];
+  var zones = pattern.map(function(type, i){ return {id:"slot"+(i+1), label:"Slot "+(i+1), acceptType:type}; });
+  makeMatcherGame({
+    dragsEl: document.getElementById("g10-drags"),
+    zonesEl: document.getElementById("g10-grid"),
+    feedbackEl: document.getElementById("g10-fb"),
+    sectionNum: 10,
+    containerEl: document.querySelector("#s10 .game-card"),
+    byType: true,
+    items: items,
+    zones: zones
+  });
+}
+
+function setupGame11(){
+  makeReorderGame({
+    listEl: document.getElementById("g11-slots"),
+    checkBtn: document.getElementById("g11-deliver"),
+    feedbackEl: document.getElementById("g11-fb"),
+    sectionNum: 11,
+    containerEl: document.querySelector("#s11 .game-card"),
+    correctMsg: "Correct order! Dimensions first, then brand and content, then final proofreading.",
+    items: [
+      {id:"dims", label:"Set up correct dimensions and export settings"},
+      {id:"brand", label:"Confirm brand colors, fonts, and logo placement"},
+      {id:"proof", label:"Proofread all text and check the safe zone"}
+    ],
+    correctOrder: ["dims","brand","proof"]
+  });
+  document.getElementById("g11-deliver").disabled = false;
+}
+
+function setupGame12(){
+  makeMatcherGame({
+    dragsEl: document.getElementById("g12-drags"),
+    zonesEl: document.getElementById("g12-zones"),
+    feedbackEl: document.getElementById("g12-fb"),
+    sectionNum: 12,
+    containerEl: document.querySelector("#s12 .game-card"),
+    byType: true,
+    items: [
+      {id:"c1", label:'"The text feels too small to read on my phone"', matchType:"valid"},
+      {id:"c2", label:'"Can we try purple instead just to see?"', matchType:"pref"},
+      {id:"c3", label:'"I can\'t tell where to click to learn more"', matchType:"valid"},
+      {id:"c4", label:'"I like the other font a little better, no real reason"', matchType:"pref"},
+      {id:"c5", label:'"The logo looks like it got cut off at the edge"', matchType:"valid"},
+      {id:"c6", label:'"Could the headline be a touch bigger, just my taste?"', matchType:"pref"}
+    ],
+    zones: [
+      {id:"valid", label:"Valid Design Issue", acceptType:"valid"},
+      {id:"pref", label:"Personal Preference", acceptType:"pref"}
+    ]
+  });
+}
+
+/* ---------------- CALLOUT TOOLTIPS (verbatim engine) ---------------- */
+function initCalloutTooltips() {
+  var tip = document.createElement("div");
+  tip.className = "callout-tip";
+  document.body.appendChild(tip);
+  var activeCallout = null;
+
+  function renderTip(text) {
+    var idx = text.indexOf(" — ");
+    if (idx !== -1) {
+      tip.innerHTML = "<b>" + text.slice(0, idx) + "</b> — " + text.slice(idx + 3);
+    } else {
+      tip.textContent = text;
+    }
+  }
+  function positionTip(el) {
+    var r = el.getBoundingClientRect();
+    var tipRect = tip.getBoundingClientRect();
+    var top = r.bottom + 8;
+    var left = r.left + r.width / 2 - tipRect.width / 2;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    if (left < 8) left = 8;
+    if (left + tipRect.width > vw - 8) left = vw - tipRect.width - 8;
+    if (top + tipRect.height > vh - 8) { top = r.top - tipRect.height - 8; }
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function showTip(el) {
+    var text = el.getAttribute("data-tip");
+    if (!text) return;
+    renderTip(text);
+    tip.classList.add("show");
+    positionTip(el);
+    activeCallout = el;
+  }
+  function hideTip() {
+    tip.classList.remove("show");
+    activeCallout = null;
+  }
+  document.querySelectorAll(".callout[data-tip]").forEach(function(el) {
+    el.addEventListener("click", function(e) {
+      e.stopPropagation();
+      if (activeCallout === el) { hideTip(); } else { showTip(el); }
+    });
+    el.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (activeCallout === el) { hideTip(); } else { showTip(el); }
+      }
+    });
+  });
+  document.addEventListener("click", hideTip);
+  document.addEventListener("keydown", function(e) { if (e.key === "Escape") hideTip(); });
+  window.addEventListener("scroll", function() { if (activeCallout) positionTip(activeCallout); }, { passive: true, capture: true });
+  window.addEventListener("resize", function() { if (activeCallout) positionTip(activeCallout); });
+}
+
+/* ---------------- RESTORE UI ---------------- */
+function restoreUI(){
+  if(state.lessonCompleted){
+    document.querySelectorAll(".section").forEach(function(s){ s.classList.add("is-visible"); s.classList.remove("locked-section"); });
+    for(var n=1;n<=TOTAL_SECTIONS;n++){
+      state.cpsDone[n] = true;
+      unlockCP(n);
+    }
+    document.getElementById("final-block").style.display = "block";
+    document.getElementById("lessonCompleteMsg").style.display = "block";
+    document.getElementById("markCompleteBtn").disabled = true;
+  }
+}
+
+/* ---------------- INIT ---------------- */
+document.addEventListener("DOMContentLoaded", function(){
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+
+  var params = new URLSearchParams(window.location.search);
+  load();
+  if(params.get("completed") === "1"){
+    state.lessonCompleted = true;
+    for(var n=1;n<=TOTAL_SECTIONS;n++){ state.cpsDone[n] = true; state.gamesDone[n] = true; }
+    save();
+  }
+
+  runSplash();
+  initTOC();
+  observeSections();
+
+  for(var i=1;i<=TOTAL_SECTIONS;i++){ initCheckpoint(i); }
+
+  setupGame1(); setupGame2(); setupGame3(); setupGame4();
+  setupGame5(); setupGame6(); setupGame7(); setupGame8();
+  setupGame9(); setupGame10(); setupGame11(); setupGame12();
+
+  updateProgress();
+  updateSectionLocks();
+  restoreUI();
+
+  initCalloutTooltips();
+
+  document.getElementById("markCompleteBtn").addEventListener("click", function(){
+    state.lessonCompleted = true;
+    save();
+    document.getElementById("lessonCompleteMsg").style.display = "block";
+    document.getElementById("markCompleteBtn").disabled = true;
+    markLessonComplete();
+    var confettiHost = document.querySelector(".complete-wrap");
+    confettiBurst(confettiHost);
+  });
+});
+})();
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

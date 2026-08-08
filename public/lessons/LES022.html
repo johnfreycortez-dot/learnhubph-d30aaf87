@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES022 — Professional Email Writing | LearnHub PH</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#5a8a6a;--sage2:#4a7358;--sand:#f0a868;--sand2:#dd8f4e;--lsage:#8fb89c;
+  --text:#2b3630;--bg:#fbfaf7;--white:#ffffff;
+  --sage-light:#eef4f0;--sand-light:#fdf6ee;--warn-light:#fdf0e9;
+  --s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;--s400:#94a3b8;--s500:#64748b;--s600:#475569;
+  --g500:#22c55e;--r500:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:0 0 60px;line-height:1.6;font-size:14px}
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#eef4f0 0%,#fbfaf7 60%,#fdf6ee 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;transition:opacity .6s ease,visibility .6s ease}
+#splash.fade-out{opacity:0;visibility:hidden}
+.sp-eyebrow{font-size:10px;font-weight:800;color:var(--sage);letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;text-align:center}
+.sp-thumb{width:min(320px,80vw);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.18);margin-bottom:22px;background:linear-gradient(135deg,var(--sage),var(--sage2));display:flex;align-items:center;justify-content:center;aspect-ratio:16/9}
+.sp-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--text);text-align:center;letter-spacing:-.02em;margin-bottom:8px}
+.sp-sub{font-size:13px;color:#5c6f62;text-align:center;margin-bottom:22px}
+.sp-track{width:min(400px,90vw);height:8px;background:#dbe9de;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand));border-radius:99px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;width:min(400px,90vw);font-size:11px;font-weight:600;color:#5c6f62}
+.topbar{background:var(--white);border-bottom:2px solid var(--sage);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(90,138,106,.1)}
+.topbar img{height:28px}
+.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--sage);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,#3f6650 0%,var(--sage) 50%,var(--lsage) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--white);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.22)}
+.hero-tag{background:rgba(255,255,255,.14);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.hero h1{font-size:clamp(22px,4vw,30px);font-weight:900;line-height:1.2;margin-bottom:12px;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;color:rgba(255,255,255,.85)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.92);display:inline-flex;align-items:center;gap:6px}
+.hero-meta svg{width:14px;height:14px;flex-shrink:0}
+.progress-wrap{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--sage);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--white);border:1px solid var(--s200);border-left:3px solid var(--sage);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.toc-title svg{width:16px;height:16px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--sage);background:var(--sage-light)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--sage);font-weight:700;background:var(--sage-light)}
+.toc-list li a.toc-current::before{background:var(--sage)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-card{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.section-title{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--sage-light);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);font-size:10px;font-weight:800;flex-shrink:0}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:700}
+em{color:var(--sage);font-style:normal;font-weight:600}
+h2{font-size:17px;font-weight:800;color:var(--text);margin:18px 0 10px}
+h3{font-size:14px;font-weight:700;color:var(--sage);margin:14px 0 8px}
+.icon-inline{display:inline-block;vertical-align:middle;flex-shrink:0}
+.def-box{border-left:3px solid var(--sage);padding:16px 20px;background:var(--sage-light);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.def-box p{font-size:13px;color:#1f2e24;margin:0;line-height:1.75}
+.tip-box{border-left:3px solid var(--sand);padding:14px 18px;background:var(--sand-light);border-radius:0 12px 12px 0;margin:14px 0}
+.tip-label{font-size:10px;font-weight:800;color:#b5671a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.tip-box p{font-size:13px;color:#5c3b12;margin:0;line-height:1.7}
+.warn-box{border-left:3px solid #d97748;padding:14px 18px;background:var(--warn-light);border-radius:0 12px 12px 0;margin:14px 0}
+.warn-label{font-size:10px;font-weight:800;color:#d97748;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.warn-box p{font-size:13px;color:#7a3520;margin:0;line-height:1.7}
+.scenario-box{border-left:3px solid var(--lsage);padding:14px 18px;background:#eef7f1;border-radius:0 12px 12px 0;margin:14px 0}
+.scenario-label{font-size:10px;font-weight:800;color:#3f6b4c;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.scenario-box p{font-size:13px;color:#1a3a2c;margin:0;line-height:1.7}
+.action-box{background:linear-gradient(135deg,#eef4f0,#fbfaf7);border:2px solid var(--sage);border-radius:12px;padding:18px 20px;margin:18px 0}
+.action-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.action-box p{font-size:13px;color:var(--text);margin:0;line-height:1.7}
+.table-wrap{overflow-x:auto;margin:16px 0}
+.les-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);table-layout:fixed}
+.les-table th{background:var(--sage);color:var(--white);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.les-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.les-table tr:last-child td{border-bottom:none}
+.les-table tr:hover td{background:var(--sage-light)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.checklist li{font-size:13px;color:var(--s600);line-height:1.6;padding-left:22px;position:relative}
+.checklist li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a8a6a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--lsage),var(--sand))}
+.stat-num{font-size:24px;font-weight:900;color:var(--sage);margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.mini-game{background:linear-gradient(135deg,#3f6650,var(--sage));border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.mg-inst{font-size:12px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.5}
+.mg-btn{background:linear-gradient(135deg,var(--sand),var(--sand2));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:10px;display:inline-flex;align-items:center;gap:6px}
+.mg-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(240,168,104,.4)}
+.mg-result{font-size:13px;font-weight:700;text-align:center;padding:10px 14px;border-radius:8px;margin-top:10px;display:none}
+.mg-result.win{display:block;background:rgba(143,184,156,.25);color:#eafff0;border:1px solid rgba(143,184,156,.4)}
+.mg-result.lose{display:block;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.drag-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.drag-zones.zones3{grid-template-columns:1fr 1fr 1fr}
+.drag-zone{min-height:110px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.24);border-radius:12px;padding:10px;transition:all .2s}
+.drag-zone.drag-over{border-color:var(--sand);background:rgba(240,168,104,.12)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.18);display:flex;align-items:center;gap:6px}
+.zone-label.good{color:#c9f2d6}
+.zone-label.bad{color:#fca5a5}
+.zone-label.neutral{color:rgba(255,255,255,.92)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--white);cursor:grab;user-select:none;transition:all .18s;line-height:1.4}
+.drag-card:hover{background:rgba(255,255,255,.2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.drag-card.dragging{opacity:.4;transform:scale(.96)}
+.drag-card.correct-flash{animation:correctFlash .5s ease forwards}
+.drag-card.wrong-shake{animation:wrongShake .5s ease forwards}
+.verdict-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.verdict-card{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;text-align:left}
+.verdict-card:hover{background:rgba(255,255,255,.17);transform:translateY(-2px)}
+.verdict-card.correct-v{border-color:#c9f2d6;background:rgba(143,184,156,.25);animation:correctFlash .5s ease}
+.verdict-card.wrong-v{border-color:#fca5a5;background:rgba(239,68,68,.14);animation:wrongShake .5s ease}
+.verdict-title{font-size:12px;font-weight:700;color:var(--white);line-height:1.5}
+.seq-drop{display:flex;flex-direction:column;gap:8px;min-height:100px;background:rgba(255,255,255,.05);border:2px dashed rgba(255,255,255,.2);border-radius:12px;padding:10px;transition:all .2s;margin-bottom:12px}
+.seq-drop.drag-over{border-color:var(--sand);background:rgba(240,168,104,.1)}
+.step-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--white);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.19)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.85);flex-shrink:0}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.17);border-color:var(--sand)}
+.match-item.selected{background:rgba(240,168,104,.28);border-color:var(--sand)}
+.match-item.matched{background:rgba(143,184,156,.28);border-color:#c9f2d6;cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.18);border-color:#fca5a5;animation:wrongShake .5s ease}
+.match-score{font-size:12px;color:rgba(255,255,255,.7);margin-top:10px;text-align:center}
+.audit-wrap{position:relative;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:16px;margin-bottom:10px}
+.audit-item{display:flex;align-items:flex-start;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.audit-item:hover{background:rgba(255,255,255,.08)}
+.audit-item.flagged{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.22)}
+.audit-item.flagged .audit-flag{opacity:1}
+.audit-icon{flex-shrink:0;color:rgba(255,255,255,.72)}
+.audit-text{font-size:12px;color:rgba(255,255,255,.88);line-height:1.5;flex:1}
+.audit-flag{font-size:11px;font-weight:700;color:#fca5a5;opacity:0;transition:opacity .2s;flex-shrink:0}
+.meter-track{background:rgba(255,255,255,.12);border-radius:99px;height:14px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.18)}
+.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sand),#c9f2d6);border-radius:99px;transition:width .4s ease}
+.meter-label{font-size:11px;color:rgba(255,255,255,.75);text-align:right;margin-bottom:10px}
+.meter-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.meter-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s}
+.meter-item:hover{background:rgba(255,255,255,.17);transform:translateY(-2px)}
+.meter-item.added{background:rgba(143,184,156,.28);border-color:#c9f2d6;cursor:default;opacity:.75}
+.check-items{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px}
+.check-item:hover{background:rgba(255,255,255,.17)}
+.check-item.picked{background:rgba(240,168,104,.22);border-color:var(--sand)}
+.check-box{width:18px;height:18px;border-radius:5px;border:2px solid rgba(255,255,255,.5);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.check-item.picked .check-box{background:var(--sand);border-color:var(--sand)}
+.dualseq-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.dualseq-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;text-align:center}
+.checkpoint{background:var(--white);border-radius:16px;overflow:hidden;margin:20px 0;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.cp-header{background:linear-gradient(135deg,var(--sage),var(--sage2));padding:14px 20px;display:flex;align-items:center;gap:10px}
+.cp-header-title{font-size:13px;font-weight:800;color:var(--white)}
+.cp-badge{background:rgba(255,255,255,.22);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--white);display:inline-flex;align-items:center;gap:6px}
+.cp-locked{padding:24px;text-align:center;color:var(--s400);font-size:13px}
+.cp-lock-icon{margin-bottom:8px;display:flex;justify-content:center;color:var(--s400)}
+.cp-content{padding:20px}
+.cp-question{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.6}
+.cp-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cp-opts label{display:flex;align-items:flex-start;gap:10px;background:var(--s100);border:2px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--s600);line-height:1.5}
+.cp-opts label:hover{border-color:var(--sage);background:var(--sage-light);color:var(--text)}
+.cp-opts input[type=radio]{accent-color:var(--sage);flex-shrink:0;margin-top:2px}
+.cp-opts label.opt-correct{border-color:var(--g500);background:#f0fdf4;color:#065f46}
+.cp-opts label.opt-incorrect{border-color:var(--r500);background:#fef2f2;color:#991b1b;animation:wrongShake .5s ease}
+.checkpoint-feedback{font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:none}
+.fb-correct{background:#d1fae5;color:#065f46;border:1px solid rgba(34,197,94,.3)}
+.fb-incorrect{background:#fef2f2;color:#991b1b;border:1px solid rgba(239,68,68,.2)}
+.cp-passed-note{display:none;align-items:center;gap:8px;background:#d1fae5;border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:#065f46;margin-bottom:10px}
+.btn-check{background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);border:none;padding:10px 24px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-right:10px}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(90,138,106,.3)}
+.btn-continue{background:linear-gradient(135deg,var(--sand),var(--sand2));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:none}
+.btn-continue:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(240,168,104,.4)}
+.final-block{display:none;margin-bottom:32px;scroll-margin-top:80px}
+.final-block.is-visible{display:block}
+.yt-wrap{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.yt-frame{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+.yt-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.yt-label{padding:12px 16px;font-size:12px;font-weight:700;color:var(--sage);background:var(--sage-light);display:flex;align-items:center;gap:8px}
+.takeaways{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.takeaways h3{font-size:14px;font-weight:800;color:var(--sage);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.complete-wrap{background:var(--white);border-left:3px solid var(--sand);border-radius:12px;padding:24px;text-align:center;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.complete-wrap p{font-size:13px;color:var(--s500);margin-bottom:16px}
+.btn-complete{background:linear-gradient(135deg,var(--sage),var(--sage2));color:var(--white);border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 16px rgba(90,138,106,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-complete:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(90,138,106,.4)}
+.btn-complete:disabled{opacity:.6;cursor:not-allowed;transform:none}
+#complete-msg{display:none;margin-top:14px;font-size:14px;font-weight:700;color:var(--sage);background:var(--sage-light);padding:12px 20px;border-radius:10px}
+@keyframes correctFlash{0%{transform:scale(1)}30%{transform:scale(1.06);box-shadow:0 0 0 4px rgba(143,184,156,.5)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@media(max-width:640px){
+  .hero{padding:28px 20px 24px}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .drag-zones{grid-template-columns:1fr}
+  .drag-zones.zones3{grid-template-columns:1fr}
+  .verdict-grid{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:1fr}
+  .dualseq-wrap{grid-template-columns:1fr}
+  .wrap{padding:16px 14px 0}
+  .section-card{padding:16px}
+  .mini-game{padding:16px}
+  .les-table th,.les-table td{padding:8px}
+  .drag-card,.step-item,.audit-item,.meter-item,.check-item{min-height:44px}
+}
+.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.tf-card{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:14px;transition:all .2s}
+.tf-card.correct-flash{animation:correctFlash .5s ease}
+.tf-card.wrong-shake{animation:wrongShake .5s ease}
+.tf-text{font-size:12px;color:var(--white);line-height:1.5;margin-bottom:10px}
+.tf-btns{display:flex;gap:8px}
+.tf-btn{flex:1;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);color:var(--white);padding:7px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.tf-btn:hover{background:rgba(255,255,255,.22)}
+.tf-btn.chosen{background:var(--sand);border-color:var(--sand)}
+.tf-card.locked-card{opacity:.55;pointer-events:none}
+.email-diagram{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:16px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,.92);line-height:1.7}
+.email-line{display:flex;align-items:center;gap:10px;padding:6px 0;flex-wrap:wrap}
+.email-part-text{flex:1;min-width:140px}
+.slot-target{min-width:120px;min-height:32px;border:2px dashed rgba(255,255,255,.3);border-radius:8px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.slot-target.drag-over{border-color:var(--sand);background:rgba(240,168,104,.14)}
+.slot-target.filled{border-style:solid;color:var(--white);font-weight:600}
+.slot-target.slot-correct{border-color:#c9f2d6;background:rgba(143,184,156,.25)}
+.slot-target.slot-wrong{border-color:#fca5a5;background:rgba(239,68,68,.14);animation:wrongShake .5s ease}
+.slot-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.rank-ladder{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.rank-slot-col{flex:1;min-width:90px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.rank-slot-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.reorder-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.reorder-item{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--white);cursor:grab;user-select:none;transition:all .15s;display:flex;align-items:center;gap:10px}
+.reorder-item:hover{background:rgba(255,255,255,.19)}
+.reorder-item.dragging{opacity:.4}
+.reorder-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+.inline-passage{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px 18px;font-size:13px;color:rgba(255,255,255,.9);line-height:2;margin-bottom:12px}
+.trim-phrase{background:rgba(240,168,104,.28);border-radius:4px;padding:1px 4px;cursor:pointer;transition:all .15s}
+.trim-phrase:hover{background:rgba(240,168,104,.45)}
+.trim-phrase.cut{background:transparent;color:rgba(255,255,255,.35);text-decoration:line-through;cursor:default}
+.clarity-track{background:rgba(255,255,255,.12);border-radius:99px;height:12px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.18)}
+.clarity-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sand),#c9f2d6);border-radius:99px;transition:width .4s ease}
+.clarity-label{font-size:11px;color:rgba(255,255,255,.75);margin-bottom:10px}
+.hl-phrase{background:rgba(255,255,255,.1);border:2px solid transparent;border-radius:4px;padding:1px 5px;cursor:pointer;transition:all .18s}
+.hl-phrase:hover{border-color:rgba(255,255,255,.3)}
+.hl-phrase.hl-on{background:rgba(240,168,104,.3);border-color:var(--sand);box-shadow:0 0 0 3px rgba(240,168,104,.18)}
+.hl-count{font-size:11px;color:rgba(255,255,255,.75);margin-top:6px}
+.mistake-phrase{cursor:pointer;border-radius:4px;padding:1px 4px;transition:all .15s}
+.mistake-phrase:hover{background:rgba(255,255,255,.12)}
+.mistake-phrase.flagged{background:rgba(239,68,68,.22);text-decoration:line-through;color:#fca5a5}
+.countdown-wrap{text-align:center;margin-top:10px}
+.countdown-num{font-size:32px;font-weight:900;color:var(--white)}
+@media(max-width:640px){
+  .tf-grid{grid-template-columns:1fr}
+  .rank-ladder{flex-wrap:wrap}
+  .rank-slot-col{min-width:calc(50% - 8px)}
+  .email-line{flex-direction:column;align-items:flex-start}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+<body>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-eyebrow">LearnHub PH &nbsp;·&nbsp; Module 8 &nbsp;·&nbsp; Lesson 1</div>
+  <div class="sp-thumb"><img src="data:image/jpeg;base64,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" alt="LES022 thumbnail" style="width:100%;height:100%;object-fit:cover"></div>
+  <div class="sp-title">Professional Email Writing</div>
+  <div class="sp-sub">Hang tight &mdash; Module 8 Lesson 1 is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES022...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 8 &nbsp;·&nbsp; Lesson 1</span>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> MODULE 8 &nbsp;·&nbsp; LESSON 1 OF 3</div>
+  <h1>Professional Email Writing</h1>
+  <p class="hero-sub">Email is still where most client relationships live or die. A confusing subject line, a wall-of-text body, or a tone that misses the mark can cost trust in seconds &mdash; while a clear, well-structured email builds it. This lesson takes you through every part of a professional email, ten ready-to-use templates, inbox triage, and the pre-send habits that catch mistakes before they go out. By the end, you will be able to write, template, and manage professional email for any client the same day.</p>
+  <div class="hero-meta">
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> ~65 min</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Beginner</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 1 Video</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59"/><rect x="2" y="5" width="20" height="16" rx="2"/></svg> 10 Activities</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> 10 Checkpoints</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 10</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> What is in this lesson</div>
+  <p class="toc-sub">Read the section &rarr; Complete the activity &rarr; Pass the checkpoint &rarr; Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. Why Professional Email Writing Is a Core VA Skill</a></li>
+    <li><a href="#s2" data-toc="2">2. The Anatomy of a Professional Email</a></li>
+    <li><a href="#s3" data-toc="3">3. Writing Subject Lines That Get Opened</a></li>
+    <li><a href="#s4" data-toc="4">4. Tone and Formality — Matching Your Voice</a></li>
+    <li><a href="#s5" data-toc="5">5. Writing Clear, Concise Email Bodies</a></li>
+    <li><a href="#s6" data-toc="6">6. Writing Effective Calls to Action</a></li>
+    <li><a href="#s7" data-toc="7">7. Email Templates and Canned Responses</a></li>
+    <li><a href="#s8" data-toc="8">8. Managing a Client Inbox Professionally</a></li>
+    <li><a href="#s9" data-toc="9">9. Common Email Mistakes VAs Must Never Make</a></li>
+    <li><a href="#s10" data-toc="10">10. Reviewing and Proofreading Before You Send</a></li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section is-visible" id="s1">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">1</span> Why Professional Email Writing Is a Core VA Skill</div>
+
+  <p>Long before a client ever sees your face on a call, they see your writing. Email is still the primary way most businesses communicate &mdash; with clients, vendors, partners, and teams. When you write on a client's behalf, every message you send is judged as if the client wrote it themselves.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p><strong>Professional email writing</strong> is the skill of composing clear, well-structured, appropriately toned messages that represent a client accurately and move a conversation toward a specific outcome.</p>
+  </div>
+
+  <h2>Your Writing Becomes the Client's Voice</h2>
+  <p>The moment a client hands you their inbox, your words carry their name. A vague, sloppy, or overly casual email does not read as "the VA made a mistake" &mdash; it reads as "this business is disorganized." A clear, well-structured email does the opposite: it quietly signals competence every single time it lands in someone's inbox.</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">1st</div><div class="stat-label">thing most business contacts judge before ever speaking to your client directly</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">of emails sent under a client's name are read as if the client personally wrote them</div></div>
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">poorly worded email is often enough to damage a relationship a client spent months building</div></div>
+  </div>
+
+  <h2>The Difference a Skilled VA Makes</h2>
+  <p>A VA who handles email well replies promptly, gets to the point, matches the client's tone, and always leaves the recipient knowing exactly what happens next. A VA who struggles with email tends to bury the real message, ramble, or send something that reads oddly formal or oddly casual for the relationship &mdash; and clients notice fast, because email is where they can compare your writing to their own instantly.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Read Before You Write</div>
+    <p>Before writing a single word for a new client, read through twenty or thirty of their past sent emails. You will absorb their vocabulary, sign-off style, and typical sentence length faster than any onboarding conversation could explain it.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A consultant's VA sent a reply that read noticeably stiffer than the consultant's usual warm, direct style. A long-time client emailed back asking "is everything okay?" &mdash; not because anything was wrong, but because the tone mismatch was that noticeable. A quick read of past emails would have prevented the confusion entirely.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Open any inbox you have access to and read the five most recent sent emails. Note down three words you would use to describe the tone.</p>
+  </div>
+
+  <div class="mini-game" id="game1">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Email Impact Check</div>
+    <div class="mg-inst">Mark each statement True or False, then submit. Wrong cards will shake so you can try again.</div>
+    <div class="tf-grid" id="g1-grid"></div>
+    <button class="mg-btn" onclick="tfSubmit('g1')">Submit Answers</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="tfInit('g1')">Reset</button>
+    <div class="mg-result" id="g1-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-1">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 1 Knowledge Check</span></div>
+    <div id="cp-1-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-1-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-1-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why does a poorly written email under a client's name damage trust so quickly?</p>
+        <div class="cp-opts" id="cp-1-opts">
+          <label><input type="radio" name="cp1" value="a"> Because recipients read it as if the client personally wrote it</label>
+          <label><input type="radio" name="cp1" value="b"> Because email is rarely checked by clients</label>
+          <label><input type="radio" name="cp1" value="c"> Because most clients never read what their VA sends</label>
+          <label><input type="radio" name="cp1" value="d"> Because tone does not matter in business email</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-1-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(1,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue to Section 2 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section" id="s2">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">2</span> The Anatomy of a Professional Email</div>
+
+  <p>Every professional email is built from the same seven components. Understanding what each one does &mdash; and what happens when one is missing or weak &mdash; is the foundation for everything else in this lesson.</p>
+
+  <h2>The Seven Components</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+    <tr><th>Component</th><th>What It Does &amp; What Happens When It's Missing or Weak</th></tr>
+    <tr><td>Subject Line</td><td>Tells the recipient what the email is about before they open it. A vague or missing subject line gets skipped, buried, or opened with the wrong expectations.</td></tr>
+    <tr><td>Greeting</td><td>Sets the tone in the first two words. A missing greeting reads as abrupt; the wrong formality level can feel either cold or overly familiar.</td></tr>
+    <tr><td>Opening Line</td><td>Gives context or warmth before the ask. Skipping straight to the request without any lead-in can feel blunt, especially with new or external contacts.</td></tr>
+    <tr><td>Body</td><td>Delivers the actual information or request, clearly and in the fewest words needed. A weak body buries the point or forces the reader to re-read to find it.</td></tr>
+    <tr><td>Call to Action (CTA)</td><td>Tells the recipient exactly what to do next. Without a clear CTA, even a well-written email can go unanswered simply because no one is sure what response is expected.</td></tr>
+    <tr><td>Closing</td><td>Wraps the message politely and signals it's complete. A missing closing can make an email feel unfinished or curt.</td></tr>
+    <tr><td>Signature</td><td>Identifies who sent it and how to reach them. A missing signature on external emails looks unprofessional and makes replying harder.</td></tr>
+  </table>
+  </div>
+
+  <h2>Annotated Sample Email</h2>
+  <div class="email-diagram">
+    <div class="email-line"><strong>Subject:</strong> <span class="email-part-text">Invoice #1042 — Approval Needed by Friday</span></div>
+    <div class="email-line"><span class="email-part-text">Hi Marco,</span></div>
+    <div class="email-line"><span class="email-part-text">Hope your week is off to a good start.</span></div>
+    <div class="email-line"><span class="email-part-text">I've attached Invoice #1042 for the design work completed last month. Everything matches the scope we agreed on in our March call.</span></div>
+    <div class="email-line"><span class="email-part-text">Could you approve this by Friday so we can process payment on schedule?</span></div>
+    <div class="email-line"><span class="email-part-text">Thanks so much for your help with this.</span></div>
+    <div class="email-line"><span class="email-part-text">Best,<br>Jamie Cruz<br>Admin Assistant to Alex Rivera</span></div>
+  </div>
+  <p style="font-size:12px;color:var(--s500)">Reading top to bottom, this sample contains a specific subject line, a warm but brief greeting, a short opening line, a two-sentence body that leads with the point, one clear CTA with a deadline, a short closing, and a full signature identifying the sender and who they work for.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>An email with a strong body but no CTA still fails its job. The recipient finishes reading, agrees it sounds fine, and then does nothing &mdash; because nothing specific was ever asked of them.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Pull up the last email you sent and label each of its seven components. Note which one, if any, was missing or weak.</p>
+  </div>
+
+  <div class="mini-game" id="game2">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M2 4h20v16H2z"/><path d="M2 4l10 8 10-8"/></svg> Email Anatomy Labeler</div>
+    <div class="mg-inst">Drag each label onto the matching part of the sample email below.</div>
+    <div class="slot-pool" id="g2-pool"></div>
+    <div id="g2-email"></div>
+    <button class="mg-btn" onclick="slotCheck('g2')">Check My Labels</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="slotInit('g2')">Reset</button>
+    <div class="mg-result" id="g2-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-2">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 2 Knowledge Check</span></div>
+    <div id="cp-2-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-2-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-2-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What can happen even when an email has a strong, well-written body?</p>
+        <div class="cp-opts" id="cp-2-opts">
+          <label><input type="radio" name="cp2" value="a"> It always gets a fast reply regardless of anything else</label>
+          <label><input type="radio" name="cp2" value="b"> Without a clear call to action, the recipient may agree it sounds fine and still do nothing</label>
+          <label><input type="radio" name="cp2" value="c"> The subject line becomes unnecessary</label>
+          <label><input type="radio" name="cp2" value="d"> The signature can safely be left out</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-2-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(2,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue to Section 3 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section" id="s3">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">3</span> Writing Subject Lines That Get Opened</div>
+
+  <p>The subject line is the most important sentence in the entire email &mdash; it is the only part guaranteed to be read before someone decides whether to open the message at all. A weak subject line can bury even a perfectly written email.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p>A <strong>strong subject line</strong> is specific, clear, and actionable &mdash; it tells the recipient exactly what the email contains and, where relevant, what they need to do about it.</p>
+  </div>
+
+  <h2>Subject Line Formula Table</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:16%"><col style="width:28%"><col style="width:30%"><col style="width:26%"></colgroup>
+    <tr><th>Email Type</th><th>Formula</th><th>Strong Example</th><th>Weak Example</th></tr>
+    <tr><td>Request</td><td>[Item] + Action Needed + [Deadline]</td><td>Invoice #1042 — Approval Needed by Friday</td><td>Quick Question</td></tr>
+    <tr><td>Update</td><td>[Project/Topic] + Status Word</td><td>Website Redesign — On Track for Launch</td><td>Update</td></tr>
+    <tr><td>Follow-Up</td><td>Follow-Up: [Original Topic]</td><td>Follow-Up: Proposal Sent Tuesday</td><td>Just Checking In</td></tr>
+    <tr><td>Introduction</td><td>Introduction: [Name] &lt;&gt; [Name]</td><td>Introduction: Alex Rivera &lt;&gt; Dana Cole</td><td>Hello!</td></tr>
+  </table>
+  </div>
+
+  <h2>Subject Lines to Never Write</h2>
+  <ul class="checklist">
+    <li>"Hi" or "Hello" alone — gives the recipient zero information</li>
+    <li>"Quick Question" — vague, and rarely actually quick</li>
+    <li>"Important!!!" — reads as urgent-for-attention rather than genuinely important</li>
+    <li>Leaving the subject line completely blank</li>
+    <li>Reusing the same subject line across many unrelated emails, making search and sorting harder later</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Match Tone to Type</div>
+    <p>A request needs urgency and a deadline; an update needs a status word like "On Track" or "Delayed"; a follow-up should reference the original topic so the thread is instantly recognizable.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA sent an approval request with the subject "Question." It sat unread for three days in a packed inbox. Resent with the subject "Contract Draft — Signature Needed Today," it was opened and signed within the hour.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Rewrite the subject line of the last email you sent using the formula for its email type above.</p>
+  </div>
+
+  <div class="mini-game" id="game3">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg> Subject Line Ranker</div>
+    <div class="mg-inst">Drag to reorder these subject lines from worst (top) to best (bottom), then check.</div>
+    <div class="reorder-list" id="g3-list"></div>
+    <button class="mg-btn" onclick="reorderCheck('g3')">Check My Ranking</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="reorderInit('g3')">Reset</button>
+    <div class="mg-result" id="g3-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-3">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 3 Knowledge Check</span></div>
+    <div id="cp-3-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-3-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-3-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What makes a subject line strong, according to this lesson?</p>
+        <div class="cp-opts" id="cp-3-opts">
+          <label><input type="radio" name="cp3" value="a"> It is specific, clear, and actionable</label>
+          <label><input type="radio" name="cp3" value="b"> It is as vague as possible so it fits any topic</label>
+          <label><input type="radio" name="cp3" value="c"> It always includes multiple exclamation points</label>
+          <label><input type="radio" name="cp3" value="d"> It is left blank so the body speaks for itself</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-3-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(3,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue to Section 4 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section" id="s4">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">4</span> Tone and Formality — Matching Your Voice to the Recipient</div>
+
+  <p>The same request can land completely differently depending on tone. Professional email exists on a spectrum from formal to conversational, and picking the right point on that spectrum is one of the fastest ways to sound like you belong in the client's inbox.</p>
+
+  <h2>The Formality Spectrum</h2>
+  <p>Formal tone suits new external contacts, legal or financial matters, and anyone senior the client does not know well. Semi-formal fits established business relationships — vendors, ongoing clients, familiar colleagues. Conversational tone fits close, long-running relationships where the client themselves writes casually.</p>
+
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:16%"><col style="width:31%"><col style="width:31%"></colgroup>
+    <tr><th>Situation</th><th>Tone Level</th><th>Opening Line Example</th><th>Closing Line Example</th></tr>
+    <tr><td>New external contact</td><td>Formal</td><td>"I hope this email finds you well."</td><td>"Kind regards,"</td></tr>
+    <tr><td>Established vendor</td><td>Semi-Formal</td><td>"Hope you had a good week."</td><td>"Best,"</td></tr>
+    <tr><td>Long-time client contact</td><td>Conversational</td><td>"Hey Sam, quick one for you."</td><td>"Thanks!"</td></tr>
+    <tr><td>Legal or financial matter</td><td>Formal</td><td>"I am writing regarding the attached agreement."</td><td>"Sincerely,"</td></tr>
+  </table>
+  </div>
+
+  <h2>Reading and Mirroring the Client's Tone</h2>
+  <p>Look at how the client greets people, how long their sentences run, whether they use exclamation points, and how they sign off. Match those patterns rather than defaulting to your own natural writing style — you are representing their voice, not introducing your own.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Common Tone Mistakes</div>
+    <p>The most common errors are being too casual with a new or senior contact, too stiff with a warm long-term relationship, over-apologizing for small things, and unintentionally reading as passive-aggressive when trying to sound firm.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Warm Without Being Unprofessional</div>
+    <p>A short personal line — "Hope the launch went well!" — before the ask adds warmth without sacrificing professionalism, as long as it stays brief and genuine rather than filling half the email.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A new VA wrote "Hey!! hope ur doing awesome" to a prospective enterprise client the founder had never met. The founder had to send an apologetic follow-up to repair the first impression before the deal conversation could even begin.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Pick one contact your client emails often and write down which tone level — formal, semi-formal, or conversational — fits that relationship.</p>
+  </div>
+
+  <div class="mini-game" id="game4">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Tone Matcher</div>
+    <div class="mg-inst">Drag each opening line into the formality level it matches. Correct cards flip to reveal why.</div>
+    <div class="drag-pool" id="g4-pool"></div>
+    <div class="drag-zones zones3">
+      <div class="drag-zone" id="g4-zone-formal" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g4')"><div class="zone-label neutral">Formal</div></div>
+      <div class="drag-zone" id="g4-zone-semi" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g4')"><div class="zone-label neutral">Semi-Formal</div></div>
+      <div class="drag-zone" id="g4-zone-conv" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g4')"><div class="zone-label neutral">Conversational</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g4')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g4')">Reset</button>
+    <div class="mg-result" id="g4-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-4">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 4 Knowledge Check</span></div>
+    <div id="cp-4-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-4-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-4-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA mirror the client's existing email tone instead of using their own natural writing style?</p>
+        <div class="cp-opts" id="cp-4-opts">
+          <label><input type="radio" name="cp4" value="a"> Because the VA is representing the client's voice, not introducing their own</label>
+          <label><input type="radio" name="cp4" value="b"> Because clients never notice tone differences</label>
+          <label><input type="radio" name="cp4" value="c"> Because formal tone is always correct regardless of relationship</label>
+          <label><input type="radio" name="cp4" value="d"> Because tone only matters in phone calls, not email</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-4-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(4,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue to Section 5 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section" id="s5">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">5</span> Writing Clear, Concise Email Bodies</div>
+
+  <p>Most people scan an email before they read it. If the body forces them to hunt for the point, or scroll through paragraphs to find the ask, the message has already failed &mdash; no matter how accurate the information inside it is.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p>The <strong>one-screen rule</strong> states that if a recipient cannot read the entire email without scrolling, it is almost always too long for its purpose.</p>
+  </div>
+
+  <h2>Lead With the Point</h2>
+  <p>The first sentence of the body should carry the main point. Everything after it should support, clarify, or provide the detail the reader needs to act &mdash; not build up to the point gradually the way a story might.</p>
+
+  <h3>Using Lists Correctly</h3>
+  <ul class="checklist">
+    <li>Use a bulleted list when items have no required order (options, features, considerations)</li>
+    <li>Use a numbered list when sequence matters (steps, a process, ranked priorities)</li>
+    <li>Keep each bullet to one line where possible — a bullet that runs five lines defeats the purpose of using a list at all</li>
+    <li>Never turn an entire paragraph into a single giant bullet just to make it look organized</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> What to Cut Before Sending</div>
+    <p>Cut filler phrases like "I just wanted to reach out to," "I was wondering if maybe," and "just following up to see." They add length without adding meaning — the reader only needs the actual point.</p>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid the Wall of Text</div>
+    <p>A body with no line breaks, no lists, and no visual structure gets skimmed at best and ignored at worst. Break long bodies into short paragraphs of two to three sentences each.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA rewrote a rambling 300-word status update into four short bullet points totaling 60 words. The client replied within the hour instead of leaving it unread for two days, exactly as had happened with the longer version the week before.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Take the longest email you have sent recently and rewrite it so it fits on one screen with no scrolling.</p>
+  </div>
+
+  <div class="mini-game" id="game5">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> Sentence Trimmer</div>
+    <div class="mg-inst">Click every highlighted filler phrase to cut it and raise the clarity score.</div>
+    <div class="clarity-track"><div class="clarity-fill" id="g5-fill"></div></div>
+    <div class="clarity-label" id="g5-pct">0% clarity</div>
+    <div class="inline-passage" id="g5-passage"></div>
+    <div class="mg-result" id="g5-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-5">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 5 Knowledge Check</span></div>
+    <div id="cp-5-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-5-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-5-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">According to the one-screen rule, what usually means an email is too long?</p>
+        <div class="cp-opts" id="cp-5-opts">
+          <label><input type="radio" name="cp5" value="a"> It has more than one paragraph</label>
+          <label><input type="radio" name="cp5" value="b"> The recipient cannot read the whole email without scrolling</label>
+          <label><input type="radio" name="cp5" value="c"> It contains a bulleted list</label>
+          <label><input type="radio" name="cp5" value="d"> It uses the recipient's first name</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-5-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(5,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue to Section 6 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section" id="s6">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">6</span> Writing Effective Calls to Action</div>
+
+  <p>Every email should ask for exactly one thing. A call to action, or CTA, tells the recipient precisely what response is expected &mdash; and a weak or missing one is one of the most common reasons professional emails go unanswered.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p>A <strong>call to action (CTA)</strong> is the specific next step an email asks the recipient to take, stated clearly enough that they know exactly how to respond.</p>
+  </div>
+
+  <h2>Weak vs Strong CTAs</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+    <tr><th>Weak CTA</th><th>Strong CTA</th></tr>
+    <tr><td>"Let me know your thoughts."</td><td>"Could you confirm by Thursday whether this works for you?"</td></tr>
+    <tr><td>"Just wanted to check in."</td><td>"Can you send the signed contract back by end of day Friday?"</td></tr>
+    <tr><td>"Whenever you get a chance."</td><td>"Please review the attached draft and reply with any edits by 5pm Wednesday."</td></tr>
+  </table>
+  </div>
+
+  <p>Notice the pattern: strong CTAs name a specific action, and almost always include a deadline or timeframe. Vague CTAs leave the timing entirely up to the recipient, which usually means it slips down their priority list.</p>
+
+  <h2>When You Need Multiple Responses</h2>
+  <p>If one email genuinely needs several answers, number them clearly — "1) Can you confirm the date, 2) Should we include the vendor, 3) Do you want a recap sent after" — rather than burying three separate asks inside flowing paragraphs where one is easy to miss.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Respect Their Time</div>
+    <p>A strong CTA also respects how easy the action is. "Reply with a thumbs up if that time works" is far easier to act on than "let me know if you have any availability concerns."</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A proposal email ending in "let me know what you think" sat unanswered for two weeks. The same proposal resent with "Could you approve this by Friday so we can start Monday?" got a reply the same afternoon.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Find one recent email you sent with a vague CTA and rewrite it to name a specific action and a deadline.</p>
+  </div>
+
+  <div class="mini-game" id="game6">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> CTA Strength Sorter</div>
+    <div class="mg-inst">Drag each CTA into its ranked slot, from weakest to strongest.</div>
+    <div class="slot-pool" id="g6-pool"></div>
+    <div class="rank-ladder" id="g6-ladder"></div>
+    <button class="mg-btn" onclick="slotCheck('g6')">Check My Ranking</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="slotInit('g6')">Reset</button>
+    <div class="mg-result" id="g6-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-6">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 6 Knowledge Check</span></div>
+    <div id="cp-6-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-6-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-6-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What is the key difference between a weak CTA and a strong CTA, according to this lesson?</p>
+        <div class="cp-opts" id="cp-6-opts">
+          <label><input type="radio" name="cp6" value="a"> A strong CTA names a specific action and usually includes a deadline or timeframe</label>
+          <label><input type="radio" name="cp6" value="b"> A strong CTA is always longer than a weak one</label>
+          <label><input type="radio" name="cp6" value="c"> A weak CTA is one that uses too many numbers</label>
+          <label><input type="radio" name="cp6" value="d"> CTAs make no real difference to whether someone replies</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-6-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(6,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue to Section 7 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section" id="s7">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">7</span> Email Templates and Canned Responses for VAs</div>
+
+  <p>Not every email needs to be written from scratch. A well-built set of templates saves enormous time on repeated email types — as long as each one is personalized enough that it never reads as copy-paste.</p>
+
+  <h2>When to Template, When to Write Fresh</h2>
+  <p>Template routine, repeatable email types — confirmations, reminders, standard requests. Write fresh anything emotionally sensitive, unusually complex, or specific to a one-off situation a template was never built for.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Personalize Every Time</div>
+    <p>Always swap in the recipient's name, a specific detail about their situation, and adjust at least one sentence to the actual context. A template used word-for-word every time is easy to spot — and it reads as impersonal.</p>
+  </div>
+
+  <h2>The 10 Essential VA Email Templates</h2>
+
+  <h3>1. Follow-Up</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Follow-Up Template</th></tr>
+  <tr><td>Subject: Follow-Up: [Original Topic]<br>Hi [Name], following up on [specific topic] from [date/context]. Have you had a chance to look it over? Happy to answer any questions. Best, [Your Name]</td></tr></table></div>
+
+  <h3>2. Meeting Request</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Meeting Request Template</th></tr>
+  <tr><td>Subject: Meeting Request — [Topic]<br>Hi [Name], I'd like to set up a [length]-minute call to discuss [topic]. Would [option 1] or [option 2] work on your end? Let me know what's best. Best, [Your Name]</td></tr></table></div>
+
+  <h3>3. Task Confirmation</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Task Confirmation Template</th></tr>
+  <tr><td>Subject: Confirmed: [Task Name]<br>Hi [Name], confirming that [task] has been completed as of [date]. [One-line detail if relevant]. Let me know if anything needs adjusting. Best, [Your Name]</td></tr></table></div>
+
+  <h3>4. Deadline Reminder</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Deadline Reminder Template</th></tr>
+  <tr><td>Subject: Reminder: [Item] Due [Date]<br>Hi [Name], quick reminder that [item] is due on [date]. Let me know if you need anything from our end to finish it. Best, [Your Name]</td></tr></table></div>
+
+  <h3>5. Status Update</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Status Update Template</th></tr>
+  <tr><td>Subject: [Project] — Status Update<br>Hi [Name], quick update on [project]: [1-2 line summary of progress]. Next step is [next step], expected by [date]. Let me know if you have questions. Best, [Your Name]</td></tr></table></div>
+
+  <h3>6. Introduction</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Introduction Template</th></tr>
+  <tr><td>Subject: Introduction: [Name] &lt;&gt; [Name]<br>Hi both, I'd like to introduce [Name 1] and [Name 2] — [one-line reason for the introduction]. I'll let you two take it from here! Best, [Your Name]</td></tr></table></div>
+
+  <h3>7. Feedback Request</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Feedback Request Template</th></tr>
+  <tr><td>Subject: Feedback Needed — [Item]<br>Hi [Name], could you review the attached [item] and share any feedback by [date]? Happy to walk through it live if that's easier. Best, [Your Name]</td></tr></table></div>
+
+  <h3>8. Apology</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Apology Template</th></tr>
+  <tr><td>Subject: Apologies — [Brief Reason]<br>Hi [Name], apologies for [specific issue]. [One line on what happened, no over-explaining]. Here's how we're fixing it: [fix]. Thank you for your patience. Best, [Your Name]</td></tr></table></div>
+
+  <h3>9. Proposal</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Proposal Template</th></tr>
+  <tr><td>Subject: Proposal — [Project Name]<br>Hi [Name], attached is our proposal for [project]. It covers [1-2 line summary of scope]. Could you review and let us know if you'd like to move forward by [date]? Best, [Your Name]</td></tr></table></div>
+
+  <h3>10. Thank-You</h3>
+  <div class="table-wrap"><table class="les-table"><colgroup><col style="width:100%"></colgroup><tr><th>Thank-You Template</th></tr>
+  <tr><td>Subject: Thank You — [Reason]<br>Hi [Name], thank you for [specific thing they did]. It made a real difference on our end. Looking forward to [next interaction, if relevant]. Best, [Your Name]</td></tr></table></div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Never send a template with an unfilled bracket still inside it, like "[Name]" left untouched. It is one of the fastest ways to make an email look automated rather than personally sent.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Save all 10 templates above into a document you can reuse, and fill in one of them with a real example right now.</p>
+  </div>
+
+  <div class="mini-game" id="game7">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Template Personalizer</div>
+    <div class="mg-inst">Click every bracketed placeholder below that needs personalizing before this template is sent. Fixed boilerplate text should stay unclicked.</div>
+    <div class="hl-count" id="g7-count">Found: 0 / 5</div>
+    <div class="inline-passage" id="g7-passage"></div>
+    <div class="mg-result" id="g7-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-7">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 7 Knowledge Check</span></div>
+    <div id="cp-7-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-7-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-7-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What should a VA never leave behind when sending a templated email?</p>
+        <div class="cp-opts" id="cp-7-opts">
+          <label><input type="radio" name="cp7" value="a"> A signature</label>
+          <label><input type="radio" name="cp7" value="b"> An unfilled bracket placeholder, like "[Name]" left untouched</label>
+          <label><input type="radio" name="cp7" value="c"> A subject line</label>
+          <label><input type="radio" name="cp7" value="d"> A closing line</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-7-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(7,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue to Section 8 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section" id="s8">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">8</span> Managing a Client Inbox Professionally</div>
+
+  <p>Having access to a client's inbox and being trusted with it are two different things. Access means you can technically see and send email. Trust means the client never has to double-check what you did with that access.</p>
+
+  <h2>Triaging Incoming Email</h2>
+  <p>Every incoming email fits into one of a few handling categories. Sorting quickly and consistently keeps the inbox from becoming a pile of unread, unsorted messages that hide the truly urgent ones.</p>
+
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+    <tr><th>Category</th><th>What Goes Here</th></tr>
+    <tr><td>Reply Now</td><td>Simple, low-risk replies you're authorized to send directly — confirmations, scheduling, routine questions</td></tr>
+    <tr><td>Flag for Client</td><td>Anything sensitive, high-stakes, or requiring a decision only the client can make</td></tr>
+    <tr><td>Archive</td><td>Informational emails that need no reply and no further action</td></tr>
+    <tr><td>Needs Template</td><td>A routine request that fits one of your existing templates but still needs to go out personalized</td></tr>
+  </table>
+  </div>
+
+  <h2>Labels and Filters</h2>
+  <p>Set up folders or labels that mirror the categories above, plus any client-specific ones like "Invoices" or "Press." A consistent filing system means anything can be found again in seconds, instead of scrolling through a single unsorted inbox.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p><strong>Inbox triage</strong> is the practice of quickly sorting every incoming email into a clear handling category before deciding how and when to respond.</p>
+  </div>
+
+  <h2>When to Reply vs When to Flag</h2>
+  <p>Reply on behalf of the client for anything routine and low-stakes that you have explicit authorization to handle. Flag anything involving money above an agreed threshold, legal matters, personal or sensitive topics, or any message where you are unsure what the client would want said.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Consistency Builds Trust</div>
+    <p>Keep a running note of every reply you send on the client's behalf during your first few weeks. It gives the client an easy way to spot-check your voice-matching early on, which builds the trust needed to hand over more.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA flagged an email offering a partnership deal instead of replying with a template, correctly judging it too significant to handle alone. The client later said that single judgment call was what convinced them to expand the VA's inbox access.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Sketch the four triage categories as folders you could set up in any inbox you manage today.</p>
+  </div>
+
+  <div class="mini-game" id="game8">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg> Inbox Triage Sorter</div>
+    <div class="mg-inst">Drag each incoming email into the correct handling zone.</div>
+    <div class="drag-pool" id="g8-pool"></div>
+    <div class="drag-zones zones3" style="grid-template-columns:repeat(2,1fr)">
+      <div class="drag-zone" id="g8-zone-reply" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">Reply Now</div></div>
+      <div class="drag-zone" id="g8-zone-flag" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">Flag for Client</div></div>
+      <div class="drag-zone" id="g8-zone-archive" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">Archive</div></div>
+      <div class="drag-zone" id="g8-zone-template" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">Needs Template</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g8')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g8')">Reset</button>
+    <div class="mg-result" id="g8-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-8">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 8 Knowledge Check</span></div>
+    <div id="cp-8-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-8-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-8-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">When should a VA flag an email for the client instead of replying on their behalf?</p>
+        <div class="cp-opts" id="cp-8-opts">
+          <label><input type="radio" name="cp8" value="a"> Only when the email is very short</label>
+          <label><input type="radio" name="cp8" value="b"> When it involves money above an agreed threshold, legal matters, or the VA is unsure what the client would want said</label>
+          <label><input type="radio" name="cp8" value="c"> Never — a VA should reply to every email personally</label>
+          <label><input type="radio" name="cp8" value="d"> Only on Fridays</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-8-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(8,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue to Section 9 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section" id="s9">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">9</span> Common Email Mistakes VAs Must Never Make</div>
+
+  <p>Most email disasters are avoidable. Knowing exactly which mistakes to watch for — and why they happen in the first place — is what keeps a small slip from becoming a damaged relationship.</p>
+
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:38%"><col style="width:40%"></colgroup>
+    <tr><th>Mistake</th><th>Why It Happens</th><th>How to Fix It</th></tr>
+    <tr><td>Reply-all disaster</td><td>Clicking reply-all out of habit without checking who is actually on the thread</td><td>Pause and check the recipient list before every send, especially on large threads</td></tr>
+    <tr><td>Sending before proofreading</td><td>Rushing to clear the inbox quickly</td><td>Build in a fixed re-read step before every send, no exceptions</td></tr>
+    <tr><td>Vague subject lines</td><td>Writing the subject last, as an afterthought</td><td>Write or rewrite the subject line after the body is finished</td></tr>
+    <tr><td>Burying the ask at the bottom</td><td>Writing in the order thoughts occur rather than order of importance</td><td>Lead with the point in the first sentence, every time</td></tr>
+    <tr><td>Over-apologizing</td><td>Trying to sound polite or avoid conflict</td><td>State the issue once, briefly, then move to the fix</td></tr>
+    <tr><td>Informal language in formal contexts</td><td>Defaulting to the VA's own natural texting style</td><td>Match tone to the relationship, as covered in Section 4</td></tr>
+    <tr><td>Forgetting attachments</td><td>Writing "attached" before actually attaching the file</td><td>Attach the file first, before writing the body</td></tr>
+    <tr><td>Not following up when there is no reply</td><td>Assuming silence means the matter is resolved</td><td>Set a reminder to follow up if no reply arrives within an agreed window</td></tr>
+    <tr><td>Responding emotionally to a difficult message</td><td>Reacting in the moment instead of pausing</td><td>Draft the reply, wait, then re-read before sending — never send in the heat of the moment</td></tr>
+  </table>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> The Highest-Risk Mistake</div>
+    <p>A reply-all disaster is the single hardest email mistake to undo. Once it is sent, everyone on the thread has already seen it. Always double-check the recipient list before sending anything to a group.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA received a sharply worded complaint email and almost fired back a defensive reply within minutes. Waiting twenty minutes and re-reading the draft revealed the tone was far too harsh — the revised, calmer reply resolved the situation instead of escalating it.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Pick the one mistake from the table above you are most likely to make, and write one specific habit that would prevent it.</p>
+  </div>
+
+  <div class="mini-game" id="game9">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg> Email Mistake Spotter</div>
+    <div class="mg-inst">Click every phrase in this badly written email that is a mistake, then check your findings.</div>
+    <div class="inline-passage" id="g9-passage"></div>
+    <button class="mg-btn" onclick="mistakeCheck('g9')">Check My Findings</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="mistakeInit('g9')">Reset</button>
+    <div class="mg-result" id="g9-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-9">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 9 Knowledge Check</span></div>
+    <div id="cp-9-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-9-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-9-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is a reply-all disaster considered one of the hardest email mistakes to undo?</p>
+        <div class="cp-opts" id="cp-9-opts">
+          <label><input type="radio" name="cp9" value="a"> Because everyone on the thread has already seen it once it is sent</label>
+          <label><input type="radio" name="cp9" value="b"> Because it can always be recalled instantly</label>
+          <label><input type="radio" name="cp9" value="c"> Because reply-all only sends to the original sender</label>
+          <label><input type="radio" name="cp9" value="d"> Because it never actually happens in practice</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-9-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(9,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-9-cont" onclick="unlockSection(10)">Continue to Section 10 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 10 ===== -->
+<div class="section" id="s10">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">10</span> Reviewing and Proofreading Before You Hit Send</div>
+
+  <p>Every skill in this lesson comes together in the final sixty seconds before an email goes out. A short, consistent pre-send review is what catches the mistakes that would otherwise slip through.</p>
+
+  <h2>The Pre-Send Checklist</h2>
+  <ul class="checklist">
+    <li>Subject line is specific, clear, and matches the email type</li>
+    <li>Recipient list is correct — no accidental reply-all, no missing or extra people</li>
+    <li>Greeting matches the correct formality level for this contact</li>
+    <li>Tone matches the client's established voice</li>
+    <li>The main point appears in the first sentence of the body</li>
+    <li>Body fits the one-screen rule with no unnecessary length</li>
+    <li>Exactly one clear call to action is present, with a deadline if relevant</li>
+    <li>Closing line matches the tone of the rest of the email</li>
+    <li>Signature is complete and accurate</li>
+    <li>All attachments mentioned in the body are actually attached</li>
+  </ul>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Definition</div>
+    <p>A <strong>pre-send review</strong> is a short, fixed checklist run on every outgoing email, specifically designed to catch the errors that rushing tends to cause.</p>
+  </div>
+
+  <h2>Proofreading Beyond Autocorrect</h2>
+  <p>Autocorrect catches obvious typos but misses wrong words that are spelled correctly — "there" instead of "their," "form" instead of "from." Read the email slowly, ideally out loud, to catch what autocorrect cannot.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Read It Out Loud</div>
+    <p>Reading an email out loud before sending forces you to slow down enough to notice awkward phrasing, missing words, and tone problems that silent skimming often misses entirely.</p>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> The 60-Second Rule</div>
+    <p>Slowing down by just sixty seconds before every send prevents most of the costly email errors covered in this lesson — the wrong attachment, the reply-all mistake, the missing deadline. It is the cheapest insurance policy in professional email.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA almost sent a contract to the wrong recipient after autocomplete filled in a similar name. A final read of the recipient line — the last step of her personal pre-send checklist — caught it seconds before sending.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Print or save the pre-send checklist above somewhere visible, and run it on the very next email you send.</p>
+  </div>
+
+  <div class="mini-game" id="game10">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg> Pre-Send Checklist Sequencer</div>
+    <div class="mg-inst">Drag the pre-send steps into the correct order to unlock the send button.</div>
+    <div class="drag-pool" id="g10-pool"></div>
+    <div class="seq-drop" id="g10-drop" ondragover="event.preventDefault();event.currentTarget.classList.add('drag-over')" ondragleave="event.currentTarget.classList.remove('drag-over')" ondrop="seqDrop(event,'g10')"></div>
+    <button class="mg-btn" onclick="seqCheckCountdown('g10')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="seqInit('g10')">Reset</button>
+    <div class="countdown-wrap" id="g10-countdown"></div>
+    <div class="mg-result" id="g10-result"></div>
+  </div>
+
+  <div class="yt-wrap">
+    <div class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/1XctnF7C74s?rel=0&enablejsapi=1" title="Professional Email Writing — Full Walkthrough" allowfullscreen></iframe></div>
+    <div class="yt-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Watch: Professional Email Writing — Full Walkthrough</div>
+  </div>
+
+  <div class="checkpoint" id="cp-10">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 10 Knowledge Check</span></div>
+    <div id="cp-10-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-10-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-10-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA read an email out loud before sending it?</p>
+        <div class="cp-opts" id="cp-10-opts">
+          <label><input type="radio" name="cp10" value="a"> It forces you to slow down enough to notice awkward phrasing and tone problems that silent skimming often misses</label>
+          <label><input type="radio" name="cp10" value="b"> It is required by every email platform</label>
+          <label><input type="radio" name="cp10" value="c"> It replaces the need for a subject line</label>
+          <label><input type="radio" name="cp10" value="d"> It guarantees the recipient will reply faster</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-10-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(10,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-10-cont" onclick="unlockFinal()">See Key Takeaways →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== FINAL BLOCK ===== -->
+<div class="final-block" id="final-block">
+  <div class="takeaways">
+    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg> Key Takeaways</h3>
+    <ul class="checklist">
+      <li>Every email sent under a client's name is read as if the client personally wrote it — email writing is a core trust skill</li>
+      <li>A professional email has seven components: subject line, greeting, opening line, body, CTA, closing, and signature</li>
+      <li>The subject line is the most important sentence in the email — make it specific, clear, and actionable</li>
+      <li>Match tone to the relationship, mirroring the client's existing voice rather than your own natural style</li>
+      <li>Follow the one-screen rule, lead with the point, and cut filler phrases before sending</li>
+      <li>Every email needs exactly one clear call to action, ideally with a specific deadline</li>
+      <li>Keep the 10 essential templates ready, and always personalize them before sending</li>
+      <li>Triage every incoming email into Reply Now, Flag for Client, Archive, or Needs Template</li>
+      <li>Watch for the recurring mistakes — especially reply-all errors, which are the hardest to undo</li>
+      <li>Run a fixed pre-send checklist and read every email out loud before sending — the 60-second rule saves relationships</li>
+    </ul>
+  </div>
+  <div class="complete-wrap">
+    <p>You have completed LES022. Mark this lesson as complete to unlock the next lesson in Module 8.</p>
+    <button class="btn-complete" id="btn-mark-complete" onclick="markLessonComplete()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Mark Lesson as Complete</button>
+    <div id="complete-msg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:6px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Lesson marked complete!</div>
+  </div>
+</div>
+
+</div>
+<script>
+const LESSON_ID = "LES022";
+const SAVE_KEY = "lhph_LES022";
+let TOTAL_SECTIONS = 1;
+
+let state = {
+  sectionsUnlocked: 1,
+  sectionsDone: [],
+  cpPassed: [],
+  finalUnlocked: false,
+  lessonCompleted: false
+};
+
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) { const saved = JSON.parse(raw); state = Object.assign({}, state, saved); }
+  } catch(e) {}
+}
+
+function updateProgress() {
+  const label = document.getElementById("progress-label");
+  const pct = document.getElementById("progress-pct");
+  const fill = document.getElementById("progress-fill");
+  const done = state.sectionsDone.length;
+  const percent = Math.round((done / TOTAL_SECTIONS) * 100);
+  label.textContent = state.finalUnlocked ? "Lesson Complete Area" : ("Section " + state.sectionsUnlocked + " of " + TOTAL_SECTIONS);
+  pct.textContent = percent + "% complete";
+  fill.style.width = percent + "%";
+}
+
+function updateTOC() {
+  document.querySelectorAll(".toc-list a").forEach(a => {
+    const n = parseInt(a.dataset.toc, 10);
+    a.classList.remove("toc-locked", "toc-current", "toc-done");
+    if (state.sectionsDone.indexOf(n) !== -1) { a.classList.add("toc-done"); }
+    else if (n === state.sectionsUnlocked) { a.classList.add("toc-current"); }
+    else if (n > state.sectionsUnlocked) { a.classList.add("toc-locked"); }
+  });
+}
+
+function unlockSection(n) {
+  if (!state.sectionsDone.includes(n - 1) && n > 1) { state.sectionsDone.push(n - 1); }
+  state.sectionsUnlocked = Math.max(state.sectionsUnlocked, n);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const target = document.getElementById("s" + n);
+  if (target) { target.classList.add("is-visible"); target.scrollIntoView({behavior:"smooth", block:"start"}); }
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockFinal() {
+  if (!state.sectionsDone.includes(TOTAL_SECTIONS)) { state.sectionsDone.push(TOTAL_SECTIONS); }
+  state.finalUnlocked = true;
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const fb = document.getElementById("final-block");
+  fb.classList.add("is-visible");
+  fb.scrollIntoView({behavior:"smooth", block:"start"});
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockCP(n) {
+  const locked = document.getElementById("cp-" + n + "-locked");
+  const content = document.getElementById("cp-" + n + "-content");
+  if (locked) locked.style.display = "none";
+  if (content) content.style.display = "block";
+}
+
+function checkAnswer(n, correctVal) {
+  const opts = document.querySelectorAll("input[name=cp" + n + "]");
+  let chosen = null;
+  opts.forEach(o => { if (o.checked) chosen = o.value; });
+  const fb = document.getElementById("cp-" + n + "-fb");
+  const labels = document.querySelectorAll("#cp-" + n + "-opts label");
+  labels.forEach(l => l.classList.remove("opt-correct", "opt-incorrect"));
+  if (!chosen) {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Please choose an answer first.";
+    return;
+  }
+  if (chosen === correctVal) {
+    fb.className = "checkpoint-feedback fb-correct";
+    fb.style.display = "block";
+    fb.textContent = "Correct! Great work.";
+    opts.forEach(o => { if (o.value === correctVal) o.closest("label").classList.add("opt-correct"); });
+    document.getElementById("cp-" + n + "-passed").style.display = "flex";
+    document.getElementById("cp-" + n + "-cont").style.display = "inline-flex";
+    if (!state.cpPassed.includes(n)) { state.cpPassed.push(n); }
+    save();
+  } else {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Not quite — review the section above and try again.";
+    opts.forEach(o => {
+      if (o.value === chosen) o.closest("label").classList.add("opt-incorrect");
+    });
+  }
+}
+
+function markLessonComplete() {
+  state.lessonCompleted = true;
+  save();
+  document.getElementById("btn-mark-complete").disabled = true;
+  document.getElementById("complete-msg").style.display = "block";
+  try{window.parent.postMessage({action:"lessonComplete"},"*");}catch(e){}
+}
+
+function restoreUI() {
+  if (state.lessonCompleted) {
+    document.querySelectorAll(".section").forEach(s => s.classList.add("is-visible"));
+    document.getElementById("final-block").classList.add("is-visible");
+    for (let i = 1; i <= TOTAL_SECTIONS; i++) {
+      unlockCP(i);
+      const passedNote = document.getElementById("cp-" + i + "-passed");
+      if (passedNote) passedNote.style.display = "flex";
+      const cont = document.getElementById("cp-" + i + "-cont");
+      if (cont) cont.style.display = "inline-flex";
+    }
+    document.getElementById("btn-mark-complete").disabled = true;
+    document.getElementById("complete-msg").style.display = "block";
+    state.sectionsUnlocked = TOTAL_SECTIONS;
+    state.finalUnlocked = true;
+    updateProgress(); updateTOC();
+    return;
+  }
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const cur = document.getElementById("s" + state.sectionsUnlocked);
+  if (cur) cur.classList.add("is-visible");
+  if (state.finalUnlocked) { document.getElementById("final-block").classList.add("is-visible"); }
+  state.cpPassed.forEach(n => {
+    unlockCP(n);
+    const passedNote = document.getElementById("cp-" + n + "-passed");
+    if (passedNote) passedNote.style.display = "flex";
+    const cont = document.getElementById("cp-" + n + "-cont");
+    if (cont) cont.style.display = "inline-flex";
+  });
+  updateProgress(); updateTOC();
+}
+
+/* ============ CONFETTI ============ */
+function confettiBurst() {
+  const colors = ["#5a8a6a","#8fb89c","#f0a868","#ffffff"];
+  for (let i = 0; i < 16; i++) {
+    const c = document.createElement("div");
+    c.style.position = "fixed";
+    c.style.left = (40 + Math.random()*20) + "vw";
+    c.style.top = "40vh";
+    c.style.width = "8px"; c.style.height = "8px";
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = "2px";
+    c.style.zIndex = 5000;
+    c.style.transition = "transform 1s ease, opacity 1s ease";
+    document.body.appendChild(c);
+    requestAnimationFrame(() => {
+      c.style.transform = "translate(" + ((Math.random()-0.5)*200) + "px," + (200 + Math.random()*200) + "px) rotate(" + (Math.random()*720) + "deg)";
+      c.style.opacity = "0";
+    });
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+/* ============ UNIVERSAL TOUCH-DRAG SUPPORT ============ */
+let touchDragEl = null;
+function makeDraggable(el, gid) {
+  el.draggable = true;
+  el.addEventListener("touchstart", () => {
+    touchDragEl = el;
+    el.classList.add("dragging");
+  }, {passive:true});
+  el.addEventListener("touchmove", e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    const under = document.elementFromPoint(t.clientX, t.clientY);
+    document.querySelectorAll(".drag-over").forEach(z => z.classList.remove("drag-over"));
+    const zone = under && under.closest(".drag-zone, .seq-drop, .slot-target");
+    if (zone) zone.classList.add("drag-over");
+  }, {passive:false});
+  el.addEventListener("touchend", e => {
+    el.classList.remove("dragging");
+    document.querySelectorAll(".drag-over").forEach(z => z.classList.remove("drag-over"));
+    const t = e.changedTouches[0];
+    const under = document.elementFromPoint(t.clientX, t.clientY);
+    handleManualDrop(el, under, gid);
+    touchDragEl = null;
+  });
+}
+function handleManualDrop(el, targetEl, gid) {
+  if (!targetEl) return;
+  const zone = targetEl.closest(".drag-zone");
+  if (zone) { zone.appendChild(el); return; }
+  const seqZone = targetEl.closest(".seq-drop");
+  if (seqZone) { seqZone.appendChild(el); seqRenumber(seqZone); return; }
+  const slotZone = targetEl.closest(".slot-target");
+  if (slotZone) { slotPlace(gid, el, slotZone); return; }
+  const reorderItem = targetEl.closest(".reorder-item");
+  if (reorderItem && reorderItem !== el) {
+    const list = reorderItem.parentElement;
+    list.insertBefore(el, reorderItem);
+    reorderRenumber(list);
+    return;
+  }
+  const pool = targetEl.closest(".drag-pool, .slot-pool, .reorder-list");
+  if (pool) { pool.appendChild(el); if (pool.classList.contains("reorder-list")) reorderRenumber(pool); return; }
+}
+
+/* ============ GENERIC DRAG-ZONE ENGINE (2-4 zones) ============ */
+const dzData = {};
+function dzMakeCard(text, gid) {
+  const el = document.createElement("div");
+  el.className = "drag-card";
+  el.textContent = text;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  makeDraggable(el, gid);
+  return el;
+}
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
+function dzLeave(e) { e.currentTarget.classList.remove("drag-over"); }
+function dzDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const dragging = document.querySelector(".drag-card.dragging") || Array.from(document.querySelectorAll(".drag-card")).find(c => c.textContent === text);
+  if (dragging) { e.currentTarget.appendChild(dragging); }
+}
+function dzInit(gid) {
+  const conf = dzData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  pool.innerHTML = "";
+  conf.zones.forEach(z => {
+    const zone = document.getElementById(gid + "-zone-" + z);
+    if (zone) { Array.from(zone.children).forEach(c => { if (c.classList && c.classList.contains("drag-card")) c.remove(); }); }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => pool.appendChild(dzMakeCard(item.text, gid)));
+}
+function dzCheck(gid) {
+  const conf = dzData[gid];
+  const zoneEls = conf.zones.map(z => document.getElementById(gid + "-zone-" + z));
+  let correct = 0, total = conf.items.length, placed = 0;
+  conf.items.forEach(item => {
+    for (let zi = 0; zi < zoneEls.length; zi++) {
+      const zone = zoneEls[zi];
+      const cards = Array.from(zone.querySelectorAll(".drag-card"));
+      const card = cards.find(c => c.textContent === item.text);
+      if (card) {
+        placed++;
+        if (conf.zones[zi] === item.zone) { correct++; card.classList.remove("wrong-shake"); void card.offsetWidth; card.classList.add("correct-flash"); }
+        else { card.classList.remove("correct-flash"); void card.offsetWidth; card.classList.add("wrong-shake"); }
+      }
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (placed < total) {
+    result.className = "mg-result lose";
+    result.textContent = "Place all " + total + " items into a zone first (" + placed + " placed).";
+    return;
+  }
+  if (correct === total) {
+    result.className = "mg-result win";
+    result.textContent = "All " + total + " correct! Excellent sorting.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + total + " correct. Check the shaking cards and try again.";
+  }
+}
+
+/* ============ GENERIC SEQUENCER ENGINE ============ */
+const seqData = {};
+function seqMakeItem(text, gid) {
+  const el = document.createElement("div");
+  el.className = "step-item";
+  el.dataset.text = text;
+  el.innerHTML = "<span class='step-num'>-</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  makeDraggable(el, gid);
+  return el;
+}
+function seqRenumber(container) {
+  Array.from(container.children).forEach((el, i) => {
+    const numSpan = el.querySelector(".step-num");
+    if (numSpan) numSpan.textContent = i + 1;
+  });
+}
+function seqInit(gid) {
+  const conf = seqData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  const drop = document.getElementById(gid + "-drop");
+  pool.innerHTML = ""; drop.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const cd = document.getElementById(gid + "-countdown");
+  if (cd) cd.innerHTML = "";
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach(t => pool.appendChild(seqMakeItem(t, gid)));
+  pool.addEventListener("dragover", e => e.preventDefault());
+  pool.addEventListener("drop", e => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+    if (dragging) pool.appendChild(dragging);
+    seqRenumber(drop);
+  });
+}
+function seqDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const drop = document.getElementById(gid + "-drop");
+  const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+  if (dragging) { drop.appendChild(dragging); seqRenumber(drop); }
+}
+function seqCheckCountdown(gid) {
+  const conf = seqData[gid];
+  const drop = document.getElementById(gid + "-drop");
+  const items = Array.from(drop.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  const cdWrap = document.getElementById(gid + "-countdown");
+  cdWrap.innerHTML = "";
+  if (items.length < conf.order.length) {
+    result.className = "mg-result lose";
+    result.textContent = "Drag all " + conf.order.length + " steps into the sequence first.";
+    return;
+  }
+  let correct = true;
+  for (let i = 0; i < conf.order.length; i++) { if (items[i] !== conf.order[i]) { correct = false; break; } }
+  if (!correct) {
+    result.className = "mg-result lose";
+    result.textContent = "That order is not quite right yet. Rearrange and check again.";
+    Array.from(drop.children).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+    return;
+  }
+  result.className = "mg-result"; result.textContent = "";
+  let n = 3;
+  cdWrap.innerHTML = "<div class='countdown-num'>" + n + "</div>";
+  const iv = setInterval(() => {
+    n--;
+    if (n > 0) { cdWrap.innerHTML = "<div class='countdown-num'>" + n + "</div>"; }
+    else {
+      clearInterval(iv);
+      cdWrap.innerHTML = "<div class='countdown-num'>Sent!</div>";
+      result.className = "mg-result win";
+      result.textContent = "Perfect pre-send order! Your email is ready to go.";
+      confettiBurst();
+      unlockCP(conf.cp);
+    }
+  }, 700);
+}
+
+/* ============ TRUE/FALSE GRID ENGINE ============ */
+const tfData = {};
+function tfInit(gid) {
+  const conf = tfData[gid];
+  const grid = document.getElementById(gid + "-grid");
+  grid.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  conf.cards.forEach((card, i) => {
+    const el = document.createElement("div");
+    el.className = "tf-card";
+    el.dataset.answer = card.answer ? "true" : "false";
+    el.dataset.chosen = "";
+    el.innerHTML = "<div class='tf-text'>" + card.text + "</div><div class='tf-btns'><button type='button' class='tf-btn' onclick=\"tfPick('" + gid + "'," + i + ",true,this)\">True</button><button type='button' class='tf-btn' onclick=\"tfPick('" + gid + "'," + i + ",false,this)\">False</button></div>";
+    grid.appendChild(el);
+  });
+}
+function tfPick(gid, idx, val, btn) {
+  const card = document.querySelectorAll("#" + gid + "-grid .tf-card")[idx];
+  card.dataset.chosen = val ? "true" : "false";
+  card.querySelectorAll(".tf-btn").forEach(b => b.classList.remove("chosen"));
+  btn.classList.add("chosen");
+}
+function tfSubmit(gid) {
+  const conf = tfData[gid];
+  const cards = document.querySelectorAll("#" + gid + "-grid .tf-card");
+  let unanswered = 0, correct = 0;
+  cards.forEach(card => {
+    if (!card.dataset.chosen) { unanswered++; return; }
+    if (card.dataset.chosen === card.dataset.answer) {
+      correct++;
+      card.classList.remove("wrong-shake"); void card.offsetWidth; card.classList.add("correct-flash");
+    } else {
+      card.classList.remove("correct-flash"); void card.offsetWidth; card.classList.add("wrong-shake");
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (unanswered > 0) {
+    result.className = "mg-result lose";
+    result.textContent = "Please answer all " + cards.length + " statements first.";
+    return;
+  }
+  if (correct === cards.length) {
+    result.className = "mg-result win";
+    result.textContent = "All " + cards.length + " correct!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + cards.length + " correct. Fix the shaking cards and submit again.";
+  }
+}
+
+/* ============ GENERIC SLOT (SINGLE-TARGET DRAG) ENGINE ============ */
+const slotData = {};
+function slotChip(text, gid) {
+  const el = document.createElement("div");
+  el.className = "drag-card";
+  el.textContent = text;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  makeDraggable(el, gid);
+  return el;
+}
+function slotPlace(gid, chip, targetEl) {
+  const existing = targetEl.querySelector(".drag-card");
+  if (existing && existing !== chip) { document.getElementById(gid + "-pool").appendChild(existing); }
+  targetEl.innerHTML = "";
+  targetEl.appendChild(chip);
+  targetEl.classList.add("filled");
+  targetEl.classList.remove("slot-correct", "slot-wrong");
+}
+function slotDrop(e, gid, targetId) {
+  e.preventDefault();
+  const targetEl = document.getElementById(gid + "-slot-" + targetId);
+  targetEl.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const chip = document.querySelector(".drag-card.dragging") || Array.from(document.querySelectorAll(".drag-card")).find(c => c.textContent === text);
+  if (chip) slotPlace(gid, chip, targetEl);
+}
+function slotInit(gid) {
+  const conf = slotData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  pool.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  const labels = conf.targets.map(t => t.correct);
+  const shuffled = [...labels].sort(() => Math.random() - 0.5);
+  shuffled.forEach(l => pool.appendChild(slotChip(l, gid)));
+  if (conf.mode === "email") {
+    const wrap = document.getElementById(gid + "-email");
+    wrap.className = "email-diagram";
+    wrap.innerHTML = "";
+    conf.targets.forEach(t => {
+      const line = document.createElement("div");
+      line.className = "email-line";
+      line.innerHTML = "<span class='email-part-text'>" + t.context + "</span>";
+      const target = document.createElement("div");
+      target.className = "slot-target";
+      target.id = gid + "-slot-" + t.id;
+      target.textContent = "Drop label here";
+      target.addEventListener("dragover", e => { e.preventDefault(); target.classList.add("drag-over"); });
+      target.addEventListener("dragleave", () => target.classList.remove("drag-over"));
+      target.addEventListener("drop", e => slotDrop(e, gid, t.id));
+      line.appendChild(target);
+      wrap.appendChild(line);
+    });
+  } else if (conf.mode === "ladder") {
+    const wrap = document.getElementById(gid + "-ladder");
+    wrap.innerHTML = "";
+    conf.targets.forEach((t, i) => {
+      const col = document.createElement("div");
+      col.className = "rank-slot-col";
+      const lab = document.createElement("div");
+      lab.className = "rank-slot-label";
+      lab.textContent = (i + 1) + (i === 0 ? " Weakest" : (i === conf.targets.length - 1 ? " Strongest" : ""));
+      const target = document.createElement("div");
+      target.className = "slot-target";
+      target.id = gid + "-slot-" + t.id;
+      target.textContent = "Drop here";
+      target.addEventListener("dragover", e => { e.preventDefault(); target.classList.add("drag-over"); });
+      target.addEventListener("dragleave", () => target.classList.remove("drag-over"));
+      target.addEventListener("drop", e => slotDrop(e, gid, t.id));
+      col.appendChild(lab); col.appendChild(target);
+      wrap.appendChild(col);
+    });
+  }
+}
+function slotCheck(gid) {
+  const conf = slotData[gid];
+  let correct = 0, filled = 0;
+  conf.targets.forEach(t => {
+    const target = document.getElementById(gid + "-slot-" + t.id);
+    const chip = target.querySelector(".drag-card");
+    if (chip) {
+      filled++;
+      if (chip.textContent === t.correct) { target.classList.add("slot-correct"); target.classList.remove("slot-wrong"); correct++; }
+      else { target.classList.add("slot-wrong"); target.classList.remove("slot-correct"); }
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (filled < conf.targets.length) {
+    result.className = "mg-result lose";
+    result.textContent = "Fill all " + conf.targets.length + " slots first.";
+    return;
+  }
+  if (correct === conf.targets.length) {
+    result.className = "mg-result win";
+    result.textContent = "All " + correct + " correct! Well done.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + conf.targets.length + " correct. Check the highlighted slots.";
+  }
+}
+
+/* ============ REORDER (IN-PLACE SORTABLE) ENGINE ============ */
+const reorderData = {};
+function reorderMakeItem(text, gid) {
+  const el = document.createElement("div");
+  el.className = "reorder-item";
+  el.dataset.text = text;
+  el.innerHTML = "<span class='reorder-num'>-</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", () => { el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => { el.classList.remove("dragging"); if (el.parentElement) reorderRenumber(el.parentElement); });
+  makeDraggable(el, gid);
+  return el;
+}
+function reorderRenumber(list) {
+  Array.from(list.children).forEach((el, i) => {
+    const n = el.querySelector(".reorder-num");
+    if (n) n.textContent = i + 1;
+  });
+}
+function reorderGetAfterElement(container, y) {
+  const items = Array.from(container.querySelectorAll(".reorder-item:not(.dragging)"));
+  let closest = {offset: -Infinity, element: null};
+  items.forEach(child => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) { closest = {offset, element: child}; }
+  });
+  return closest.element;
+}
+function reorderInit(gid) {
+  const conf = reorderData[gid];
+  const list = document.getElementById(gid + "-list");
+  list.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach(t => list.appendChild(reorderMakeItem(t, gid)));
+  reorderRenumber(list);
+  list.addEventListener("dragover", e => {
+    e.preventDefault();
+    const dragging = list.querySelector(".dragging");
+    if (!dragging) return;
+    const afterEl = reorderGetAfterElement(list, e.clientY);
+    if (afterEl == null) { list.appendChild(dragging); } else { list.insertBefore(dragging, afterEl); }
+    reorderRenumber(list);
+  });
+}
+function reorderCheck(gid) {
+  const conf = reorderData[gid];
+  const list = document.getElementById(gid + "-list");
+  const items = Array.from(list.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  let correct = true;
+  for (let i = 0; i < conf.order.length; i++) { if (items[i] !== conf.order[i]) { correct = false; break; } }
+  if (correct) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect ranking, worst to best!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "Not quite the right order yet. Keep dragging to rearrange.";
+    Array.from(list.children).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+  }
+}
+
+/* ============ SENTENCE TRIMMER (INLINE CLICK-TO-CUT) ENGINE ============ */
+const trimData = {};
+function trimInit(gid) {
+  const conf = trimData[gid];
+  const wrap = document.getElementById(gid + "-passage");
+  wrap.innerHTML = "";
+  document.getElementById(gid + "-fill").style.width = "0%";
+  document.getElementById(gid + "-pct").textContent = "0% clarity";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  let fillerIdx = 0;
+  conf.segments.forEach((seg, i) => {
+    if (seg.filler) {
+      const span = document.createElement("span");
+      span.className = "trim-phrase";
+      span.textContent = seg.text;
+      span.dataset.idx = i;
+      span.onclick = () => trimClick(gid, span);
+      wrap.appendChild(span);
+    } else {
+      wrap.appendChild(document.createTextNode(seg.text));
+    }
+  });
+}
+function trimClick(gid, span) {
+  if (span.classList.contains("cut")) return;
+  span.classList.add("cut");
+  const conf = trimData[gid];
+  const totalFiller = conf.segments.filter(s => s.filler).length;
+  const cutCount = document.querySelectorAll("#" + gid + "-passage .trim-phrase.cut").length;
+  const pct = Math.round((cutCount / totalFiller) * 100);
+  document.getElementById(gid + "-fill").style.width = pct + "%";
+  document.getElementById(gid + "-pct").textContent = pct + "% clarity";
+  if (cutCount === totalFiller) {
+    const result = document.getElementById(gid + "-result");
+    result.className = "mg-result win";
+    result.textContent = "100% clarity! All filler phrases cut.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  }
+}
+
+/* ============ HIGHLIGHT (INLINE CLICK-TO-TOGGLE, AUTO-CHECK) ENGINE ============ */
+const highlightData = {};
+function highlightInit(gid) {
+  const conf = highlightData[gid];
+  const wrap = document.getElementById(gid + "-passage");
+  wrap.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  const totalTargets = conf.segments.filter(s => s.type === "target").length;
+  document.getElementById(gid + "-count").textContent = "Found: 0 / " + totalTargets;
+  conf.segments.forEach(seg => {
+    if (seg.type === "target" || seg.type === "decoy") {
+      const span = document.createElement("span");
+      span.className = "hl-phrase";
+      span.textContent = seg.text;
+      span.dataset.type = seg.type;
+      span.onclick = () => highlightClick(gid, span);
+      wrap.appendChild(span);
+    } else {
+      wrap.appendChild(document.createTextNode(seg.text));
+    }
+  });
+}
+function highlightClick(gid, span) {
+  span.classList.toggle("hl-on");
+  const conf = highlightData[gid];
+  const totalTargets = conf.segments.filter(s => s.type === "target").length;
+  const wrap = document.getElementById(gid + "-passage");
+  const correctOn = wrap.querySelectorAll(".hl-phrase.hl-on[data-type=target]").length;
+  const wrongOn = wrap.querySelectorAll(".hl-phrase.hl-on[data-type=decoy]").length;
+  document.getElementById(gid + "-count").textContent = "Found: " + correctOn + " / " + totalTargets;
+  if (wrongOn > 0) { span.classList.add("wrong-shake"); setTimeout(() => span.classList.remove("wrong-shake"), 500); }
+  if (correctOn === totalTargets && wrongOn === 0) {
+    const result = document.getElementById(gid + "-result");
+    result.className = "mg-result win";
+    result.textContent = "All personalization spots found, with no fixed text mistakenly flagged!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  }
+}
+
+/* ============ MISTAKE SPOTTER (INLINE CLICK-TO-FLAG, EXPLICIT CHECK) ENGINE ============ */
+const mistakeData = {};
+function mistakeInit(gid) {
+  const conf = mistakeData[gid];
+  const wrap = document.getElementById(gid + "-passage");
+  wrap.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  conf.segments.forEach(seg => {
+    if (seg.type === "error" || seg.type === "decoy") {
+      const span = document.createElement("span");
+      span.className = "mistake-phrase";
+      span.textContent = seg.text;
+      span.dataset.type = seg.type;
+      span.dataset.flagged = "0";
+      span.onclick = () => {
+        const on = span.dataset.flagged === "1";
+        span.dataset.flagged = on ? "0" : "1";
+        span.classList.toggle("flagged");
+      };
+      wrap.appendChild(span);
+    } else {
+      wrap.appendChild(document.createTextNode(seg.text));
+    }
+  });
+}
+function mistakeCheck(gid) {
+  const conf = mistakeData[gid];
+  const wrap = document.getElementById(gid + "-passage");
+  const totalErrors = conf.segments.filter(s => s.type === "error").length;
+  const flaggedErrors = wrap.querySelectorAll('.mistake-phrase.flagged[data-type="error"]').length;
+  const flaggedDecoys = wrap.querySelectorAll('.mistake-phrase.flagged[data-type="decoy"]').length;
+  const result = document.getElementById(gid + "-result");
+  if (flaggedErrors === totalErrors && flaggedDecoys === 0) {
+    result.className = "mg-result win";
+    result.textContent = "All " + totalErrors + " mistakes correctly flagged, with no false flags!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "Found " + flaggedErrors + " of " + totalErrors + " mistakes, with " + flaggedDecoys + " incorrect flags. Adjust and check again.";
+  }
+}
+
+/* ============ GAME 1: Email Impact Check (True/False) ============ */
+tfData.g1 = { cp: 1, cards: [
+  { text: "Every email sent under a client's name is read as if the client personally wrote it.", answer: true },
+  { text: "Reading a client's past sent emails before writing on their behalf is a waste of time.", answer: false },
+  { text: "A VA who buries the real message or rambles tends to lose client trust over time.", answer: true },
+  { text: "Tone mismatches between a VA's writing and a client's usual style are rarely noticed by anyone.", answer: false },
+  { text: "A clear, well-structured email quietly signals competence every time it's sent.", answer: true }
+]};
+
+/* ============ GAME 2: Email Anatomy Labeler ============ */
+slotData.g2 = { cp: 2, mode: "email", targets: [
+  { id: "subject", correct: "Subject Line", context: "Subject: Invoice #1042 — Approval Needed by Friday" },
+  { id: "greeting", correct: "Greeting", context: "Hi Marco," },
+  { id: "opening", correct: "Opening Line", context: "Hope your week is off to a good start." },
+  { id: "body", correct: "Body", context: "I've attached Invoice #1042 for the design work completed last month." },
+  { id: "cta", correct: "CTA", context: "Could you approve this by Friday so we can process payment on schedule?" },
+  { id: "closing", correct: "Closing", context: "Thanks so much for your help with this." },
+  { id: "signature", correct: "Signature", context: "Jamie Cruz — Admin Assistant to Alex Rivera" }
+]};
+
+/* ============ GAME 3: Subject Line Ranker (reorder, worst to best) ============ */
+reorderData.g3 = { cp: 3, order: [
+  "Hi",
+  "Quick Question",
+  "Update",
+  "Follow-Up: Proposal Sent Tuesday",
+  "Invoice #1042 — Approval Needed by Friday"
+]};
+
+/* ============ GAME 4: Tone Matcher ============ */
+dzData.g4 = { zones: ["formal","semi","conv"], cp: 4, items: [
+  { text: "I hope this email finds you well.", zone: "formal" },
+  { text: "I am writing regarding the attached agreement.", zone: "formal" },
+  { text: "Hope you had a good week.", zone: "semi" },
+  { text: "Wanted to touch base on the proposal.", zone: "semi" },
+  { text: "Hey Sam, quick one for you.", zone: "conv" },
+  { text: "Hope you're doing well!", zone: "conv" }
+]};
+
+/* ============ GAME 5: Sentence Trimmer ============ */
+trimData.g5 = { cp: 5, segments: [
+  { text: "I just wanted to reach out to ", filler: true },
+  { text: "let you know that ", filler: false },
+  { text: "just following up to see ", filler: true },
+  { text: "whether you had a chance to review the attached proposal. ", filler: false },
+  { text: "I was wondering if maybe ", filler: true },
+  { text: "you could send your feedback ", filler: false },
+  { text: "at your earliest convenience whenever you get a chance. ", filler: true },
+  { text: "Thanks so much for taking the time to look at this.", filler: false }
+]};
+
+/* ============ GAME 6: CTA Strength Sorter (slot ladder) ============ */
+slotData.g6 = { cp: 6, mode: "ladder", targets: [
+  { id: "r1", correct: "Whenever you get a chance." },
+  { id: "r2", correct: "Let me know your thoughts." },
+  { id: "r3", correct: "Just wanted to check in." },
+  { id: "r4", correct: "Could you confirm by Thursday whether this works for you?" },
+  { id: "r5", correct: "Can you send the signed contract back by end of day Friday?" }
+]};
+
+/* ============ GAME 7: Template Personalizer ============ */
+highlightData.g7 = { cp: 7, segments: [
+  { text: "Subject: Follow-Up: ", type: "text" },
+  { text: "[Original Topic]", type: "target" },
+  { text: " — Hi ", type: "text" },
+  { text: "[Name]", type: "target" },
+  { text: ", following up on ", type: "text" },
+  { text: "[Original Topic]", type: "target" },
+  { text: " from our call on ", type: "text" },
+  { text: "[Date]", type: "target" },
+  { text: ". Have you had a chance to review it? Happy to answer any questions. ", type: "text" },
+  { text: "Best,", type: "decoy" },
+  { text: " ", type: "text" },
+  { text: "[Your Name]", type: "target" }
+]};
+
+/* ============ GAME 8: Inbox Triage Sorter ============ */
+dzData.g8 = { zones: ["reply","flag","archive","template"], cp: 8, items: [
+  { text: "Can you confirm you got my last email?", zone: "reply" },
+  { text: "What time does the call start today?", zone: "reply" },
+  { text: "Partnership proposal — please review terms", zone: "flag" },
+  { text: "Legal notice regarding contract renewal", zone: "flag" },
+  { text: "Your subscription receipt for this month", zone: "archive" },
+  { text: "Newsletter: 5 productivity tips", zone: "archive" },
+  { text: "Following up on the invoice sent last week", zone: "template" },
+  { text: "Requesting a status update on the project", zone: "template" }
+]};
+
+/* ============ GAME 9: Email Mistake Spotter ============ */
+mistakeData.g9 = { cp: 9, segments: [
+  { text: "Hey!!! ", type: "error" },
+  { text: "sorry sorry SO sorry for the late reply on this, ", type: "error" },
+  { text: "here's the file you asked for last week", type: "decoy" },
+  { text: ", ", type: "text" },
+  { text: "ill get u the rest soon", type: "error" },
+  { text: ", ", type: "text" },
+  { text: "let me know whatever", type: "error" },
+  { text: ", thanks so much!!!", type: "text" }
+]};
+
+/* ============ GAME 10: Pre-Send Checklist Sequencer ============ */
+seqData.g10 = { cp: 10, order: [
+  "Check the subject line is specific and matches the email type",
+  "Confirm the recipient list — no accidental reply-all",
+  "Check the greeting matches the right formality level",
+  "Confirm tone matches the client's voice",
+  "Confirm the main point is in the first sentence",
+  "Check the body fits the one-screen rule",
+  "Confirm exactly one clear CTA with a deadline",
+  "Check the closing line matches the tone",
+  "Confirm the signature is complete and accurate",
+  "Confirm all mentioned attachments are actually attached"
+]};
+
+/* ============ SPLASH ANIMATION ============ */
+const spMsgs = [
+  [0, "Initializing LES022..."],
+  [15, "Loading lesson content..."],
+  [30, "Preparing activities and games..."],
+  [50, "Setting up your checkpoints..."],
+  [70, "Almost there..."],
+  [88, "LES022 is ready — launching!"]
+];
+let spStart = null;
+const SP_DURATION = 4000;
+function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+function spAnimate(ts) {
+  if (!spStart) spStart = ts;
+  const raw = Math.min((ts - spStart) / SP_DURATION, 1);
+  const pct = Math.round(easeInOut(raw) * 100);
+  document.getElementById("sp-fill").style.width = pct + "%";
+  document.getElementById("sp-pct").textContent = pct + "%";
+  let msg = spMsgs[0][1];
+  for (const [threshold, text] of spMsgs) { if (pct >= threshold) msg = text; }
+  document.getElementById("sp-msg").textContent = msg;
+  if (raw < 1) { requestAnimationFrame(spAnimate); }
+  else {
+    const sp = document.getElementById("splash");
+    sp.classList.add("fade-out");
+    setTimeout(() => { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 700);
+  }
+}
+
+/* ============ INIT ============ */
+window.addEventListener("DOMContentLoaded", () => {
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+  if (window.location.search.indexOf("completed=1") !== -1) {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      let s = raw ? JSON.parse(raw) : {};
+      s.lessonCompleted = true;
+      s.sectionsUnlocked = TOTAL_SECTIONS;
+      s.finalUnlocked = true;
+      s.sectionsDone = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.sectionsDone.push(i);
+      s.cpPassed = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.cpPassed.push(i);
+      localStorage.setItem(SAVE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+  load();
+  restoreUI();
+  tfInit("g1");
+  slotInit("g2");
+  reorderInit("g3");
+  dzInit("g4");
+  trimInit("g5");
+  slotInit("g6");
+  highlightInit("g7");
+  dzInit("g8");
+  mistakeInit("g9");
+  seqInit("g10");
+  requestAnimationFrame(spAnimate);
+});
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

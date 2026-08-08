@@ -58,7 +58,23 @@ function LessonPage() {
       }
       if (res?.error) throw new Error(res.error);
       if (!res?.lesson) throw new Error("Lesson unavailable. Please try again.");
-      setLesson(res.lesson);
+
+      // Lesson content now ships with the app (public/lessons/<id>.html) instead
+      // of being fetched from Drive at runtime. This lets us build/test/version
+      // every lesson, and removes the "is the Drive file even there" uncertainty.
+      // Metadata (Title, ModuleID, lock status) still comes from the sheet/API above.
+      let contentHTML = res.lesson.ContentHTML;
+      try {
+        const localRes = await fetch(`/lessons/${lessonId}.html`);
+        if (localRes.ok) {
+          contentHTML = await localRes.text();
+        }
+      } catch {
+        // Local file missing (e.g. a lesson not yet migrated) — fall back to
+        // whatever the API returned so nothing breaks for un-migrated lessons.
+      }
+
+      setLesson({ ...res.lesson, ContentHTML: contentHTML });
     } catch (e: any) {
       setError(e?.message || "Couldn't reach the server. Please check your connection and try again.");
     } finally {

@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p950:#1a0533;--p900:#2d0f54;--p800:#4c1a87;--p700:#6d28d9;
+  --p600:#7c3aed;--p500:#8b5cf6;--p400:#a78bfa;--p300:#c4b5fd;
+  --p100:#ede9fe;--p50:#f5f3ff;
+  --i500:#6366f1;--i600:#4f46e5;
+  --g500:#22c55e;--g400:#4ade80;--g600:#16a34a;
+  --a500:#f59e0b;--r500:#ef4444;
+  --s900:#0f172a;--s800:#1e293b;--s700:#334155;--s600:#475569;
+  --s500:#64748b;--s400:#94a3b8;--s300:#cbd5e1;--s200:#e2e8f0;
+  --s100:#f1f5f9;--s50:#f8fafc;--w:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--s800);background:var(--s50);padding:0 0 60px;line-height:1.6;font-size:14px}
+.topbar{background:var(--w);border-bottom:1px solid var(--s200);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.topbar img{height:28px}.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--s400);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,var(--p950) 0%,var(--p800) 45%,var(--i500) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--w);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.hero::after{content:"🎯";position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:90px;opacity:.07;pointer-events:none}
+.hero-tag{background:rgba(255,255,255,.12);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.18);color:var(--p300);position:relative}
+.hero h1{font-size:30px;font-weight:900;line-height:1.2;margin-bottom:12px;position:relative;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;position:relative;color:rgba(255,255,255,.75);margin-bottom:0!important}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;position:relative}
+.hero-meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.progress-wrap{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--p600);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--p700),var(--i500));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--w);border:1px solid var(--s200);border-left:3px solid var(--p500);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--p700);background:var(--p50)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--p700);font-weight:700;background:var(--p50)}
+.toc-list li a.toc-current::before{background:var(--p500)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.toc-status{margin-left:auto;font-size:11px}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-title{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--p100);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--p700),var(--i500));color:var(--w);font-size:10px;font-weight:800;flex-shrink:0}
+.card{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-purple{background:var(--p50);border-color:rgba(139,92,246,.3)}
+.card-green{background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.25)}
+.card-amber{background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--s800);font-weight:700}
+em{color:var(--p700);font-style:normal;font-weight:600}
+.img-block{border-radius:12px;overflow:hidden;margin-bottom:16px;border:1px solid var(--s200)}
+.img-block img{width:100%;display:block;object-fit:cover;max-height:240px}
+.img-caption{padding:10px 16px;font-size:12px;color:var(--s500);background:var(--w);border-top:1px solid var(--s200)}
+.definition{border-left:3px solid var(--p500);padding:16px 20px;background:var(--p50);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.definition p{font-size:13px;color:var(--s700);font-style:italic;margin:0;line-height:1.75}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--p600),var(--i500))}
+.stat-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--p700),var(--i500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.shift-table{width:100%;border-collapse:collapse;font-size:13px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0}
+.shift-table th{padding:12px 16px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--s200)}
+.shift-table th:first-child{background:#fef2f2;color:var(--r500)}
+.shift-table th:last-child{background:#f0fdf4;color:var(--g600)}
+.shift-table td{padding:12px 16px;border-bottom:1px solid var(--s100);color:var(--s600);vertical-align:top}
+.shift-table tr:last-child td{border-bottom:none}
+.col-bad{color:var(--r500)}.col-good{color:var(--g600)}
+.niche-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0;table-layout:fixed}
+.niche-table th{background:var(--p950);color:rgba(255,255,255,.75);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.niche-table th:nth-child(1){width:20%}.niche-table th:nth-child(2){width:22%}
+.niche-table th:nth-child(3){width:40%}.niche-table th:nth-child(4){width:18%}
+.niche-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.niche-table tr:last-child td{border-bottom:none}
+.niche-table tr:hover td{background:var(--p50)}
+.niche-tag{background:linear-gradient(135deg,var(--p700),var(--i500));color:var(--w);padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;line-height:1.5}
+.demand-high{color:var(--g600);font-size:11px;font-weight:700}
+.demand-med{color:var(--a500);font-size:11px;font-weight:700}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.pillar{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:18px 14px;text-align:center;transition:all .2s}
+.pillar:hover{border-color:var(--p400);transform:translateY(-3px);box-shadow:0 4px 16px rgba(109,40,217,.12)}
+.pillar-icon{font-size:26px;margin-bottom:8px}.pillar-num{font-size:10px;font-weight:800;color:var(--p500);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.pillar-title{font-size:13px;font-weight:700;color:var(--s800);margin-bottom:5px}.pillar-desc{font-size:11px;color:var(--s500);line-height:1.6}
+.persona-card{background:var(--w);border:1px solid var(--s200);border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 4px 16px rgba(109,40,217,.12)}
+.persona-header{background:linear-gradient(135deg,var(--p950),var(--p700));padding:22px 26px;color:var(--w);display:flex;align-items:center;gap:18px}
+.persona-avatar{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:2px solid rgba(255,255,255,.25)}
+.persona-name{font-size:20px;font-weight:800}.persona-role{font-size:12px;color:var(--p300);margin-top:3px}
+.persona-body{padding:22px 26px}.persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.persona-field label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:5px}
+.persona-field p{font-size:13px;color:var(--s600);margin:0;line-height:1.65}
+.pain-gain{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.pain-box{background:#fef2f2;border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:18px 20px}
+.gain-box{background:#f0fdf4;border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:18px 20px}
+.pain-box .box-label{font-size:10px;font-weight:800;color:var(--r500);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.gain-box .box-label{font-size:10px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.pain-gain ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.pain-gain ul li{font-size:12px;color:var(--s600);line-height:1.55;padding-left:16px;position:relative}
+.pain-box ul li::before{content:"•";position:absolute;left:0;color:var(--r500)}
+.gain-box ul li::before{content:"•";position:absolute;left:0;color:var(--g500)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:12px}
+.checklist li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:var(--s600);line-height:1.7}
+.check-icon{width:20px;height:20px;border-radius:5px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:2px;color:var(--g600)}
+.timeline{list-style:none;position:relative;padding-left:30px;margin-bottom:16px}
+.timeline::before{content:"";position:absolute;left:10px;top:10px;bottom:10px;width:2px;background:linear-gradient(to bottom,var(--p500),var(--p100))}
+.tl-item{position:relative;margin-bottom:26px}.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-30px;top:4px;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--p700),var(--i500));border:3px solid var(--s50);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--w)}
+.tl-time{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tl-title{font-size:14px;font-weight:700;color:var(--s800);margin-bottom:5px}
+.tl-body{font-size:13px;color:var(--s500);line-height:1.7;background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:14px 16px;margin-top:8px}
+.tip-box,.warn-box,.success-box,.scenario-box{border-radius:12px;padding:18px 20px;margin:16px 0;display:flex;gap:14px}
+.tip-box{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-left:3px solid var(--a500)}
+.warn-box{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-left:3px solid var(--r500)}
+.success-box{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-left:3px solid var(--g500)}
+.scenario-box{background:var(--p50);border:1px solid rgba(139,92,246,.2);border-left:3px solid var(--p500)}
+.tip-icon,.warn-icon,.success-icon,.scenario-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.tip-label{color:var(--a500)}.warn-label{color:var(--r500)}.success-label{color:var(--g600)}.scenario-label{color:var(--p600)}
+.tip-label,.warn-label,.success-label,.scenario-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.tip-body p,.warn-body p,.success-body p,.scenario-body p{font-size:13px;color:var(--s600);margin:0;line-height:1.7}
+.quote-box{border-left:3px solid var(--p400);padding:16px 20px;background:var(--p50);border-radius:0 12px 12px 0;margin:12px 0}
+.quote-box p{font-size:13px;color:var(--s700);font-style:italic;margin:0 0 8px;line-height:1.7}
+.quote-author{font-size:11px;font-weight:700}
+.takeaways{background:linear-gradient(135deg,var(--p950),var(--p800));border-radius:16px;padding:28px;margin-bottom:24px;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.takeaways h3{font-size:15px;font-weight:800;color:var(--w);margin-bottom:20px}
+.takeaway-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.takeaway-list li{display:flex;align-items:flex-start;gap:12px;font-size:13px;color:rgba(255,255,255,.75);line-height:1.75}
+.tk-num{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--p300);flex-shrink:0;margin-top:1px}
+.yt-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--s200);margin-bottom:10px}
+.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.yt-label{font-size:12px;color:var(--s400);text-align:center;margin-bottom:20px}
+.worksheet{background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:24px;margin:16px 0}
+.worksheet-title{font-size:14px;font-weight:800;color:var(--s800);margin-bottom:4px}
+.worksheet-sub{font-size:12px;color:var(--s400);margin-bottom:18px}
+.ws-field{margin-bottom:14px}
+.ws-field label{font-size:10px;font-weight:800;color:var(--p600);text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:6px}
+.ws-field input,.ws-field textarea{width:100%;background:var(--s50);border:1px solid var(--s200);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--s800);font-family:inherit;outline:none;transition:border-color .15s}
+.ws-field input:focus,.ws-field textarea:focus{border-color:var(--p400);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
+.ws-field textarea{min-height:72px;resize:vertical}
+.complete-wrap{margin-top:28px;padding:32px;background:linear-gradient(135deg,var(--p950),var(--p800));border-radius:16px;text-align:center;box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.complete-wrap p{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:20px}
+.btn-complete{display:inline-flex;align-items:center;gap:10px;background:var(--g500);color:var(--w);border:none;border-radius:12px;padding:16px 40px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,197,94,.4);font-family:inherit}
+.btn-complete:hover{background:var(--g600);transform:translateY(-2px)}
+.btn-complete:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.5);cursor:not-allowed;box-shadow:none;transform:none}
+#complete-msg{margin-top:16px;font-size:13px;color:var(--g400);display:none;font-weight:600}
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--s200),transparent);margin:28px 0}
+/* CHECKPOINT */
+.checkpoint{margin-top:0;background:linear-gradient(135deg,var(--p950),var(--p900));border-radius:16px;overflow:hidden;border:1px solid rgba(139,92,246,.3);box-shadow:0 8px 32px rgba(109,40,217,.18)}
+.cp-locked{padding:24px;text-align:center}
+.cp-lock-icon{font-size:36px;margin-bottom:10px}
+.cp-lock-msg{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+.cp-lock-msg strong{color:var(--p300)}
+.cp-content{padding:24px 26px;display:none}
+.checkpoint-header{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--p400);margin-bottom:12px}
+.checkpoint-q{font-size:15px;font-weight:700;color:var(--w);margin-bottom:18px;line-height:1.5}
+.checkpoint-options{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.checkpoint-options label{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.8);cursor:pointer;transition:all .15s}
+.checkpoint-options label:hover{background:rgba(255,255,255,.1);border-color:rgba(139,92,246,.5)}
+.checkpoint-options label.opt-correct{background:rgba(34,197,94,.2);border-color:var(--g500);color:var(--w)}
+.checkpoint-options label.opt-incorrect{background:rgba(239,68,68,.2);border-color:var(--r500);color:var(--w)}
+.checkpoint-options input{accent-color:var(--p400)}
+.checkpoint-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-check{background:var(--w);color:var(--p800);border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-check:hover{background:var(--p100)}
+.checkpoint-feedback{font-size:13px;font-weight:600;margin-top:8px;display:none}
+.checkpoint-feedback.fb-correct{color:var(--g400)}.checkpoint-feedback.fb-incorrect{color:#fca5a5}
+.btn-continue{display:none;align-items:center;gap:8px;background:var(--g500);color:var(--w);border:none;border-radius:8px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;margin-top:14px;font-family:inherit;transition:all .15s}
+.btn-continue:hover{background:var(--g600)}
+.checkpoint.is-passed{background:linear-gradient(135deg,#052e16,#14532d);border-color:rgba(34,197,94,.3)}
+.cp-passed-note{display:none;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--g400);margin-top:8px}
+/* MINI GAME */
+.mini-game{background:linear-gradient(135deg,var(--p950),var(--p900));border:1px solid rgba(139,92,246,.35);border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-badge{background:linear-gradient(135deg,var(--p600),var(--i500));color:var(--w);font-size:10px;font-weight:800;padding:4px 12px;border-radius:99px;letter-spacing:.08em;text-transform:uppercase;display:inline-block;margin-bottom:10px}
+.mg-title{font-size:15px;font-weight:800;color:var(--w);margin-bottom:4px}
+.mg-desc{font-size:12px;color:var(--p300);margin-bottom:16px}
+.mg-result{font-size:13px;font-weight:700;margin-top:14px;min-height:20px;text-align:center}
+.mg-result.win{color:var(--g400)}.mg-result.lose{color:#fca5a5}
+.mg-btn{background:rgba(255,255,255,.12);color:var(--w);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.mg-btn:hover{background:rgba(255,255,255,.2)}
+.mg-btn.primary{background:linear-gradient(135deg,var(--p600),var(--i500));border-color:transparent}
+/* DRAG SORT */
+.sort-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sort-zone{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:12px;min-height:110px;transition:all .2s}
+.sort-zone.drag-over{border-color:var(--p400);background:rgba(139,92,246,.15)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.zone-label.bad{color:var(--r500)}.zone-label.good{color:var(--g400)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--w);cursor:grab;user-select:none;line-height:1.4;transition:all .15s}
+.drag-card:hover{background:rgba(255,255,255,.18);transform:scale(1.02)}
+.drag-card:active{cursor:grabbing}
+.drag-card.dragging{opacity:.4}
+/* TRUE FALSE */
+.tf-question{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+.tf-text{font-size:13px;color:var(--w);margin-bottom:10px;line-height:1.5}
+.tf-btns{display:flex;gap:8px}
+.tf-btn{flex:1;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.tf-btn.true-btn{background:rgba(34,197,94,.2);color:var(--g400);border:1px solid rgba(34,197,94,.3)}
+.tf-btn.false-btn{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.tf-btn.sel-correct{background:rgba(34,197,94,.5);color:var(--w);border-color:var(--g500)}
+.tf-btn.sel-wrong{background:rgba(239,68,68,.4);color:var(--w);border-color:var(--r500)}
+.tf-score{font-size:12px;color:var(--p300);text-align:right;margin-bottom:10px}
+/* DRAG ORDER */
+.step-pool,.step-drop-zone{display:flex;flex-direction:column;gap:8px}
+.step-drop-zone{min-height:120px;background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.14);border-radius:12px;padding:12px;margin-bottom:10px;transition:all .2s}
+.step-drop-zone.drag-over{border-color:var(--p400);background:rgba(139,92,246,.1)}
+.step-item{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--w);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.16)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--p300);flex-shrink:0}
+.step-drop-label{font-size:10px;font-weight:700;color:var(--p400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+/* MATCH PAIRS */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:var(--p400);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--w);cursor:pointer;transition:all .18s;min-height:48px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.13);border-color:var(--p400)}
+.match-item.selected{background:rgba(139,92,246,.3);border-color:var(--p400)}
+.match-item.matched{background:rgba(34,197,94,.18);border-color:var(--g500);cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.18);border-color:var(--r500)}
+.match-score{font-size:12px;color:var(--p300);margin-top:10px;text-align:center}
+/* WORD CHIPS */
+.word-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.word-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--w);cursor:pointer;user-select:none;transition:all .15s}
+.word-chip:hover{background:rgba(139,92,246,.3);border-color:var(--p400)}
+.word-chip.used{opacity:.28;cursor:not-allowed;pointer-events:none}
+.niche-output{background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:14px 16px;min-height:54px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;transition:all .2s}
+.niche-output.filled{color:var(--w);border-color:var(--p400);background:rgba(139,92,246,.08)}
+.chip-inline{background:rgba(139,92,246,.4);border-radius:4px;padding:1px 6px;margin:0 2px;color:var(--w)}
+/* SCENARIO SORT */
+.scenario-cards{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.sc-card{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px}
+.sc-text{font-size:12px;color:var(--w);line-height:1.6;margin-bottom:8px}
+.sc-btns{display:flex;gap:6px}
+.sc-btn{flex:1;border:none;border-radius:6px;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.sc-btn.good-btn{background:rgba(34,197,94,.2);color:var(--g400);border:1px solid rgba(34,197,94,.3)}
+.sc-btn.bad-btn{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.sc-card.done-good{background:rgba(34,197,94,.12);border-color:var(--g500)}
+.sc-card.done-bad{background:rgba(239,68,68,.08);border-color:var(--r500)}
+.sc-reveal{font-size:11px;font-weight:700;margin-top:6px;display:none;line-height:1.5}
+.sc-card.done-good .sc-reveal{display:block;color:var(--g400)}
+.sc-card.done-bad .sc-reveal{display:block;color:#fca5a5}
+/* PITCH BUILDER */
+.pitch-parts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.pitch-part{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.pitch-part:hover{background:rgba(255,255,255,.14);border-color:var(--p400)}
+.pitch-part.placed{background:rgba(34,197,94,.1);border-color:var(--g500);cursor:default;opacity:.55}
+.pitch-part.wrong-pick{border-color:var(--r500)!important;animation:shake .3s}
+.pitch-part-label{font-size:10px;font-weight:800;color:var(--p300);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.pitch-part-text{font-size:12px;color:var(--w);line-height:1.4}
+.pitch-output-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:12px;min-height:70px}
+.pitch-output-label{font-size:10px;font-weight:800;color:var(--p400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.pitch-built{display:flex;flex-direction:column;gap:6px}
+.pitch-built-item{background:rgba(139,92,246,.2);border:1px solid var(--p500);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--w);animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110px) rotate(720deg);opacity:0}}
+.confetti-p{position:absolute;border-radius:2px;animation:confettiFall 1s ease-out forwards;pointer-events:none}
+@media(max-width:640px){
+  .stat-row,.pillars,.pain-gain,.sort-zones,.match-grid,.persona-grid,.pitch-parts{grid-template-columns:1fr}
+  .hero h1{font-size:24px}.wrap{padding:16px 14px 0}.hero{padding:28px 22px}
+  .niche-table{font-size:11px}.niche-table th,.niche-table td{padding:8px 8px}
+}
+
+.platforms{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.plat{display:flex;align-items:center;gap:8px;background:var(--w);border:1px solid var(--s200);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;color:var(--s800);transition:border-color .2s}
+.plat:hover{border-color:var(--p400)}
+.plat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.plat-sub{font-size:10px;color:var(--s500);font-weight:400}
+.role-list{list-style:none;background:var(--w);border:1px solid var(--s200);border-radius:12px;overflow:hidden}
+.role-item{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border-bottom:1px solid var(--s200);transition:background .15s}
+.role-item:last-child{border-bottom:none}
+.role-item:hover{background:var(--p50)}
+.role-icon-wrap{width:42px;height:42px;border-radius:10px;background:var(--p50);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--p100)}
+.role-body{flex:1}.role-title{font-size:14px;font-weight:700;color:var(--s800);margin-bottom:3px}
+.role-desc{font-size:13px;color:var(--s600);line-height:1.65}
+.role-tools{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tool-tag{background:var(--p50);border:1px solid var(--p100);border-radius:99px;padding:3px 10px;font-size:10px;color:var(--p600);font-weight:600}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0;table-layout:fixed}
+.compare-table th{background:var(--p950);color:rgba(255,255,255,.8);padding:11px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.compare-table th:nth-child(1){width:22%}.compare-table th:nth-child(2){width:39%}.compare-table th:nth-child(3){width:39%}
+.compare-table td{padding:11px 14px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;vertical-align:top}
+.compare-table .label-col{font-weight:700;color:var(--s700);background:var(--s50)}
+.compare-table tr:last-child td{border-bottom:none}
+.badge-yes{background:rgba(34,197,94,.15);color:var(--g600);padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.badge-maybe{background:rgba(245,158,11,.12);color:var(--a500);padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.income-table{width:100%;border-collapse:collapse;font-size:13px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);margin:16px 0}
+.income-table th{background:var(--p950);color:rgba(255,255,255,.8);padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.income-table td{padding:11px 14px;border-bottom:1px solid var(--s100);color:var(--s600);vertical-align:top}
+.income-table tr:last-child td{border-bottom:none}
+.income-pill{background:rgba(34,197,94,.15);color:var(--g600);padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700}
+.quote{border-left:3px solid var(--g500);padding:14px 20px;background:rgba(34,197,94,.06);border-radius:0 10px 10px 0;margin:16px 0}
+.quote p{font-size:14px;color:var(--s600);font-style:italic;margin:0;line-height:1.7}
+.quote-author{font-size:11px;color:var(--s500);margin-top:6px}
+.habit-row{display:flex;align-items:flex-start;gap:16px;background:var(--w);border:1px solid var(--s200);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.habit-emoji{font-size:28px;flex-shrink:0;margin-top:2px}
+.habit-body{flex:1}
+.habit-title{font-size:14px;font-weight:700;color:var(--s800);margin-bottom:4px}
+.habit-desc{font-size:13px;color:var(--s600);line-height:1.7}
+.habit-badge{font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px;white-space:nowrap;align-self:flex-start;margin-top:2px}
+.badge-daily{background:rgba(99,102,241,.15);color:var(--i500)}
+.badge-weekly{background:rgba(245,158,11,.15);color:var(--a500)}
+.badge-always{background:rgba(34,197,94,.15);color:var(--g600)}
+
+/* SPLASH */
+#les-splash{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:linear-gradient(160deg,#1a0533 0%,#2d0f54 60%,#0d0d1f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;transition:opacity 0.7s,visibility 0.7s;}
+#les-splash.done{opacity:0;visibility:hidden;pointer-events:none;}
+.sp-eye{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#c4b5fd;margin-bottom:16px;}
+.sp-img{width:min(360px,88vw);border-radius:16px;overflow:hidden;border:2px solid rgba(139,92,246,.4);box-shadow:0 0 60px rgba(109,40,217,.5);margin-bottom:22px;}
+.sp-img img{width:100%;display:block;}
+.sp-title{font-size:17px;font-weight:800;color:#fff;text-align:center;margin-bottom:6px;font-family:Inter,sans-serif;}
+.sp-sub{font-size:12px;color:rgba(255,255,255,.45);text-align:center;margin-bottom:20px;font-family:Inter,sans-serif;}
+.sp-track{width:min(320px,80vw);height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-bottom:10px;}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,#7c3aed,#6366f1,#a78bfa);border-radius:99px;}
+.sp-row{display:flex;justify-content:space-between;width:min(320px,80vw);}
+.sp-msg{font-size:11px;color:#c4b5fd;font-weight:600;font-family:Inter,sans-serif;}
+.sp-pct{font-size:13px;color:#c4b5fd;font-weight:800;font-family:Inter,sans-serif;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<div id="les-splash">
+  <div class="sp-eye">LearnHub PH &nbsp;&middot;&nbsp; Module 1 &nbsp;&middot;&nbsp; Lesson 1</div>
+  <div class="sp-img"><img src="data:image/jpeg;base64,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AouFhvT2qWMdMjioxng4qaNecHJpSY0i7bj5hiuk01eRXPWyndxXT6YvQ1xVnocmK0idFaD5RWgnHNU7ZflFXF6V5stz5eq9Rw60tIKWoMQooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigDLmGQaybtODW3KvFZdynB4rpgztw8rM5e9Q5PFYdwnzGumvYzycVg3SYJrvoyPo6U7ozupqRfamuCDwKVDzzXS9jpiSj7pPNMZQegPNPUcc08qCOgqLmtinJGcZxUJXBzV9k+bI6VE8ZNXGRm4FQcHpT1c4605o+M96YUIPFaXTIs0SiYjjJp3nnuear7e/NJg9qXKh8zLHnnkZpjSk8c1HtOaUIetFkhXbAue/wBKTBNSrFk9KlSEngik5JDUWyJYvzqZYuOlTrD7cVIIxis3M0ULFfyxTGU49MVaKc4B/GoWUZ+vrSTKaIQMdRUkQ5pAowDzU8SZP402ybF6zTLA11OnR4AzXP2MeXFdXp8eAK4a8jysfUsrGvAuFqyOgqKIYAqauBnzc3dijpRRRUkBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAFSQcVQuEBzWk44qpMnHStYs6KUrM527iyDWBdRYJrrLqLIPFYV5D14rspSPdw9S6RzcqENjtUYGDV64i71UYYOK7k7o9GEhykdamHTp1qunLHip0I9alnTFjtoOOKa0ZPvUg547Gn4yOtTcGyo0XHNNMParm3I4oKj0p8zJ0KHk9BzxR5OPXFXvLFL5YA6U+di90pCCnrAcZq2EA9qcEHYUudic4orLD045qZIgDxUu30pccf4Urmcq/Yj2ClI7/0qTHSkI9BSM/atshYfSoGXrVk9Oox9ajIyelNOx1QldEAXJ6VZhQ7hTVTnNXIIwxAxSkxTkoo09Ph+YcV1FlHhRWNp0GMcV0dumFFcFaR81javMy0gp/emqMCniuVnksKKKKQgooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD//Z" alt="Social Media Manager"></div>
+  <div class="sp-title">What is Social Media Management?</div>
+  <div class="sp-sub">Hang tight &mdash; your lesson is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES001...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 1 &nbsp;·&nbsp; Lesson 1</span>
+</div>
+<div class="wrap">
+<div class="hero">
+  <div class="hero-tag">📌 MODULE 1 &nbsp;·&nbsp; LESSON 1 OF 3</div>
+  <h1>What is Social Media Management?</h1>
+  <p class="hero-sub">Welcome to your first lesson. Before you can manage social media for clients, you need to understand what Social Media Management actually is, why every business desperately needs it, what you will do every day, how much you can earn, and why you do not need experience to start. This lesson covers all of it — one section at a time.</p>
+  <div class="hero-meta">
+    <span>📖 ~30 min</span><span>🎯 Beginner</span><span>🎬 1 Video</span><span>🎮 9 Activities</span><span>🧠 9 Checkpoints</span>
+  </div>
+</div>
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 9</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+<div class="toc">
+  <div class="toc-title">📋 What is in this lesson</div>
+  <p class="toc-sub">Read the section → Complete the activity → Pass the checkpoint → Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. What is Social Media Management?</a></li>
+    <li><a href="#s2" data-toc="2">2. Why businesses cannot ignore social media</a></li>
+    <li><a href="#s3" data-toc="3">3. Platforms you will manage and what each one is for</a></li>
+    <li><a href="#s4" data-toc="4">4. What an SMM VA actually does every day</a></li>
+    <li><a href="#s5" data-toc="5">5. The 4 pillars of SMM</a></li>
+    <li><a href="#s6" data-toc="6">6. SMM vs Social Media Marketing — the difference</a></li>
+    <li><a href="#s7" data-toc="7">7. How much can you earn as an SMM VA?</a></li>
+    <li><a href="#s8" data-toc="8">8. A day in the life of an SMM VA</a></li>
+    <li><a href="#s9" data-toc="9">9. Do you need experience to start?</a></li>
+  </ul>
+</div>
+
+<!-- S1 -->
+<div class="section is-visible" id="s1" data-section="1">
+  <div class="section-title"><span class="sec-badge">1</span>📌 What is Social Media Management?</div>
+  <div class="img-block">
+    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80" alt="Social media apps on a phone">
+    <div class="img-caption">📱 Billions of people open these apps every single day — and businesses need to be there.</div>
+  </div>
+  <div class="definition">
+    <div class="def-label">Definition</div>
+    <p>Social Media Management (SMM) is the ongoing process of creating, publishing, scheduling, monitoring, analyzing, and engaging with content across a brand's social media accounts — on behalf of a business or individual — to grow their online presence and achieve their business goals.</p>
+  </div>
+  <div class="card">
+    <p>Think of social media like a business storefront on the internet. Just like a physical store needs someone to open the doors, arrange the displays, greet customers, and keep the place looking professional — a brand's social media pages need someone to keep them active, consistent, and engaging. That person is <strong>you</strong> — the SMM Virtual Assistant.</p>
+    <p>Business owners are busy running operations, managing staff, serving customers, and handling finances. They know they need to post on Facebook or Instagram — but they simply do not have the time or the consistent energy to do it well. That gap between what they know they need and what they can actually execute is exactly where you come in.</p>
+    <p>Social Media Management is <strong>not</strong> just "posting on social media." It is a professional service that includes strategy, content creation, scheduling, community engagement, analytics, and client reporting. When you deliver all of that for a client, you are not a hobbyist — you are a social media professional delivering real business results.</p>
+  </div>
+  <div class="quote">
+    <p>"Social media is no longer just a channel — it is the primary way customers discover, evaluate, and choose businesses today."</p>
+    <div class="quote-author">— HubSpot State of Marketing Report</div>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-icon">🎬</div>
+    <div class="scenario-body"><div class="scenario-label">Picture This</div>
+    <p>Maria owns a small bakery in Cavite. She is up at 4 AM baking, running the counter, and managing suppliers. She knows a Facebook Page could bring in new customers — but she has not posted in three weeks because she simply has no time. That is not a "someday" problem for Maria. It is a problem she will pay someone to solve today. That someone can be you.</p></div>
+  </div>
+  <div class="mini-game" id="game1">
+    <span class="mg-badge">🎮 Activity 1 — True or False?</span>
+    <div class="mg-title">What IS and IS NOT Social Media Management?</div>
+    <div class="mg-desc">Answer all 5 statements correctly to unlock the knowledge checkpoint below.</div>
+    <div class="tf-score" id="g1-score">Score: 0 / 5</div>
+    <div id="g1-qs"></div>
+    <div class="mg-result" id="g1-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-1">
+    <div class="cp-locked" id="cp-1-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Get all 5 <strong>True or False</strong> answers correct to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-1-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 1</div>
+      <p class="checkpoint-q">Beyond just posting, what does Social Media Management professionally include?</p>
+      <div class="checkpoint-options" id="cp-1-opts">
+        <label><input type="radio" name="cp1" value="a"> Only uploading photos whenever the business owner remembers</label>
+        <label><input type="radio" name="cp1" value="b"> Strategy, content creation, scheduling, community engagement, analytics, and reporting</label>
+        <label><input type="radio" name="cp1" value="c"> Only running paid Facebook and Instagram ads</label>
+        <label><input type="radio" name="cp1" value="d"> Only replying to comments and DMs once a week</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(1,'b')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-1-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-1-fb"></div>
+      <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue to Section 2 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S2 -->
+<div class="section" id="s2" data-section="2">
+  <div class="section-title"><span class="sec-badge">2</span>📊 Why businesses cannot ignore social media</div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">5.2B</div><div class="stat-label">Social media users worldwide as of 2024</div></div>
+    <div class="stat"><div class="stat-num">2.5hrs</div><div class="stat-label">Average time a person spends on social media daily</div></div>
+    <div class="stat"><div class="stat-num">76%</div><div class="stat-label">Of consumers have bought a product they discovered on social media</div></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">90%</div><div class="stat-label">Of Instagram users follow at least one business account</div></div>
+    <div class="stat"><div class="stat-num">73%</div><div class="stat-label">Of marketers say SMM has been very effective for their business</div></div>
+    <div class="stat"><div class="stat-num">₱0</div><div class="stat-label">Cost to post organically — vs thousands for paid ads</div></div>
+  </div>
+  <div class="card card-purple">
+    <p>Here is the reality most business owners face: they know social media is important, but managing it properly takes <strong>3 to 5 hours per day</strong>. Writing captions, designing graphics, replying to comments, researching trends, analyzing performance — it adds up fast. A business owner who focuses on their core product or service is far better off hiring someone to handle social media professionally. That is a smart business decision — and it is why the demand for SMM VAs keeps growing every year.</p>
+  </div>
+  <div class="card">
+    <p><strong>What does a strong social media presence actually do for a business?</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">✓</div><div><strong>Builds brand awareness</strong> — people cannot buy from a business they have never heard of. Consistent posting keeps the brand visible to new audiences every single week.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Attracts new customers</strong> — a well-optimized Instagram or Facebook page ranks in search and gets discovered by people actively looking for what the business offers.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Builds trust and credibility</strong> — active, professional pages signal that a business is legitimate and cares about its customers. A page with no recent posts looks like an abandoned shop.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Nurtures existing customers</strong> — staying top-of-mind through consistent content keeps past buyers coming back and referring friends.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Drives free traffic and sales</strong> — without spending a peso on ads, organic content can send customers directly to a website, a booking form, or a product page.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Provides social proof</strong> — reviews, testimonials, and user-generated content build the kind of credibility that paid advertising alone can never replicate.</div></li>
+    </ul>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">💡</div>
+    <div class="tip-body"><div class="tip-label">Why This Creates Demand for You</div>
+    <p>Every single one of those benefits requires consistent, professional management. A business owner who posts once every 3 weeks gets almost none of them. A business whose SMM VA posts 4-5 times per week, replies to every comment, and tracks performance gets all of them. That is the measurable difference you create — and that is why they pay you every single month.</p></div>
+  </div>
+  <div class="mini-game" id="game2">
+    <span class="mg-badge">🔗 Activity 2 — Match It!</span>
+    <div class="mg-title">Match Each SMM Benefit to Its Business Outcome</div>
+    <div class="mg-desc">Click a benefit on the left, then its matching outcome on the right. Match all 5 pairs to unlock the checkpoint.</div>
+    <div class="match-grid">
+      <div><div class="match-col-label">📢 SMM Activity</div><div class="match-items" id="g2-left"></div></div>
+      <div><div class="match-col-label">💼 Business Outcome</div><div class="match-items" id="g2-right"></div></div>
+    </div>
+    <div class="match-score" id="g2-score">Matched: 0 / 5</div>
+    <div class="mg-result" id="g2-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-2">
+    <div class="cp-locked" id="cp-2-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Match all <strong>5 pairs</strong> correctly above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-2-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 2</div>
+      <p class="checkpoint-q">A business owner says their Facebook page has not been updated in 2 months because they are "too busy." What is the most accurate consequence of this?</p>
+      <div class="checkpoint-options" id="cp-2-opts">
+        <label><input type="radio" name="cp2" value="a"> Nothing serious — customers will check back later</label>
+        <label><input type="radio" name="cp2" value="b"> They lose brand awareness, trust, new customer discovery, and social proof — all of which directly cost them sales</label>
+        <label><input type="radio" name="cp2" value="c"> Only their ad performance suffers — organic does not matter</label>
+        <label><input type="radio" name="cp2" value="d"> It only affects businesses with fewer than 100 followers</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(2,'b')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-2-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-2-fb"></div>
+      <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue to Section 3 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S3 -->
+<div class="section" id="s3" data-section="3">
+  <div class="section-title"><span class="sec-badge">3</span>📱 Platforms you will manage and what each one is for</div>
+  <div class="card">
+    <p>Not all social media platforms are created equal — and not all of them are right for every client. As an SMM VA, your job is to understand which platform serves which purpose, so you can recommend the right ones for each client and manage them with the right strategy.</p>
+  </div>
+  <div class="platforms">
+    <div class="plat"><div class="plat-dot" style="background:#1877f2"></div><div><div class="plat-name">Facebook</div><small class="plat-sub">King in the Philippines — pages, groups, events, and Marketplace. Best for community-building and local businesses.</small></div></div>
+    <div class="plat"><div class="plat-dot" style="background:#e1306c"></div><div><div class="plat-name">Instagram</div><small class="plat-sub">Visual platform — ideal for fashion, food, wellness, beauty, and lifestyle brands. Reels and Stories drive reach.</small></div></div>
+    <div class="plat"><div class="plat-dot" style="background:#010101"></div><div><div class="plat-name">TikTok</div><small class="plat-sub">Fastest-growing platform globally — short-form video content. High organic reach even for new accounts.</small></div></div>
+    <div class="plat"><div class="plat-dot" style="background:#0077b5"></div><div><div class="plat-name">LinkedIn</div><small class="plat-sub">B2B and professional brands. Best for coaches, consultants, agencies, and corporate clients.</small></div></div>
+    <div class="plat"><div class="plat-dot" style="background:#ff0000"></div><div><div class="plat-name">YouTube</div><small class="plat-sub">Long-form video — tutorials, vlogs, product demos. Second-largest search engine in the world.</small></div></div>
+    <div class="plat"><div class="plat-dot" style="background:#e60023"></div><div><div class="plat-name">Pinterest</div><small class="plat-sub">Discovery platform — evergreen content that drives website traffic. Strong for home decor, food, fashion, and DIY.</small></div></div>
+  </div>
+  <div class="card card-amber">
+    <p><strong>Which platforms should a beginner VA focus on?</strong></p>
+    <p>Start with <strong>Facebook and Instagram</strong> — they are the most in-demand in the Philippines, the most beginner-friendly, and have the best free tools (Meta Business Suite and Canva). Once you have 2-3 clients and a consistent workflow, you can expand to TikTok and LinkedIn. Do not try to master all platforms at once — depth on two platforms beats mediocrity across five.</p>
+  </div>
+  <div class="tip-box">
+    <div class="tip-icon">💡</div>
+    <div class="tip-body"><div class="tip-label">Platform Strategy by Client Type</div>
+    <p>A local restaurant? Facebook and Instagram. A business coach? LinkedIn and Instagram. An e-commerce store? Instagram and TikTok. A real estate agent? Facebook and YouTube. Knowing which platform fits which client makes your proposals sharper and your results faster.</p></div>
+  </div>
+  <div class="mini-game" id="game3">
+    <span class="mg-badge">🎯 Activity 3 — Platform Match!</span>
+    <div class="mg-title">Match the Business Type to Its Best Platform</div>
+    <div class="mg-desc">Click a business type on the left, then its best primary platform on the right. Match all 5 correctly to unlock the checkpoint.</div>
+    <div class="match-grid">
+      <div><div class="match-col-label">🏢 Business Type</div><div class="match-items" id="g3-left"></div></div>
+      <div><div class="match-col-label">📱 Best Primary Platform</div><div class="match-items" id="g3-right"></div></div>
+    </div>
+    <div class="match-score" id="g3-score">Matched: 0 / 5</div>
+    <div class="mg-result" id="g3-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-3">
+    <div class="cp-locked" id="cp-3-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Match all <strong>5 pairs</strong> above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-3-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 3</div>
+      <p class="checkpoint-q">As a beginner SMM VA in the Philippines, which 2 platforms should you master first and why?</p>
+      <div class="checkpoint-options" id="cp-3-opts">
+        <label><input type="radio" name="cp3" value="a"> TikTok and YouTube — because video content always performs best</label>
+        <label><input type="radio" name="cp3" value="b"> Pinterest and LinkedIn — because they have the wealthiest users</label>
+        <label><input type="radio" name="cp3" value="c"> Facebook and Instagram — they are the most in-demand in the Philippines, most beginner-friendly, and have the best free tools</label>
+        <label><input type="radio" name="cp3" value="d"> All platforms at once — so you can offer the most services</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(3,'c')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-3-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-3-fb"></div>
+      <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue to Section 4 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S4 -->
+<div class="section" id="s4" data-section="4">
+  <div class="section-title"><span class="sec-badge">4</span>💼 What an SMM VA actually does every day</div>
+  <div class="card">
+    <p>Let us be very specific here — because vague answers do not help you know what to learn or what to expect. Here is the complete breakdown of what you will actually do as an SMM Virtual Assistant:</p>
+  </div>
+  <ul class="role-list">
+    <li class="role-item">
+      <div class="role-icon-wrap">✍️</div>
+      <div class="role-body">
+        <div class="role-title">Content Creation</div>
+        <div class="role-desc">Writing captions, designing graphics in Canva, creating short-form video scripts, and producing Reels or Stories that represent the brand voice and personality. You adapt your style for each platform — a Facebook post reads differently from a LinkedIn article or a TikTok caption. Content creation is where most of your creative energy goes each week.</div>
+        <div class="role-tools"><span class="tool-tag">Canva</span><span class="tool-tag">ChatGPT</span><span class="tool-tag">CapCut</span><span class="tool-tag">Google Docs</span></div>
+      </div>
+    </li>
+    <li class="role-item">
+      <div class="role-icon-wrap">📅</div>
+      <div class="role-body">
+        <div class="role-title">Content Scheduling and Calendar Management</div>
+        <div class="role-desc">Planning a content calendar for the week or month, then scheduling posts in advance so the brand stays consistent even when the owner is unavailable. Consistency is one of the biggest value-adds you provide — most business owners fail at this exactly because they have no system. You become their system.</div>
+        <div class="role-tools"><span class="tool-tag">Buffer</span><span class="tool-tag">Meta Business Suite</span><span class="tool-tag">Later</span><span class="tool-tag">Publer</span></div>
+      </div>
+    </li>
+    <li class="role-item">
+      <div class="role-icon-wrap">💬</div>
+      <div class="role-body">
+        <div class="role-title">Community Management</div>
+        <div class="role-desc">Responding to comments, DMs, and reviews in the brand voice. Engaging with followers, liking and replying to relevant posts, and building relationships with the audience. This is what turns followers into loyal customers — and it is the responsibility most business owners skip because it feels time-consuming.</div>
+        <div class="role-tools"><span class="tool-tag">Facebook Business Suite</span><span class="tool-tag">Instagram DMs</span><span class="tool-tag">Sprout Social</span></div>
+      </div>
+    </li>
+    <li class="role-item">
+      <div class="role-icon-wrap">📊</div>
+      <div class="role-body">
+        <div class="role-title">Analytics and Reporting</div>
+        <div class="role-desc">Tracking key metrics — reach, impressions, engagement rate, follower growth, link clicks — and compiling them into a simple monthly or weekly report for the client. Your job is to translate data into plain language: "This post reached 4,200 people and got 3x more engagement than usual — here is what we can learn from it."</div>
+        <div class="role-tools"><span class="tool-tag">Meta Insights</span><span class="tool-tag">Instagram Analytics</span><span class="tool-tag">Google Sheets</span><span class="tool-tag">Canva Reports</span></div>
+      </div>
+    </li>
+    <li class="role-item">
+      <div class="role-icon-wrap">🔍</div>
+      <div class="role-body">
+        <div class="role-title">Research and Strategy</div>
+        <div class="role-desc">Researching trending content in the client's industry, studying competitor pages, finding relevant hashtags, and identifying content ideas that will resonate with their specific audience. Good SMM VAs do not just post — they post with intention backed by real data and research.</div>
+        <div class="role-tools"><span class="tool-tag">Google Trends</span><span class="tool-tag">Hashtag tools</span><span class="tool-tag">Buzzsumo</span></div>
+      </div>
+    </li>
+    <li class="role-item">
+      <div class="role-icon-wrap">🤝</div>
+      <div class="role-body">
+        <div class="role-title">Client Communication and Approval</div>
+        <div class="role-desc">Presenting your content calendar for client approval before publishing, attending weekly or biweekly check-in calls, and communicating clearly via email or Slack. Your reliability and professionalism in this area is what makes clients want to keep you long-term — because they trust that nothing will go live without their knowledge.</div>
+        <div class="role-tools"><span class="tool-tag">Slack</span><span class="tool-tag">Zoom</span><span class="tool-tag">Trello</span><span class="tool-tag">Notion</span></div>
+      </div>
+    </li>
+  </ul>
+  <div class="warn-box" style="margin-top:16px">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-body"><div class="warn-label">Common Misconception</div>
+    <p>Being an SMM VA is not just posting pretty pictures. Clients who hire you expect strategy, consistency, professionalism, and results. The good news: this course teaches you exactly how to deliver all of that from day one.</p></div>
+  </div>
+  <div class="mini-game" id="game4">
+    <span class="mg-badge">🔢 Activity 4 — Sort the Tasks!</span>
+    <div class="mg-title">Which Tasks Does an SMM VA Own?</div>
+    <div class="mg-desc">Drag each task into the correct bin — SMM VA tasks vs tasks that are NOT part of the role. Sort all 6 to unlock the checkpoint.</div>
+    <div class="drag-pool" id="g4-pool"></div>
+    <div class="sort-zones">
+      <div class="sort-zone" id="g4-zone-yes" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g4Drop(event,'yes')">
+        <div class="zone-label good">✅ SMM VA Does This</div>
+      </div>
+      <div class="sort-zone" id="g4-zone-no" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g4Drop(event,'no')">
+        <div class="zone-label bad">❌ NOT an SMM VA Task</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="mg-btn primary" onclick="g4Check()">Check My Sort ✓</button>
+      <button class="mg-btn" onclick="g4Init()" style="margin-left:8px">↺ Reset</button>
+    </div>
+    <div class="mg-result" id="g4-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-4">
+    <div class="cp-locked" id="cp-4-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Sort all <strong>6 tasks</strong> correctly above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-4-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 4</div>
+      <p class="checkpoint-q">Which of these is NOT one of the core responsibilities of an SMM VA?</p>
+      <div class="checkpoint-options" id="cp-4-opts">
+        <label><input type="radio" name="cp4" value="a"> Content creation and scheduling</label>
+        <label><input type="radio" name="cp4" value="b"> Community management and analytics reporting</label>
+        <label><input type="radio" name="cp4" value="c"> Handling the client's payroll, accounting, and business taxes</label>
+        <label><input type="radio" name="cp4" value="d"> Client communication and content calendar approval</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(4,'c')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-4-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-4-fb"></div>
+      <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue to Section 5 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S5 -->
+<div class="section" id="s5" data-section="5">
+  <div class="section-title"><span class="sec-badge">5</span>🧩 The 4 pillars of SMM</div>
+  <div class="card">
+    <p>Every successful social media strategy rests on four pillars. As an SMM VA, your job is to deliver all four — not just one or two. Clients who receive only "pretty posts" but no engagement, no strategy, and no reporting eventually leave. Clients who get all 4 pillars delivered consistently stay for years and refer you to others.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar"><div class="pillar-icon">🎨</div><div class="pillar-num">Pillar 1</div><div class="pillar-title">Create</div><div class="pillar-desc">Write compelling captions, design eye-catching visuals in Canva, and produce video content that stops the scroll and represents the brand authentically and consistently.</div></div>
+    <div class="pillar"><div class="pillar-icon">📅</div><div class="pillar-num">Pillar 2</div><div class="pillar-title">Schedule</div><div class="pillar-desc">Post at optimal times using scheduling tools. Consistency beats frequency — a reliable 3x per week schedule outperforms random daily posting every single time.</div></div>
+    <div class="pillar"><div class="pillar-icon">💬</div><div class="pillar-num">Pillar 3</div><div class="pillar-title">Engage</div><div class="pillar-desc">Respond to every comment and DM in the brand voice. The algorithm rewards active accounts. More importantly, real human connection turns followers into paying customers.</div></div>
+    <div class="pillar"><div class="pillar-icon">📊</div><div class="pillar-num">Pillar 4</div><div class="pillar-title">Analyze</div><div class="pillar-desc">Track what is working and what is not. Data-driven decisions separate average SMM VAs from great ones. Report your findings in simple language clients can understand and act on.</div></div>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-icon">⚖️</div>
+    <div class="scenario-body"><div class="scenario-label">The Pillar That Gets Skipped</div>
+    <p>Most beginner VAs are strong on Create and okay on Schedule — but Engage and Analyze quietly get ignored because they feel less creative. Those are exactly the two pillars that make a client renew your contract, because they prove the content is actually working. Do not skip them.</p></div>
+  </div>
+  <div class="mini-game" id="game5">
+    <span class="mg-badge">🧩 Activity 5 — Put in Order!</span>
+    <div class="mg-title">Arrange the 4 Pillars in the Right Workflow Order</div>
+    <div class="mg-desc">Drag the 4 pillars into the correct order that an SMM VA follows in their weekly workflow. Get it right to unlock the checkpoint.</div>
+    <div class="step-pool" id="g5-pool"></div>
+    <div class="step-drop-zone" id="g5-drop" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g5Drop(event)">
+      <div class="step-drop-label">Drop the pillars here in workflow order ↓</div>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="mg-btn primary" onclick="g5Check()">Check Order ✓</button>
+      <button class="mg-btn" onclick="g5Init()" style="margin-left:8px">↺ Reset</button>
+    </div>
+    <div class="mg-result" id="g5-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-5">
+    <div class="cp-locked" id="cp-5-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Arrange the pillars in the <strong>correct workflow order</strong> above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-5-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 5</div>
+      <p class="checkpoint-q">What are the 4 pillars of Social Media Management in their correct workflow order?</p>
+      <div class="checkpoint-options" id="cp-5-opts">
+        <label><input type="radio" name="cp5" value="a"> Post, Boost, Sell, Repeat</label>
+        <label><input type="radio" name="cp5" value="b"> Create, Schedule, Engage, Analyze</label>
+        <label><input type="radio" name="cp5" value="c"> Design, Print, Mail, Track</label>
+        <label><input type="radio" name="cp5" value="d"> Plan, Ignore, Hope, Wait</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(5,'b')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-5-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-5-fb"></div>
+      <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue to Section 6 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S6 -->
+<div class="section" id="s6" data-section="6">
+  <div class="section-title"><span class="sec-badge">6</span>🔀 SMM vs Social Media Marketing — what is the difference?</div>
+  <div class="card">
+    <p>These two terms are often confused — even by clients. Understanding the difference will help you position yourself correctly, avoid taking on work outside your scope, and answer client questions with confidence and clarity.</p>
+  </div>
+  <table class="compare-table">
+    <thead><tr><th>Area</th><th>Social Media Management (Your Core Role)</th><th>Social Media Marketing (Paid Ads)</th></tr></thead>
+    <tbody>
+      <tr><td class="label-col">Focus</td><td>Day-to-day operations of social media accounts</td><td>Paid advertising campaigns and growth strategies</td></tr>
+      <tr><td class="label-col">Content</td><td>Organic posts, stories, reels, captions</td><td>Facebook Ads, Instagram Ads, boosted posts</td></tr>
+      <tr><td class="label-col">Budget</td><td>No ad spend required</td><td>Requires a client budget for paid placement</td></tr>
+      <tr><td class="label-col">Timeline</td><td>Long-term, consistent, relationship-building</td><td>Campaign-based, short-term bursts of traffic</td></tr>
+      <tr><td class="label-col">Skills needed</td><td>Writing, design, scheduling, analytics, communication</td><td>Ad copywriting, audience targeting, pixel setup, A/B testing</td></tr>
+      <tr><td class="label-col">Can SMM VA do it?</td><td><span class="badge-yes">Yes — this is your core role</span></td><td><span class="badge-maybe">Optional — a separate and advanced skillset</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tip-box">
+    <div class="tip-icon">💡</div>
+    <div class="tip-body"><div class="tip-label">Pro Tip</div>
+    <p>As you grow, you can add paid ads management as an additional service and charge significantly more for it. But your foundation as an SMM VA is organic content management — and that alone is already a complete, in-demand, well-paying skill set that requires no ad budget from you or your client.</p></div>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-icon">🙋</div>
+    <div class="scenario-body"><div class="scenario-label">A Question You Will Get From Clients</div>
+    <p>A client asks: "Can you also run ads for me?" Knowing the difference lets you answer honestly: "My core service is managing your organic content — captions, posts, engagement, and reporting. Ads management is a separate add-on I can offer once we have your organic presence solid." That clarity builds trust instead of over-promising and underdelivering.</p></div>
+  </div>
+  <div class="mini-game" id="game6">
+    <span class="mg-badge">🔀 Activity 6 — SMM or Ads?</span>
+    <div class="mg-title">Classify Each Task: Social Media Management or Paid Ads?</div>
+    <div class="mg-desc">Read each task description. Click whether it belongs to Social Media Management (your core role) or Paid Ads (a separate advanced skill). Get all 5 correct to unlock the checkpoint.</div>
+    <div class="scenario-cards" id="g6-cards"></div>
+    <div class="tf-score" id="g6-score">Score: 0 / 5</div>
+    <div class="mg-result" id="g6-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-6">
+    <div class="cp-locked" id="cp-6-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Get all <strong>5 correct</strong> in the activity above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-6-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 6</div>
+      <p class="checkpoint-q">What is the key difference between Social Media Management and Social Media Marketing?</p>
+      <div class="checkpoint-options" id="cp-6-opts">
+        <label><input type="radio" name="cp6" value="a"> There is no real difference — they are the same job with different names</label>
+        <label><input type="radio" name="cp6" value="b"> SMM is the day-to-day organic content operations; Marketing is paid ad campaigns that require a budget</label>
+        <label><input type="radio" name="cp6" value="c"> SMM is for big companies; Marketing is for small businesses</label>
+        <label><input type="radio" name="cp6" value="d"> SMM is only done on Instagram; Marketing is done on Facebook</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(6,'b')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-6-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-6-fb"></div>
+      <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue to Section 7 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S7 -->
+<div class="section" id="s7" data-section="7">
+  <div class="section-title"><span class="sec-badge">7</span>💰 How much can you earn as an SMM VA?</div>
+  <div class="card card-green">
+    <p>Income as an SMM VA is directly tied to your skill level, number of clients, and the services you offer. The table below shows realistic income ranges at different experience levels. These are Philippine peso figures based on real market rates from OnlineJobs.ph, Upwork, and VA community surveys.</p>
+  </div>
+  <table class="income-table">
+    <thead><tr><th>Level</th><th>Rate per Client per Month</th><th>Typical Client Count</th><th>Monthly Income Range</th></tr></thead>
+    <tbody>
+      <tr><td>Beginner (0–6 months)</td><td>₱3,000 – ₱8,000 / $50 – $150</td><td>1–2</td><td><span class="income-pill">₱3,000 – ₱16,000</span></td></tr>
+      <tr><td>Intermediate (6–18 months)</td><td>₱8,000 – ₱20,000 / $150 – $400</td><td>2–4</td><td><span class="income-pill">₱16,000 – ₱80,000</span></td></tr>
+      <tr><td>Experienced (18+ months)</td><td>₱20,000 – ₱40,000 / $400 – $700</td><td>3–5</td><td><span class="income-pill">₱60,000 – ₱200,000</span></td></tr>
+      <tr><td>Specialist (Ads + Strategy)</td><td>₱40,000 – ₱100,000+ / $700 – $2,000+</td><td>2–4</td><td><span class="income-pill">₱80,000 – ₱400,000+</span></td></tr>
+    </tbody>
+  </table>
+  <div class="card">
+    <p><strong>How to price your packages as a beginner:</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">✓</div><div><strong>Starter Package (~₱4,000–₱6,000/month)</strong> — 12 posts per month on 1 platform, basic Canva graphics, captions, and scheduling. Good for your first 1-2 clients.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Growth Package (~₱8,000–₱12,000/month)</strong> — 20 posts per month on 2 platforms, Canva graphics, captions, scheduling, comment replies, and a monthly analytics report.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Premium Package (~₱15,000–₱25,000/month)</strong> — Full management: strategy, 30+ posts, all platforms, stories, Reels, community management, and bi-weekly performance reports.</div></li>
+    </ul>
+  </div>
+  <div class="success-box">
+    <div class="success-icon">🎯</div>
+    <div class="success-body"><div class="success-label">Your First Realistic Goal</div>
+    <p>By the end of this course, your goal is to land your first 1-2 clients at a starter rate of ₱3,000–₱5,000 per month each. That is an extra ₱6,000–₱10,000 per month working from home — a real income stream that grows with you as you build confidence and results.</p></div>
+  </div>
+  <div class="scenario-box">
+    <div class="scenario-icon">📈</div>
+    <div class="scenario-body"><div class="scenario-label">How Income Actually Grows</div>
+    <p>Jen started with one ₱4,000 per month client managing a small boutique's Facebook Page. Six months later, with a portfolio and testimonials, she raised her rate to ₱8,000 and added a second client. That is the real path — small first win, proof of results, then scale. Not a shortcut, but a repeatable one that works every time.</p></div>
+  </div>
+  <div class="mini-game" id="game7">
+    <span class="mg-badge">💰 Activity 7 — Package Builder!</span>
+    <div class="mg-title">Build the Right Package for Each Client</div>
+    <div class="mg-desc">Read each client scenario. Click the package tier that best fits their needs and budget. Get all 4 right to unlock the checkpoint.</div>
+    <div class="scenario-cards" id="g7-cards"></div>
+    <div class="tf-score" id="g7-score">Score: 0 / 4</div>
+    <div class="mg-result" id="g7-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-7">
+    <div class="cp-locked" id="cp-7-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Get all <strong>4 correct</strong> in the Package Builder above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-7-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 7</div>
+      <p class="checkpoint-q">Roughly how much can a beginner SMM VA with 1-2 clients realistically earn per month?</p>
+      <div class="checkpoint-options" id="cp-7-opts">
+        <label><input type="radio" name="cp7" value="a"> ₱6,000 – ₱16,000 — a real income stream that grows with skill and client count</label>
+        <label><input type="radio" name="cp7" value="b"> ₱200,000+ — everyone earns this immediately with any client</label>
+        <label><input type="radio" name="cp7" value="c"> Nothing until you have 2 years of corporate marketing experience</label>
+        <label><input type="radio" name="cp7" value="d"> Only whatever the client tips you after each post</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(7,'a')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-7-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-7-fb"></div>
+      <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue to Section 8 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S8 -->
+<div class="section" id="s8" data-section="8">
+  <div class="section-title"><span class="sec-badge">8</span>🌅 A day in the life of an SMM VA</div>
+  <div class="img-block">
+    <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221?w=800&q=80" alt="Person working on content">
+    <div class="img-caption">📷 Most SMM VAs work 4 to 6 hours per day and manage multiple clients on a flexible schedule.</div>
+  </div>
+  <div class="card">
+    <p>One of the best things about being an SMM VA is the flexibility. Most of your work can be done any time of day, as long as you meet your deadlines and keep your clients' pages active. Here is what a typical day looks like once you have 2-3 clients:</p>
+  </div>
+  <ul class="timeline">
+    <li class="tl-item"><div class="tl-dot">1</div><div class="tl-time">7:00 – 8:00 AM — Morning Check-In</div><div class="tl-title">Start with a complete account scan</div><div class="tl-body">Log in to all client accounts. Reply to overnight comments and DMs. Check if scheduled posts went live correctly. Note any engagement spikes to include in your weekly report. This sets the tone for a proactive, organized day.</div></li>
+    <li class="tl-item"><div class="tl-dot">2</div><div class="tl-time">8:00 – 10:00 AM — Content Creation Block</div><div class="tl-title">Deep creative work while energy is highest</div><div class="tl-body">Design graphics in Canva for the next 3-5 posts. Write captions with hashtags. Draft scripts for any Reels or Stories. This is your most creative and focused work — protect this time from notifications and distractions. Batch your content creation so you are not switching modes constantly.</div></li>
+    <li class="tl-item"><div class="tl-dot">3</div><div class="tl-time">10:00 – 11:00 AM — Scheduling and Approval</div><div class="tl-title">Get content queued and client-approved</div><div class="tl-body">Upload finalized content into Buffer or Meta Business Suite. Send a content preview to the client for approval if required. Queue posts for optimal posting times based on each platform's analytics. Your goal is to have the week fully scheduled by mid-morning.</div></li>
+    <li class="tl-item"><div class="tl-dot">4</div><div class="tl-time">11:00 AM – 12:00 PM — Research Block</div><div class="tl-title">Keep content fresh with intentional research</div><div class="tl-body">Spend 30-60 minutes researching trending content, studying competitor pages, or finding new hashtag strategies for your clients. This is what keeps your content relevant and prevents you from running out of ideas. Great SMM VAs are always feeding their content pipeline.</div></li>
+    <li class="tl-item"><div class="tl-dot">5</div><div class="tl-time">3:00 – 4:00 PM — Afternoon Engagement</div><div class="tl-title">Community management round 2</div><div class="tl-body">A second round of engagement — reply to new comments, engage with other accounts in the niche, respond to any DMs that arrived since morning. Platforms reward consistent, active accounts with more organic reach. Your engagement work compounds over time.</div></li>
+    <li class="tl-item"><div class="tl-dot">6</div><div class="tl-time">Friday (Weekly) — Analytics Review</div><div class="tl-title">Data review and next-week planning</div><div class="tl-body">Pull performance data for the week. Note which posts performed best and worst and why. Update your content calendar for the following week based on what the data shows. Prepare any client reports due. This weekly review is what separates strategic VAs from reactive ones.</div></li>
+  </ul>
+  <div class="tip-box">
+    <div class="tip-icon">⏰</div>
+    <div class="tip-body"><div class="tip-label">Time Reality Check</div>
+    <p>With 2 clients, expect to work about 3-5 hours per day. With 4 clients, expect 5-7 hours per day. As you build templates, systems, and routines, the same work takes less time — which is how experienced SMM VAs manage more clients without burning out.</p></div>
+  </div>
+  <div class="mini-game" id="game8">
+    <span class="mg-badge">🌅 Activity 8 — Sequence the Day!</span>
+    <div class="mg-title">Put the SMM VA Daily Tasks in Correct Order</div>
+    <div class="mg-desc">Drag the 4 morning tasks into the correct chronological order that an SMM VA follows. Get it right to unlock the checkpoint.</div>
+    <div class="step-pool" id="g8-pool"></div>
+    <div class="step-drop-zone" id="g8-drop" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g8Drop(event)">
+      <div class="step-drop-label">Drop the tasks here in the correct time order ↓</div>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="mg-btn primary" onclick="g8Check()">Check Order ✓</button>
+      <button class="mg-btn" onclick="g8Init()" style="margin-left:8px">↺ Reset</button>
+    </div>
+    <div class="mg-result" id="g8-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-8">
+    <div class="cp-locked" id="cp-8-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Sequence the tasks in the <strong>correct order</strong> above to unlock this checkpoint.</div></div>
+    <div class="cp-content" id="cp-8-content">
+      <div class="checkpoint-header">🧠 Knowledge Checkpoint · Section 8</div>
+      <p class="checkpoint-q">About how many hours per day should you realistically expect to work while managing 2 clients as an SMM VA?</p>
+      <div class="checkpoint-options" id="cp-8-opts">
+        <label><input type="radio" name="cp8" value="a"> 3-5 hours per day — flexible, focused, and manageable</label>
+        <label><input type="radio" name="cp8" value="b"> 10-12 hours per day minimum</label>
+        <label><input type="radio" name="cp8" value="c"> 30 minutes total, once a week</label>
+        <label><input type="radio" name="cp8" value="d"> Only on weekends when you have free time</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(8,'a')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-8-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-8-fb"></div>
+      <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue to Section 9 →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- S9 -->
+<div class="section" id="s9" data-section="9">
+  <div class="section-title"><span class="sec-badge">9</span>🚀 Do you need experience to start?</div>
+  <div class="card card-green">
+    <p><strong>Short answer: No. You need training, not prior experience.</strong></p>
+    <p>If you have ever used Facebook, Instagram, or TikTok personally, you already understand how these platforms work from a user's perspective. What this course will do is teach you how to use them professionally — with strategy, tools, systems, and skills that clients will pay you for.</p>
+  </div>
+  <div class="card">
+    <p><strong>What you DO need to succeed as a beginner SMM VA:</strong></p>
+    <ul class="checklist" style="margin-top:12px">
+      <li><div class="check-icon">✓</div><div><strong>A reliable internet connection</strong> — you will be uploading content, doing video calls, and working in browser-based tools daily. A stable connection is non-negotiable.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>A laptop or desktop</strong> — a smartphone alone will not cut it. You need a screen large enough to design in Canva, manage multiple accounts, and review analytics properly.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Willingness to learn tools</strong> — Canva, Buffer, Meta Business Suite, and Google Sheets are all free and learnable in days. This course covers all of them with practice exercises.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Basic written English</strong> — most international clients communicate in English. Local clients may be fine with Filipino. Either way, clear written communication is essential for captions, reports, and client emails.</div></li>
+      <li><div class="check-icon">✓</div><div><strong>Professionalism and reliability</strong> — this matters more than any tool. Clients stay long-term with VAs who communicate clearly, hit deadlines, and take ownership of their work. These traits are a choice, not a talent.</div></li>
+    </ul>
+  </div>
+  <div class="warn-box">
+    <div class="warn-icon">❌</div>
+    <div class="warn-body"><div class="warn-label">What You Do NOT Need</div>
+    <p>You do not need a marketing degree, a huge personal social media following, years of corporate experience, or expensive equipment. Many successful SMM VAs started with just a laptop, a free Canva account, and the willingness to learn, take action, and improve with every client.</p></div>
+  </div>
+  <div class="quote">
+    <p>"Every expert was once a beginner. The only difference is they started."</p>
+    <div class="quote-author">— Unknown</div>
+  </div>
+  <div class="mini-game" id="game9">
+    <span class="mg-badge">🚀 Activity 9 — Need It or Not?</span>
+    <div class="mg-title">Sort: Do You Need This to Start as an SMM VA?</div>
+    <div class="mg-desc">Drag each item into the correct bin — things you genuinely need vs things you absolutely do NOT need to start. Sort all 6 correctly to unlock the final checkpoint.</div>
+    <div class="drag-pool" id="g9-pool"></div>
+    <div class="sort-zones">
+      <div class="sort-zone" id="g9-zone-need" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g9Drop(event,'need')">
+        <div class="zone-label good">✅ You Need This</div>
+      </div>
+      <div class="sort-zone" id="g9-zone-noneed" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="g9Drop(event,'noneed')">
+        <div class="zone-label bad">❌ You Do NOT Need This</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:10px">
+      <button class="mg-btn primary" onclick="g9Check()">Check My Sort ✓</button>
+      <button class="mg-btn" onclick="g9Init()" style="margin-left:8px">↺ Reset</button>
+    </div>
+    <div class="mg-result" id="g9-result"></div>
+  </div>
+  <div class="checkpoint" id="cp-9">
+    <div class="cp-locked" id="cp-9-locked"><div class="cp-lock-icon">🔒</div><div class="cp-lock-msg">Sort all <strong>6 items</strong> correctly above to unlock this final checkpoint.</div></div>
+    <div class="cp-content" id="cp-9-content">
+      <div class="checkpoint-header">🧠 Final Checkpoint · Section 9</div>
+      <p class="checkpoint-q">What do you actually need most to succeed as a beginner SMM VA?</p>
+      <div class="checkpoint-options" id="cp-9-opts">
+        <label><input type="radio" name="cp9" value="a"> A marketing degree and years of corporate experience</label>
+        <label><input type="radio" name="cp9" value="b"> Training, the right tools, and professionalism — not prior experience</label>
+        <label><input type="radio" name="cp9" value="c"> A huge personal social media following of at least 10,000</label>
+        <label><input type="radio" name="cp9" value="d"> Expensive professional equipment and paid software subscriptions</label>
+      </div>
+      <div class="checkpoint-actions">
+        <button class="btn-check" onclick="checkAnswer(9,'b')">✓ Check Answer</button>
+        <div class="cp-passed-note" id="cp-9-passed">✅ Correct!</div>
+      </div>
+      <div class="checkpoint-feedback" id="cp-9-fb"></div>
+      <button class="btn-continue" id="cp-9-cont" onclick="unlockFinal()">Unlock Video and Lesson Wrap-Up →</button>
+    </div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- FINAL -->
+<div class="section" id="final-block">
+  <div class="section-title">🎬 Watch: Social Media Management Explained</div>
+  <div class="yt-wrap">
+    <iframe src="https://www.youtube-nocookie.com/embed/I2pwcAVonKI?rel=0&enablejsapi=1" title="Social Media Management Explained" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+  <div class="yt-label">📺 Watch this after all 9 sections — it reinforces every concept with real examples</div>
+  <div class="takeaways">
+    <h3>🎯 Key Takeaways — Lesson 1: What is Social Media Management?</h3>
+    <ul class="takeaway-list">
+      <li><div class="tk-num">1</div><div>Social Media Management is a professional service — not just posting. It involves creating, scheduling, engaging, analyzing, and reporting for a brand's social accounts on an ongoing basis.</div></li>
+      <li><div class="tk-num">2</div><div>Businesses need SMM because they do not have time to do it consistently themselves. You solve a real, painful, recurring problem — and that is why they pay you every single month without negotiation.</div></li>
+      <li><div class="tk-num">3</div><div>Start with Facebook and Instagram — the most in-demand platforms in the Philippines. Master these two before expanding to TikTok, LinkedIn, or YouTube.</div></li>
+      <li><div class="tk-num">4</div><div>Your daily work includes: content creation, scheduling, community management, analytics, research, and client communication. It is a learnable routine, not a vague creative gig.</div></li>
+      <li><div class="tk-num">5</div><div>All 4 pillars — Create, Schedule, Engage, Analyze — must be delivered every week. Clients who get all 4 stay for years. Clients who only get "pretty posts" leave in months.</div></li>
+      <li><div class="tk-num">6</div><div>Income scales from ₱3,000–₱16,000 per month for beginners to ₱80,000–₱400,000+ for specialists. Your first goal is landing 1-2 clients at a starter rate and building from there.</div></li>
+      <li><div class="tk-num">7</div><div>You do not need prior experience — you need training, tools, and the right mindset. All of that is in this course. Start now, build as you go, and improve with every client.</div></li>
+    </ul>
+  </div>
+  <div class="complete-wrap">
+    <p>You have read all 9 sections, completed all 9 activities, and passed all 9 checkpoints. Watch the video above, then mark this lesson complete to unlock your Knowledge Check quiz.</p>
+    <button class="btn-complete" id="btn-mark-complete" onclick="markLessonComplete()">✅ Mark Lesson as Complete</button>
+    <div id="complete-msg">🎉 Outstanding! Your Knowledge Check is now unlocked.</div>
+  </div>
+</div>
+</div><script>
+const TOTAL_SECTIONS=document.querySelectorAll(".section[id^='s']").length||1;
+const LESSON_ID="LES001";
+const SAVE_KEY="lhph_"+LESSON_ID;
+const state={unlockedUpTo:1,passed:{},gamePassed:{},finalUnlocked:false,lessonCompleted:false};
+
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY)||"{}");state.unlockedUpTo=d.unlockedUpTo||1;state.passed=d.passed||{};state.gamePassed=d.gamePassed||{};state.finalUnlocked=d.finalUnlocked||false;state.lessonCompleted=d.lessonCompleted||false;}catch(e){}}
+
+function unlockCP(n){
+  const l=document.getElementById("cp-"+n+"-locked");
+  const c=document.getElementById("cp-"+n+"-content");
+  if(l)l.style.display="none";
+  if(c)c.style.display="block";
+  state.gamePassed[n]=true;save();
+}
+function markPassedUI(n){
+  const cp=document.getElementById("cp-"+n);if(!cp)return;
+  cp.classList.add("is-passed");
+  const pn=document.getElementById("cp-"+n+"-passed");if(pn)pn.style.display="flex";
+  const cb=document.getElementById("cp-"+n+"-cont");if(cb)cb.style.display="none";
+  const fb=document.getElementById("cp-"+n+"-fb");if(fb)fb.style.display="none";
+  const opts=document.getElementById("cp-"+n+"-opts");
+  if(opts)opts.querySelectorAll("input").forEach(i=>i.disabled=true);
+}
+function restoreUI(){
+  if(state.lessonCompleted){
+    for(let i=1;i<=TOTAL_SECTIONS;i++){const s=document.getElementById("s"+i);if(s)s.classList.add("is-visible");}
+    const fb=document.getElementById("final-block");if(fb)fb.classList.add("is-visible");
+    for(let n=1;n<=TOTAL_SECTIONS;n++){unlockCP(n);markPassedUI(n);}
+    const btn=document.getElementById("btn-mark-complete");const msg=document.getElementById("complete-msg");
+    if(btn){btn.disabled=true;btn.textContent="✓ Lesson Completed";}if(msg)msg.style.display="block";
+  } else {
+    for(let i=1;i<=state.unlockedUpTo;i++){const s=document.getElementById("s"+i);if(s)s.classList.add("is-visible");}
+    if(state.finalUnlocked){const fb=document.getElementById("final-block");if(fb)fb.classList.add("is-visible");}
+    Object.keys(state.gamePassed).forEach(n=>unlockCP(parseInt(n)));
+    Object.keys(state.passed).forEach(n=>markPassedUI(parseInt(n)));
+  }
+  refreshToc();updateLabel();updateProgress();
+}
+function checkAnswer(sn,cv){
+  const ow=document.getElementById("cp-"+sn+"-opts");
+  const sel=ow.querySelector("input[name='cp"+sn+"']:checked");
+  const fb=document.getElementById("cp-"+sn+"-fb");
+  const cb=document.getElementById("cp-"+sn+"-cont");
+  const pn=document.getElementById("cp-"+sn+"-passed");
+  const box=document.getElementById("cp-"+sn);
+  ow.querySelectorAll("label").forEach(l=>l.classList.remove("opt-correct","opt-incorrect"));
+  if(!sel){fb.textContent="Please select an answer first.";fb.className="checkpoint-feedback fb-incorrect";fb.style.display="block";return;}
+  if(sel.value===cv){
+    sel.closest("label").classList.add("opt-correct");
+    fb.textContent="Correct! Well done.";fb.className="checkpoint-feedback fb-correct";fb.style.display="block";
+    cb.style.display="inline-flex";pn.style.display="flex";box.classList.add("is-passed");
+    ow.querySelectorAll("input").forEach(i=>i.disabled=true);
+    state.passed[sn]=true;updateProgress();save();
+  } else {
+    sel.closest("label").classList.add("opt-incorrect");
+    fb.textContent="Not quite — re-read the section and try again.";fb.className="checkpoint-feedback fb-incorrect";fb.style.display="block";
+  }
+}
+function unlockSection(n){
+  const s=document.getElementById("s"+n);if(!s)return;
+  s.classList.add("is-visible");state.unlockedUpTo=Math.max(state.unlockedUpTo,n);
+  refreshToc();updateLabel();save();
+  setTimeout(()=>s.scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+function unlockFinal(){
+  const fb=document.getElementById("final-block");if(fb)fb.classList.add("is-visible");
+  state.finalUnlocked=true;refreshToc();updateLabel();save();
+  setTimeout(()=>fb.scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+function updateProgress(){
+  const pct=Math.round((Object.keys(state.passed).length/TOTAL_SECTIONS)*100);
+  document.getElementById("progress-fill").style.width=pct+"%";
+  document.getElementById("progress-pct").textContent=pct+"% complete";
+}
+function updateLabel(){
+  document.getElementById("progress-label").textContent=state.finalUnlocked?"All sections complete — watch video and finish":"Section "+state.unlockedUpTo+" of "+TOTAL_SECTIONS;
+}
+function refreshToc(){
+  document.querySelectorAll("#toc-list a").forEach(a=>{
+    const n=parseInt(a.getAttribute("data-toc"),10);
+    a.classList.remove("toc-locked","toc-current","toc-done");
+    a.querySelectorAll(".toc-status").forEach(s=>s.remove());
+    const st=document.createElement("span");st.className="toc-status";
+    if(state.lessonCompleted||state.passed[n]){a.classList.add("toc-done");st.textContent="✅";}
+    else if(n===state.unlockedUpTo){a.classList.add("toc-current");st.textContent="▶";}
+    else if(n>state.unlockedUpTo){a.classList.add("toc-locked");st.textContent="🔒";}
+    a.appendChild(st);
+  });
+}
+function markLessonComplete(){
+  const btn=document.getElementById("btn-mark-complete");const msg=document.getElementById("complete-msg");
+  btn.disabled=true;btn.textContent="✓ Lesson Completed";msg.style.display="block";
+  state.lessonCompleted=true;save();
+  try{window.parent.postMessage({action:"lessonComplete"},"*");}catch(e){}
+}
+function confetti(el){
+  const colors=["#8b5cf6","#6366f1","#22c55e","#f59e0b","#ec4899","#fff"];
+  for(let i=0;i<16;i++){
+    const p=document.createElement("div");p.className="confetti-p";
+    p.style.cssText="position:absolute;left:"+Math.random()*100+"%;top:10px;width:"+(Math.random()*7+4)+"px;height:"+(Math.random()*7+4)+"px;background:"+colors[Math.floor(Math.random()*colors.length)]+";border-radius:"+(Math.random()>.5?"50%":"2px")+";animation:confettiFall 1s ease-out "+(Math.random()*.4)+"s forwards;pointer-events:none;";
+    el.appendChild(p);setTimeout(()=>p.remove(),1400);
+  }
+}
+
+/* GAME 1 — TRUE/FALSE: What IS social media management */
+const g1Qs=[
+  {t:"Social Media Management includes strategy, content creation, scheduling, engagement, analytics, and reporting.",a:true,e:"Correct! SMM is a full professional service — not just posting."},
+  {t:"An SMM VA only posts photos when the business owner reminds them to.",a:false,e:"No — an SMM VA proactively manages a content calendar and posts consistently without being reminded."},
+  {t:"Running paid Facebook Ads is the core responsibility of an SMM VA.",a:false,e:"Paid ads (Social Media Marketing) is a separate and advanced skillset. SMM VAs focus on organic content management."},
+  {t:"Community management — replying to comments and DMs — is part of the SMM VA role.",a:true,e:"Correct! Engagement and community management are core SMM VA responsibilities."},
+  {t:"An SMM VA needs to be a professional graphic designer with expensive software to succeed.",a:false,e:"Canva is free, beginner-friendly, and all you need for professional-quality social media graphics."},
+];
+let g1Score=0,g1Done=0;
+function g1Init(){
+  g1Score=0;g1Done=0;
+  document.getElementById("g1-score").textContent="Score: 0 / 5";
+  document.getElementById("g1-result").textContent="";document.getElementById("g1-result").className="mg-result";
+  const c=document.getElementById("g1-qs");c.innerHTML="";
+  g1Qs.forEach((q,i)=>{
+    const d=document.createElement("div");d.className="tf-question";d.id="g1q"+i;
+    d.innerHTML="<div class='tf-text'>"+q.t+"</div><div class='tf-btns'><button class='tf-btn true-btn' onclick='g1Ans("+i+",true)'>TRUE</button><button class='tf-btn false-btn' onclick='g1Ans("+i+",false)'>FALSE</button></div>";
+    c.appendChild(d);
+  });
+}
+function g1Ans(i,chose){
+  const q=g1Qs[i];const d=document.getElementById("g1q"+i);
+  if(d.dataset.done)return;d.dataset.done="1";
+  const ok=chose===q.a;if(ok)g1Score++;g1Done++;
+  d.querySelectorAll(".tf-btn").forEach(b=>b.disabled=true);
+  const btn=d.querySelector(chose?".true-btn":".false-btn");
+  btn.classList.add(ok?"sel-correct":"sel-wrong");
+  const ex=document.createElement("div");
+  ex.style.cssText="font-size:11px;margin-top:8px;padding:8px;border-radius:6px;line-height:1.5;background:"+(ok?"rgba(34,197,94,.15)":"rgba(239,68,68,.12)")+";color:"+(ok?"#4ade80":"#fca5a5")+";";
+  ex.textContent=(ok?"✅ ":"❌ ")+q.e;d.appendChild(ex);
+  document.getElementById("g1-score").textContent="Score: "+g1Score+" / 5";
+  if(g1Done===5){
+    const r=document.getElementById("g1-result");
+    if(g1Score===5){r.className="mg-result win";r.textContent="Perfect! You now know exactly what SMM is and is not.";confetti(document.getElementById("game1"));unlockCP(1);}
+    else{r.className="mg-result lose";r.textContent=g1Score+"/5. Review the explanations and try again.";
+      setTimeout(()=>{const rb=document.createElement("button");rb.className="mg-btn";rb.style="margin-top:10px;display:block;margin-left:auto;margin-right:auto";rb.textContent="↺ Try Again";rb.onclick=g1Init;document.getElementById("g1-result").after(rb);},100);}
+  }
+}
+
+/* GAME 2 — MATCH: SMM benefit to business outcome */
+const g2Pairs=[
+  {l:"Posting consistently 5x per week",r:"Builds brand awareness and keeps the business top of mind",id:"m1"},
+  {l:"Replying to every comment and DM within hours",r:"Turns followers into loyal, paying customers through connection",id:"m2"},
+  {l:"Maintaining a professional, active page",r:"Builds trust and credibility — the page looks legitimate",id:"m3"},
+  {l:"Publishing content with a link to the website",r:"Drives free organic traffic and sales without ad spend",id:"m4"},
+  {l:"Sharing customer testimonials and user content",r:"Creates social proof that advertising alone cannot replicate",id:"m5"},
+];
+let g2Sel=null,g2Matched=0;
+function g2Init(){
+  g2Sel=null;g2Matched=0;
+  const lEl=document.getElementById("g2-left");const rEl=document.getElementById("g2-right");
+  lEl.innerHTML="";rEl.innerHTML="";
+  document.getElementById("g2-score").textContent="Matched: 0 / 5";
+  document.getElementById("g2-result").textContent="";
+  [...g2Pairs].sort(()=>Math.random()-.5).forEach(p=>{const el=document.createElement("div");el.className="match-item";el.dataset.id=p.id;el.dataset.side="left";el.textContent=p.l;el.addEventListener("click",()=>g2Click(el));lEl.appendChild(el);});
+  [...g2Pairs].sort(()=>Math.random()-.5).forEach(p=>{const el=document.createElement("div");el.className="match-item";el.dataset.id=p.id;el.dataset.side="right";el.textContent=p.r;el.addEventListener("click",()=>g2Click(el));rEl.appendChild(el);});
+}
+function g2Click(el){
+  if(el.classList.contains("matched"))return;
+  if(el.dataset.side==="left"){
+    document.querySelectorAll(".match-item[data-side='left']").forEach(i=>i.classList.remove("selected"));
+    g2Sel=el;el.classList.add("selected");
+  } else {
+    const lSel=document.querySelector(".match-item[data-side='left'].selected");
+    if(!lSel){el.classList.add("selected");return;}
+    if(lSel.dataset.id===el.dataset.id){
+      lSel.classList.add("matched");el.classList.add("matched");lSel.classList.remove("selected");el.classList.remove("selected");
+      g2Matched++;document.getElementById("g2-score").textContent="Matched: "+g2Matched+" / 5";
+      if(g2Matched===5){const r=document.getElementById("g2-result");r.className="mg-result win";r.textContent="All 5 matched! You understand exactly why SMM creates business value.";confetti(document.getElementById("game2"));unlockCP(2);}
+    } else {
+      lSel.classList.add("wrong");el.classList.add("wrong");
+      setTimeout(()=>{lSel.classList.remove("selected","wrong");el.classList.remove("selected","wrong");},700);
+    }
+    g2Sel=null;
+  }
+}
+
+/* GAME 3 — MATCH: Business type to platform */
+const g3Pairs=[
+  {l:"Local restaurant in Quezon City",r:"Facebook — best for local discovery and community engagement",id:"p1"},
+  {l:"Online fitness and wellness coach",r:"Instagram — visual platform perfect for health and lifestyle brands",id:"p2"},
+  {l:"Business consultant and keynote speaker",r:"LinkedIn — professional network ideal for B2B and corporate clients",id:"p3"},
+  {l:"Youth fashion and streetwear brand",r:"TikTok — fastest-growing platform with highest reach for young audiences",id:"p4"},
+  {l:"Home renovation and interior design service",r:"Pinterest — evergreen visual content that drives website traffic",id:"p5"},
+];
+let g3Sel=null,g3Matched=0;
+function g3Init(){
+  g3Sel=null;g3Matched=0;
+  const lEl=document.getElementById("g3-left");const rEl=document.getElementById("g3-right");
+  lEl.innerHTML="";rEl.innerHTML="";
+  document.getElementById("g3-score").textContent="Matched: 0 / 5";
+  document.getElementById("g3-result").textContent="";
+  [...g3Pairs].sort(()=>Math.random()-.5).forEach(p=>{const el=document.createElement("div");el.className="match-item";el.dataset.id=p.id;el.dataset.side="left";el.textContent=p.l;el.addEventListener("click",()=>g3Click(el));lEl.appendChild(el);});
+  [...g3Pairs].sort(()=>Math.random()-.5).forEach(p=>{const el=document.createElement("div");el.className="match-item";el.dataset.id=p.id;el.dataset.side="right";el.textContent=p.r;el.addEventListener("click",()=>g3Click(el));rEl.appendChild(el);});
+}
+function g3Click(el){
+  if(el.classList.contains("matched"))return;
+  if(el.dataset.side==="left"){
+    document.querySelectorAll(".match-item[data-side='left']").forEach(i=>i.classList.remove("selected"));
+    g3Sel=el;el.classList.add("selected");
+  } else {
+    const lSel=document.querySelector(".match-item[data-side='left'].selected");
+    if(!lSel){el.classList.add("selected");return;}
+    if(lSel.dataset.id===el.dataset.id){
+      lSel.classList.add("matched");el.classList.add("matched");lSel.classList.remove("selected");el.classList.remove("selected");
+      g3Matched++;document.getElementById("g3-score").textContent="Matched: "+g3Matched+" / 5";
+      if(g3Matched===5){const r=document.getElementById("g3-result");r.className="mg-result win";r.textContent="All 5 matched! You now know which platform fits which client.";confetti(document.getElementById("game3"));unlockCP(3);}
+    } else {
+      lSel.classList.add("wrong");el.classList.add("wrong");
+      setTimeout(()=>{lSel.classList.remove("selected","wrong");el.classList.remove("selected","wrong");},700);
+    }
+    g3Sel=null;
+  }
+}
+
+/* GAME 4 — DRAG SORT: SMM VA tasks vs NOT */
+const g4Tasks=[
+  {t:"Write captions and design Canva graphics for 3 posts this week",tp:"yes"},
+  {t:"Schedule posts in Buffer for the next 2 weeks",tp:"yes"},
+  {t:"Reply to all comments and DMs within 2 hours",tp:"yes"},
+  {t:"Compile a monthly analytics report for the client",tp:"yes"},
+  {t:"Handle the client company payroll and process salaries",tp:"no"},
+  {t:"File the client business income tax return with BIR",tp:"no"},
+];
+let g4Drag=null;
+function g4Init(){
+  const pool=document.getElementById("g4-pool");pool.innerHTML="";
+  document.getElementById("g4-zone-yes").innerHTML='<div class="zone-label good">✅ SMM VA Does This</div>';
+  document.getElementById("g4-zone-no").innerHTML='<div class="zone-label bad">❌ NOT an SMM VA Task</div>';
+  document.getElementById("g4-result").textContent="";document.getElementById("g4-result").className="mg-result";
+  [...g4Tasks].sort(()=>Math.random()-.5).forEach((c,i)=>{
+    const el=document.createElement("div");el.className="drag-card";el.draggable=true;el.dataset.tp=c.tp;el.dataset.i=i;el.textContent=c.t;
+    el.addEventListener("dragstart",e=>{g4Drag=i;el.classList.add("dragging");e.dataTransfer.effectAllowed="move";});
+    el.addEventListener("dragend",()=>el.classList.remove("dragging"));
+    pool.appendChild(el);
+  });
+}
+function g4Drop(e,zone){
+  e.preventDefault();document.getElementById("g4-zone-"+zone).classList.remove("drag-over");
+  if(g4Drag===null)return;
+  const card=document.querySelector(".drag-card[data-i='"+g4Drag+"']");
+  if(card)document.getElementById("g4-zone-"+zone).appendChild(card);
+  g4Drag=null;
+}
+function g4Check(){
+  const yCards=[...document.getElementById("g4-zone-yes").querySelectorAll(".drag-card")];
+  const nCards=[...document.getElementById("g4-zone-no").querySelectorAll(".drag-card")];
+  if(yCards.length+nCards.length<g4Tasks.length){const r=document.getElementById("g4-result");r.className="mg-result lose";r.textContent="Sort all 6 tasks first!";return;}
+  let ok=0;yCards.forEach(c=>{if(c.dataset.tp==="yes")ok++;});nCards.forEach(c=>{if(c.dataset.tp==="no")ok++;});
+  const r=document.getElementById("g4-result");
+  if(ok===g4Tasks.length){r.className="mg-result win";r.textContent="Perfect! You know exactly what an SMM VA does and does not do.";confetti(document.getElementById("game4"));unlockCP(4);}
+  else{r.className="mg-result lose";r.textContent=ok+"/"+g4Tasks.length+" correct. Payroll and tax filing are admin/accounting tasks — not SMM.";}
+}
+
+/* GAME 5 — DRAG ORDER: 4 Pillars */
+const g5Pillars=[
+  {id:"create",label:"Create — write captions and design graphics for the content",order:1},
+  {id:"schedule",label:"Schedule — upload and queue posts at optimal times",order:2},
+  {id:"engage",label:"Engage — reply to comments and DMs to build community",order:3},
+  {id:"analyze",label:"Analyze — review performance data and prepare client report",order:4},
+];
+let g5Drag=null;
+function g5Init(){
+  const pool=document.getElementById("g5-pool");pool.innerHTML="";
+  const drop=document.getElementById("g5-drop");drop.innerHTML='<div class="step-drop-label">Drop the 4 pillars here in workflow order ↓</div>';
+  document.getElementById("g5-result").textContent="";document.getElementById("g5-result").className="mg-result";
+  [...g5Pillars].sort(()=>Math.random()-.5).forEach(s=>{
+    const el=document.createElement("div");el.className="step-item";el.draggable=true;el.dataset.id=s.id;el.dataset.ord=s.order;
+    el.innerHTML="<div class='step-num'>?</div><span>"+s.label+"</span>";
+    el.addEventListener("dragstart",e=>{g5Drag=s.id;el.classList.add("dragging");e.dataTransfer.effectAllowed="move";});
+    el.addEventListener("dragend",()=>el.classList.remove("dragging"));
+    pool.appendChild(el);
+  });
+}
+function g5Drop(e){
+  e.preventDefault();document.getElementById("g5-drop").classList.remove("drag-over");
+  if(!g5Drag)return;
+  const el=document.querySelector(".step-item[data-id='"+g5Drag+"']");
+  if(el)document.getElementById("g5-drop").appendChild(el);
+  g5Drag=null;
+}
+function g5Check(){
+  const placed=[...document.getElementById("g5-drop").querySelectorAll(".step-item")];
+  if(placed.length<4){const r=document.getElementById("g5-result");r.className="mg-result lose";r.textContent="Drag all 4 pillars into the drop zone first.";return;}
+  const ok=placed.every((el,i)=>parseInt(el.dataset.ord)===i+1);
+  placed.forEach((el,i)=>el.querySelector(".step-num").textContent=i+1);
+  const r=document.getElementById("g5-result");
+  if(ok){r.className="mg-result win";r.textContent="Perfect workflow order! Create → Schedule → Engage → Analyze.";confetti(document.getElementById("game5"));unlockCP(5);}
+  else{r.className="mg-result lose";r.textContent="Not quite. Think: what comes first — creating or scheduling? What comes last — engagement or analysis?";}
+}
+
+/* GAME 6 — CLASSIFY: SMM or Paid Ads? */
+const g6Tasks=[
+  {t:"Writing captions and designing Canva graphics for organic Instagram posts",good:true,e:"SMM — organic content creation is the core of your daily work as an SMM VA."},
+  {t:"Setting up Facebook Ads Manager targeting and running a paid campaign",good:false,e:"Paid Ads — this requires a separate advanced skillset and an ad budget. It is not core SMM."},
+  {t:"Replying to comments and DMs on the brand's Facebook page",good:true,e:"SMM — community management is a key pillar of Social Media Management."},
+  {t:"Installing a Facebook Pixel on a website for retargeting campaigns",good:false,e:"Paid Ads — pixel setup is a technical paid advertising task, not organic SMM."},
+  {t:"Creating a monthly content calendar and scheduling posts in Buffer",good:true,e:"SMM — content planning and scheduling is one of your core weekly responsibilities."},
+];
+let g6Score=0,g6Done=0;
+function g6Init(){
+  g6Score=0;g6Done=0;
+  document.getElementById("g6-score").textContent="Score: 0 / 5";
+  document.getElementById("g6-result").textContent="";document.getElementById("g6-result").className="mg-result";
+  const c=document.getElementById("g6-cards");c.innerHTML="";
+  g6Tasks.forEach((s,i)=>{
+    const d=document.createElement("div");d.className="sc-card";d.id="g6s"+i;
+    d.innerHTML="<div class='sc-text'>"+s.t+"</div><div class='sc-reveal'></div><div class='sc-btns'><button class='sc-btn good-btn' onclick='g6Ans("+i+",true)'>📋 Social Media Management</button><button class='sc-btn bad-btn' onclick='g6Ans("+i+",false)'>💰 Paid Ads</button></div>";
+    c.appendChild(d);
+  });
+}
+function g6Ans(i,chose){
+  const s=g6Tasks[i];const d=document.getElementById("g6s"+i);
+  if(d.dataset.done)return;d.dataset.done="1";
+  d.querySelectorAll(".sc-btn").forEach(b=>b.disabled=true);
+  const ok=chose===s.good;if(ok)g6Score++;g6Done++;
+  d.classList.add(s.good?"done-good":"done-bad");
+  d.querySelector(".sc-reveal").textContent=(ok?"✅ Correct — ":"❌ Wrong — ")+s.e;
+  document.getElementById("g6-score").textContent="Score: "+g6Score+" / 5";
+  if(g6Done===5){
+    const r=document.getElementById("g6-result");
+    if(g6Score===5){r.className="mg-result win";r.textContent="Perfect! You can now clearly distinguish SMM from Paid Ads.";confetti(document.getElementById("game6"));unlockCP(6);}
+    else{r.className="mg-result lose";r.textContent=g6Score+"/5. Review the explanations above and remember: organic content is SMM, ad spend and pixels are paid ads.";
+      setTimeout(()=>{const rb=document.createElement("button");rb.className="mg-btn";rb.style="margin-top:10px;display:block;margin-left:auto;margin-right:auto";rb.textContent="↺ Try Again";rb.onclick=g6Init;document.getElementById("g6-result").after(rb);},100);}
+  }
+}
+
+/* GAME 7 — SCENARIO SORT: Package tier */
+const g7Scenarios=[
+  {t:"A small local bakery wants to start their Facebook page. First-time SMM client. Budget is around 5,000 pesos per month. Needs 10-12 posts per month.",tier:"starter",e:"Starter Package — fits a first-time client with a limited budget wanting basic Facebook content."},
+  {t:"An online coaching brand wants 20 posts per month on Instagram and Facebook, Canva graphics, captions, comment replies, and a monthly analytics report.",tier:"growth",e:"Growth Package — covers 2 platforms, graphics, engagement, and reporting at the mid-range rate."},
+  {t:"A wellness brand wants full management: strategy, 30+ posts, all platforms, Stories, Reels, community management, and bi-weekly performance reports.",tier:"premium",e:"Premium Package — full-service management across all platforms with strategy and deep reporting."},
+  {t:"A new online store wants 12 Instagram posts per month with basic graphics and scheduling only. No reporting needed yet.",tier:"starter",e:"Starter Package — limited scope, single platform, no reporting. Perfect for a beginner-priced engagement."},
+];
+const g7Labels={"starter":"Starter Package (~₱4,000–₱6,000)","growth":"Growth Package (~₱8,000–₱12,000)","premium":"Premium Package (~₱15,000–₱25,000)"};
+let g7Score=0,g7Done=0;
+function g7Init(){
+  g7Score=0;g7Done=0;
+  document.getElementById("g7-score").textContent="Score: 0 / 4";
+  document.getElementById("g7-result").textContent="";document.getElementById("g7-result").className="mg-result";
+  const c=document.getElementById("g7-cards");c.innerHTML="";
+  g7Scenarios.forEach((s,i)=>{
+    const d=document.createElement("div");d.className="sc-card";d.id="g7s"+i;
+    d.innerHTML="<div class='sc-text'>"+s.t+"</div><div class='sc-reveal'></div><div class='sc-btns'><button class='sc-btn good-btn' onclick='g7Ans("+i+","starter")' style='flex:1;font-size:10px'>Starter</button><button class='sc-btn' onclick='g7Ans("+i+","growth")' style='flex:1;font-size:10px;background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)'>Growth</button><button class='sc-btn bad-btn' onclick='g7Ans("+i+","premium")' style='flex:1;font-size:10px'>Premium</button></div>";
+    c.appendChild(d);
+  });
+}
+function g7Ans(i,chose){
+  const s=g7Scenarios[i];const d=document.getElementById("g7s"+i);
+  if(d.dataset.done)return;d.dataset.done="1";
+  d.querySelectorAll(".sc-btn").forEach(b=>b.disabled=true);
+  const ok=chose===s.tier;if(ok)g7Score++;g7Done++;
+  d.classList.add(ok?"done-good":"done-bad");
+  d.querySelector(".sc-reveal").textContent=(ok?"✅ Correct — ":"❌ Wrong — ")+s.e;
+  document.getElementById("g7-score").textContent="Score: "+g7Score+" / 4";
+  if(g7Done===4){
+    const r=document.getElementById("g7-result");
+    if(g7Score===4){r.className="mg-result win";r.textContent="Perfect! You can now match client needs to the right package tier.";confetti(document.getElementById("game7"));unlockCP(7);}
+    else{r.className="mg-result lose";r.textContent=g7Score+"/4. Match the scope of work (posts, platforms, reporting) to the package tier.";
+      setTimeout(()=>{const rb=document.createElement("button");rb.className="mg-btn";rb.style="margin-top:10px;display:block;margin-left:auto;margin-right:auto";rb.textContent="↺ Try Again";rb.onclick=g7Init;document.getElementById("g7-result").after(rb);},100);}
+  }
+}
+
+/* GAME 8 — DRAG ORDER: Daily tasks */
+const g8Tasks=[
+  {id:"checkin",label:"Morning Check-In — log in to all accounts, reply to overnight comments and DMs",order:1},
+  {id:"create",label:"Content Creation Block — design graphics, write captions, draft Reels scripts",order:2},
+  {id:"schedule",label:"Scheduling and Approval — upload content, get client approval, queue posts",order:3},
+  {id:"research",label:"Research Block — find trending content, study competitors, update hashtag strategy",order:4},
+];
+let g8Drag=null;
+function g8Init(){
+  const pool=document.getElementById("g8-pool");pool.innerHTML="";
+  const drop=document.getElementById("g8-drop");drop.innerHTML='<div class="step-drop-label">Drop the 4 morning tasks here in chronological order ↓</div>';
+  document.getElementById("g8-result").textContent="";document.getElementById("g8-result").className="mg-result";
+  [...g8Tasks].sort(()=>Math.random()-.5).forEach(s=>{
+    const el=document.createElement("div");el.className="step-item";el.draggable=true;el.dataset.id=s.id;el.dataset.ord=s.order;
+    el.innerHTML="<div class='step-num'>?</div><span>"+s.label+"</span>";
+    el.addEventListener("dragstart",e=>{g8Drag=s.id;el.classList.add("dragging");e.dataTransfer.effectAllowed="move";});
+    el.addEventListener("dragend",()=>el.classList.remove("dragging"));
+    pool.appendChild(el);
+  });
+}
+function g8Drop(e){
+  e.preventDefault();document.getElementById("g8-drop").classList.remove("drag-over");
+  if(!g8Drag)return;
+  const el=document.querySelector(".step-item[data-id='"+g8Drag+"']");
+  if(el)document.getElementById("g8-drop").appendChild(el);
+  g8Drag=null;
+}
+function g8Check(){
+  const placed=[...document.getElementById("g8-drop").querySelectorAll(".step-item")];
+  if(placed.length<4){const r=document.getElementById("g8-result");r.className="mg-result lose";r.textContent="Drag all 4 tasks into the drop zone first.";return;}
+  const ok=placed.every((el,i)=>parseInt(el.dataset.ord)===i+1);
+  placed.forEach((el,i)=>el.querySelector(".step-num").textContent=i+1);
+  const r=document.getElementById("g8-result");
+  if(ok){r.className="mg-result win";r.textContent="Perfect daily order! Check-In → Create → Schedule → Research.";confetti(document.getElementById("game8"));unlockCP(8);}
+  else{r.className="mg-result lose";r.textContent="Not quite. Start your morning by checking accounts, then create, then schedule, then research.";}
+}
+
+/* GAME 9 — DRAG SORT: Need vs Do Not Need */
+const g9Items=[
+  {t:"A reliable laptop or desktop computer",tp:"need"},
+  {t:"Stable internet connection",tp:"need"},
+  {t:"Willingness to learn Canva, Buffer, and Meta Business Suite",tp:"need"},
+  {t:"A marketing degree from a university",tp:"noneed"},
+  {t:"A personal Instagram following of 10,000+",tp:"noneed"},
+  {t:"Expensive professional camera equipment",tp:"noneed"},
+];
+let g9Drag=null;
+function g9Init(){
+  const pool=document.getElementById("g9-pool");pool.innerHTML="";
+  document.getElementById("g9-zone-need").innerHTML='<div class="zone-label good">✅ You Need This</div>';
+  document.getElementById("g9-zone-noneed").innerHTML='<div class="zone-label bad">❌ You Do NOT Need This</div>';
+  document.getElementById("g9-result").textContent="";document.getElementById("g9-result").className="mg-result";
+  [...g9Items].sort(()=>Math.random()-.5).forEach((c,i)=>{
+    const el=document.createElement("div");el.className="drag-card";el.draggable=true;el.dataset.tp=c.tp;el.dataset.i=i;el.textContent=c.t;
+    el.addEventListener("dragstart",e=>{g9Drag=i;el.classList.add("dragging");e.dataTransfer.effectAllowed="move";});
+    el.addEventListener("dragend",()=>el.classList.remove("dragging"));
+    pool.appendChild(el);
+  });
+}
+function g9Drop(e,zone){
+  e.preventDefault();document.getElementById("g9-zone-"+zone).classList.remove("drag-over");
+  if(g9Drag===null)return;
+  const card=document.querySelector(".drag-card[data-i='"+g9Drag+"']");
+  if(card)document.getElementById("g9-zone-"+zone).appendChild(card);
+  g9Drag=null;
+}
+function g9Check(){
+  const nCards=[...document.getElementById("g9-zone-need").querySelectorAll(".drag-card")];
+  const nnCards=[...document.getElementById("g9-zone-noneed").querySelectorAll(".drag-card")];
+  if(nCards.length+nnCards.length<g9Items.length){const r=document.getElementById("g9-result");r.className="mg-result lose";r.textContent="Sort all 6 items first!";return;}
+  let ok=0;nCards.forEach(c=>{if(c.dataset.tp==="need")ok++;});nnCards.forEach(c=>{if(c.dataset.tp==="noneed")ok++;});
+  const r=document.getElementById("g9-result");
+  if(ok===g9Items.length){r.className="mg-result win";r.textContent="Perfect! You know exactly what you need — and do not need — to start.";confetti(document.getElementById("game9"));unlockCP(9);}
+  else{r.className="mg-result lose";r.textContent=ok+"/"+g9Items.length+" correct. You need a laptop, internet, and willingness to learn. You do NOT need a degree, a following, or expensive equipment.";}
+}
+
+const ss=document.createElement("style");ss.textContent="@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}";document.head.appendChild(ss);
+document.addEventListener("DOMContentLoaded",()=>{
+  load();restoreUI();
+  g1Init();g2Init();g3Init();g4Init();g5Init();g6Init();g7Init();g8Init();g9Init();
+});
+</script><script>
+(function(){
+  var MSGS=[
+    [0,'Initializing LES001...'],
+    [15,'Loading lesson content...'],
+    [30,'Preparing activities and games...'],
+    [50,'Setting up your checkpoints...'],
+    [70,'Almost there...'],
+    [88,'LES001 is ready - launching!'],
+  ];
+  var fill=document.getElementById('sp-fill');
+  var msg=document.getElementById('sp-msg');
+  var pct=document.getElementById('sp-pct');
+  var splash=document.getElementById('les-splash');
+  var start=null;
+  var DUR=4000;
+  function step(ts){
+    if(!start) start=ts;
+    var p=Math.min((ts-start)/DUR,1);
+    var v=Math.round(p<0.5?2*p*p*100:(-1+(4-2*p)*p)*100);
+    fill.style.width=v+'%';
+    pct.textContent=v+'%';
+    for(var i=MSGS.length-1;i>=0;i--){if(v>=MSGS[i][0]){msg.textContent=MSGS[i][1];break;}}
+    if(p<1){requestAnimationFrame(step);}
+    else{setTimeout(function(){splash.classList.add('done');},400);}
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body></html>

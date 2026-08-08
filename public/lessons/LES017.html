@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES017 — Where to Find Clients (OnlineJobs, Upwork) | LearnHub PH</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0d7377;--teal2:#14a085;--gold:#f4a261;--gold2:#e76f51;
+  --text:#1a2e35;--bg:#f0fafa;--white:#ffffff;
+  --teal-light:#e8f8f8;--gold-light:#fff8f0;--warn-light:#fff3ee;
+  --s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;--s400:#94a3b8;--s500:#64748b;--s600:#475569;
+  --g500:#22c55e;--r500:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:0 0 60px;line-height:1.6;font-size:14px}
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#e8f8f8 0%,#f0fafa 60%,#e0f5f5 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;transition:opacity .6s ease,visibility .6s ease}
+#splash.fade-out{opacity:0;visibility:hidden}
+.sp-eyebrow{font-size:10px;font-weight:800;color:var(--teal);letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;text-align:center}
+.sp-thumb{width:min(320px,80vw);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(13,115,119,.18);margin-bottom:22px;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;aspect-ratio:16/9}
+.sp-thumb svg{width:64px;height:64px;color:rgba(255,255,255,.85)}
+.sp-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--text);text-align:center;letter-spacing:-.02em;margin-bottom:8px}
+.sp-sub{font-size:13px;color:#4a7c85;text-align:center;margin-bottom:22px}
+.sp-track{width:min(400px,90vw);height:8px;background:#cce9ea;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--teal2),var(--gold));border-radius:99px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;width:min(400px,90vw);font-size:11px;font-weight:600;color:#4a7c85}
+.topbar{background:var(--white);border-bottom:2px solid var(--teal);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(13,115,119,.1)}
+.topbar img{height:28px}
+.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,#0a4f52 0%,var(--teal) 50%,var(--teal2) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--white);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(13,115,119,.22)}
+.hero-tag{background:rgba(255,255,255,.12);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85)}
+.hero h1{font-size:clamp(22px,4vw,30px);font-weight:900;line-height:1.2;margin-bottom:12px;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;color:rgba(255,255,255,.78)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.88);display:inline-flex;align-items:center;gap:6px}
+.hero-meta svg{width:14px;height:14px;flex-shrink:0}
+.progress-wrap{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--teal);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--teal),var(--teal2),var(--gold));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--white);border:1px solid var(--s200);border-left:3px solid var(--teal);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.toc-title svg{width:16px;height:16px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--teal);background:var(--teal-light)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--teal);font-weight:700;background:var(--teal-light)}
+.toc-list li a.toc-current::before{background:var(--teal)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-card{background:var(--white);border-left:3px solid var(--teal);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 4px 20px rgba(13,115,119,.08)}
+.section-title{font-size:10px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--teal-light);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:var(--white);font-size:10px;font-weight:800;flex-shrink:0}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:700}
+em{color:var(--teal);font-style:normal;font-weight:600}
+h2{font-size:17px;font-weight:800;color:var(--text);margin:18px 0 10px}
+h3{font-size:14px;font-weight:700;color:var(--teal);margin:14px 0 8px}
+.icon-inline{display:inline-block;vertical-align:middle;flex-shrink:0}
+.def-box{border-left:3px solid var(--teal);padding:16px 20px;background:var(--teal-light);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.def-box p{font-size:13px;color:#1a2e35;margin:0;line-height:1.75}
+.tip-box{border-left:3px solid var(--gold);padding:14px 18px;background:var(--gold-light);border-radius:0 12px 12px 0;margin:14px 0}
+.tip-label{font-size:10px;font-weight:800;color:#b5671a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.tip-box p{font-size:13px;color:#5c3b12;margin:0;line-height:1.7}
+.warn-box{border-left:3px solid var(--gold2);padding:14px 18px;background:var(--warn-light);border-radius:0 12px 12px 0;margin:14px 0}
+.warn-label{font-size:10px;font-weight:800;color:var(--gold2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.warn-box p{font-size:13px;color:#7a3520;margin:0;line-height:1.7}
+.scenario-box{border-left:3px solid var(--teal2);padding:14px 18px;background:#e8f8f8;border-radius:0 12px 12px 0;margin:14px 0}
+.scenario-label{font-size:10px;font-weight:800;color:var(--teal2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.scenario-box p{font-size:13px;color:#1a3a35;margin:0;line-height:1.7}
+.action-box{background:linear-gradient(135deg,#e8f8f8,#f0fafa);border:2px solid var(--teal);border-radius:12px;padding:18px 20px;margin:18px 0}
+.action-label{font-size:10px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.action-box p{font-size:13px;color:var(--text);margin:0;line-height:1.7}
+.table-wrap{overflow-x:auto;margin:16px 0}
+.les-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);table-layout:fixed}
+.les-table th{background:var(--teal);color:var(--white);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.les-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.les-table tr:last-child td{border-bottom:none}
+.les-table tr:hover td{background:var(--teal-light)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.checklist li{font-size:13px;color:var(--s600);line-height:1.6;padding-left:22px;position:relative}
+.checklist li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d7377' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--teal2),var(--gold))}
+.stat-num{font-size:24px;font-weight:900;color:var(--teal);margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.mini-game{background:linear-gradient(135deg,#0a4f52,var(--teal));border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.mg-inst{font-size:12px;color:rgba(255,255,255,.75);margin-bottom:16px;line-height:1.5}
+.mg-btn{background:linear-gradient(135deg,var(--gold),#e07c3a);color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:10px;display:inline-flex;align-items:center;gap:6px}
+.mg-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(244,162,97,.4)}
+.mg-result{font-size:13px;font-weight:700;text-align:center;padding:10px 14px;border-radius:8px;margin-top:10px;display:none}
+.mg-result.win{display:block;background:rgba(34,197,94,.2);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.mg-result.lose{display:block;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.drag-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.drag-zones.zones3{grid-template-columns:1fr 1fr 1fr}
+.drag-zone{min-height:110px;background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.2);border-radius:12px;padding:10px;transition:all .2s}
+.drag-zone.drag-over{border-color:var(--gold);background:rgba(244,162,97,.1)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:6px}
+.zone-label.good{color:#4ade80}
+.zone-label.bad{color:#fca5a5}
+.zone-label.neutral{color:rgba(255,255,255,.9)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--white);cursor:grab;user-select:none;transition:all .18s;line-height:1.4}
+.drag-card:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.drag-card.dragging{opacity:.4;transform:scale(.96)}
+.drag-card.correct-flash{animation:correctFlash .5s ease forwards}
+.drag-card.wrong-shake{animation:wrongShake .5s ease forwards}
+.verdict-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.verdict-card{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.verdict-card:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.verdict-card.correct-v{border-color:#4ade80;background:rgba(34,197,94,.15);animation:correctFlash .5s ease}
+.verdict-card.wrong-v{border-color:#fca5a5;background:rgba(239,68,68,.12);animation:wrongShake .5s ease}
+.verdict-title{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px}
+.verdict-sub{font-size:11px;color:rgba(255,255,255,.65)}
+.seq-drop{display:flex;flex-direction:column;gap:8px;min-height:100px;background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:10px;transition:all .2s;margin-bottom:12px}
+.seq-drop.drag-over{border-color:var(--gold);background:rgba(244,162,97,.08)}
+.step-item{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--white);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.17)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.8);flex-shrink:0}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.15);border-color:var(--gold)}
+.match-item.selected{background:rgba(244,162,97,.25);border-color:var(--gold)}
+.match-item.matched{background:rgba(34,197,94,.18);border-color:#4ade80;cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.18);border-color:#fca5a5;animation:wrongShake .5s ease}
+.match-score{font-size:12px;color:rgba(255,255,255,.65);margin-top:10px;text-align:center}
+.audit-wrap{position:relative;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px;margin-bottom:10px}
+.audit-item{display:flex;align-items:flex-start;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.audit-item:hover{background:rgba(255,255,255,.06)}
+.audit-item.flagged{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2)}
+.audit-item.flagged .audit-flag{opacity:1}
+.audit-icon{flex-shrink:0;color:rgba(255,255,255,.7)}
+.audit-text{font-size:12px;color:rgba(255,255,255,.85);line-height:1.5;flex:1}
+.audit-flag{font-size:11px;font-weight:700;color:#fca5a5;opacity:0;transition:opacity .2s;flex-shrink:0}
+.meter-track{background:rgba(255,255,255,.1);border-radius:99px;height:14px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.15)}
+.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#4ade80);border-radius:99px;transition:width .4s ease}
+.meter-label{font-size:11px;color:rgba(255,255,255,.7);text-align:right;margin-bottom:10px}
+.meter-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.meter-item{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s}
+.meter-item:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.meter-item.added{background:rgba(34,197,94,.18);border-color:#4ade80;cursor:default;opacity:.7}
+.budget-track{background:rgba(255,255,255,.08);border-radius:10px;padding:8px 12px;font-size:12px;color:var(--white);margin-bottom:10px;display:flex;justify-content:space-between}
+.checkpoint{background:var(--white);border-radius:16px;overflow:hidden;margin:20px 0;box-shadow:0 4px 20px rgba(13,115,119,.1)}
+.cp-header{background:linear-gradient(135deg,var(--teal),var(--teal2));padding:14px 20px;display:flex;align-items:center;gap:10px}
+.cp-header-title{font-size:13px;font-weight:800;color:var(--white)}
+.cp-badge{background:rgba(255,255,255,.2);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--white);display:inline-flex;align-items:center;gap:6px}
+.cp-locked{padding:24px;text-align:center;color:var(--s400);font-size:13px}
+.cp-lock-icon{margin-bottom:8px;display:flex;justify-content:center;color:var(--s400)}
+.cp-content{padding:20px}
+.cp-question{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.6}
+.cp-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cp-opts label{display:flex;align-items:flex-start;gap:10px;background:var(--s100);border:2px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--s600);line-height:1.5}
+.cp-opts label:hover{border-color:var(--teal);background:var(--teal-light);color:var(--text)}
+.cp-opts input[type=radio]{accent-color:var(--teal);flex-shrink:0;margin-top:2px}
+.cp-opts label.opt-correct{border-color:var(--g500);background:#f0fdf4;color:#065f46}
+.cp-opts label.opt-incorrect{border-color:var(--r500);background:#fef2f2;color:#991b1b;animation:wrongShake .5s ease}
+.checkpoint-feedback{font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:none}
+.fb-correct{background:#d1fae5;color:#065f46;border:1px solid rgba(34,197,94,.3)}
+.fb-incorrect{background:#fef2f2;color:#991b1b;border:1px solid rgba(239,68,68,.2)}
+.cp-passed-note{display:none;align-items:center;gap:8px;background:#d1fae5;border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:#065f46;margin-bottom:10px}
+.btn-check{background:linear-gradient(135deg,var(--teal),var(--teal2));color:var(--white);border:none;padding:10px 24px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-right:10px}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,115,119,.3)}
+.btn-continue{background:linear-gradient(135deg,var(--gold),#e07c3a);color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:none}
+.btn-continue:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(244,162,97,.4)}
+.final-block{display:none;margin-bottom:32px;scroll-margin-top:80px}
+.final-block.is-visible{display:block}
+.yt-wrap{background:var(--white);border-left:3px solid var(--teal);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 20px rgba(13,115,119,.1)}
+.yt-frame{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+.yt-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.yt-label{padding:12px 16px;font-size:12px;font-weight:700;color:var(--teal);background:var(--teal-light);display:flex;align-items:center;gap:8px}
+.takeaways{background:var(--white);border-left:3px solid var(--teal);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(13,115,119,.08)}
+.takeaways h3{font-size:14px;font-weight:800;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.complete-wrap{background:var(--white);border-left:3px solid var(--gold);border-radius:12px;padding:24px;text-align:center;box-shadow:0 4px 20px rgba(13,115,119,.08)}
+.complete-wrap p{font-size:13px;color:var(--s500);margin-bottom:16px}
+.btn-complete{background:linear-gradient(135deg,var(--teal),var(--teal2));color:var(--white);border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 16px rgba(13,115,119,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-complete:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(13,115,119,.4)}
+.btn-complete:disabled{opacity:.6;cursor:not-allowed;transform:none}
+#complete-msg{display:none;margin-top:14px;font-size:14px;font-weight:700;color:var(--teal);background:var(--teal-light);padding:12px 20px;border-radius:10px}
+@keyframes correctFlash{0%{transform:scale(1)}30%{transform:scale(1.06);box-shadow:0 0 0 4px rgba(34,197,94,.4)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@media(max-width:640px){
+  .hero{padding:28px 20px 24px}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .drag-zones{grid-template-columns:1fr}
+  .drag-zones.zones3{grid-template-columns:1fr}
+  .verdict-grid{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:1fr}
+  .wrap{padding:16px 14px 0}
+  .section-card{padding:16px}
+  .mini-game{padding:16px}
+  .les-table th,.les-table td{padding:8px}
+  .drag-card,.step-item,.audit-item,.meter-item{min-height:44px}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-eyebrow">LearnHub PH &nbsp;·&nbsp; Module 6 &nbsp;·&nbsp; Lesson 2</div>
+  <div class="sp-thumb"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAJLArwDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAIDAQQFBwgGCf/EAFMQAAIBAwIEAgUHCAYHBgQHAAABAgMEBQYRBxIhMUFRCBMyYXEUIlJygZHBFRYjQqGxwtEzQ2KChKIkRYOSo7LSFyVGY3OzNlNk4hg0NZPh8PH/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAJBEBAQEBAAICAQUBAQEAAAAAAAECEQMSITEEEyIyQVEFFGH/2gAMAwEAAhEDEQA/APSIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHiGYYGGVzLGVyLQUVOxq1TbqGrVNcjTqmrUWxt1UakzpytFDCfUzNETReJxZKLK11JJ9Sti65PoST2KkyaexnYlYn2Jb9StMkpFLEJpkkyvwJJlLELEzKZWmS3K2K8WbhMgn7ySZSxWxPfoZj0IJktytjOxNe4kmVp7kl3MtRhqLYPqWMpj0Lu6OPyTmpTHzONii+hejWoPobKO7F+GuPoABZcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwZMAYZCRYyEiYKJmtUXQ25o16iNc0aVVGpURu1UatSJ0ZqY1JpkC6aKZL7zaLysEk+xAymLF5ViZOMuhUmZTKWJXKRJMpTJJlbErkzKe/cqTJJlLELN+pKL7FW5JPqytiFqZlMrT6mUylitWp+8k2VbkkylilixMlF9OhWmSizPUZai6JdH2SiL8i+HY4vPGWPtdQNmJq0e5tROnx39rXLIANFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+4DAwRZIMCmaKKiNqSKZovmjSqRNWpHub84mtUib5o0JxKJI3akTXnE6M1aNZ9OxhlkkQa8i60rG5LfwImNxxaVYn0JJlW/UkmVsW6tUuhLcpT8iaZSwWpmU/eVJkk9itgt3Mp+BVuSTK2IWpkkylMkmUsVq5MnFlKZOL3MtRlqNmHgbEH801qfgbNP2Tg/J+mMn7ltI2YmtT6M2Is18X8VspgwZNmgAAAAAAAAANwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeJgyYAi0Qki1kWiZRrTia84m5KJTOJrmjQqRNacTkZx3NapA2zpLQnEqkjcnEonA2lTGu0RLZLqQaLrSo9TPYPoRJTKkmSTKzKZWxZbFmU/eVJktytgt3MqRVv0JJ9StgtUjKZUmST3K2IXRl1LYPc1oyLqe5lqKWNymbUOyNaibUeiPK/Jvzxjz5Ti+pfFmvHoWRka+O/Ckq5MzuVpmdzXq/Vm43IbjclPU9zO5DcbhPUgY3Mbg6kCO5ncHUgASkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAwYaJGAINFcolzRFotKNWcTXnA3pRKZxNM6HHzga84nITgUVIG2dJcfKJVKJuTiUTibZqetdoj8S2USto0lT1HruA0AnonsZT8iLHiOLJ7/eZ3K9zO5HBYmS3KkxuVuUL4s2aD3ZpwfU3rZGPk+Ic63qKNhFVJbFyPD/IvdMrGEyaZBmN/Mt49fDCreYypFO5Lc3mlfZdzGeYp5jKZbqfZbzGdyrccxPVvZduNyrcypE9PZZuNyvcb+8dT7NkAFmoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8Zr+4uaNxZq2q1YJwlvyNrfqvI2/H8P6/kmO8cH/AEvzp+B+PfPc+3P6j5HizqjNYfVEbbG39W3oO3hPkiltu2+vY+KevtTpP/vev90f5HwnGm7yUtXQca90/wDRofrS82WabjcVcDazqxqzm4vdyTbfzmfdf8qfi6zPx9+OdzPvk+Xznl8/l8vjn5WNWTf9d+nqbTWo1e5C3xFaFSV3HF0L+pXbW0uduO23nvFs+lqVIU4OdScYRXeUnsjrjRia4iJNdfzZs/8A3JnFaxV1m+KF1jLrCTzlhYWNKtQsXdxoU+abfNVkm/n9uX3bHwnmknk1z/a+u8XzjPf8duxlGcVKDUovqmnumRp1adXm9VUhPl6Plknt8TpCXyrB0M9jKthe4zFX3yejb4y0yNOrXhc1J7ckHu/Vwmu+/k9i63tKmnddaRVrpuOnHeXU7ar6u/jWVzT9XJtSgu+zUXzfzMmjurngkt5x69uvcx62n6xU/WQ9Y1uo8y3a+B0ppbTVlPhbltQXbr3OVVC/9TVq1ZNUIqVSKjCO+yWy+9k7nRmMtODcNQU/X/nFQxcMhDJOrJ1lVUFNLff2fDbtsB2jZ6gpXWrcngY0Kka1jb0biVVtcslU32SXu2JV87So6ttsDKlP11ayneqruuVRjNRafv67nWljSz+Y4nZa4wmWt8bWqYbH1a7q2yrKfNGT6LdbddyjO2WctNXZGGcylHJXE9K37oyoW/qeRbrpsm93uB3TuuXmbXL3336HB2Of+UaqzWJqUoUqWOo29X17n7frVJ9fLbY+U1DeUoej/WufXxUJYSCjU5u8nBJJPz3OIxen8VqLiflqOZlK4p0sVYVI2MqjUKr9W1zySfzuXt9oHb0JRnFShJSi+zi90z4SWvb+tkspb4vSWTyFDH3U7SpXoVaaTlHvsm0/Eo0tZUNOcTchgcLKccRVxsb2dpzuULat6zlXLv7Kkuu3uOI0llNR2eW1hSwen6ORovN3D9fUvY0VGW0eji1vt26gfW4rXeNy11g6NjSry/Kkrin89KMredGO84Tj4PwOV1DnqWEr4inWozqvI3sLKDi0uSUk3zP3dDqirpfNYjUelKNDJW1rnsjeZG/r11S9bSpznSjvCMXtuuWKW/n1OT1TjtTWed0ZUz2dtcjbPN0FGlSs1RaltLrvv+wDtwAAYMNEuxgCDRXKJc0RaLSjVnEonA3ZRKZxNJoaE4GvOByE4GvUgbZ0loTiVSibs4FE4m00NVog0XyiVyiXlW6q2HiSa6kX0LJ6wNzG5Fsnh1PfzCZDczDqRxLZoreSOVt47R2NC1g210OUpx6HF+Rr4aTPI2Ka6E0QiTR4Xl+3PqsPyDXUyYa95XOuMdRgANG+ds7DcJkQazSiaZnfoVmUy0p1ZzBMrTM7k9T1ZuOYr3M7jp1yAANnWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYcU+6T+JkBFkvxXX2usfWuM1GdG0nVj6qK5o0914n1OlbZUtP2cKtBQmlLeMobNfOZzJg7PJ+Zrfiz4ufTx/xf8Aj4/G/M8n5c1b7/1/U+Xy2o9CYXUGVjkr5XkLtUVQ57a6nR3gm2k+Vrfq2af/AGZ6eVCEYflGFxTm507tXtT18N0k4qe+/L07dj7UHG9l8rR0Dp2nhbrGSs5VaV1UjVr1qtWUq1SpH2Zupvzbrw8iGO4fYGyyVrkPV3dzkLWoqlK5urmdWcOjWycn26vofWgDiLTTmNtNO1cHQpSWOqxqwlBzbbVRty69+8mWVsFYVtNSwNSnJ412qs3T5nv6rl5dt+/bxOTAHE43T+PxuUrZC0pSjdVrelazk5tp06S2gtvdv3Lq2Gsq2bpZarScr2nbStIyb+b6uUlJprs+qOQAHwsuFWlpxq0qlvdzsp8zjZyupuhSb7uEN9k+vTyN/K6AwOTvJXlajcUr5wp043VCvKnVhGEeWKjJPotu/mfVgDhNMaXxemqVeOMpVPW3ElKvcVqjqVarXbmm+r2NzE4izxM76VlTlB3tzK7rbyb5qktt37uy6G+ANC8xFneZbH5KvCUruw9Z6iSk0o88eWW68ehjLYizytSwqXsJTlY3MbqhtJrlqR32b8+/Y5AAAAAAAGDDRIwBCSK5IuZFotKNacSicDclEqnE0mhoTga84HITga84e41zpLQnEqkjdnA15xNpRqyRWzYlEpkjWVKlkfHqWSWxW0Xh1gvt4OTKqceaSOUtKOy3KeTXrG3jz1sW9PlibcPArgtiyJ5nmvV/JeTiyL2LIsqiTTPN8mXFan7jDMbkkc9nEdR2DRLx6ATXEWIbdCJY15EdjXO1LlEfAy1uNtjSbUuUfgDPZjYvNK8NwDG3vJ9kOUAB1O0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAzJgCDRCSLtiDRaUa04lM4m5KJTOJfNGjUga04nITga9SBtnQ0JwKJQN6cCmpFJPc3mktKcdirbd7ItqyTeyLLeju92ad5Or4z7VO1o7bNo5GnHlW2xCnDZLoXLp2OTyb7XZJ6xJE12IIkmc2nP5PlJEkRG5zay49LEySfUrJbnPrCnU0zPcin0M7mFyvKyB8AV+ksNGGiTGxM0ixDbcw0TaMbGk2rco7MxsT26BIt7q+rkAAei6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgwyRgCDRXJFzRFotKNacSicNzclE168owjuzTNGnWSim2cVd1t3siy+uuaTUX0NSnFye7OzGeTtXznqVGm5PdnI0oJJFVGGxsxSKb112YzxNE1+0iu3UyYVepGTBnczsY7ykmE+pFEuxlY5N5SMkUZXQx1lzWcSTJJle5lMx1lHeLEzO+5BMluY6wvNJAimS3M7leUBlGCoDbyG4J6cbwAPYXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMADBhokVVqipxbZM+RXXqRpxbbPnsheOcmovoWZK8c21FnEveTbZ3eHxc+atmdSiuZ7s2qUdimCL6fbua7rpxONiC6l0dimBbHuc9bxYS3IIkmUqUkwuhgz+4pYrYkvJmURTMopYw3lIyR8DJlY5N4ZMkdzK7mdjnsS36GftIb9SW5lcq94kmSK13MmVytNLF8dgn16ogn0MmdwvNJbmd9iI39xX1T7OQAB6zUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADEnsgI1JqMd2cFkrvfdJm1kLnZNJnz9xU5mzr8Hi/upiqpLmkERJI7WuV0fAugzXiy6L6GWm2WxBlsX0NeLLE+qMrGkq9MmmVRZNMzsXizcyQ3JblbBkyR6kl2K2KWBLcj8DKKWMN4Z8CXgRBlY5d4SC7BAzsc2ss7mURXYzuUsUST8huRMplblPUtxu/BkQV9U9coADtdYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGpeVuWLW5sVZcsWcLfVt2+pp48e1GheVXKTOPn1ZfWlu2a8j0sTkWjBmPQx4mUXaRZHoWplG/YnFlLGkrYjLqWqRrRfUsjIysXlbUWTT6mvGXYtjIzsaSrkyW/Qqi+pNMpYssTBFMkitgyjKMIe8rYpYkupnuRXcyUsYbwl3M7kU9gjKxy7wkDC2DKWOfWWRv3AK8U4z4GABw45YAG7sAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADBGo9kBq3dTaLODup7tnJXk+5xFd9WdnhyNSp3KX3Lp9ypnZF4j4mTHiZ8ehK0ZT69yaez9xXs136GedeMkvtK1aVcmTTNdVaa/rIf7yLKclJbxakvNPcrV5WzGRbGXvNVMsjLqZ2LytpPoTTNdS6lsZe8zsaSrkyW5oZPJWeKsal7k7mnbWlLbnq1XtGO7SW7+LSPnZcTNGU/a1Jj/sm3+5Gd+E+0n2+z3Mo+GlxX0NT76ktG/dGb/hKJ8YNCwf8A+vU39WlN/gVtiLvP+uwDPicbgMzY5/FUMniq3r7Kvu6dTlcd9ns+j96OS7kWIs6yDBlFLGOsMmSJnfqUsc+sM/vMkRuV9WVwz2MGG+hjmaHqp6OaABZsAAAAauSyNli7Z3GSu7e0oLvUr1FCP3sDaB1jm+Omg8VKUI5Spf1I/q2VCVRf7z2j+0+QvvSawVNtWWAyVdeEqlSEP2dQO/Qebp+k9Df9HpeW39q7/wDtJUvSeo7/AKbS9RL+xdp/viB6PB0ZjPSU0xcSishi8rZ795RUKqX3NHYemOJekNTSjTxWctZXEu1Cs3Rqf7stt/sA+wAAAGJPaLfktzzXd+k3cUa9WlDS1FuEnHeV612e30APSoPL1T0ncm/Y0zZR+N1N/wAJrz9JrOv2MBjI/GpUYHqkHk6fpLanfsYfDR+Maj/jNap6SWsJezYYOHwoVH++oB66B49n6RetpezDEw+Fs/xka8/SE13L2bjHQ+FpF/vA9lA8W1OPnECfbJ2kPq2VL+RrT45cQZ/67jH6ttTX4Ae2wee/Rt4gak1dqjL2mosnK8o0rNVacHCMeWXOlv0S8D6f0mNQ5nTei8bd6fyNxj7id+qdSpRaTlB05vZ7rtukB28Nn5M8EVOJ+uKnt6pyr/2u34GvU4haxqe3qbLv/EyQHv8A5X5MbPyZ+fFTWuqant6kzL+F7UX7mSxut9TY7JW19Qz2TlXoTVSPrbqdSLa8HFvZr3AfoID4rhRxAsOIGno3dvy0cjQ2heWu/WnLzXnF+D+w+1AAADWvMhZWLir28trZy6x9dVjDf4bs0amqNP0/6TPYmPxvaS/iPPfpiw/7x0xPb+prR/zRPOfKvJAfoPU1rpan7eo8Qv8AFwf4lK1/pF1I01qXFOcmoxiriLbb7I/P7lXkvuNnGSVLJ2c+nza0H90kB+js5KEZSm9oxW7b8EfD1OLegYd9U49/Vcn+B9xXjzwqx+kmj826i2qST7ptAe5J8ZtAQ/8AEdu/q05v8DXnxw4fQ/17v9W2qv8AhPEQA9qVOPXD6HbLXM/q2VX/AKTXqekFoOPs3d/P4WcvxPGYA9iVPSJ0PH2VlZ/C1X4yNep6SGjY+zZ5ufwt6a/fUPIYA9Zz9JXSy9jFZmXxhTX8Zrz9JnAL2MFlJfGdNfieVAB7f4VcVrHiJfZC2ssZc2Ts6UarlWqRlzJvbZbG7xa4iUuHWKsb2vjauQV1WdFRhVVPlajvv1T3OkfQ+ntqrUEPOxhL7qi/mfY+l9DfROFn9HI7ffSn/IDh5+k9R/q9LVP714v+k15+k9W/q9L0/wC9dv8A6TzgAPQ9T0nsj/V6Ysv711P+RrT9JvOP2NO4yPxrVGdAgDvafpL6lfsYbEx+Lm/xKJeknq1+zjsMv9nN/wAR0gAO8afpKarT+fjMPJe6E1/EclZek5lotK905YVI+LpV5xf7Uzz4APV+E9JXTtzKMMvicjYN9503GtFfuf7Gdo6b1pp7VdBz0/lbe7klvKkny1I/GD2a+4/P8usrq4sbundWVerb3NJ80KtKTjKL800TPgfoJdPucZV7nV/BHihV1bRlhs9OLzNCHPTrdvlMF3bX0l4+fc7Qqrqzu8VlnYlrTKpF00VSOmJiDPgeMer/AM1tMyp2tTlyd8nSobd4L9af2eHvZ9zd3FGztK1zc1I06FGDqVJy7Rilu2eQOIOp62rNT3ORqc0bff1dvTf6lNdvtfd+9mP5Hk9M8n3U28cRLK5GXtZG9l8bib/ErlfXcvau7iXxqyf4muDzu1ROVarL2qtSXxk2dv8AALXH5MyH5u5KrtZ3U97Wcn0p1X+r8Jfv+J06Zi3GSlFuMk9009mmWxu5vUy8vXu5eXiTT2OueDutlqzTyo3lRflayShXXjUj+rU+3s/f8TsJSPRlmp2OjOutiM/MtizVi90WRlt0K2NJXx3HNc/CnPL+xTf3VYM8dnsbjKufhhqBf+Qn90onjk4/NOVh5vsABixexvR9nz8KMN7pVY/dUkdiJnWXo5z5uFOOT7xr11/xGdmeJvPp6GP4xL4AjuZI4mxnczuR36GNyPVlcptmG+hHmMN7eJHqpcJORHmISluuhDmZaYU9H0gAMWIYlJRi5SajFLdtvZJGTzl6T/Eitayej8LXdOcoKeRqwez2fVUk/eur+xeYF3FX0gadjXrYvQypXFaDcKmSqLmpxf8A5cf1vrPp5bnnHPZ3K6gvJXebyFzfXEnvzV6jlt8F2S9yOOAAA5TAadzOoa7o4PGXl/UXf1FJyUfi+y+1gcWDsmjwQ4gVaan+QuT+zO4pp/ducHqLhxq/TtGVfLYC9pW8esq0Iesgl5tx32+0D5IeKfiuwAHZnDnjLqXR1WlQrV55XEJpStLmbbiv/Lm+sfh1XuPXeiNXYnWmDp5TCV/WUn82pTl0qUZ+MZLwf7z8+D7ThPrq70Hquhf0pTlj6rVO9oJ9KlPfvt9Jd0/5ge8mt4te4/OTMx5Mxfw+jcVF/mZ+i9ncUby2oXFtUjUoV4RqU5x7Si1un9zPzv1NHk1NmIfRva6/4kgONAAAHY3BTh3bcRMtkrO7yFaxVpQjWUqUFJy3ltt1O4qfoyYNf0moso/q0qa/ADyuD1hD0aNMr28zl5f/ALa/A2IejbpGPt3+Xl/tIL+EDyOD2BT9HLRMfbq5iX+JS/hNmn6PWg4d6OTn9a8f4IDqj0RZ8uvspH6WPf7JxOyfS0hzcN7OX0cjTf8Alkj7XRPDDTGi8nUyGBtrildVKToylUrymnFtPs/gfJelbDm4WKX0b+i/+ZAePAAAALbm2r2sqcbmlOk6lONWHMtuaElupLzTA5nRGqslo3UNvl8PV5a1PpUpyfzK0PGEl5P9nc9zaB1fjdbadoZbEz+bL5tajJ/PoVPGEvwfiup+fZ9hwv15kNA6ihf2TlVs6m0Lu1b2jWh+El3TA97A4zTOdx+pcJa5bD11Xs7iPNGS7xfjGS8GuzRyYHmz0xof/C0//Xj/AMp5sPTfpjQ/7u0rP/zriP8AlgeZABZbva4ovynH95WZpvapB+Ul+8D9I6UuejCX0op/sPzjyMPV5G6h9GtNfdJn6LYyXPjrOX0qMH/lR+eGoYer1BlIfRuqq/zsDQAAHP6S0dn9X1bmnpzGzvp2yjKqozhHkT329pryZ9VT4IcQZ98A4/WuaX/Ufe+hzJ/l3U8Em97Wi/unL+Z6haa7poDxTDgPr+ffFUI/WuofzNiHo/a+n3s8fH615H+R7Mcku7S+0w6lNd6kF/eQHjyn6O2uZe2sTD/F7/wmxD0cNZS9u5xEf9vJ/wAJ63ndW8PbuKMfjUSIUb+zrVVSo3dvUqvqoQqxlL7kwOnOBHCjN6A1Dkb/AC93Y1qNzaeojG3lJtS54y3e6XToQ9LiHNw6xsvoZOD/AOFUR3edMelhDm4Y0JfRyFJ/5Zr8QPIAAAw+x6F0v6OdLNaexuUnqedJXtvC49XGxT5OZJ7b+s69/I89Hv7hTP1nDLSs/PG0P+RAdQQ9GKwX9Jqe7f1bSK/iLv8A8MeJ2/8AiPIb/wDoQ/meggB5qyfoxSVNvF6mjKpt0hc2uy/3oyf7jpHXejMxojM/k7O0IwqSjz0qtOXNTqx7bxf4d0foJt038Dyr6Weo8VlcvhcXjrilc3VgqsrmdKSkoOXLtBtePzW9vDcDoIAAcxo7LVcFqrFZKjJqVvcQk9vGO+0l9qbR7gq9esXvF9meC7WEql1RhBNylOKSXm2e84U5U7elCXtRgov4pHT+PfsUTXUraZfNHz2tdQ22ltOXmVutn6qO1On41Kj9mK+39m5295O1Lqj0htYepoQ0zYVP0lVKreOL7R7xh9vd/YdCG1lb+5yuSub++qOpc3FR1Kkn4t/gap5vk3d66gPr9F6EyGqsPmL+z3jGxp70otf09Tu4L+7v9rR8vY2le/vaFpaU3UuK81TpwXjJvZHsXRmn6GmNN2WLt9m6Md6s1+vUfWUvv/ZsX8Hi/Uvz9Jk68ZtNNpppro0/AHaPHbR/5Dzyy9jS5cdkJNyUV0p1u7XuT7r7Tq4y3i4161DmtG6iutLagtcpZNt03tUp79KsH7UX/wD3vsew8FlbXN4q1yWPqKpbXEFOD8vNP3p9GeIjtfgRrf8AImW/IeRq7Y69n+ilJ9KNV9vgpdvjsbfj+T1vrfpfGuPSyZZGXUo3JJndY2lfOcV/n8NdRr/6Ob+7qeNj2XxIXrOH2ooedjV/5TxocP5M5qM/L9gAOdk9Z+jZPfhhQj9G7rL9u/4naiZ1F6M9TfhzOP0b6qv2Rf4nbO/Q6cz4jv8AHf2xbuN+pXuY5ieLrdzG5VzeZhy2HqipuRGUitzK5T8C0ypVkplfP8CuUyPMXmGdfZAA4HK18jeU8fj7q9rvalbUp1pv3Ri2/wBx+d+eylfN5u+yl5JyuLytOtNt+Mnvt9nY90cYa8rfhbqipDpL5DUj/vfNf7GeCEBkAAdicEeHstf6olSu3Onh7JKrdzh0ct382mn4OWz6+CTPa2HxdjhcdSsMTaUbOzpLaFKlHlS/m/ezqT0UbClbcM6t3FL113fVHN+ailFL953OAD6prwYOI1LqbC6YtqNxn8jQsKNabhTnWbSlLbfZfYB1jxB4B4TVGa/KWMunhalRP5RSo0VKnUl9JLdcr89ujPnKfow4/wDrNT3n921h/M7Lnxg0DDvqazf1Yzf7omvU418PaffUVN/Vtqz/AHQA+Fp+jJhF7eoslL4UaaNiHo0abXt5nLS+Cpr8D6mfHXh9Htmqk/q2db8YmvU4/aBj2v7yf1bSf4gdgaOwVLTOnsfhra5r3NCzj6unUrtOfLu2k9kl032XuSPBOt4er1pn4eV/X/8Acke8dFapxmscLDLYSdWdnKrKknVhyS5o7b9PtPC/EiHq+IOo4+WQrf8AOwPnAAB276N2rsLpDUmWudQ3qtLevaKnCThKXNJTT22Sfhud+1OOnD2HfN1JfVtKz/hPEoA9o1OPugI+zkruf1bKp+KNefpC6Ej7NbJT+Fo/xZ42AHsGp6RmiY+zSzE/hbR/GZyuiuNmm9YantcHi7TKU7q4U3CdxShGC5YOT32m32T8DxSdkejrPk4xYB+brR++jNAe3jqT0pYc3CO5f0by3f8AmZ22dWekzDn4QZP+zXoS/wA4HiwAAD1XS4b2vEPgXpedFQo5y0sV8kuH0Utm/wBHP+y9vsf2nlQ90cBZ8/CDTL/+nkvuqTX4AeIMnYXWLyFxY5ChO3u7ebp1aU1s4yXgax7F4+cKoayx8sxhaUY6htoeyunyuC/Uf9peD+w8eVac6VWdOrCUKkG4yhJbOLXdNeYHYnBfiXdaAznLXc62CupJXVuurh4esgvpL9q+w9r42+tcnj7e+x9eFxaXEFUpVYPdSi/E/OI7h4B8VZ6NyEcPm6spaeuZ9JPr8km/11/ZfivtA7D9MOG+ndNz+jd1V98F/I8tnqn0unCvorAV6U41Kcr1uM4vdSTptpp+XQ8rADG+3XyMkZ+xL4Afo3p+XPg8XL6VrRf+RH5+6xh6vV+dh9G/uF91SR770hP1mlcHPzsaH/txPBnEGHq9e6jj5ZG4/wDckwOAAAG1YZG+x0pyx95c2kpraToVZU3JeT2a3L553MT9vL5KXxuqj/E5PQmi8vrjKVsfgY28rijSdearVORcu6XfbzaPv6fo664l7Tw8Pjdv8IgdTzyd/P27+7l8a8n+JTO4rz9uvVl8Ztnc0PRv1i/bvMPH/bTf8JsU/Rq1Q/byuIj9s3+AHRbW73fVnavoySUOL2NX0qFeP/Db/A+np+jLqCXt5/FR/wBnUf4H2fCzgZkdF60sc7dZuzuqdvGpGVGlRnFy5oOPd/HcDvg6g9KiHNwoqS+je0H+1r8Tt86p9J+HNwgyD+jc27/4iA8XgAAdlYTjZrPC4SyxWOurOnaWdKNGkpWsZSUUtlu33OtQB2hU488QZ9svQh9Wyo/jE1K3GviBWTUtQ1I/Ut6Uf3ROugB9Jmdd6rzUJQymocncU5d4Ou4x+5bHzYAAA+s4b4DBagz0LXUmep4e23W3NB71n9FT9mPxkBzfAnSFbU2tLa6qUn+TMbONxXm10cl1hD4tpP4JnreqiGnsBi9O4ahj8Hb06FlBbx5Hvzt/rOX6zfmbFWPc6/FPWDSkup5Y476x/OHUn5MsavNjMdJwTi+lSr2lL4Lsvt8zubjhrFaU0vKjaVNsrfp0qGz6wj+tP7F0XvZ5KI8/k+PWAADlHcPo+4G1eQr6hyVahThbb0bWNWajvNr50+vknt9p3tPM4uHt5Owj8biC/E8UGNl5HT4/yP088kTK9eaur6Z1DgLvF3+Yxip147Rl8pg3CS9mS6+DPJd/aysr6vaznTqSozcHOnJSjLZ9013TNflXkjJn5fL+p88Leg7PddGAZIeoOC2tvzmwXyG+qb5axioz371afZT+Pg/f8TslPzPFel87d6bztrlLCW1WjLdxb6VI+MX7mj1/pzNWmoMLa5THz5qFxHmS8Yvxi/en0PR/H8vvOX7aZ0q1zHn0VnYrxsqv/KzxeuyPaeq1z6XzEe+9nVX+RniyPsr4GP5c+Yjd6yADkUenvRjqb6BvI7+zkKi/4dNnb/P0Ok/Rmrxho7JxlOMdr5vq9u9OH8jt131vFfOuaC+NSK/E7fHP2x1+PX7Y5Dn94czjJZWwj7d9aL414/zKJ5/EwXz8rYL/ABEP5luRf2cw5EZTOAqapwUPazWOX+Jh/M1qms9NQ9vPYxf4mP8AMtJFbqPpJT95W5+84PF6oweXupW2Ly1leXCi5unRrKUlFeOy+KOVcupeZl+lbpY5EXLr3K2zP2l+KWvvBuDG55DB8xxRs5ZDhxqW1prec7Cs4rzcYuW37DwAux+ktSEatOdOolKE04yT8U+5+fnEHTlbSessrhq0Wo29Z+qbXtUn1g19jQHzwAA9VeiNn6NxpbKYGc0rmzuPlMIN9XTmkm18JL9q8zvw/PTRup8lpDUNtmMPVULmi9nGXs1IPvCS8Uz13ojjdpHUlrTV5eww+Qa+fb3kuWO/9mp7LXx2YHaB0N6X8N9F4Kf0ci199KR3PTz+GqU+enl8dOH0o3UGvv3Pj+Ilzw81DjKVpq7NYudrQqeujCN8lJS2a32g9+zYHhsHb/ELKcKLCzrWmjMBUyN/JOKvK1xWjRpf2knJOb+xI6gAAAD2L6KU+bhUl9DIV1+yDPMvFiHq+JuqIeWQq/vPSPomT34a3Ufo5Gp+2MTzvxph6vizqted/N/fsB8WAAOwuBujcbrnWVXFZmdxC3jaTrp0JKMuZOK7tPps2egIejpoiPtSys/jc7fgefuBur8donW7yuZVd2jtalF+phzy3ltt039x37P0jtGR9m2zE/hbxX75AblP0e9BR9q3yU3772X8jZhwE0BD/Vt1L613NnA1PSV0nH2MXnJf7Okv4zXn6TGnV/R4PLy+Lpr+JgfXQ4G8P4f6klL61zU/mcvp/hbo3T+Vt8liMJTt76g26VZVaknFtNPo5bdmzrKfpN4hf0enMhL414L8DWqek9ZL+j0tcy+texX8DA9FHWnpHQ5+D+b/ALLpS/4kTrifpPr+r0q19a93/gPr+IWfer/RsyGddurZ3dtGr6lS5uTauo7b+PYDx4AAB7g9HefPwd09/ZjVj/xp/wAzw+e2PRsnz8H8Ovo1K0f+I/5gdnHn70ieE35VpV9Vaat/+8Kcea+taa/p4r+sivpLxXiveegQB+bIPQfpFcJvybUuNV6at/8AQZtzvrWmv6GT71Ir6L8V4Pr27efAPpr3WeRv9CWul76Xr7WzulcWtST+dSjyyTp++Pzt15HzIAAjL2X8CRh9mB+hXD+frND6en52FD/kR4e4pQ9XxI1NHyyFb/mZ7Y4Xz9Zw50zPzx9H/lR4v4ww9XxT1THyvp/gB8eAAO6/RMrwo8R79VZwhGWMqdZSSW6qUz1lK/so+1eWq+NaK/E/OOMnF/NbXwexGSUva6/HqB+i9TOYmn/SZSwj8bmC/E1qmqtPU/6TO4qPxu6a/E/PDlj9FfcZ2XkgP0Gqa40pT/pNTYSPxvqa/iNapxG0XD2tVYX7LyD/AHM8BbGQPec+KWhoe1qnF/ZV3/cfNcfr20zHA7I32OrwuLOs6FWlVh2nH1i6o8YnqbKfpvREt39Gyp/srbAeWQAAPSPCnglpfVegsTm8lXySuruM3UjSqqMU41JR6dP7J5uPbfo4T5uDmCX0XXj/AMab/EDiIejtoePtLKz+N1t+Bc/R60FybfJ8nv5/LZfyO3AB5x1p6NlurKrcaPyVf5TBNq0vWnGp7lNbbP47/Yebr60uLC9r2l7RnQuqE3Tq0praUJJ7NNH6Pnk/0s9NQx+rMfnbeny08nScK2y6OrT2W/xcWvuA6JAAHoT0ZNc3VS9q6TydeVWi6bq2Lm93Bx9qmn5bdUvDZnf2SuKFjZ17u8qRpW1CDqVJy7Rilu2eIuGmT/I/EDT9858kKd5TU5b9oSfLL9jZ3V6UGtvUU4aSx1X9JU2rX8ovtHvGn9vtP3beZrjfIOluI2qq+sdVXeUq80bdv1dtSf8AV0l2Xxfd+9nzIBnb35Awmm9l1ZzOj8Bcan1JY4i0TU7ie05/QguspP4Lc9l4/AYvHWNvaW1hbRo0Kapw3oxb2S26vbqzTx+K7Hh5Qm+0JP4RZJW9d9qNV/CDPdHyK2j7NtQXwpx/kZVCnH2acF8IpG3/AJv/AKnjwzGyu5PaNrcN+6lL+RfDD5OfsY69l8KEv5HuFJrtuvgRfN5sn/yz/Tjw1eWF3YuCvbWvbua3iqtNw5vhua5654raQjq/S9WhSivyjbb1rWT+ku8fhJdPjseR6kJU6koVIuE4txlFrZprumYeXxfp3iGDszgjrb83c1+S8hV5cVfTS3k+lGr2Uvg+z+x+B1mCmNXF7B7Xz65sFk4+drVX+RniaHsr4Ho/hFrT84tJ3uHyFXmyllazjGUn1rUuVpS+K7P7Dzk+ja8mdH5OpuZ1E29AY3XmhzLzRyoTjUnBbQnOK8lJoOpN95zfxkyCafZoyt32TAPr36/Ejyx+ivuJ8sn2jL7iUaNWT2jSqN+6LJ5RXyryQ2XkbULC8n7Fpcy+FKT/AALoYXKT9jGX0vhbzf4DlHYHo7y5dfzX0rOov2xZ6Y6nm/gPicnZ6+pVrvHXtCg7arF1KtCcIp7dFu1sekUtz0fxvjHyvL8C6smkZhAujDobWnX2W4I7jc8hRI6h9IHhlLWmKhlMNTTz1jBqMO3yml35PrLuvtXidubmdwPzfrUqlCtOlXpyp1acnGcJraUWu6a8GQPbPE/hBgdcud4t8bmWv/zlGKaqf+pH9b49GebtXcFtZ6cnOSxrydpHtcWP6Tp74e0vuIHW5gtuaFa1qundUatCou8KsHB/cysDGy8kNl5GTAGQbWPx17kqqpY6zubuo3so0KUpv9iOz9IcBtYZ2cJ5G3hhbN9XO7f6Tb3U11+/YDqYHrnL8CcDj+G2Xx+Jozu87Kj62ne19nUlUh85Ril0ins1svPxPNVPQWrqm3JpjMv/AAk/5AekPRGnvoHKR+jkH+2ETofjvDk4u6mXnc833xiegvRcwmXwWk8xb5zG3mPqzvVOnC5pOm5x5Et0n3W51fxo4datzXE/OX2IwN7dWVecJU60Irll8yKezb89wOkQffQ4O6/n201dr606a/fI2afBLiFPtp6cfrXVFfxgdcA7PhwI4gS74elD613S/CRsU+AGvZ97Gyh9a7j+AHVAO36fo8a6l3hiofWu/wCUTZp+jjrR+3cYeH+Ik/4QOlwd4Q9GzVj9vI4iP9+b/hNiHoz6jft5vEx/u1H+AHQ56mxf6b0QK0fo2VVfdcNnzNP0Y8y/6TUeMX1aNRncWH4d1rLg9W0TXyNOdWpRqUvlUKb5VzT5t+VvfoB4dB6Sp+jC/wCs1Tt9Wy3/AIzZp+jBaL+k1VcP6tjFfxgeZD2h6MM+fhFYr6NzXj/mPkoejHiV7epL+Xwt4L8WducONH22hdMQwlndVrujCtOsqlZJS3ltuunwA+nAAEakIVac6dWMZ05pxlGS3Uk+6aPH3H3hVPR9/LNYOlKWnrmfWC6/JJv9V/2X4P7PI9hmvkrG2ydhcWN/QhcWlxB06tKa3jKL7pgfnCD2rDgNw+h/qq4l9a8qP8TYhwP4fw/1HzfWuKj/ABA8RA9yw4M8P4f+G7aX1qk3/EbFPhJoGn7Olsf9qk/4gNrg9P1nCvSkvPH0v3HkDjlFU+Luql23vHL74xPcuMsLXF4+hY46hC3s6EFClRpraMIrwRxN/ozTOQvq17f4DGXN3WfNUrVbeMpTfm20B+e+680N15o/QenonStP2NNYVf4Gk/4TZhpfT9P+jwWJj9Wzpr+ED87915jc/RiGFxVP+jxdhH6tvBfgXwsrSn/R2tvH6tOK/AD85IUqk/Ypzl9WLZdDH3s/Ys7qXwoyf4H6NqnTXanBf3UZUYrtFfcB+dUMJlp+xishL4W03+BfT0vqCp7GCy0vhZ1P+k/RBPbsZ5pfSf3gfnvDRWqansadyz/wk/5HpenhMpU9FiWJlj7pZRWcoq0dN+t3VdtLl79up3hzPzf3jfqB4Ep8N9aVPY0vln/h2bNPhVryp20plF9alt+J7y3fmYA8LU+D+vp9tM3i+s4r8T1TwJwmT07w2x+MzdrK1vaVWq5UpNNpOba7fE7AAAAAD4XjLoZ6+0bPHW9SlSyFGrGva1Kraipro1JpNpNNr7j7oAeR6fo2auf9JkMJH4Vqj/gNiHo06lft5nEx+HrH+B6wAHlan6NGcjJSlqHGxae6aozexyF/6O2UyN7WvcpqylXu68uerU+TSblL7ZHpeSKpx3LTg80r0bdvb1K/7tr/APcTj6OFqvb1Jcf3bWP/AFHoupAonA1mcjrHhtwux2hLq7uqF5WvruvBU1Vq01D1ce7SSfi9vuPu5R6G7KBXKHuNs2Scg0nAg4m44EHA0mktNxIuJtOBFwLzQ1nE+NyfDTSeTyNxfXmIhO5rzc6klUnFSl4vZPY+5cHsY5Bea+x8FHhbo6HbBUH8ZSf4lsOG2j4f+H7F/Wi3+J9q4GHAeuf8HzOO0bp3GXKuMfhbK2rxTiqlOns0mtmvuZrx0JpaHs6fxyf/AKKPrHT6mHD3FuZ/wfNR0dpyHsYPHL/YRLY6awcPZw2OX+Gh/I55w9xhwJkz/iXEQwuKh7GLsI/C2gvwLY46xj7Nlax+FGK/A5Bw8RyFvg61I21CHsUKUfhBItUeXsunki3kZn1Y+Dqpb+/ckky1UycabI6dVKLZbCmWxpl0KZW6QqhT6l6p9C2FMvVPoY62OW5huU8xnmOPgu3MplKkSUiOC5MymVpkkyOCi+x1jkION/ZWt1F91WpRn+9Hz1zw40Xcycq2l8Pu+7jaxhv92x9UmZ3IQ+Mjwr0Knv8Amvjd/qN/ib9noHSNlJSttM4eEl+t8kg397R9KgQK7W3oWsFC1oUqEEttqUFFfsLQYAyZ3fizAAAAAAAAAAAAAAAAAAAAAAAAKru4pWlrWubiXLRowdSctm9opbt7LqfAz40cP4/+IqEvq0pv8AOwwdaT45cP4f67lL6ttUf4GvU4+cP4f6zupfVsqj/ADtMHyuhNe4DXNK8np65qVfkkoxqxq0nTkt+z2fh0fU+qAAAAAcHrfUtrpDS1/nL+LnRtYbqnF7OpJtKMU/Ntgc4DzlU9J+3/AKvSlb+9fL/oNefpPT/q9LRX1rzf+ED0qDzFP0nb7+r0zar61zL+R3hwu1HlNW6Rt81l8dQx7upOVCjSnKW9JdFJ7+b3+zYD60AAADh9Yahs9K6bv8zkZbW9rTcuXfrOXaMF729kBzAPGlx6Qeu6lScqdxYUYNtxjG1T5V4Ld9zVqceeIEu2Vt4fVtKf4oD2qDxFU44cQp/6/cV/ZtKC/gO1fR+4wZDOZurgNYXquLq6fNZXMoxhvJLrSfKkuvde/deQHogAAAAAAAAAACLRIAUSjuVTgbTRGUS00NKVMqlTN6UCEoGk0NCVMg6ZvOmRdMvNjQlTIun7jedP3EXTLTY0XT9xH1ZvOmY9X7i3uNH1Zh0jedL3GPVe4e40HT9xh0jf9V7jDpE+4490jDpHIOluyLpe4t7jj/V+4eq9xv8AqvcY9V7if1Bo+qMql7je9V5IyqQ9xpKkWRpG2qRONL3Fb5BrRplsKZsRplkYGd2KoUy1Q6FsYFijsZ3Q1Occ5r85lTJ9V2ypk1I1FMsjPoRYhtqRNSNVTLIyK2DZTJJlEZE0ynELgQTJbkcQkZImdwMmAZ3IDcAbAAYM7gANxuAA3AAAAAAAAAAAADxX6Qeg/wAzdYyubGly4bJuVa32XSnP9en9j6r3P3HtQ+T4oaPt9caOvMRW5Y3DXrbWq/6usvZfwfZ+5geBQX39ncY++uLO9pSo3VvUlSq05LrGSezRQB97wS1i9F6+srutNxx11/ot4vDkk1tL+69n957pTTSaaafVNeJ+bD6o9pejlrL86dB0rS6q82TxO1tW3fWdPb9HP7unxiB2qAAB5l9LfVfrbvG6WtanzaK+WXaX0nuqcX8Fu/tR6Ryd9b4zG3V/ezVO2tqUq1WT8IxW7Pz51dnbjU2p8lmbtv1t5WlV2b9mP6sfsWyA4gAAfV8L9JVda61x+HgpK3lL1t1NfqUY9ZP7ey97R73tbelaW1G3tqcaVCjBU6cIrZRilskvsOnvRj0V+b2jnmr2ly5HLpTSkusKC9hfb7X2o7lAAAAeSfSf17+XNQx03jqu+Oxk967i+lW47P7Irp8WzvTjfrqOhtGVq9vOP5WvN6FlHxUmus/hFdfjseHJzlUnKdSTlOTcpSk922+7YGADldOaeyepLq4tsNazua1C3nczjHwhBbv7fJeLA4ost61W2uKVe3qSp1qUlOE4vZxknumisAe5uC2vqWvdJU69aUY5e02o3tNdPnbdJpeUtt/jujsA8DcL9aXWhdW22Vt+ads/0V3QT6VaTfVfFd170e78TkbXL4y1yGOrRr2dzTVWlUj2lFgbQAAAAAAAAAAGGjIAi0RcSzYwT0VOJFwL9jGxPRruBhwNjYxyk+w13Ax6s2eUxyk+w1nTMerNnlMco9hrOmY9WbXKY5SfYavqzDp+42+Uxyj2Go6fuHq/cbfKY5CfYavq/cZ9X7jZ5DPIPYa6p+4kqZeomVEj2FSgTUCxRMpFboRUSWxlIlsV6PnHLqFMpcnuN/PudnGi9SJxkaykSjIiw424z95bGfU0oz8yyMytyjjejMsUzRjULYVClyjjdUiakakZlkZlLDjaTM7lCkTUivELdwQUiW5CEgY3G4EgYBAzsY2A3AzsNjAAbAbmdwG4AAAAAAAAAA8yelVoP1NxS1hjaX6Oq1RyEYrtPtCp9vsv37eZ50P0azWMtM1ibzG5GkqtndUpUqsH4xa/f4ngbiBpa70bqy/wt7u/UT3pVNulWk+sZr4r9u4Hzx9/wP1k9Ga+s7mvNxx13/ot2t+ihJ9Jf3Xs/hufAGAP0nTTSaaafZrxB1b6Ousvzq0FRtrqpz5PFbWtbd9ZQ2/Rz+1Lb4xZ2l0XVvZeLYHR/pV6r/JWj7fAW1Ta6y096qT6qhB7v75bL7GeST7jjRqt6v4hZO/pzcrKjL5La+Xq4dN/te7+0+HAH23BzRs9b65ssfOLdhRfyi8kvClFrdf3ntH7T4g9oejlor81dDwvbylyZTLctxV3XWFP+rh9z3fvYHatOEKdONOnFQpwSjGMVskl2SJAACFetTt6FStXqRp0acXOc5PZRilu2/sJnQfpS69/JmIp6UxtXa8v4+svJRfWnQ8I/GT/AGL3gdG8Ytb1ddazub+EpLHUP0FlTfhTT9rbzk+r+zyPhwAMHsn0atEfmxoxZW9pcuUy6jVlzLrTo/qR+32n8V5Hnfgfop6211a21eDeMs9rm8fg4J9If3n0+G57mjFRioxSUUtkl2SA8Z+kXoH80tWPJY+ly4bKSdSmorpSq95w/Fe5+46lP0D4h6Ttda6SvcLeJRdWPNQqtdaVVezJfb39zZ4IzGMu8NlbvG5Gk6N5a1JUqsH4ST/cBpnoD0YOIv5Nv/zRy9bazupuVjUm+lOq+9P4S8Pf8Tz+SpznTqRqU5ShUg1KMovZprs0B+kgOtuBXEGGutKRjeVF+W7BKldx8Zr9Wqvc/H37nZIAAAAAAAAAAAAAAAAAwZAGNhsZ2AGNjGxIAR2GxIwT0R2GxIDohsNiewHRDYbEwOiOxnYyB0YSMgyQMAzsAPkt+g337kew8D0GqW/XYbkR4gWJ+8nGWxR+8lvsRwXqZZGoavNsSUuiIuUN2NQtjU95x8ZlkZ+8pcnHIxqFsZnHRqdS2FUpcq8chGZNSNKNQthMpcnG0mS3KIzJqRTiFo3IJkkyEJAwAMgwZAAwZAAxuAlncyYAQyDBkgAAAOnvST0H+dGlPyvj6XNlsVFzSiutWh3nH3te0vt8zuEdGuqTXkwPzYMnZ/H/AEG9GaynWsqTjh8k3Xttl0py/Xp/Y3uvc0dYAdg8C9YvRuvrOvXqOONvNrW7XgoyfSf92Wz+G56f496s/NXhxfVLeoo31+vkds0+u80+aS+Ed39x4ePrNa64yWrcZp+yyMm4Yi1+Txlvv62W/tv38qivsA+T7IyB8AOxOBWi3rPXlrSuKbljLHa6u34OKfzYf3nsvhue4kkkkkkl0SXgdb8A9FfmboS3V1T5MpkNrq63XWO6+ZD+6v2tnZAAAAcNrLUVnpTTV/msjLaha03JR361J9owXvb2R4E1Lm7zUeevsvkp893d1XUm/BeUV7ktkvgduek7r38vajjpzHVebG4ub9c4vpVuOz+yPb47nSIAAAfQaY1nqHS1G4paeylewhcSUqvqkt5tLZbtrw3f3nKVOKuu6ntaryn2VEvwPiwB9ZU4j60qe3qjLP8A27R87k8jeZW9qXmSuq11dVNuerVlzSlstluzVAAAAfS8O9XXmidVWmYsd5Rg+SvR36VqT9qL/eveke8sDlrPPYazymMrKtZ3VNVKc15Pwfk12a8z86DvT0ZuIv5Dy/5sZettjL+pvazm+lGu/D3KXb47ebA9ZAyYAAAAAAAAAAAAAAAAAAAAAAAAAbAAANgAAAAbDYAAAAAAA+PMv7zCM/Yeg1PgNtwh5gPADuPABuEwvj0HiBnm7EtyA7AXRkTjU2NZPr17GVL7yODdjU95fCqccpFkZ9Slyjjk4VC6MzjadQ2IVDO5V434yJpmpCZdGRnYhfuZK1ImmV4hIGAQMgwAMmAY3AyZ3I7jcCYI7mUwJAwZIAAAfI8U9G0Nc6OvMTUUY3SXrbSq/wCrrJdPsfZ+5ng29ta9jeV7S8pSo3NCbp1acls4yT2aZ+kB5j9KbQEqN9S1biaEpU7hqjfQpx32qfq1Nl5ro/el5gedQbcMXkKnsWF3L6tGT/A2IafzVT2MPkpfVtaj/ADjDtH0eNFfnbrqlcXdLmxeL2ua+66Tnv8AMh9rW79yZ8TT0lqSp/R6ezEvhZVf+k9ocFtGR0ToWzsq0Esjcf6TeS8fWSXs/wB1bL7wPvDAAA684466jofRlarbVEsve729nHxi2vnVPhFft2Owzynxd0bxE17rO5yEdP3MMfR/QWVOdWC5aSffbm7yfV//AMAdDTlKc5TnJynJtyk3u234swdl0+BvEGf+o4x+tc01/EbFPgHxBn3xdrD617S/mB1dSpzq1IU6UJTqTkoxjFbuTfRJHrjSPo/aWpacx/5x21zcZeVJSuZQuJRipvq4pLy7fYfMcG+B+Zwus7fL6uo2sbayTq0KVOsqjnW/Vb28F1fx2PSYHWMOBXD+PfD1ZfWuqn8zYp8EuHsO+nacvrXNb/rOxgB8FT4PaAp+zpm0f1p1H++RsQ4U6Fh7Ol8b9sG/3s+1AHTvFrg7g8noy6elcPZ2GXtf09H5PTUHW2XWm/PddvfseO5Jxk4yTUk9mmtmmfpOdGa29HvH6i1Re5ayy8sbSu5esnbQoKajN+00910b67e9geSxFuMlKLaknumns0z07D0YrH+s1Pd/3bWP8zZp+jHhV/SakyUvhQpoD6z0f+Ia1rphWeQqp5zHRjCvu+taHaNX8H7/AInah1HofgdjdHaitczi89lHcUW04SjBQqRfeElt2Z24AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8h7x4hb/cGeg1Avexv16GPuAz3Bh+8yEm/UfvHkYBxlAAB4jwHgAg328SSf2ER+8C2Ey6E9maqfUnGTK2DkKdQ2YTOMpzNqlUMtZVsb8JFsWakJl8ZGViq5MluVpkkyoluNzAIQGGGzDZKTcbmGYbAkmSTK9zKYStTMlaZJMhCYMJmSEAAAGd35mABnmfm/vMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfIIwPAb9D0GzIfYw+nwMMJkZZhmGzD3C8yluHIhvt23MN9NwvPHVm4bK+bcc3kE/pVZvsZ36+RXzGU+3UK3x2Jme3mR3M/AMrnjIT6jp4BhVZB+ZfTl1RqosgytiHI0pmzCRx9OWxtU5GOohuRZNMogy2LM7FVm4IgqMmGwYYBsi2GyLZKYzuFIg2Y5ieLSLkycWUKROMiOFi9MkiqLJplVbEwYRkhUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfIGPEyRfY9BvIw2H1YfYi30DXOejf7SLYb26fcQb+IdOPGy5GObpuQcu/kQc+nQh058SzmHN3KubuRUgv+nGypEoyNdT6+RJSCmvFGwmTi+hRF7dC1Pp7iXH5PHxYmZ+BHfckuuwclh8CUWQ7EohVsU35m3TkaNN9japsz1EVuwZdFmtTZfFmNVWpmSKZkohkwxuRbAw2RbMsrbLRMYbItiTK2yeNJFikTjI1+Ykpixp6tyMi2LNKEi+EilimstlMkmVRe5NMqysTBgyQqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD5Foi9ycu3QrfU9B05RZB+JN9H5lUmQ6fHlhsg34GZvZFMn5h3YzyEmQcjEn1IOS6lpF7UnLd9zG76ENzG5PEdWp9O5ZGXToa6ZOL6ixMrZi/MvgzVpy+0vg90ijLy57Or11RNFceiLP3kvM8k5WWF4DsgtmGK2mbFN+ZrQ6F9NlNIrcpsvgzWpmxBmNVXIluVpkiiGWzDYZFsDDZXJ9CTK5MtFohJlcpGZsqlItxrmMuQUtipyMcxPG8jajM2IT7GhGZfTmUsNZchCRdFmlTmbMJFLHNrK9MyQiyaZVlWQYMkIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfKPoVP3F0vMqkdzqwqkUzZbMpk+5Lu8WUJMpk+pObKZsmOv6YkyDYk+hHfvtsaSK2m4395Hfdjx6kqpbk4vqVImiExsQfY2KfY1Ie42qfuM6nX8WzHt1Jorj5li6IPL8v2kwu4C7hzrIdz47inruWgsXY3kbBX3yms6XI6vq+XZb777M+mv8AJWOMoRrZK8t7OjKXIp16ihFy77bt9+j+4+E4w6ajrzSlhVx2ZxltZ21WVeV3Xq/oXFrl6Sjuu5nu/HwivqNF67xuodG1M/Vas6dqp/LaU5bu3lHq0/Pp1XnufN8NeMH57awlhYYZ2dL1VStCtKtzScY7bbx5V3TT7nyuptGYm8zUa1lrPD4/A5aFCeTtflUY/KnTls5U/BptP7dy2jpynaa71BqPS+rdLUIVrKVG2pu662sXCFNTlsmtlt097RhbVX0ereNttgtUXWOtMRVyGNsKlOlfX9OptGjKT2aS22e3but2mj6PiZxMx+idPY/J06Esk8i/9FjTnywnHZS5nLwWzXvOq8Jw40rQwVazyPEyEat5869p2l/RVCtJNtNqXWX2+JufmzcWeh5aVyOutKqdnX9baK5cKqVOS35JxqLePfdOPm122K/KH02m+LOdzF1VtfzMlUryoynQdnfQrQlPl3jGcl7KfZvw36mpU4v6lhquOmpaGSzco8ytvyjDfbbm9rbl7e84bhxwrm9Y2Wo7jO4CdKwlGao4PpGckunN4JPx8zmamLxdzx3o6opas0/KnGCo/IVdp13LkcO3bu/MfIhd8ZM1R1RU0/8AmlRWUpU4zq0qmThTUG4KTXNJKPTfbv1NrM8VMzhtK3Gay2l6FGELqnbU408lTrKo5Rk2+aG+zXKunvOO1jwkzeV4iZHUljdYCpRuduW2yVvKtFbQjF7x5Wt+m6KMvwu1VlNJXGCrXml7S2lc07qnCwtJ0IqaUlJySj1bTX3Fp1M62r7i7m8XiLXMZjRro4m4UJQrUshTnJqa3i+Xv1XmfQ6m1vlLPA2WcwGnpZXEVrL5bVrzuY0XRjtzbOL6vp16HwesuEOnrPTOMtqeXscVnlGmpVr27ao12klPljL39tl7jsrP20aPDmtjMnfY6xq1cf8AInXlJUrdVJU+Vbb7bR37ItOtcdfEYzi1nMjpy7z9LSEfyRbRm53Hy6OylHbpy7b+K8PE+gwnEi1yPD6tqSrC1t7qnTrTVjK6jzNwbSXn128j5fTGEsLThXk9Hx1Rgbi/vZVPV1aV0nBc3Ltuu/6vkRsdBacw2ip4DN19OfnNWp1FSu6rip7zk/Vtc3zunRdvDoJ1tj2Rq8ca0MNh72ngITqZCrWpKm7vlUHCUUvnOPjzfZsfa6Q1lqDM5ylZ3um7W0tWm6lellKNdw27fMi9+r2R1jkODmVpabxFCrl8PTWMqV61apX5/VNTlGS33XZcr33Od0Tb1sBmKOTlnNAUMc5+puZ4+jGlOaa5uRT7b7pPb3EfP9pnv39z6G84sX95qm+wei9M1c5XsW1XqyuFRgmns9t1236de5u0OMELHTmSyOp9OZTEXVnKMI29SLcbicm0owm0l4PffwW58fDTF5g9e5C94f6vwVG6yUn63H3slOW7fNskt9+rbXZ9fE5W/wBE3Waw13gNea7pXWZvZwrWVupRjGjNN7OMHtKe/wA6Ph07FbKx1L/bYrcZ9Q47D2uey+g69vp24ceS6heKU+WXsvl26b+G+yZs3nGy5udXUsJpXTkcu69vTubepK8VBzjKmpvdSWya327+B8tqDSWqKmCstIar19pmyw1GNNxjN8ledOHSPtbbpbdOvgbGM4S6ey2uqN3R1BiMhp22tIUXaULx/KGoUlHmbj0XVbvqUY3r6L/txq2ORyWKz+mauPy9razuadKN3GrTqOMeblcorpuvHqU4DjRqHPY+F7i9G2VS3lJwi6mbo0pNro/mz2f7D5SroDTuP1FmbjTestLU8RkLGpawo3t6qlajKcNt1Pr05l577NopxXDi805gbatUz3DSrZTm50b7IW6qub38Kkl1Sfl2IVdt8ROImQ0PiMFk8hgPWWd64QvXG462VRpNx6JqS9rZ79XH3kuIXEuGm8hp3G4XHrNZLNNOhRjW5Eqb25Zt7Po2/uTZsXs8NqrhhcWWpM9hLulUoKjd31pXgqEKv6sovf5uz2238jrvhPpzDaY1HHMao1zp3LXdraxsscqV7HahBbr9Z99ui282B2BxR4jx0QsXZ22OeWzuQltTsaM2nypdZb7N9+i6devkctwz1pZ680xSytnD1FZSdK5tnLmdGov1W/FbbNM62y/DC8udW5HWGttawxFSU4xsq2PrepVvHqlDnqJbdPLv1Zv8OeHt1onVFfPYLU1pkNJ31Hnu3dVN5z7v1inFcj2e/Xp0bTA09Q8eKlDVOSw2ntPQv/kE506tW5vY2/O4PaXImuvXsu78jYznG64xOKwF1caWuKFXJ1p0Z0rivyKHK4fOhJJqcXz+7bY+S19pS2z+pMhe47WWhbm2vXLaN9Giq1Lm8pw6ya8JN7lOV4FOjovD046sxULahXq3FzdXFRwo7TUElSfVdoPq9t2wOzdR8W7enqOnp/ReLq6ny/NtWVvU5KNFePNU2a6ePgvMozfFS+weusdpfI4S3+VXNr8oqVKN25RpvlnLlW8Vv7G2/TufN4/QGItsvaX/AAY1jj7TJ0YKnc287tXNO5gu7motvfzW23lsbF5oq81vxEsdVWue07XlZWqtrujY151kpuFSKae3RPm32fXo+4H2vBziDLiLgr7Iyxyx/wAmufk/q1V9ZzfMjLffZfSNd8SZLjEtDfkyPL6v1nyz13X+j59uTb7O519wu0drTTNjf4zRustHXUHWVa5gozryhPbl67Lp7Pb3M1LjTOfWu6mso670THM2sI0bmcpv1dOTTp7Sjt83dLbr4pgdscWuIlpw6wlte3FpUvLi6qulQowlyptLduUvBLp9585oLizldRZ+2x2Q0pK3o3CTjdWV5G6hT3W6c0uy8/LxNDLYDWGsNJ3dTMaw0jcWFP8ASUa9vaRq2+8d1L1kpJpbLxXVHx2jeHuPxusMRqXPav0naW1rNTowxVaNKNxKHfdtpd2ubb4dAPu9WcYL/EcQrzSmM07Qv7ihFSjVq5CNupJwUn1muVd/MzkuKWqMZpe/zt7ou3VpZ1KcZ+pytOvupb7y3pp7bPl33+kfKaq0NHVnFG81BgNTaLvflKjGnZXslc77QUesEmm+nQ+u0xj46Ptslh9e5fRFniL+i4/I7KnG0c5S6OUlLbf5vQDk9acWLDAaGwuoLC1/KNXMShG0tI1OWUt1vLrs/ZfTt3aPnMhxnzVrq6tpunpO2qZOjTjOpGeTjSjFuCk1zTSXTfbv12OG0Pw2scDm8bnc9rDD5DSmLqVXi4/KFyQqTlzR5pP5u/jsn3Q1/wANrq41zfa0jndIU8ZfuPqI5mPrKUk4JJ9Vyt9N00wPoM7xfzeA0tVzOY0nb0YK6p21KNLKU68anNGTk+aG+zXKuj+kU5PjPncFjLTK6h0RK2xNy48lajkqdSTUluvmrr289jistwl1XqHR35IWS0hbWMriF5Q/JtpOjTcuVpyfLHrumijUPBfTWVx9pitK5rHUdV2bi7qnVvHWjPlW096fVrrs+3uYH2eT4uRwebxf5fxE7XTWUpKtaZinUc47SjulOHLvFrxXXzW6OV4ca/vtdX97XscFK103QnKFLI3FbaVw19GG33vfp8TjOLmJtc5w/ttKXuewOKzDVvNK4rKlT+b0bhHuk2ml09x9RpuNhofRmDxGeymOt50KEbf1lSqqcKskuvLzbb9wPhYcY8rnc1krLQWj6+ct8fLlrXM7lUU+rW6TXjs9l3e3YxmuNdxidFPM3mk7+0voXkLWpZ3jdKLUozlzwny/OXzNttj5m205eaD1FmvzF4haXtLa9qP11pk6sXOjJN7Lu+sd2t+nvRymY4cZ/XHD9Y+truzz2Qd9C5lWlPmt6MYwnHkhyJvdue+727Ady2WVdzpehmPVcrq2Ubz1XNvtvT5+Xf8AZudJP0h6i0rDM/m3DeV+7L1Xyt+FNT5t+X37bHKYSnryrTpadtNb6HuY29D5LO1owcqypwjySWyW+6Xd+Z8VmOCV9idE0cblNT6fsW8nK6jWuak6dOSdJR5E2usum/wA7MwfEfVGQvqNOvo+zo2soupUq081QqyhBRbcuSL3ZxfDbjvZ6rztDHZXFPERun6u2uXW9ZTqVf8A5bfKtm0+hw2K0rltOxtMtLNcNLCwrQdL5bQtFRlVpSW01Cpst21v1JcOuGmDqcNc9hcpqPC5OnOurynfY64U/kUow2U23ttt4+GwH0NnxZzOV1PqHB4DScche4mq4KPy2NP1sVNxcvnJJeHTfxNDTnGPU2os1f4rE6EjXvbCTjdU1koR9VtLlfVpJ7PftucbwZwdjovVeUy+a11pnJVL+j6tujernlPmT5pc2xzfD/TdpoHWuotQZzU2CVpnpVKlpFXKhJxdVz33lsnsml0b6gdyQbcIuS2k0m15MycPj9UYDJXcLXHZvGXdzPflpULqE5y277JPc5gAAAAAAAAAAAAAAAAAAAAAAAAD5eaKZo2JoomdsdWFEzXn07GxUNap4lno+FTPxfiUyZZNlMi8b1Hcw/ANox8OpdRgy/2mGCRnsSj9hAmkQLqb6rY26XVGpT7m3T7Iz0tr+K+HYs69yEV4diaXQh5fl+2fHqSRgyg53UfpOKUtBWPLFyayEOy3/q6h8bqixyuh9C1rK2hWvNL5+xpSinu5WVzKMZP+7LZ//wCrr6SiWwZjrHb1Wx4yvFCnS0LO5jTjQhat1HXt3WpqPymrvzQXWS93ifZ3OV05U0dqe2tHiauTr2SjbuwwdSzlFKpFzUpNvdNbdPceoYt+ZbF+8z9OI48gaJyGn7TDWEMzPBKcJt1qVzp6pcVnHnb2dVS2ba7dOnReBy35T0pT43ZfI6js1cadrUd6MKlpKousIcnzNunTf4Hq1S95ndkeqOPJlLEU8/xByt3oLGZjH6YnZVIV521BwbTpNSUItpPeW20N/uPjoRtbO3o2djaW+YuFcNfJLnGVaVw/jKEt9v7O/TyPcbl7ytqPPzcq5/PbqPRPHybt9U1sTiXibvHYra0pqvbXdtO5lCey6KfOnsu3Xd+8sx8s5i6d5eaqy2Mr2NGk5721pKi4bdW23OW628D6WTKZM0kXkeV8us1xKzeWzs9NZTI42VKdpjfUTjTjbtPpJ7+0/FrzbGoNUXmU4QXWnM5TrU87iLujSlGpF806abSb83Hs/sZ6imyqUiP0/wD60z4+/wBvLmZvNE33Dmzx2JwtSrqn1FKLqULKUZKotuZuX63j57nHXum8hkdU6Qwmd9fRuq9hTpSlPdypJzquG/wW3Q9Xyk+/XYrb6E/p9b5/H9vuug3l9QawtLTQd9SrW9zZSmsvd/8AzKNL2dn/AGunxe3vOsXSmuH9xFU57LMR2XK+3qZHsjfwJRkxfH3+2uvxe/NrzTjdMS1TxWzVnTr1bO7p2yuLW5juvV1oxp8r+HdErjUl9c8Y9M3urLaVle4j1dvfVOVuLdOU5OotvBqSfQ9NU5l1SnTurapb3EFUo1YuE4PtJPuit8bDfg5/boHjbSnmOMOk/wAm2trkPlNpQdGldJ+orc1SbSn/AGXucPk8FfYri7gKOaxWN05zQ56Tw8G6Vb2tk3v0bfzX7n2PU9qo06cKdOKjCKUYxitkkuyRvUpGdjm1jjxDw7usVZ466jl54ajVlUTgsjgql9Jrb9WUWuVe4+r4lUsBfy0xmsZXuKGMhbRt4b4eTsOeE5es5Yc28U5btxae6a7nrqLfmSaUouMkmn3T6lWfHiK1lXudF6xnbYK2hY8tJPJWtKtRjUfro7R9XKTj16vZJOJy+hsppazsMQs5PT8lS5Xc0aum6lW4aUuq9cpbOW362x7HjtFJRWyXZIlu/MhDy/xFz17xP1zbWOBweRzmlMLKNSvb2svVO4m13cn2X6q8ej8yvh/n8npTFan0HqexvMfTubK4uMXTuusoc0JP1e66PdLdbeKfmepAB4y4eaZzWQ4aZS9x+k9PZOhTdXmub2L+Vw2gm1BdOy6r3nCW2LunorTGQrLIZLTNvf1HkbWnCSVvLmi5Lb+1DtLp137HugbgecsXfcNMzrrDrRek8zUv6coSjc4+ErWnQaftVE2uiXd+K6dThfRsstU1vznemcnjsdFXFL1yvbKVbnf6TlcdpR226/eepYRjBbQioryS2JAeZ/RhyFDGaz1PaZSsoXl/dQoUfmNKtUTrSkl5dE31OtMnSqfk/iX+jn1yFDb5r6/6RUPbdxaW9xXtq1elGpVtpOdGUv1JNNNr37Nr7TY3YHlKePzGgOGlLI4yFe90xqTFqnfW3Vuzupw2VRf2W/5eR1vdU+TSWinWglThdXbm6lF1Ipesp780fFe7xPeo3fmB4k1BLH32q8DcadtrfJKjWUqlDDYerj5PaUWu7lu316rsfT4+WHwHFbU11xgw91cK7cqlrUrW8q9PrLfol0fzdkmu2z7HrTd+ZGcYzjtOKkvJrcDynwsni8Wtc5jMY+vQ4e3cHToWlzBv5RNz3hGnF95KO/VdunXocdpbH1cFltN5jXuJyU9DVKtR4uhXqurGycpbwlUht1W3Xw37+Gx6/G7A6z4j8T8dhdAVcrp64je3d1UnZ2KpxbTqrpKW23aPf39PM8+0sBq/SNrjdUUNLZq1zOPrzu77I16kZU7iEn7LguqW3R+fMz2NZWdvY0XSs6MaNOU5VGo+MpPdt+9svA8n8Ra+N4lcW9DVIRq/k3LWVClWUekqTdSqpRb8HFnDcX62osdQw2jtTU6l1VxFy6lnkUm1c20klHf3rbb9nh19lbjcDyBp++0njOMOsa2vLCN1jp1K0aEalpKulV9anukl0fKpdT6fghYTuON+Ry+ksZfY7RsqdRbVacqcJJxSikn3+f8AOS8EemN2N2B4009hstW1xrjP6edSGX0/eTv6FPZ7VoevmqkPfvH8fM5TibkshxP09ltXVKFxZ4HERo21hayXWpXnKPrZPz2T2+73nrfcbgeMLe0jj8zobLa4x13e6QWOpxhy05Tpw25t00v7XVrxXmblxQs8xxBzGU4bY26stN0cVXV3NUZUqUl6maktn23fLtHzW+x7Ca5k1Lqn3TEUoxUYpRivBdEB400DpnN3/DDJ31hpPTuTt6cqyldXkX8rhtBN8i6dl1Xv3Plb2jTp6P0dJXFSvH5VdSrQrUHKNv8AOo/N5f1o7fO8N92e9huwPNfDjVmicNqWF1e3OCU3B06FSw05VtJ05tpbubb6bbrb3o9Jmd35mAAAAAAAAAAAAAAAAAAAAAAAAAPnJo15m3URrVF0OyOnDVqe41anTc26viatTsWj0/C1KhUy2p36FT7+41jWoMDcFlWB3M+5mH2JBEo9yKJLuQL6S69upt0+yNSlsblPwMtJ3/FfEs32RCPbxJdg8ryfaXgZiRRNBinEtgVR8C2JSoXR7FkWymLLIvYpULEzO5BPYzuQMtkJMORBsniYSZTJkpyKZSLSL5iMmiqbJSkUzfvLOnxxGT7lcn5GZEG/IO7x5N9zMWVNmU+vQnjStmEjaoy6mhB9jZpSK2OfccpRkb1JnF0JdjkKMjHUcPky3YMtiUU2XRMq5akZMGUVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHBVEa1RdWbdRGrVR1SunH206q79DUqm7VNKr49jSPT8P01KhUy2oUv3GsaVHsB3ZleRZDBjoZ+Ie3cDHjsSj32RDxJx6MDYom5S7GnS7m5T8DLX2eT+K5eHmWb7EF4Ew8vf2ImiJldxWNWRfwLIlSLIsrULIvYmmVJ+8kmVFu43K9zDZHBJyISfvDkQb6e8niYSkVSZmUiqTLSNcxiTKZdfInJ+RTNkuzxZRk/2FUmZk/eVt7kyO2TkZ33CfkVuRlMniKvgbFN9jUi+psU2VsZajkaEuxyFCRxVBnI277GOo4/LHJUn2L4+Bq0mbMTCuLSwyYRkqzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHD1F0NSqjcqLwNWqjpjow0a3iadXqbtbxNKv2NI9Pw/TTmUtF1TdspaNo1rHiZ2HmZRZCL7kSfdEWBj3mV+0w+plPr37AbFI3Kb7GjTZuUn0RnpOp3LZRYv2lUevQsXYh5nknykjKImV5hhVi8ySK0ST6dyELEyW/vKtzO5HBZuY5iG5Fy7DhxNyX2kJSMSkVtheRmbK5My3uVSkS6PHhiT8CmUuhmUimcg9Dx45OsTbZW31aEn5lXrIynKKlFzj3SfVfEvItas36GU+pXv5kk9/eTxC6L6l1J7M14vbYupsrVa36L7HI277HEwqQpwc6kowgu8pPZHKW3ZGG3J5Y5Oj2NqPY1KJsRqQVSNNziqkk5KLfVpd3t9pz1wbXoyYXYyVZgIxqQnKcYTjKUHtJJ7uL79fIkEAIxqQlOcIzi5w25op9Y79t14EgAAAAjUnCnCU6kowhFbuUnskveySaaTT3T6pgARjUhOc4wnGUoPaST3cX7/IkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABxdRdzTq+Ju1EatVG8dGPtx9XxNKsu5v1l3NGtvubZen4fpo1PEq2LqndlL6s2jUTCHxM7dSRhoi15FngRaBUOpgyzG3YlCyDNulJ7GlF9S+lLqt2V1Fs/45CD6lqf3GrTl5F0Xv8Cjk83jWokVp+JncOO5Wb7hPYjuNwpxPczuQ36mNyD1T5jDfUhuY3+4cWmUnIg3u+pGT2ISl2DfHj6y328iuT+4xKZROaHHd4/Hz5pORTOW4lPcrct2XkaWs79fM+CWZhiI6vzs4qpJ38LSjF9FNwhCEevlzSe/wZ93zHzq0vS/INTHO7qqrK6leRuYxSlCq6jqJpdU9n028UNS/wBMdy36cXp/Ut3cais7KeRtMpRuqc5VHb2s6PyeUUmusvai+q69TV1Hq68sK91Ws8tjKzoV406dhRoTquaclFqdVdIy6v4e8+rxWOv6NarWyeWq3s5w9WoQpKjTgvPlW+8ve2cJbaLuIWVnj6uaqTxlncQr0qEbaMXPlnzqNSW/zuvj08+pWzXFOb5xyGXvstX1VSw+HuLa2pqzlcV61al6xwbmox2W677S7mZ3mcvtS3+Kxt5Z29CytaDq3NW355OtPmfSO6WzST9xylpi40c9fZR1ZTqXNGlQUNklCMOZ9H47uTZKywyt7jN143EpVcnNScuVfokqahFLz223+0iyrXOq+WyuUvtQ8NMM6tOh8vyt5Qt3FbqnLatu5eai1T3+B9fp/KZi21ffYnM3VpeUIWMb6NWjQdF0m5uLg1u910bT9xTYaXo0bbTVvG5m6WFfNFci/TS9W4bvy9py+JzdrgKTzOXyFatOo8jbU7WVPbb1cIKS6P387ZjqVz+TN+3GUNVZR8OMNmF6j8p5O4oU6S9X81Rq1kl83fuqb3+wsylLLZPi1Wp4S5trT8nYeFOd1Wpet9XKtVcuWMN1u2qcerfRDDaAubeOAo32orq9s8LcRrWtvK3hTi1GMoxU2usmubu/Lt1OTudH5GOpMrmsPqKrYXOSVOFaErWFaMYQgoxUU30kur3/ALXYwrg24yvrPNUeHeTvfV2lXUFpkniabhFqjXqqtGmpJN9N0+2/Ro5ahkdRYrWWGxuZu7C+tMvCuoxt7d0pW1SnFS6PmfPFp7bvZ7/E4nVeklHD6V0xipXkLaWT+U3F7H51SEoRnV9dOW2zk6m3fo29j6XC6auaGZ/LGcy08rk4UXb281QjRp28JNOXLBN/Ok0t234bdCrN19SyGocfgdbauxN5j6FpHJ3FxGjXt3UlcwpONLlcuZcq+Y0tk+p3JQnKpQpTnHklKKk4/RbXY+U/Mmj+YcNLu+qep51OrcerXNV/TetmnHfZcz3X2nPqzuln/l35Rq/Ifk/qfkHq48nPzb+s5u++3Tbt0A+Ass3LEw1rnre3V1d3ebhjbKk3sqlSMYUYRb8FzuTfu3OZs8hqLEarw+Nz97YZCjlqdfldtbOi7epTipNLeT5oNNrd7NPbzLvzHofmnLDfL66rq9lkad7GCU4XDquqp8vVPZvbZ90bWE01cW+a/LGdys8rk4UXb0JeojRpW8G05ckFv86Wy3k34bdAODutZZC0x+pKEqdGtmrfK/k3G0VHZVXUjGVFyXuUm2/KLNvWGdu8R+TLKeoMRjripScrirVt5Vq1SS2X6KhH9Vvfq307dTep6NtI6+raoncVZ1Z0YwhatL1cKqjyOr75OG0fct/MqyWlL6pqi8zOIzk8dO+oU7e5j8lhVltDfldOUvYfzn4NeIHx2b1DkNR8ErirVjSq5DIXixdGVODpRuN7hU1Lle7jzRT6eB9TZX+fxGs8Rh8vdWF7Z5ShXdJW9u6UradGMXtu5Pmg09t3s9yuvw8pT0dgsBSy11RjiriN1G5hBesqVYuUoyab2Xz5c3jvtt4nK4PTdxbZiWYzeVnlcqqLt6NT1EaNOhTb3koQTfVtLdt79EuiA+MtNTQ09p7U+ouWnOvk8/UtrX1m/I3FqjFy2TfLH1c29uuyexyOjNXXt/q6GKqZWzzVpXtKlw7i2salt8mqQlFcj5t1JSUunj81nLR0PTpaSx+HoZGtSu7C5+W29/GnFyjX55Sc3B7pp88k15M5TCYnJ2krutlc7XyF1XgqceWjGjRopb7OFNb/ADt31bb36IDY1PkZYrA3l5TuLG2qU4fMq31Rwoxk+i5muv2Lq+x8dobVt7ktYV8TXylrmLNY/wCWO5oWM7ZUpqoo8i5m+aLTbT8NjmcxpO7ymnMVZXGbq1MpjriF1Tv6tvCXrKkW9nOn7LWz2+xPuaFzgL/B2uqNQVslc5jM3OM9RTgrdQUHCM3GNOMd+jlJdO/TuwOBhqnV89AVtZu5xcLKh624hYu2blc26qNJ8/N82Thttsn179+n0uey+cuNaY/A6fq2ltTqY6pe3Ve4pOo6Sc4xp8sd1u2+dbPp4+Gxxmm+H93S03hsRk83cVsFa06NR431EYtyilL1c6veUFPry7Lsk2SqYPMZPiRqDLY7I1sTO3t7awoVZ2yrU61PaU5/NltvtKS2affcDndDZbJX885j81O3rXuJvfksrmhB04V4unGpGXLu+V7T2a37o+oOJ0xgqOAx0relWq3NatVlcXNzW29ZXqye8py26L3JdEkkcsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABx1RGrVXQ3ai7mpVXRm0b4cfWRoV15HJVl3OPrryNsvS8N+GhVRS0bFVdzXkbZbMbeC67GV5GCS79i1TGfAjIn0DRHU8VNEH4lsluQa8SZVaiWRl1K9jKJG3TmbEZ9vM4+Mti6nU7FLlb41OVvxl0JpmnGp7y1T+BRhvwf42EzO/QoUiXP7yWF8FWbv4htb9yrnMOQJ4KsbIuRW57EJVOhDbPgWSkVyns+5XKoUymTJ1vnMynKZVKW76kJMj4l5E3STZEyupnbpt4llWEupkykzO3QhPGEPIMyurQonHqXwRTHqi+mupSjbod0cparscbbo5W1XRGG3N5vpyFFGzEopI2YnPXm7SXYz4mDKKsgAAAAAAAAAAAAAMmAAMmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGnNGrVXc3JI1qi7msrXFaFZdzj662OUrR7mhXia5r0PDXGVUa0l1N2tHqas13N811SqiUSJJdyy0T2HcLsSXYhZW15EWuvUt2f2Edu+4lRYokiLL5RTK3EtKrYgiSbQcSJKFsZE41Pea66Gd9iLlMrbVUkqvXozTUhzEeqfZt+tMOp7zW5uhjmHqezYlU95XKo9ircPsT6o9qm5EG2F3MqPR9CUMGUicY9OxNR9xHUyIKJLl7dCxQM8pXq0irb3GGtu5a0Ra6MdOK0jO23ZGdjKXiT1HEodzYpLqUwRs0VvsilK3LePY5W2j0Rx9tE5W3ic+64fPpt0l0L4ldNFsTCvP1UgjBkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa8kUTXQ2ZIpmi8aZaNaJpVonJ1I9DSqxNM12eLTiq0e/madSJyVeBp1Ym+a7M1pNddzCLJIg0atIkmTRWuhNELxNGGjKM+JVKtx+ww47/aXbIw4sdONdwISj07fabLiRlHxLTSvq13HyMbGxyEXAn2R6qGtvAbF/J1Dh4eBPsj1UbdDOxdydDPqx7J9VCj4klHbwL1T/AGElAj2T6qFDcnGBcodehNQK+yeSKow8ETUdixx6jYr1HtIhsjDXkWNGGm2CaVNdCDSLmuhBrffoTFlaX3GUZ+JJInqEoR6o2qMeqKaceqNyhDqUtU3rkbttDt0OToR6I07aHY5GlHoc2q8vza6uiuhYiMUSM3JWQECEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACtlUkXMrkWi0a1SJq1Ym9UNaqXldHjrja0NzRqw23OUrJdTSrdjXNdmK42pHYpa2Nyp4mtPsbyt81Wv2CPUPsIktYsiyaK0/nbEolatE+rMpeY8TPiQVjbzMbe4l3M7dAr1HlMcpP8AVRjsvtB7Icg5CzwZkHsr5V9pnk9xP+Y8Ar7o8u22xnlJJGQrd1Hb3Gdu5n+Rn+QU9qil5jYyn0CCOsbIi0WLwK9+rC2awyDXXYm/D4GPAN5UNmTjHzCJxXUFqynHr0N+3gatHuclbrsZ6rj8uq3KEOiN2miiikbMDn1XnbqaJGDJRiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//2Q==" alt="LES017 thumbnail" style="width:100%;height:100%;object-fit:cover"></div>
+  <div class="sp-title">Where to Find Clients (OnlineJobs, Upwork)</div>
+  <div class="sp-sub">Hang tight &mdash; Module 6 Lesson 2 is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES017...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 6 &nbsp;·&nbsp; Lesson 2</span>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> MODULE 6 &nbsp;·&nbsp; LESSON 2 OF 3</div>
+  <h1>Where to Find Clients (OnlineJobs, Upwork)</h1>
+  <p class="hero-sub">Skills alone do not pay the bills &mdash; you need clients who know you exist. This lesson walks you through the two platforms every Filipino VA should master: OnlineJobs.ph for local and Filipino-friendly employers, and Upwork for the global marketplace. You will learn how each platform works, how to build a profile that gets noticed, how to write applications that actually get replies, and how to build a repeatable habit of finding work.</p>
+  <div class="hero-meta">
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> ~55 min</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Beginner</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 2 Videos</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59"/><rect x="2" y="5" width="20" height="16" rx="2"/></svg> 11 Activities</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> 11 Checkpoints</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 11</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> What is in this lesson</div>
+  <p class="toc-sub">Read the section &rarr; Complete the activity &rarr; Pass the checkpoint &rarr; Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. Why Knowing Where to Find Clients Matters</a></li>
+    <li><a href="#s2" data-toc="2">2. What Is OnlineJobs.ph and How It Works</a></li>
+    <li><a href="#s3" data-toc="3">3. Setting Up a Winning OnlineJobs.ph Profile</a></li>
+    <li><a href="#s4" data-toc="4">4. Applying for Jobs on OnlineJobs.ph Effectively</a></li>
+    <li><a href="#s5" data-toc="5">5. What Is Upwork and How It Works</a></li>
+    <li><a href="#s6" data-toc="6">6. Setting Up a Winning Upwork Profile</a></li>
+    <li><a href="#s7" data-toc="7">7. Applying for Jobs and Writing Proposals on Upwork</a></li>
+    <li><a href="#s8" data-toc="8">8. OnlineJobs.ph vs. Upwork — Which Platform</a></li>
+    <li><a href="#s9" data-toc="9">9. Other Places VAs Find Clients</a></li>
+    <li><a href="#s10" data-toc="10">10. Common Mistakes VAs Make</a></li>
+    <li><a href="#s11" data-toc="11">11. Building a Client Search Routine</a></li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section is-visible" id="s1">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">1</span> Why Knowing Where to Find Clients Matters</div>
+
+  <p>Most new VAs pour all their energy into learning skills &mdash; social media management, admin work, bookkeeping &mdash; and forget that skills are useless if no one knows you exist. <strong>Finding clients is a skill on its own</strong>, and it is one you will use for as long as you freelance, even after you already have clients.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Definition</div>
+    <p><strong>Client search</strong> is the ongoing, active process of finding, applying to, and winning paid work as a freelancer &mdash; through job platforms, referrals, and direct outreach. It is not a one-time task you finish once you land a client; it is a habit you keep for your entire freelance career.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">platforms every Filipino VA should master first: OnlineJobs.ph and Upwork</div></div>
+    <div class="stat"><div class="stat-num">1-4</div><div class="stat-label">weeks is a realistic timeline to land a first client if you apply consistently</div></div>
+    <div class="stat"><div class="stat-num">80%</div><div class="stat-label">of new VAs quit applying too early, before consistency has a chance to pay off</div></div>
+  </div>
+
+  <h2>Two Worlds, Two Platforms</h2>
+  <p>OnlineJobs.ph exists specifically to connect Filipino freelancers with employers &mdash; many of them small business owners in Australia, the US, and the UK who specifically want to hire from the Philippines. Upwork is a global marketplace where you compete with freelancers from every country on price, portfolio, and proposal quality. Knowing both gives you two very different paths to your first paying client.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Set Realistic Expectations</div>
+    <p>Landing your first client is rarely instant. A realistic first goal is applying to 3-5 quality job posts every day for two to four weeks, while polishing your profile in parallel. Consistency beats intensity.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Open a note or spreadsheet right now and create two columns: "OnlineJobs.ph" and "Upwork." You will use it to track applications as you go through this lesson.</p>
+  </div>
+
+  <div class="mini-game" id="game1">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Client Search Readiness Sort</div>
+    <div class="mg-inst">Drag each habit into the zone where it belongs. Some help your client search, some do not.</div>
+    <div class="drag-pool" id="g1-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g1-zone-good" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label good"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Helps Your Search</div></div>
+      <div class="drag-zone" id="g1-zone-bad" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label bad"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Slows You Down</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g1')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g1')">Reset</button>
+    <div class="mg-result" id="g1-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-1">
+    <div class="cp-header"><span class="cp-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> Checkpoint</span><span class="cp-header-title">Section 1 Knowledge Check</span></div>
+    <div id="cp-1-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-1-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-1-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is client search described as an ongoing habit rather than a one-time task?</p>
+        <div class="cp-opts" id="cp-1-opts">
+          <label><input type="radio" name="cp1" value="a"> Because platforms delete your profile after every hired job</label>
+          <label><input type="radio" name="cp1" value="b"> Because freelancers need a steady pipeline of leads even while working with existing clients</label>
+          <label><input type="radio" name="cp1" value="c"> Because you can only apply to one job per month</label>
+          <label><input type="radio" name="cp1" value="d"> Because clients automatically expire after 30 days</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-1-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(1,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue to Section 2 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section" id="s2">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">2</span> What Is OnlineJobs.ph and How It Works</div>
+
+  <p>OnlineJobs.ph is a job marketplace built specifically for the Philippines. Employers &mdash; usually small and medium business owners from Australia, New Zealand, the US, Canada, and the UK &mdash; post jobs there because they want to hire Filipino remote staff. Filipino freelancers create a profile, browse job posts, and apply directly.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p><strong>OnlineJobs.ph</strong> is a job board built exclusively for connecting Filipino freelancers and virtual assistants with foreign employers, verified through government ID checks and employer screening.</p>
+  </div>
+
+  <h2>How Job Listings Work</h2>
+  <p>Job posts on OnlineJobs.ph fall into three broad categories:</p>
+  <ul class="checklist">
+    <li><strong>Full-time</strong> &mdash; usually 40 hours a week, fixed schedule, most similar to a regular job</li>
+    <li><strong>Part-time</strong> &mdash; fewer hours per week, common for VAs supporting multiple clients</li>
+    <li><strong>Project-based</strong> &mdash; a single deliverable or short engagement with a defined end date</li>
+  </ul>
+
+  <h3>Employer Verification</h3>
+  <p>OnlineJobs.ph verifies employers before they can post jobs, which filters out a large share of scam postings compared to open job boards. This does not mean every job post is a perfect fit &mdash; you still need to read carefully &mdash; but it does mean the platform has already done a first layer of screening for you.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Angel, a new VA, browsed OnlineJobs.ph and found a part-time appointment setter role for an Australian roofing company. The job post clearly listed hours, tools used, and pay range &mdash; all signs of a legitimate, well-prepared employer. She applied the same day and had an interview within 48 hours.</p>
+  </div>
+
+  <div class="mini-game" id="game2">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Platform Feature Sorter</div>
+    <div class="mg-inst">Drag each feature into whether it belongs to OnlineJobs.ph or Upwork.</div>
+    <div class="drag-pool" id="g2-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g2-zone-oj" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g2')"><div class="zone-label neutral">OnlineJobs.ph</div></div>
+      <div class="drag-zone" id="g2-zone-up" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g2')"><div class="zone-label neutral">Upwork</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g2')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g2')">Reset</button>
+    <div class="mg-result" id="g2-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-2">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 2 Knowledge Check</span></div>
+    <div id="cp-2-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-2-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-2-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Which of the following best describes OnlineJobs.ph's core purpose?</p>
+        <div class="cp-opts" id="cp-2-opts">
+          <label><input type="radio" name="cp2" value="a"> A global freelancing marketplace open to workers from any country</label>
+          <label><input type="radio" name="cp2" value="b"> A platform built specifically to connect Filipino freelancers with foreign employers</label>
+          <label><input type="radio" name="cp2" value="c"> A social media scheduling tool</label>
+          <label><input type="radio" name="cp2" value="d"> A government job placement office</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-2-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(2,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue to Section 3 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section" id="s3">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">3</span> Setting Up a Winning OnlineJobs.ph Profile</div>
+
+  <p>Your profile is your first impression &mdash; employers see it before they ever talk to you. A complete, professional profile earns trust instantly and gets you shortlisted more often.</p>
+
+  <h2>Full Profile Walkthrough</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+    <tr><th>Field</th><th>What to Put &amp; Why</th></tr>
+    <tr><td>Profile Photo</td><td>A clear, friendly, professional headshot &mdash; no filters, no group photos, no sunglasses. This is the first thing employers notice.</td></tr>
+    <tr><td>Headline</td><td>A specific title like "Social Media VA &amp; Appointment Setter" beats a vague one like "Hardworking and Reliable." Specificity signals expertise.</td></tr>
+    <tr><td>Skills Summary</td><td>Two to three sentences on your core skills and the type of client you help, written in plain, confident language.</td></tr>
+    <tr><td>Resume Upload</td><td>A clean, one-page resume with your work history, tools you use, and any relevant training.</td></tr>
+    <tr><td>Verification (ID, requirements)</td><td>Completing government ID and background verification steps builds trust and often unlocks better job visibility.</td></tr>
+  </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Profile Completeness Tip</div>
+    <p>An incomplete profile is often filtered out automatically by employers browsing candidate lists. Finish every section before you start applying.</p>
+  </div>
+
+  <div class="mini-game" id="game3">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Profile Checklist Builder</div>
+    <div class="mg-inst">Drag the correct profile elements into the "Complete Profile" zone. Leave out the items that do not belong.</div>
+    <div class="drag-pool" id="g3-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g3-zone-good" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g3')"><div class="zone-label good">Belongs in Profile</div></div>
+      <div class="drag-zone" id="g3-zone-bad" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g3')"><div class="zone-label bad">Does Not Belong</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g3')">Check My Profile</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g3')">Reset</button>
+    <div class="mg-result" id="g3-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-3">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 3 Knowledge Check</span></div>
+    <div id="cp-3-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-3-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-3-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA choose a specific headline like "Social Media VA & Appointment Setter" over a vague one like "Hardworking and Reliable"?</p>
+        <div class="cp-opts" id="cp-3-opts">
+          <label><input type="radio" name="cp3" value="a"> Specific headlines are required by law</label>
+          <label><input type="radio" name="cp3" value="b"> A specific headline signals clear expertise, while a vague one tells the employer nothing about your skills</label>
+          <label><input type="radio" name="cp3" value="c"> Vague headlines are automatically rejected by the platform</label>
+          <label><input type="radio" name="cp3" value="d"> It does not matter which one you choose</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-3-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(3,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue to Section 4 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section" id="s4">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">4</span> Applying for Jobs on OnlineJobs.ph Effectively</div>
+
+  <p>Most applicants copy-paste the same generic message into every job post. This alone puts you ahead of most of your competition &mdash; because employers can spot a copy-paste message instantly, and they skip it.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Avoid This Trap</div>
+    <p>Applying with the same generic paragraph to every job post &mdash; without mentioning the client's actual need &mdash; is the single most common reason applications go unanswered.</p>
+  </div>
+
+  <h2>Sample Tailored Cover Message Template</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:100%"></colgroup>
+    <tr><th>Cover Message Template</th></tr>
+    <tr><td>Hi [Employer Name], I saw your post for a [job title] and noticed you need help with [specific task mentioned in the post]. I have handled [related experience] for past clients, including [one concrete example]. I am available [your available hours] and can start [timeframe]. I would love to answer any questions on a quick call. Thank you for your time, [Your Name]</td></tr>
+  </table>
+  </div>
+
+  <p>Following application instructions exactly &mdash; such as starting your message with a specific word the employer asked for &mdash; filters out most of the competition automatically, since many applicants skip reading the full post.</p>
+
+  <div class="mini-game" id="game4">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Cover Message Rewriter</div>
+    <div class="mg-inst">For each pair, click the version that is tailored and specific rather than generic.</div>
+    <div class="scenario-qs" id="g4-qs" style="display:flex;flex-direction:column;gap:10px"></div>
+    <div class="mg-result" id="g4-result"></div>
+  </div>
+
+  <div class="yt-wrap">
+    <div class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/WNtFyfJoCdI?rel=0&enablejsapi=1" title="OnlineJobs.ph Tutorial" allowfullscreen></iframe></div>
+    <div class="yt-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Watch: OnlineJobs.ph Tutorial — Finding & Applying to VA Jobs</div>
+  </div>
+
+  <div class="checkpoint" id="cp-4">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 4 Knowledge Check</span></div>
+    <div id="cp-4-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-4-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-4-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why do generic, copy-pasted cover messages usually fail to get a response?</p>
+        <div class="cp-opts" id="cp-4-opts">
+          <label><input type="radio" name="cp4" value="a"> They are technically against OnlineJobs.ph rules</label>
+          <label><input type="radio" name="cp4" value="b"> Employers can tell they were not written for their specific job post, so they get skipped</label>
+          <label><input type="radio" name="cp4" value="c"> They are always too short to read</label>
+          <label><input type="radio" name="cp4" value="d"> The platform blocks generic messages automatically</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-4-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(4,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue to Section 5 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section" id="s5">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">5</span> What Is Upwork and How It Works</div>
+
+  <p>Upwork is one of the largest global freelance marketplaces, connecting clients from every country with freelancers offering nearly every kind of remote skill. Unlike OnlineJobs.ph, competition on Upwork comes from freelancers worldwide, not just the Philippines.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Definition</div>
+    <p><strong>Upwork</strong> is a global online marketplace where clients post jobs and invite freelancers, and freelancers apply using "connects" &mdash; a limited credit system used to submit proposals.</p>
+  </div>
+
+  <h2>Key Upwork Concepts</h2>
+  <ul class="checklist">
+    <li><strong>Job posts vs. invites</strong> &mdash; you can apply to open job posts, or a client can invite you directly based on your profile</li>
+    <li><strong>Connects</strong> &mdash; a limited number of credits used to submit proposals; some jobs cost more connects than others</li>
+    <li><strong>Hourly vs. fixed-price contracts</strong> &mdash; hourly contracts track time with Upwork's tracker; fixed-price pays a set amount per milestone</li>
+    <li><strong>Job Success Score</strong> &mdash; Upwork's algorithm favors freelancers with completed profiles, strong reviews, and consistent delivery</li>
+  </ul>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Kristal spent her first week on Upwork applying to every job she saw, spending connects freely. After running low, she switched strategy: she only applied to jobs that matched her exact skill set and had a clear budget listed. Her response rate tripled.</p>
+  </div>
+
+  <div class="mini-game" id="game5">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Upwork Basics Matcher</div>
+    <div class="mg-inst">Click a term on the left, then click its matching definition on the right.</div>
+    <div class="match-grid">
+      <div><div class="match-col-label">Term</div><div class="match-items" id="g5-left"></div></div>
+      <div><div class="match-col-label">Definition</div><div class="match-items" id="g5-right"></div></div>
+    </div>
+    <div class="match-score" id="g5-score">Matched: 0 / 4</div>
+    <button class="mg-btn" onclick="matchInit('g5')" style="background:rgba(255,255,255,.15)">Reset</button>
+    <div class="mg-result" id="g5-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-5">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 5 Knowledge Check</span></div>
+    <div id="cp-5-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-5-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-5-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What are "connects" used for on Upwork?</p>
+        <div class="cp-opts" id="cp-5-opts">
+          <label><input type="radio" name="cp5" value="a"> Messaging other freelancers</label>
+          <label><input type="radio" name="cp5" value="b"> Submitting proposals to job posts</label>
+          <label><input type="radio" name="cp5" value="c"> Verifying your government ID</label>
+          <label><input type="radio" name="cp5" value="d"> Tracking hourly time worked</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-5-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(5,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue to Section 6 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section" id="s6">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">6</span> Setting Up a Winning Upwork Profile</div>
+
+  <p>An Upwork profile works differently from OnlineJobs.ph &mdash; it functions more like a landing page that has to convince a stranger, in seconds, that you are worth reading further.</p>
+
+  <h2>Full Profile Walkthrough</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+    <tr><th>Field</th><th>What to Put &amp; Why</th></tr>
+    <tr><td>Photo</td><td>Same standard as OnlineJobs.ph &mdash; clear, professional, friendly, well-lit.</td></tr>
+    <tr><td>Title</td><td>A results-oriented title like "Social Media VA for Small Business Owners" performs better than a generic label like "Freelancer."</td></tr>
+    <tr><td>Overview</td><td>Written for the client's problem, not your life story &mdash; open with what you help clients achieve, then briefly list your tools and experience.</td></tr>
+    <tr><td>Skills Tags</td><td>Choose specific, searchable tags (e.g., "Canva," "Meta Business Suite") so you appear in client searches for those exact skills.</td></tr>
+    <tr><td>Portfolio Samples</td><td>Two to four real or mock samples of work relevant to the jobs you want.</td></tr>
+    <tr><td>Rate</td><td>Set a modest, competitive starting rate to win your first few contracts and build reviews.</td></tr>
+  </table>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Rate Strategy Warning</div>
+    <p>Pricing yourself too high before you have reviews can make you invisible in search results. Start competitive, then raise your rate once your Job Success Score and reviews are established.</p>
+  </div>
+
+  <div class="mini-game" id="game6">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Profile Strength Meter</div>
+    <div class="mg-inst">Click each profile element to add it and watch your profile strength grow. Add every element to reach 100%.</div>
+    <div class="meter-track"><div class="meter-fill" id="g6-fill"></div></div>
+    <div class="meter-label" id="g6-pct">0% complete</div>
+    <div class="meter-items" id="g6-items"></div>
+    <div class="mg-result" id="g6-result"></div>
+    <button class="mg-btn" onclick="meterInit('g6')" style="background:rgba(255,255,255,.15)">Reset</button>
+  </div>
+
+  <div class="checkpoint" id="cp-6">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 6 Knowledge Check</span></div>
+    <div id="cp-6-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-6-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-6-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is it recommended for a new Upwork freelancer to set a modest, competitive starting rate?</p>
+        <div class="cp-opts" id="cp-6-opts">
+          <label><input type="radio" name="cp6" value="a"> Upwork requires all freelancers to charge the same rate</label>
+          <label><input type="radio" name="cp6" value="b"> A modest starting rate helps win the first contracts and build reviews, which unlocks better-paying work later</label>
+          <label><input type="radio" name="cp6" value="c"> Higher rates always get more clients regardless of reviews</label>
+          <label><input type="radio" name="cp6" value="d"> Rate has no effect on visibility in search results</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-6-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(6,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue to Section 7 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section" id="s7">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">7</span> Applying for Jobs and Writing Proposals on Upwork</div>
+
+  <p>Connects are limited, so spending them wisely matters. Every proposal should address the client's specific problem, not repeat a generic template.</p>
+
+  <h2>Sample Tailored Proposal Template</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:100%"></colgroup>
+    <tr><th>Proposal Template</th></tr>
+    <tr><td>Hi [Client Name], your post mentions you need help with [specific task]. I recently helped a similar client achieve [concrete result], using [tool/method]. I would approach your project by [one clear first step]. I am available to start [timeframe] and happy to hop on a quick call. Best, [Your Name]</td></tr>
+  </table>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Connects Budget Tip</div>
+    <p>Reserve most of your connects for jobs that closely match your skills and have a clear, realistic budget listed. Do not spend them on vague posts with no budget information.</p>
+  </div>
+
+  <div class="mini-game" id="game7">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Connects Budgeting Simulator</div>
+    <div class="mg-inst">You have 30 connects. Click the job listings worth applying to until you run out or choose wisely — spend on strong-fit jobs only.</div>
+    <div class="budget-track"><span>Connects remaining:</span><span id="g7-budget">30</span></div>
+    <div class="meter-items" id="g7-items"></div>
+    <div class="mg-result" id="g7-result"></div>
+    <button class="mg-btn" onclick="budgetCheck('g7')">Check My Choices</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="budgetInit('g7')">Reset</button>
+  </div>
+
+  <div class="yt-wrap">
+    <div class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/AomSFPbUMHQ?rel=0&enablejsapi=1" title="Upwork Tutorial" allowfullscreen></iframe></div>
+    <div class="yt-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Watch: Upwork Tutorial — Profile, Proposals & Getting Hired</div>
+  </div>
+
+  <div class="checkpoint" id="cp-7">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 7 Knowledge Check</span></div>
+    <div id="cp-7-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-7-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-7-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why should a VA spend Upwork connects mainly on strong-fit jobs with a clear budget?</p>
+        <div class="cp-opts" id="cp-7-opts">
+          <label><input type="radio" name="cp7" value="a"> Connects regenerate instantly so it does not matter</label>
+          <label><input type="radio" name="cp7" value="b"> Connects are limited, so spending them on well-matched, well-defined jobs improves your odds of a response</label>
+          <label><input type="radio" name="cp7" value="c"> Upwork bans freelancers who apply to vague posts</label>
+          <label><input type="radio" name="cp7" value="d"> Clients prefer freelancers who apply to everything</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-7-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(7,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue to Section 8 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section" id="s8">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">8</span> OnlineJobs.ph vs. Upwork — Which Platform for Which Situation</div>
+
+  <p>Neither platform is universally "better" &mdash; each fits a different situation. Knowing when to use which one saves you time and connects.</p>
+
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
+    <tr><th>Feature</th><th>OnlineJobs.ph</th><th>Upwork</th></tr>
+    <tr><td>Client Type</td><td>Mostly Filipino-hiring foreign employers</td><td>Global clients of every size</td></tr>
+    <tr><td>Fees</td><td>Free for freelancers to apply</td><td>Service fees deducted from earnings</td></tr>
+    <tr><td>Competition</td><td>Filipino freelancers mainly</td><td>Freelancers worldwide</td></tr>
+    <tr><td>Payment Method</td><td>Agreed directly with employer</td><td>Handled through Upwork's system</td></tr>
+    <tr><td>Best Fit</td><td>Long-term, dedicated VA roles</td><td>Project-based and hourly gigs, global reach</td></tr>
+  </table>
+  </div>
+
+  <div class="mini-game" id="game8">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Platform Recommendation Sorter</div>
+    <div class="mg-inst">Drag each client scenario into the platform that best fits.</div>
+    <div class="drag-pool" id="g8-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g8-zone-oj" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">OnlineJobs.ph</div></div>
+      <div class="drag-zone" id="g8-zone-up" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g8')"><div class="zone-label neutral">Upwork</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g8')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="dzInit('g8')">Reset</button>
+    <div class="mg-result" id="g8-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-8">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 8 Knowledge Check</span></div>
+    <div id="cp-8-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-8-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-8-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">A new VA wants to decide between OnlineJobs.ph and Upwork for their first client. Which factor should most influence the choice?</p>
+        <div class="cp-opts" id="cp-8-opts">
+          <label><input type="radio" name="cp8" value="a"> Whichever platform's logo looks nicer</label>
+          <label><input type="radio" name="cp8" value="b"> Whether they want to work with Filipino-hiring employers or global clients, and how much competition and fees they are comfortable with</label>
+          <label><input type="radio" name="cp8" value="c"> Only Upwork should ever be used</label>
+          <label><input type="radio" name="cp8" value="d"> Only OnlineJobs.ph should ever be used</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-8-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(8,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue to Section 9 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section" id="s9">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">9</span> Other Places VAs Find Clients</div>
+
+  <p>OnlineJobs.ph and Upwork are the two platforms to master first, but they are not the only ways to find clients. Building multiple lead sources protects you from relying on just one channel.</p>
+
+  <ul class="checklist">
+    <li><strong>Referrals</strong> &mdash; happy clients are often willing to refer you to other business owners; always ask politely once a project goes well</li>
+    <li><strong>LinkedIn outreach</strong> &mdash; connecting with small business owners and sharing relevant, non-salesy content builds visibility over time</li>
+    <li><strong>Facebook VA and freelancer groups</strong> &mdash; many groups post client leads directly; active participation (not just lurking) increases your visibility</li>
+    <li><strong>Direct cold outreach</strong> &mdash; reaching out to small businesses that clearly need help, with a short, specific, non-pushy message</li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Referral Tip</div>
+    <p>Never assume a happy client will refer you automatically &mdash; ask directly: "If you know anyone else who could use similar help, I would appreciate an introduction."</p>
+  </div>
+
+  <div class="mini-game" id="game9">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Lead Source Priority Sorter</div>
+    <div class="mg-inst">Drag each lead source into the order you should build it up, from first priority to last, for a brand-new VA.</div>
+    <div class="drag-pool" id="g9-pool"></div>
+    <div class="seq-drop" id="g9-drop" ondragover="dzOver(event)" ondrop="seqDrop(event,'g9')"></div>
+    <button class="mg-btn" onclick="seqCheck('g9')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="seqInit('g9')">Reset</button>
+    <div class="mg-result" id="g9-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-9">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 9 Knowledge Check</span></div>
+    <div id="cp-9-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-9-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-9-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Besides OnlineJobs.ph and Upwork, which of these is a legitimate way VAs find clients?</p>
+        <div class="cp-opts" id="cp-9-opts">
+          <label><input type="radio" name="cp9" value="a"> Referrals from existing clients and active participation in freelancer Facebook groups</label>
+          <label><input type="radio" name="cp9" value="b"> Only waiting for clients to message first</label>
+          <label><input type="radio" name="cp9" value="c"> Buying a list of leads with no research</label>
+          <label><input type="radio" name="cp9" value="d"> Applying to jobs without reading the post</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-9-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(9,'a')">Submit Answer</button>
+        <button class="btn-continue" id="cp-9-cont" onclick="unlockSection(10)">Continue to Section 10 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 10 ===== -->
+<div class="section" id="s10">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">10</span> Common Mistakes VAs Make When Searching for Clients</div>
+
+  <p>Most client search struggles come down to a small set of repeated mistakes. Spotting these in your own habits is the fastest way to improve your results.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Watch Out For These</div>
+    <p>Applying with generic messages, applying to jobs that clearly do not match your skills, ignoring red flags in job posts, and giving up after only a few unanswered applications are the most common reasons new VAs stay stuck.</p>
+  </div>
+
+  <div class="mini-game" id="game10">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Habit Mistake Spotter</div>
+    <div class="mg-inst">Click each habit that is a mistake. Leave the good habits unclicked.</div>
+    <div class="audit-wrap" id="g10-items"></div>
+    <div class="mg-result" id="g10-result"></div>
+    <button class="mg-btn" onclick="auditCheck('g10')">Check My Answers</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="auditInit('g10')">Reset</button>
+  </div>
+
+  <div class="checkpoint" id="cp-10">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 10 Knowledge Check</span></div>
+    <div id="cp-10-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-10-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-10-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What is a common mistake new VAs make that this lesson warns against?</p>
+        <div class="cp-opts" id="cp-10-opts">
+          <label><input type="radio" name="cp10" value="a"> Tracking applications sent in a spreadsheet</label>
+          <label><input type="radio" name="cp10" value="b"> Giving up after only a few unanswered applications instead of treating client search as an ongoing habit</label>
+          <label><input type="radio" name="cp10" value="c"> Reading the full job post before applying</label>
+          <label><input type="radio" name="cp10" value="d"> Tailoring each cover message</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-10-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(10,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-10-cont" onclick="unlockSection(11)">Continue to Section 11 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 11 ===== -->
+<div class="section" id="s11">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">11</span> Building a Client Search Routine</div>
+
+  <p>Client search only works if it becomes a habit, not a one-time sprint. Set a weekly schedule, track your applications, and keep going even while working with existing clients.</p>
+
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Action Step</div>
+    <p>Block 30 minutes on your calendar, three times a week, labeled "Client Search Time." Treat it exactly like a client meeting &mdash; do not skip it.</p>
+  </div>
+
+  <div class="mini-game" id="game11">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Weekly Routine Sequencer</div>
+    <div class="mg-inst">Drag these client-search tasks into the correct weekly order.</div>
+    <div class="drag-pool" id="g11-pool"></div>
+    <div class="seq-drop" id="g11-drop" ondragover="dzOver(event)" ondrop="seqDrop(event,'g11')"></div>
+    <button class="mg-btn" onclick="seqCheck('g11')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.15);margin-left:8px" onclick="seqInit('g11')">Reset</button>
+    <div class="mg-result" id="g11-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-11">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 11 Knowledge Check</span></div>
+    <div id="cp-11-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-11-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-11-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! You have finished all sections.</div>
+        <p class="cp-question">Why is a scheduled, recurring client search routine more effective than sporadic bursts of applying?</p>
+        <div class="cp-opts" id="cp-11-opts">
+          <label><input type="radio" name="cp11" value="a"> Because job posts only appear on scheduled days</label>
+          <label><input type="radio" name="cp11" value="b"> Because consistency compounds over time and keeps a steady pipeline of leads flowing even while working with current clients</label>
+          <label><input type="radio" name="cp11" value="c"> Because Upwork requires a fixed weekly schedule</label>
+          <label><input type="radio" name="cp11" value="d"> Because it has no real effect on results</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-11-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(11,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-11-cont" onclick="unlockFinal()">See Key Takeaways →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== FINAL BLOCK ===== -->
+<div class="final-block" id="final-block">
+  <div class="takeaways">
+    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Key Takeaways</h3>
+    <ul class="checklist">
+      <li>Client search is an ongoing habit, not a one-time task &mdash; keep applying even while working with existing clients.</li>
+      <li>OnlineJobs.ph connects Filipino freelancers with foreign employers who specifically want to hire from the Philippines.</li>
+      <li>Upwork is a global marketplace where connects, proposals, and Job Success Score matter most.</li>
+      <li>A complete, specific profile beats a vague one on both platforms.</li>
+      <li>Tailored cover messages and proposals dramatically outperform generic, copy-pasted ones.</li>
+      <li>Spend Upwork connects on well-matched jobs with clear budgets, not on every post you see.</li>
+      <li>Referrals, LinkedIn, Facebook groups, and cold outreach are valuable lead sources beyond the two main platforms.</li>
+      <li>Avoiding common mistakes &mdash; generic messages, ignoring red flags, giving up too soon &mdash; improves results fast.</li>
+      <li>A scheduled, recurring client search routine builds a steady pipeline over time.</li>
+    </ul>
+  </div>
+  <div class="complete-wrap">
+    <p>You have completed LES017. Mark this lesson as complete to unlock the next lesson in Module 6.</p>
+    <button class="btn-complete" id="btn-mark-complete" onclick="markLessonComplete()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Mark Lesson as Complete</button>
+    <div id="complete-msg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:6px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Lesson marked complete!</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const LESSON_ID = "LES017";
+const SAVE_KEY = "lhph_LES017";
+let TOTAL_SECTIONS = 1;
+
+let state = {
+  sectionsUnlocked: 1,
+  sectionsDone: [],
+  cpPassed: [],
+  finalUnlocked: false,
+  lessonCompleted: false
+};
+
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) { const saved = JSON.parse(raw); state = Object.assign({}, state, saved); }
+  } catch(e) {}
+}
+
+function updateProgress() {
+  const label = document.getElementById("progress-label");
+  const pct = document.getElementById("progress-pct");
+  const fill = document.getElementById("progress-fill");
+  const done = state.sectionsDone.length;
+  const percent = Math.round((done / TOTAL_SECTIONS) * 100);
+  label.textContent = state.finalUnlocked ? "Lesson Complete Area" : ("Section " + state.sectionsUnlocked + " of " + TOTAL_SECTIONS);
+  pct.textContent = percent + "% complete";
+  fill.style.width = percent + "%";
+}
+
+function updateTOC() {
+  document.querySelectorAll(".toc-list a").forEach(a => {
+    const n = parseInt(a.dataset.toc, 10);
+    a.classList.remove("toc-locked", "toc-current", "toc-done");
+    if (state.sectionsDone.indexOf(n) !== -1) { a.classList.add("toc-done"); }
+    else if (n === state.sectionsUnlocked) { a.classList.add("toc-current"); }
+    else if (n > state.sectionsUnlocked) { a.classList.add("toc-locked"); }
+  });
+}
+
+function unlockSection(n) {
+  if (!state.sectionsDone.includes(n - 1) && n > 1) { state.sectionsDone.push(n - 1); }
+  state.sectionsUnlocked = Math.max(state.sectionsUnlocked, n);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const target = document.getElementById("s" + n);
+  if (target) { target.classList.add("is-visible"); target.scrollIntoView({behavior:"smooth", block:"start"}); }
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockFinal() {
+  if (!state.sectionsDone.includes(TOTAL_SECTIONS)) { state.sectionsDone.push(TOTAL_SECTIONS); }
+  state.finalUnlocked = true;
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const fb = document.getElementById("final-block");
+  fb.classList.add("is-visible");
+  fb.scrollIntoView({behavior:"smooth", block:"start"});
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockCP(n) {
+  const locked = document.getElementById("cp-" + n + "-locked");
+  const content = document.getElementById("cp-" + n + "-content");
+  if (locked) locked.style.display = "none";
+  if (content) content.style.display = "block";
+}
+
+function checkAnswer(n, correctVal) {
+  const opts = document.querySelectorAll("input[name=cp" + n + "]");
+  let chosen = null;
+  opts.forEach(o => { if (o.checked) chosen = o.value; });
+  const fb = document.getElementById("cp-" + n + "-fb");
+  const labels = document.querySelectorAll("#cp-" + n + "-opts label");
+  labels.forEach(l => l.classList.remove("opt-correct", "opt-incorrect"));
+  if (!chosen) {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Please choose an answer first.";
+    return;
+  }
+  if (chosen === correctVal) {
+    fb.className = "checkpoint-feedback fb-correct";
+    fb.style.display = "block";
+    fb.textContent = "Correct! Great work.";
+    opts.forEach(o => { if (o.value === correctVal) o.closest("label").classList.add("opt-correct"); });
+    document.getElementById("cp-" + n + "-passed").style.display = "flex";
+    document.getElementById("cp-" + n + "-cont").style.display = "inline-flex";
+    if (!state.cpPassed.includes(n)) { state.cpPassed.push(n); }
+    save();
+  } else {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Not quite — review the section above and try again.";
+    opts.forEach(o => {
+      if (o.value === chosen) o.closest("label").classList.add("opt-incorrect");
+    });
+  }
+}
+
+function markLessonComplete() {
+  state.lessonCompleted = true;
+  save();
+  document.getElementById("btn-mark-complete").disabled = true;
+  document.getElementById("complete-msg").style.display = "block";
+  try{window.parent.postMessage({action:"lessonComplete"},"*");}catch(e){}
+}
+
+function restoreUI() {
+  if (state.lessonCompleted) {
+    document.querySelectorAll(".section").forEach(s => s.classList.add("is-visible"));
+    document.getElementById("final-block").classList.add("is-visible");
+    for (let i = 1; i <= TOTAL_SECTIONS; i++) {
+      unlockCP(i);
+      const passedNote = document.getElementById("cp-" + i + "-passed");
+      if (passedNote) passedNote.style.display = "flex";
+      const cont = document.getElementById("cp-" + i + "-cont");
+      if (cont) cont.style.display = "inline-flex";
+    }
+    document.getElementById("btn-mark-complete").disabled = true;
+    document.getElementById("complete-msg").style.display = "block";
+    state.sectionsUnlocked = TOTAL_SECTIONS;
+    state.finalUnlocked = true;
+    updateProgress(); updateTOC();
+    return;
+  }
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const cur = document.getElementById("s" + state.sectionsUnlocked);
+  if (cur) cur.classList.add("is-visible");
+  if (state.finalUnlocked) { document.getElementById("final-block").classList.add("is-visible"); }
+  state.cpPassed.forEach(n => {
+    unlockCP(n);
+    const passedNote = document.getElementById("cp-" + n + "-passed");
+    if (passedNote) passedNote.style.display = "flex";
+    const cont = document.getElementById("cp-" + n + "-cont");
+    if (cont) cont.style.display = "inline-flex";
+  });
+  updateProgress(); updateTOC();
+}
+
+/* ============ GENERIC DRAG-ZONE ENGINE ============ */
+const dzData = {};
+function dzMakeCard(text) {
+  const el = document.createElement("div");
+  el.className = "drag-card";
+  el.draggable = true;
+  el.textContent = text;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  el.addEventListener("touchstart", () => { el.dataset.touching = "1"; }, {passive:true});
+  return el;
+}
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
+function dzLeave(e) { e.currentTarget.classList.remove("drag-over"); }
+function dzDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const pool = document.getElementById(gid + "-pool");
+  const dragging = pool.querySelector(".dragging") || Array.from(document.querySelectorAll("#" + gid + "-pool .drag-card, .drag-zone .drag-card")).find(c => c.textContent === text);
+  if (dragging) { e.currentTarget.appendChild(dragging); }
+}
+function dzInit(gid) {
+  const conf = dzData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  pool.innerHTML = "";
+  document.querySelectorAll("#" + gid + "-zone-good, #" + gid + "-zone-bad, #" + gid + "-zone-oj, #" + gid + "-zone-up").forEach(z => {
+    Array.from(z.children).forEach(c => { if (c.classList && c.classList.contains("drag-card")) c.remove(); });
+  });
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => pool.appendChild(dzMakeCard(item.text)));
+}
+function dzCheck(gid) {
+  const conf = dzData[gid];
+  const zoneEls = conf.zones.map(z => document.getElementById(gid + "-zone-" + z));
+  let correct = 0, total = conf.items.length, placed = 0;
+  conf.items.forEach(item => {
+    for (let zi = 0; zi < zoneEls.length; zi++) {
+      const zone = zoneEls[zi];
+      const cards = Array.from(zone.querySelectorAll(".drag-card"));
+      const card = cards.find(c => c.textContent === item.text);
+      if (card) {
+        placed++;
+        if (conf.zones[zi] === item.zone) { correct++; card.classList.remove("wrong-shake"); void card.offsetWidth; card.classList.add("correct-flash"); }
+        else { card.classList.remove("correct-flash"); void card.offsetWidth; card.classList.add("wrong-shake"); }
+      }
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (placed < total) {
+    result.className = "mg-result lose";
+    result.textContent = "Place all " + total + " items into a zone first (" + placed + " placed).";
+    return;
+  }
+  if (correct === total) {
+    result.className = "mg-result win";
+    result.textContent = "All " + total + " correct! Excellent sorting.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + total + " correct. Check the shaking cards and try again.";
+  }
+}
+
+/* ============ GENERIC SEQUENCER ENGINE ============ */
+const seqData = {};
+function seqMakeItem(text, i) {
+  const el = document.createElement("div");
+  el.className = "step-item";
+  el.draggable = true;
+  el.dataset.text = text;
+  el.innerHTML = "<span class='step-num'>" + (i+1) + "</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  return el;
+}
+function seqRenumber(container) {
+  Array.from(container.children).forEach((el, i) => {
+    const numSpan = el.querySelector(".step-num");
+    if (numSpan) numSpan.textContent = i + 1;
+  });
+}
+function seqInit(gid) {
+  const conf = seqData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  const drop = document.getElementById(gid + "-drop");
+  pool.innerHTML = ""; drop.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach((t, i) => pool.appendChild(seqMakeItem(t, i)));
+  pool.addEventListener("dragover", e => e.preventDefault());
+  pool.addEventListener("drop", e => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+    if (dragging) pool.appendChild(dragging);
+    seqRenumber(drop);
+  });
+}
+function seqDrop(e, gid) {
+  e.preventDefault();
+  const text = e.dataTransfer.getData("text/plain");
+  const drop = document.getElementById(gid + "-drop");
+  const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+  if (dragging) { drop.appendChild(dragging); seqRenumber(drop); }
+}
+function seqCheck(gid) {
+  const conf = seqData[gid];
+  const drop = document.getElementById(gid + "-drop");
+  const items = Array.from(drop.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  if (items.length < conf.order.length) {
+    result.className = "mg-result lose";
+    result.textContent = "Drag all " + conf.order.length + " steps into the sequence first.";
+    return;
+  }
+  let correct = true;
+  for (let i = 0; i < conf.order.length; i++) { if (items[i] !== conf.order[i]) { correct = false; break; } }
+  if (correct) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect order! Well done.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "That order is not quite right yet. Rearrange and check again.";
+    drop.classList.remove("drag-over");
+    Array.from(drop.children).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+  }
+}
+
+/* ============ GENERIC MATCH ENGINE ============ */
+const matchData = {};
+let matchSel = {};
+function matchInit(gid) {
+  const conf = matchData[gid];
+  const left = document.getElementById(gid + "-left");
+  const right = document.getElementById(gid + "-right");
+  left.innerHTML = ""; right.innerHTML = "";
+  matchSel[gid] = { left: null, matched: 0 };
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const leftShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  const rightShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  leftShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.term; el.dataset.key = p.term;
+    el.onclick = () => matchClickLeft(gid, el, p.term);
+    left.appendChild(el);
+  });
+  rightShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.def; el.dataset.key = p.term;
+    el.onclick = () => matchClickRight(gid, el, p.term);
+    right.appendChild(el);
+  });
+  document.getElementById(gid + "-score").textContent = "Matched: 0 / " + conf.pairs.length;
+}
+function matchClickLeft(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  document.querySelectorAll("#" + gid + "-left .match-item").forEach(e => e.classList.remove("selected"));
+  el.classList.add("selected");
+  matchSel[gid].left = term;
+}
+function matchClickRight(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  const sel = matchSel[gid].left;
+  if (!sel) return;
+  const conf = matchData[gid];
+  const leftEl = document.querySelector("#" + gid + "-left .match-item.selected");
+  if (sel === term) {
+    el.classList.remove("selected"); el.classList.add("matched");
+    if (leftEl) leftEl.classList.add("matched");
+    matchSel[gid].matched++;
+    matchSel[gid].left = null;
+    document.getElementById(gid + "-score").textContent = "Matched: " + matchSel[gid].matched + " / " + conf.pairs.length;
+    if (matchSel[gid].matched === conf.pairs.length) {
+      const result = document.getElementById(gid + "-result");
+      result.className = "mg-result win";
+      result.textContent = "All terms matched correctly!";
+      confettiBurst();
+      unlockCP(conf.cp);
+    }
+  } else {
+    el.classList.add("wrong");
+    if (leftEl) leftEl.classList.add("wrong");
+    setTimeout(() => { el.classList.remove("wrong"); if (leftEl) { leftEl.classList.remove("wrong", "selected"); } }, 600);
+    matchSel[gid].left = null;
+  }
+}
+
+/* ============ GENERIC AUDIT/CLICK-FLAG ENGINE ============ */
+const auditData = {};
+function auditInit(gid) {
+  const conf = auditData[gid];
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "audit-item"; el.dataset.problem = item.problem; el.dataset.done = "0";
+    el.innerHTML = "<span class='audit-icon'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg></span><span class='audit-text'>" + item.text + "</span><span class='audit-flag'>Flagged</span>";
+    el.addEventListener("click", () => auditClick(gid, el, item));
+    container.appendChild(el);
+  });
+}
+function auditClick(gid, el, item) {
+  if (el.dataset.done === "1") return;
+  if (item.problem) {
+    el.dataset.done = "1"; el.classList.add("flagged");
+  } else {
+    el.style.background = "rgba(34,197,94,0.1)";
+    setTimeout(() => { el.style.background = ""; }, 500);
+  }
+}
+function auditCheck(gid) {
+  const conf = auditData[gid];
+  const flagged = document.querySelectorAll("#" + gid + "-items .audit-item.flagged").length;
+  const totalProblems = conf.items.filter(i => i.problem).length;
+  const result = document.getElementById(gid + "-result");
+  if (flagged < totalProblems) {
+    result.className = "mg-result lose";
+    result.textContent = "Found " + flagged + " of " + totalProblems + " mistakes. Keep looking.";
+    return;
+  }
+  result.className = "mg-result win";
+  result.textContent = "All " + totalProblems + " mistakes found! Sharp eye.";
+  confettiBurst();
+  unlockCP(conf.cp);
+}
+
+/* ============ CONFETTI ============ */
+function confettiBurst() {
+  // simple lightweight confetti using CSS animation clones
+  const colors = ["#0d7377","#14a085","#f4a261","#ffffff"];
+  for (let i = 0; i < 16; i++) {
+    const c = document.createElement("div");
+    c.style.position = "fixed";
+    c.style.left = (40 + Math.random()*20) + "vw";
+    c.style.top = "40vh";
+    c.style.width = "8px"; c.style.height = "8px";
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = "2px";
+    c.style.zIndex = 5000;
+    c.style.transition = "transform 1s ease, opacity 1s ease";
+    document.body.appendChild(c);
+    requestAnimationFrame(() => {
+      c.style.transform = "translate(" + ((Math.random()-0.5)*200) + "px," + (200 + Math.random()*200) + "px) rotate(" + (Math.random()*720) + "deg)";
+      c.style.opacity = "0";
+    });
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+/* ============ GAME 1: Client Search Readiness Sort ============ */
+dzData.g1 = { zones: ["good","bad"], cp: 1, items: [
+  { text: "Applying to a handful of well-matched jobs every day", zone: "good" },
+  { text: "Keeping a simple spreadsheet of applications sent", zone: "good" },
+  { text: "Completing your profile before applying widely", zone: "good" },
+  { text: "Following up politely after a few days of silence", zone: "good" },
+  { text: "Applying with the exact same message to every post", zone: "bad" },
+  { text: "Giving up after two unanswered applications", zone: "bad" },
+  { text: "Skipping the job description and applying anyway", zone: "bad" },
+  { text: "Waiting for clients to find you without applying at all", zone: "bad" }
+]};
+
+/* ============ GAME 2: Platform Feature Sorter ============ */
+dzData.g2 = { zones: ["oj","up"], cp: 2, items: [
+  { text: "Built specifically for Filipino freelancers", zone: "oj" },
+  { text: "Employer government ID verification", zone: "oj" },
+  { text: "Full-time, part-time, and project-based listings", zone: "oj" },
+  { text: "Connects used to submit proposals", zone: "up" },
+  { text: "Global client base from every country", zone: "up" },
+  { text: "Job Success Score algorithm", zone: "up" },
+  { text: "Hourly time tracker feature", zone: "up" },
+  { text: "Direct agreement on payment terms with employer", zone: "oj" }
+]};
+
+/* ============ GAME 3: Profile Checklist Builder ============ */
+dzData.g3 = { zones: ["good","bad"], cp: 3, items: [
+  { text: "Clear, professional headshot photo", zone: "good" },
+  { text: "Specific headline naming your core skills", zone: "good" },
+  { text: "Completed government ID verification", zone: "good" },
+  { text: "Uploaded one-page resume", zone: "good" },
+  { text: "A group photo from a party", zone: "bad" },
+  { text: "A blank skills summary section", zone: "bad" },
+  { text: "An outdated resume from a different career", zone: "bad" },
+  { text: "A headline that only says \"Available Now\"", zone: "bad" }
+]};
+
+/* ============ GAME 4: Cover Message Rewriter (verdict-style) ============ */
+const g4Data = { cp: 4, pairs: [
+  { good: "I saw your post about needing help managing Instagram and Facebook posting three times a week — I have handled that exact schedule for two past clients.", bad: "I am hardworking and can do any task you need, please hire me." },
+  { good: "Your job post mentions you need someone available during AU business hours — I currently work 6am to 2pm Manila time, which overlaps well.", bad: "I am available anytime, I will do whatever you say." },
+  { good: "I noticed you are using Canva for your graphics — I have built templates in Canva for two e-commerce clients this year.", bad: "I know how to use computers and social media very well." }
+]};
+function g4Render() {
+  const container = document.getElementById("g4-qs");
+  container.innerHTML = "";
+  const result = document.getElementById("g4-result");
+  result.className = "mg-result"; result.textContent = "";
+  g4Score = 0;
+  g4Data.pairs.forEach((pair, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "sc-card";
+    wrap.style.background = "rgba(255,255,255,.07)";
+    wrap.style.border = "1px solid rgba(255,255,255,.14)";
+    wrap.style.borderRadius = "12px";
+    wrap.style.padding = "14px";
+    const opts = Math.random() > 0.5 ? [pair.good, pair.bad] : [pair.bad, pair.good];
+    let html = "<div style='font-size:12px;color:var(--white);margin-bottom:10px;font-weight:600'>Which message is tailored and specific?</div><div style='display:flex;gap:8px;flex-wrap:wrap'>";
+    opts.forEach(opt => {
+      const isGood = opt === pair.good;
+      html += "<button class='mg-btn g4-opt' data-good='" + isGood + "' data-idx='" + idx + "' style='background:rgba(255,255,255,.1);color:var(--white);font-size:11px;flex:1;min-width:200px;text-align:left;padding:10px 12px'>" + opt + "</button>";
+    });
+    html += "</div>";
+    wrap.innerHTML = html;
+    container.appendChild(wrap);
+  });
+  document.querySelectorAll(".g4-opt").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const isGood = btn.dataset.good === "true";
+      const idx = btn.dataset.idx;
+      const siblingBtns = document.querySelectorAll(".g4-opt[data-idx='" + idx + "']");
+      siblingBtns.forEach(b => b.style.pointerEvents = "none");
+      if (isGood) {
+        btn.style.background = "rgba(34,197,94,.3)"; btn.style.borderColor = "#4ade80";
+        g4Score++;
+      } else {
+        btn.style.background = "rgba(239,68,68,.2)";
+        btn.classList.add("wrong-shake");
+      }
+      if (document.querySelectorAll(".g4-opt[style*='pointer-events: none']").length >= g4Data.pairs.length * 2) {
+        checkG4Done();
+      }
+    });
+  });
+}
+let g4Score = 0;
+function checkG4Done() {
+  const answered = document.querySelectorAll(".g4-opt").length / 2;
+  const clickedGroups = new Set();
+  document.querySelectorAll(".g4-opt").forEach(b => { if (b.style.pointerEvents === "none") clickedGroups.add(b.dataset.idx); });
+  if (clickedGroups.size === g4Data.pairs.length) {
+    const result = document.getElementById("g4-result");
+    if (g4Score === g4Data.pairs.length) {
+      result.className = "mg-result win";
+      result.textContent = "You picked the tailored message every time!";
+      confettiBurst();
+      unlockCP(g4Data.cp);
+    } else {
+      result.className = "mg-result win";
+      result.textContent = "You picked " + g4Score + " of " + g4Data.pairs.length + " tailored messages correctly.";
+      confettiBurst();
+      unlockCP(g4Data.cp);
+    }
+  }
+}
+
+/* ============ GAME 5: Upwork Basics Matcher ============ */
+matchData.g5 = { cp: 5, pairs: [
+  { term: "Connects", def: "Limited credits used to submit proposals to job posts" },
+  { term: "Job Success Score", def: "A score that reflects your track record and reliability on the platform" },
+  { term: "Fixed-price contract", def: "Pays an agreed amount per milestone rather than by the hour" },
+  { term: "Hourly contract", def: "Tracked using Upwork's time tracker tool" }
+]};
+
+/* ============ GAME 6: Profile Strength Meter ============ */
+const g6Data = { cp: 6, items: [
+  "Professional photo", "Results-oriented title", "Client-focused overview",
+  "Specific skills tags", "Two to four portfolio samples", "Competitive starting rate"
+]};
+let g6Added = 0;
+function meterInit(gid) {
+  g6Added = 0;
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  document.getElementById(gid + "-fill").style.width = "0%";
+  document.getElementById(gid + "-pct").textContent = "0% complete";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  g6Data.items.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "meter-item";
+    el.textContent = item;
+    el.onclick = () => {
+      if (el.classList.contains("added")) return;
+      el.classList.add("added");
+      g6Added++;
+      const pct = Math.round((g6Added / g6Data.items.length) * 100);
+      document.getElementById(gid + "-fill").style.width = pct + "%";
+      document.getElementById(gid + "-pct").textContent = pct + "% complete";
+      if (g6Added === g6Data.items.length) {
+        result.className = "mg-result win";
+        result.textContent = "Profile 100% complete! This is what a strong Upwork profile looks like.";
+        confettiBurst();
+        unlockCP(g6Data.cp);
+      }
+    };
+    container.appendChild(el);
+  });
+}
+
+/* ============ GAME 7: Connects Budgeting Simulator ============ */
+const g7Data = { cp: 7, budget: 30, items: [
+  { text: "Social media VA needed, clear budget $8/hr, matches your skills (5 connects)", cost: 5, good: true },
+  { text: "\"Need someone for anything\" — no budget listed, vague description (6 connects)", cost: 6, good: false },
+  { text: "Appointment setter for AU roofing company, budget listed, matches your skills (4 connects)", cost: 4, good: true },
+  { text: "Graphic design job — outside your skill set entirely (5 connects)", cost: 5, good: false },
+  { text: "Ecommerce customer service VA, clear scope and budget, matches your skills (5 connects)", cost: 5, good: true },
+  { text: "\"Urgent hire, DM for details,\" no info given (4 connects)", cost: 4, good: false }
+]};
+let g7Remaining = g7Data.budget;
+let g7Spent = [];
+function budgetInit(gid) {
+  g7Remaining = g7Data.budget;
+  g7Spent = [];
+  document.getElementById(gid + "-budget").textContent = g7Remaining;
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  g7Data.items.forEach((item, idx) => {
+    const el = document.createElement("div");
+    el.className = "meter-item";
+    el.style.display = "block";
+    el.style.width = "100%";
+    el.textContent = item.text;
+    el.onclick = () => {
+      if (el.classList.contains("added")) return;
+      if (g7Remaining < item.cost) { el.classList.add("wrong-shake"); setTimeout(()=>el.classList.remove("wrong-shake"),600); return; }
+      el.classList.add("added");
+      g7Remaining -= item.cost;
+      g7Spent.push(idx);
+      document.getElementById(gid + "-budget").textContent = g7Remaining;
+    };
+    container.appendChild(el);
+  });
+}
+function budgetCheck(gid) {
+  const goodCount = g7Data.items.filter(i => i.good).length;
+  const goodSpent = g7Spent.filter(idx => g7Data.items[idx].good).length;
+  const badSpent = g7Spent.filter(idx => !g7Data.items[idx].good).length;
+  const result = document.getElementById(gid + "-result");
+  if (goodSpent === goodCount && badSpent === 0) {
+    result.className = "mg-result win";
+    result.textContent = "Smart budgeting! You spent connects only on well-matched, well-defined jobs.";
+    confettiBurst();
+    unlockCP(g7Data.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "You applied to " + goodSpent + " strong-fit jobs and " + badSpent + " vague or mismatched ones. Reset and try to pick only the strong-fit jobs.";
+  }
+}
+
+/* ============ GAME 8: Platform Recommendation Sorter ============ */
+dzData.g8 = { zones: ["oj","up"], cp: 8, items: [
+  { text: "An Australian small business wants a dedicated long-term Filipino VA", zone: "oj" },
+  { text: "A US startup wants a one-time logo design project from anyone worldwide", zone: "up" },
+  { text: "A New Zealand roofing company wants a part-time appointment setter from the Philippines", zone: "oj" },
+  { text: "A client wants to browse freelancer portfolios and reviews before hiring", zone: "up" },
+  { text: "A UK employer specifically searched for Filipino remote staff", zone: "oj" },
+  { text: "A global agency wants to post one project and compare bids from many countries", zone: "up" }
+]};
+
+/* ============ GAME 9: Lead Source Priority Sorter ============ */
+seqData.g9 = { cp: 9, order: [
+  "Complete profiles on OnlineJobs.ph and Upwork first",
+  "Ask past or current clients for referrals",
+  "Join and participate in Facebook VA groups",
+  "Start light LinkedIn outreach to small business owners",
+  "Add direct cold outreach once you have some experience"
+]};
+
+/* ============ GAME 10: Habit Mistake Spotter ============ */
+auditData.g10 = { cp: 10, items: [
+  { text: "Sends the same generic message to every job post", problem: true },
+  { text: "Reads the full job description before applying", problem: false },
+  { text: "Gives up applying after only two unanswered messages", problem: true },
+  { text: "Tailors each cover message to the specific job", problem: false },
+  { text: "Ignores obvious red flags like vague pay and no details", problem: true },
+  { text: "Tracks applications sent in a simple spreadsheet", problem: false },
+  { text: "Applies to jobs completely outside their skill set", problem: true }
+]};
+
+/* ============ GAME 11: Weekly Routine Sequencer ============ */
+seqData.g11 = { cp: 11, order: [
+  "Review and refresh your OnlineJobs.ph and Upwork profiles",
+  "Set aside a 30-minute block for applications, three times a week",
+  "Apply to 3-5 well-matched jobs per session",
+  "Follow up politely on applications older than a few days",
+  "Update your tracking spreadsheet with results"
+]};
+
+/* ============ SPLASH ANIMATION ============ */
+const spMsgs = [
+  [0, "Initializing LES017..."],
+  [15, "Loading lesson content..."],
+  [30, "Preparing activities and games..."],
+  [50, "Setting up your checkpoints..."],
+  [70, "Almost there..."],
+  [88, "LES017 is ready — launching!"]
+];
+let spStart = null;
+const SP_DURATION = 4000;
+function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+function spAnimate(ts) {
+  if (!spStart) spStart = ts;
+  const raw = Math.min((ts - spStart) / SP_DURATION, 1);
+  const pct = Math.round(easeInOut(raw) * 100);
+  document.getElementById("sp-fill").style.width = pct + "%";
+  document.getElementById("sp-pct").textContent = pct + "%";
+  let msg = spMsgs[0][1];
+  for (const [threshold, text] of spMsgs) { if (pct >= threshold) msg = text; }
+  document.getElementById("sp-msg").textContent = msg;
+  if (raw < 1) { requestAnimationFrame(spAnimate); }
+  else {
+    const sp = document.getElementById("splash");
+    sp.classList.add("fade-out");
+    setTimeout(() => { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 700);
+  }
+}
+
+/* ============ INIT ============ */
+window.addEventListener("DOMContentLoaded", () => {
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+  if (window.location.search.indexOf("completed=1") !== -1) {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      let s = raw ? JSON.parse(raw) : {};
+      s.lessonCompleted = true;
+      s.sectionsUnlocked = TOTAL_SECTIONS;
+      s.finalUnlocked = true;
+      s.sectionsDone = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.sectionsDone.push(i);
+      s.cpPassed = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.cpPassed.push(i);
+      localStorage.setItem(SAVE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+  load();
+  restoreUI();
+  dzInit("g1"); dzInit("g2"); dzInit("g3");
+  g4Render();
+  matchInit("g5");
+  meterInit("g6");
+  budgetInit("g7");
+  dzInit("g8");
+  seqInit("g9");
+  auditInit("g10");
+  seqInit("g11");
+  requestAnimationFrame(spAnimate);
+});
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>

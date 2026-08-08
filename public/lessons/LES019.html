@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LES019 — Admin VA Role & Responsibilities | LearnHub PH</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#5a8a6a;--sage-dk:#4a7358;--sage-lt:#8fb89c;--sand:#f0a868;--sand-dk:#dd8f4e;
+  --text:#2b3630;--bg:#fbfaf7;--white:#ffffff;
+  --sage-light:#eef4f0;--sand-light:#fdf6ee;--warn-light:#fdf0e9;
+  --s100:#f1f5f9;--s200:#e2e8f0;--s300:#cbd5e1;--s400:#94a3b8;--s500:#64748b;--s600:#5c6b62;
+  --g500:#22c55e;--r500:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:0 0 60px;line-height:1.6;font-size:14px}
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#eef4f0 0%,#fbfaf7 60%,#fdf6ee 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;transition:opacity .6s ease,visibility .6s ease}
+#splash.fade-out{opacity:0;visibility:hidden}
+.sp-eyebrow{font-size:10px;font-weight:800;color:var(--sage);letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;text-align:center}
+.sp-thumb{width:min(320px,80vw);border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.18);margin-bottom:22px;background:linear-gradient(135deg,var(--sage),var(--sage-lt));display:flex;align-items:center;justify-content:center;aspect-ratio:16/9}
+.sp-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.sp-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--text);text-align:center;letter-spacing:-.02em;margin-bottom:8px}
+.sp-sub{font-size:13px;color:#5c6b62;text-align:center;margin-bottom:22px}
+.sp-track{width:min(400px,90vw);height:8px;background:#dfe9e2;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sage),var(--sage-lt),var(--sand));border-radius:99px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;width:min(400px,90vw);font-size:11px;font-weight:600;color:#5c6b62}
+.topbar{background:var(--white);border-bottom:2px solid var(--sage);padding:10px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(90,138,106,.1)}
+.topbar img{height:28px}
+.topbar-divider{width:1px;height:18px;background:var(--s200);margin:0 4px}
+.topbar-label{font-size:11px;font-weight:700;color:var(--sage);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:780px;margin:0 auto;padding:24px 20px 0}
+.hero{background:linear-gradient(135deg,#3d6b4c 0%,var(--sage) 50%,var(--sage-lt) 100%);border-radius:20px;padding:40px 36px 36px;margin-bottom:24px;color:var(--white);position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(90,138,106,.22)}
+.hero-tag{background:rgba(255,255,255,.15);display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:18px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.hero h1{font-size:clamp(22px,4vw,30px);font-weight:900;line-height:1.2;margin-bottom:12px;letter-spacing:-.02em}
+.hero-sub{font-size:14px;line-height:1.8;max-width:560px;color:rgba(255,255,255,.85)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;color:rgba(255,255,255,.92);display:inline-flex;align-items:center;gap:6px}
+.hero-meta svg{width:14px;height:14px;flex-shrink:0}
+.progress-wrap{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:14px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:12px;font-weight:600;color:var(--s500)}
+.progress-head .pct{color:var(--sage);font-weight:700}
+.progress-track{background:var(--s100);border-radius:99px;height:7px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,var(--sage),var(--sage-lt),var(--sand));height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.toc{background:var(--white);border:1px solid var(--s200);border-left:3px solid var(--sage);border-radius:12px;padding:20px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.toc-title{font-size:11px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.toc-title svg{width:16px;height:16px}
+.toc-sub{font-size:12px;color:var(--s400);margin-bottom:14px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.toc-list li a{color:var(--s600);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;transition:all .15s}
+.toc-list li a:hover{color:var(--sage);background:var(--sage-light)}
+.toc-list li a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--s300);flex-shrink:0}
+.toc-list li a.toc-locked{color:var(--s300);cursor:not-allowed;pointer-events:none}
+.toc-list li a.toc-locked::before{background:var(--s200)}
+.toc-list li a.toc-current{color:var(--sage);font-weight:700;background:var(--sage-light)}
+.toc-list li a.toc-current::before{background:var(--sage)}
+.toc-list li a.toc-done::before{background:var(--g500)}
+.section{margin-bottom:32px;scroll-margin-top:80px;display:none}
+.section.is-visible{display:block}
+.section-card{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:14px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.section-title{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--sage-light);display:flex;align-items:center;gap:9px}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage-dk));color:var(--white);font-size:10px;font-weight:800;flex-shrink:0}
+p{font-size:14px;line-height:1.85;color:var(--s600);margin-bottom:14px}
+p:last-child{margin-bottom:0}
+strong{color:var(--text);font-weight:700}
+em{color:var(--sage);font-style:normal;font-weight:600}
+h2{font-size:17px;font-weight:800;color:var(--text);margin:18px 0 10px}
+h3{font-size:14px;font-weight:700;color:var(--sage);margin:14px 0 8px}
+.icon-inline{display:inline-block;vertical-align:middle;flex-shrink:0}
+.def-box{border-left:3px solid var(--sage);padding:16px 20px;background:var(--sage-light);border-radius:0 12px 12px 0;margin:16px 0}
+.def-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.def-box p{font-size:13px;color:#28342d;margin:0;line-height:1.75}
+.tip-box{border-left:3px solid var(--sand);padding:14px 18px;background:var(--sand-light);border-radius:0 12px 12px 0;margin:14px 0}
+.tip-label{font-size:10px;font-weight:800;color:#b5671a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.tip-box p{font-size:13px;color:#5c3b12;margin:0;line-height:1.7}
+.warn-box{border-left:3px solid #d97748;padding:14px 18px;background:var(--warn-light);border-radius:0 12px 12px 0;margin:14px 0}
+.warn-label{font-size:10px;font-weight:800;color:#d97748;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.warn-box p{font-size:13px;color:#7a3520;margin:0;line-height:1.7}
+.scenario-box{border-left:3px solid var(--sage-lt);padding:14px 18px;background:#eef4f0;border-radius:0 12px 12px 0;margin:14px 0}
+.scenario-label{font-size:10px;font-weight:800;color:#3d6b4c;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.scenario-box p{font-size:13px;color:#1f2e24;margin:0;line-height:1.7}
+.action-box{background:linear-gradient(135deg,#eef4f0,#fbfaf7);border:2px solid var(--sage);border-radius:12px;padding:18px 20px;margin:18px 0}
+.action-label{font-size:10px;font-weight:800;color:var(--sage);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.action-box p{font-size:13px;color:var(--text);margin:0;line-height:1.7}
+.table-wrap{overflow-x:auto;margin:16px 0}
+.les-table{width:100%;border-collapse:collapse;font-size:12px;border-radius:12px;overflow:hidden;border:1px solid var(--s200);table-layout:fixed}
+.les-table th{background:var(--sage);color:var(--white);padding:10px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.les-table td{padding:10px 12px;border-bottom:1px solid var(--s100);color:var(--s600);word-wrap:break-word;overflow-wrap:break-word;vertical-align:top}
+.les-table tr:last-child td{border-bottom:none}
+.les-table tr:hover td{background:var(--sage-light)}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.checklist li{font-size:13px;color:var(--s600);line-height:1.6;padding-left:22px;position:relative}
+.checklist li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a8a6a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:contain}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--white);border:1px solid var(--s200);border-radius:12px;padding:20px 16px;text-align:center;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sage),var(--sage-lt),var(--sand))}
+.stat-num{font-size:24px;font-weight:900;color:var(--sage);margin-bottom:6px;line-height:1}
+.stat-label{font-size:11px;color:var(--s500);line-height:1.5}
+.mini-game{background:linear-gradient(135deg,#3d6b4c,var(--sage));border-radius:16px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.mg-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.mg-inst{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:16px;line-height:1.5}
+.mg-btn{background:linear-gradient(135deg,var(--sand),var(--sand-dk));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:10px;display:inline-flex;align-items:center;gap:6px}
+.mg-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(240,168,104,.4)}
+.mg-result{font-size:13px;font-weight:700;text-align:center;padding:10px 14px;border-radius:8px;margin-top:10px;display:none}
+.mg-result.win{display:block;background:rgba(143,184,156,.25);color:#eafff0;border:1px solid rgba(143,184,156,.4)}
+.mg-result.lose{display:block;background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.drag-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.drag-zones.zones3{grid-template-columns:1fr 1fr 1fr}
+.drag-zones.zones5{grid-template-columns:1fr 1fr;gap:10px}
+.drag-zone{min-height:110px;background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.25);border-radius:12px;padding:10px;transition:all .2s}
+.drag-zone.drag-over{border-color:var(--sand);background:rgba(240,168,104,.12)}
+.zone-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.18);display:flex;align-items:center;gap:6px}
+.zone-label.good{color:#c9f2d5}
+.zone-label.bad{color:#ffd2c4}
+.zone-label.neutral{color:rgba(255,255,255,.95)}
+.drag-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px}
+.drag-card{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--white);cursor:grab;user-select:none;transition:all .18s;line-height:1.4}
+.drag-card:hover{background:rgba(255,255,255,.2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.drag-card.dragging{opacity:.4;transform:scale(.96)}
+.drag-card.correct-flash{animation:correctFlash .5s ease forwards}
+.drag-card.wrong-shake{animation:wrongShake .5s ease forwards}
+.seq-drop{display:flex;flex-direction:column;gap:8px;min-height:100px;background:rgba(255,255,255,.05);border:2px dashed rgba(255,255,255,.2);border-radius:12px;padding:10px;transition:all .2s;margin-bottom:12px}
+.seq-drop.drag-over{border-color:var(--sand);background:rgba(240,168,104,.1)}
+.step-item{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--white);cursor:grab;display:flex;align-items:center;gap:10px;user-select:none;transition:all .15s}
+.step-item:hover{background:rgba(255,255,255,.2)}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.85);flex-shrink:0}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-col-label{font-size:10px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.match-items{display:flex;flex-direction:column;gap:8px}
+.match-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;min-height:44px;display:flex;align-items:center;line-height:1.4}
+.match-item:hover{background:rgba(255,255,255,.18);border-color:var(--sand)}
+.match-item.selected{background:rgba(240,168,104,.3);border-color:var(--sand)}
+.match-item.matched{background:rgba(143,184,156,.3);border-color:#c9f2d5;cursor:default}
+.match-item.wrong{background:rgba(239,68,68,.2);border-color:#fca5a5;animation:wrongShake .5s ease}
+.match-score{font-size:12px;color:rgba(255,255,255,.7);margin-top:10px;text-align:center}
+.audit-wrap{position:relative;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:16px;margin-bottom:10px}
+.audit-item{display:flex;align-items:flex-start;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.audit-item:hover{background:rgba(255,255,255,.08)}
+.audit-item.flagged{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.24)}
+.audit-item.flagged .audit-flag{opacity:1}
+.audit-icon{flex-shrink:0;color:rgba(255,255,255,.75)}
+.audit-text{font-size:12px;color:rgba(255,255,255,.9);line-height:1.5;flex:1}
+.audit-flag{font-size:11px;font-weight:700;color:#fca5a5;opacity:0;transition:opacity .2s;flex-shrink:0}
+.meter-track{background:rgba(255,255,255,.12);border-radius:99px;height:14px;overflow:hidden;margin-bottom:6px;border:1px solid rgba(255,255,255,.18)}
+.meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--sand),#c9f2d5);border-radius:99px;transition:width .4s ease}
+.meter-label{font-size:11px;color:rgba(255,255,255,.75);text-align:right;margin-bottom:10px}
+.meter-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.meter-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:9px 13px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s}
+.meter-item:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.meter-item.added{background:rgba(143,184,156,.3);border-color:#c9f2d5;cursor:default;opacity:.75}
+.pick-item{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;line-height:1.4}
+.pick-item:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.pick-item.selected{background:rgba(240,168,104,.32);border-color:var(--sand)}
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.dd-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.dd-row span{font-size:12px;color:var(--white);flex:1;line-height:1.4}
+.dd-row select{background:rgba(255,255,255,.92);border:none;border-radius:6px;padding:7px 8px;font-size:12px;font-family:inherit;color:var(--text);font-weight:600;flex-shrink:0;min-width:130px}
+.scenario-choice{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:14px;margin-bottom:14px}
+.scenario-choice .sc-prompt{font-size:12px;color:var(--white);margin-bottom:10px;line-height:1.6;font-weight:600}
+.scenario-choice .sc-opt{display:block;width:100%;text-align:left;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.16);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--white);cursor:pointer;margin-bottom:7px;transition:all .18s;font-family:inherit;line-height:1.5}
+.scenario-choice .sc-opt:hover{background:rgba(255,255,255,.18)}
+.scenario-choice .sc-opt.sc-correct{background:rgba(143,184,156,.32);border-color:#c9f2d5}
+.scenario-choice .sc-opt.sc-incorrect{background:rgba(239,68,68,.2);border-color:#fca5a5;animation:wrongShake .5s ease}
+.checkpoint{background:var(--white);border-radius:16px;overflow:hidden;margin:20px 0;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.cp-header{background:linear-gradient(135deg,var(--sage),var(--sage-lt));padding:14px 20px;display:flex;align-items:center;gap:10px}
+.cp-header-title{font-size:13px;font-weight:800;color:var(--white)}
+.cp-badge{background:rgba(255,255,255,.22);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--white);display:inline-flex;align-items:center;gap:6px}
+.cp-locked{padding:24px;text-align:center;color:var(--s400);font-size:13px}
+.cp-lock-icon{margin-bottom:8px;display:flex;justify-content:center;color:var(--s400)}
+.cp-content{padding:20px}
+.cp-question{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.6}
+.cp-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.cp-opts label{display:flex;align-items:flex-start;gap:10px;background:var(--s100);border:2px solid var(--s200);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--s600);line-height:1.5}
+.cp-opts label:hover{border-color:var(--sage);background:var(--sage-light);color:var(--text)}
+.cp-opts input[type=radio]{accent-color:var(--sage);flex-shrink:0;margin-top:2px}
+.cp-opts label.opt-correct{border-color:var(--g500);background:#f0fdf4;color:#065f46}
+.cp-opts label.opt-incorrect{border-color:var(--r500);background:#fef2f2;color:#991b1b;animation:wrongShake .5s ease}
+.checkpoint-feedback{font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:none}
+.fb-correct{background:#d1fae5;color:#065f46;border:1px solid rgba(34,197,94,.3)}
+.fb-incorrect{background:#fef2f2;color:#991b1b;border:1px solid rgba(239,68,68,.2)}
+.cp-passed-note{display:none;align-items:center;gap:8px;background:#d1fae5;border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:#065f46;margin-bottom:10px}
+.btn-check{background:linear-gradient(135deg,var(--sage),var(--sage-dk));color:var(--white);border:none;padding:10px 24px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-right:10px}
+.btn-check:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(90,138,106,.3)}
+.btn-continue{background:linear-gradient(135deg,var(--sand),var(--sand-dk));color:var(--white);border:none;padding:10px 22px;border-radius:99px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:none}
+.btn-continue:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(240,168,104,.4)}
+.final-block{display:none;margin-bottom:32px;scroll-margin-top:80px}
+.final-block.is-visible{display:block}
+.yt-wrap{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.1)}
+.yt-frame{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+.yt-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.yt-label{padding:12px 16px;font-size:12px;font-weight:700;color:var(--sage);background:var(--sage-light);display:flex;align-items:center;gap:8px}
+.takeaways{background:var(--white);border-left:3px solid var(--sage);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.takeaways h3{font-size:14px;font-weight:800;color:var(--sage);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.complete-wrap{background:var(--white);border-left:3px solid var(--sand);border-radius:12px;padding:24px;text-align:center;box-shadow:0 4px 20px rgba(90,138,106,.08)}
+.complete-wrap p{font-size:13px;color:var(--s500);margin-bottom:16px}
+.btn-complete{background:linear-gradient(135deg,var(--sage),var(--sage-dk));color:var(--white);border:none;padding:14px 32px;border-radius:99px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 16px rgba(90,138,106,.3);display:inline-flex;align-items:center;gap:8px}
+.btn-complete:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(90,138,106,.4)}
+.btn-complete:disabled{opacity:.6;cursor:not-allowed;transform:none}
+#complete-msg{display:none;margin-top:14px;font-size:14px;font-weight:700;color:var(--sage);background:var(--sage-light);padding:12px 20px;border-radius:10px}
+@keyframes correctFlash{0%{transform:scale(1)}30%{transform:scale(1.06);box-shadow:0 0 0 4px rgba(143,184,156,.5)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@media(max-width:640px){
+  .hero{padding:28px 20px 24px}
+  .stat-row{grid-template-columns:1fr 1fr}
+  .drag-zones{grid-template-columns:1fr}
+  .drag-zones.zones3{grid-template-columns:1fr}
+  .drag-zones.zones5{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:1fr}
+  .pick-grid{grid-template-columns:1fr}
+  .wrap{padding:16px 14px 0}
+  .section-card{padding:16px}
+  .mini-game{padding:16px}
+  .les-table th,.les-table td{padding:8px}
+  .drag-card,.step-item,.audit-item,.meter-item,.pick-item{min-height:44px}
+  .dd-row{flex-direction:column;align-items:stretch}
+  .dd-row select{width:100%}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style id="premium-layer">
+:root{
+  --glow-1:rgba(139,92,246,.35);--glow-2:rgba(99,102,241,.25);
+  --glass:rgba(255,255,255,.55);--ring:rgba(139,92,246,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+::selection{background:var(--p300);color:var(--p950)}
+
+/* ── Display type: Sora for headings/labels, Inter stays for body copy ── */
+.hero h1,.section-title,.toc-title,.takeaways h3,.worksheet-title,.persona-name,
+.stat-num,.tl-title,.pillar-title,.complete-wrap h3,.def-label,.tip-label,.warn-label,
+.success-label,.scenario-label,.box-label,.card-title,.badge-daily,.badge-weekly,.badge-always{
+  font-family:"Sora",Inter,sans-serif;letter-spacing:-.01em;
+}
+.section-title,.toc-title,.def-label,.tip-label,.warn-label,.success-label,.scenario-label{letter-spacing:.12em}
+
+/* ── Hero: aurora glow, grain, refined headline ── */
+.hero{position:relative;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto -20%;height:140%;z-index:-1;
+  background:radial-gradient(closest-side,var(--glow-1),transparent 70%),
+             radial-gradient(closest-side,var(--glow-2),transparent 70%);
+  background-position:20% 30%,80% 70%;background-size:60% 60%,55% 55%;background-repeat:no-repeat;
+  animation:auroraDrift 14s var(--ease) infinite alternate;filter:blur(20px);opacity:.8;
+}
+@keyframes auroraDrift{
+  0%{background-position:20% 30%,80% 70%}
+  100%{background-position:32% 42%,68% 58%}
+}
+.hero h1{animation:heroRise .7s var(--ease) both}
+.hero-tag{animation:heroRise .6s var(--ease) both}
+.hero-sub{animation:heroRise .8s var(--ease) .05s both}
+.hero-meta{animation:heroRise .9s var(--ease) .1s both}
+@keyframes heroRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Progress bar: shimmer + smoother fill ── */
+.progress-fill{transition:width .7s var(--ease);position:relative;overflow:hidden}
+.progress-fill::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  width:40%;animation:shimmer 2.2s linear infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+
+/* ── TOC: sliding active indicator ── */
+.toc-list li a{position:relative;transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)}
+.toc-list li a:hover{transform:translateX(2px)}
+.toc-list li a.toc-current{position:relative}
+.toc-list li a.toc-current::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--p600),var(--i500));animation:pulseBar 1.6s var(--ease) infinite;
+}
+@keyframes pulseBar{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── Section entrance: staggered reveal for children when a section becomes visible ── */
+.section.is-visible,#final-block.is-visible{animation:sectionIn .5s var(--ease) both}
+@keyframes sectionIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.reveal-child{opacity:0;transform:translateY(12px);animation:childIn .55s var(--ease) forwards}
+@keyframes childIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── Cards & content blocks: lift on hover, softer premium shadow ── */
+.card,.stat,.persona-card,.tip-box,.warn-box,.success-box,.scenario-box,.worksheet,
+.habit-row,.timeline .tl-body,.quote-box,.quote,.definition,.box{
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease);
+}
+.card:hover,.persona-card:hover,.worksheet:hover,.habit-row:hover{
+  transform:translateY(-2px);box-shadow:0 12px 28px -8px rgba(76,26,135,.18);
+}
+.stat{transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.stat:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 14px 30px -10px rgba(76,26,135,.22)}
+.pillar{transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s var(--ease)}
+
+/* ── Video block: glow frame + fade on reveal ── */
+.yt-wrap{transition:box-shadow .3s var(--ease)}
+.yt-wrap:hover{box-shadow:0 0 0 3px var(--ring),0 16px 32px -12px rgba(76,26,135,.28)}
+
+/* ── Buttons & interactive controls: tactile feedback ── */
+.mg-btn,.tf-btn,#btn-mark-complete,.btn,.btn-primary,.btn-accent,.cp-btn,.ws-field input,.ws-field textarea{
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease);
+}
+.mg-btn:hover,.tf-btn:not(:disabled):hover,#btn-mark-complete:not(:disabled):hover,.btn:hover{
+  transform:translateY(-1px);filter:brightness(1.04);
+}
+.mg-btn:active,.tf-btn:not(:disabled):active,#btn-mark-complete:not(:disabled):active{transform:translateY(0) scale(.98)}
+
+/* ── Checkpoint pass state: gentle celebratory pop ── */
+.is-passed{animation:passPop .4s var(--ease)}
+@keyframes passPop{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+
+/* ── Completion panel: glow pulse ── */
+.complete-wrap{position:relative;overflow:hidden}
+.complete-wrap::before{
+  content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
+  animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
+}
+</style>
+
+</head>
+<body>
+<!-- SPLASH -->
+<div id="splash">
+  <div class="sp-eyebrow">LearnHub PH &nbsp;&middot;&nbsp; Module 7 &nbsp;&middot;&nbsp; Lesson 1</div>
+  <div class="sp-thumb"><img src="data:image/jpeg;base64,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" alt="LES019 thumbnail"></div>
+  <div class="sp-title">Admin VA Role &amp; Responsibilities</div>
+  <div class="sp-sub">Hang tight &mdash; Module 7 Lesson 1 is being prepared</div>
+  <div class="sp-track"><div class="sp-fill" id="sp-fill"></div></div>
+  <div class="sp-row">
+    <span class="sp-msg" id="sp-msg">Initializing LES019...</span>
+    <span class="sp-pct" id="sp-pct">0%</span>
+  </div>
+</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <img src="https://i.imgur.com/4eDwnsE.png" alt="LearnHub PH">
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">Module 7 &nbsp;&middot;&nbsp; Lesson 1</span>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> MODULE 7 &nbsp;&middot;&nbsp; LESSON 1 OF 3</div>
+  <h1>Admin VA Role &amp; Responsibilities</h1>
+  <p class="hero-sub">Every business owner eventually drowns in the small stuff &mdash; the emails, the calendar, the files, the follow-ups. The Admin VA is the person who takes all of that off their plate. This lesson lays the foundation for the entire Admin VA track: what the role actually is, the core pillars of the work, what a realistic day looks like, the skills and tools you need, and how to set yourself up for a confident, professional start with a brand-new client.</p>
+  <div class="hero-meta">
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> ~55 min</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Beginner</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 1 Video</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59"/><rect x="2" y="5" width="20" height="16" rx="2"/></svg> 10 Activities</span>
+    <span><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> 10 Checkpoints</span>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-head"><span id="progress-label">Section 1 of 10</span><span class="pct" id="progress-pct">0% complete</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> What is in this lesson</div>
+  <p class="toc-sub">Read the section &rarr; Complete the activity &rarr; Pass the checkpoint &rarr; Unlock the next section.</p>
+  <ul class="toc-list" id="toc-list">
+    <li><a href="#s1" data-toc="1">1. What Is an Admin VA and Why the Role Exists</a></li>
+    <li><a href="#s2" data-toc="2">2. Core Responsibilities of an Admin VA</a></li>
+    <li><a href="#s3" data-toc="3">3. A Day in the Life of an Admin VA</a></li>
+    <li><a href="#s4" data-toc="4">4. Skills Every Admin VA Needs</a></li>
+    <li><a href="#s5" data-toc="5">5. Tools of the Trade for Admin VAs</a></li>
+    <li><a href="#s6" data-toc="6">6. Setting Expectations With a New Client</a></li>
+    <li><a href="#s7" data-toc="7">7. Prioritizing Tasks and Managing Multiple Requests</a></li>
+    <li><a href="#s8" data-toc="8">8. Confidentiality and Handling Sensitive Information</a></li>
+    <li><a href="#s9" data-toc="9">9. Common Mistakes New Admin VAs Make</a></li>
+    <li><a href="#s10" data-toc="10">10. Growing From Admin VA Into Specialized Roles</a></li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section is-visible" id="s1">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">1</span> What Is an Admin VA and Why the Role Exists</div>
+
+  <p>Behind almost every small business owner who looks like they have it all together is someone quietly managing the calendar, answering the emails, and keeping the files in order. That person is often an <strong>Administrative Virtual Assistant</strong> &mdash; the Admin VA. This role is the operational backbone of a small business: not the flashy, front-facing work, but the steady, reliable support that keeps everything running day to day.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>An <strong>Admin VA</strong> is a remote professional who handles the day-to-day operational and administrative tasks of a business &mdash; calendars, inbox, files, data entry, and meeting notes &mdash; so the business owner can focus on growth instead of getting buried in logistics.</p>
+  </div>
+
+  <h2>How This Differs From Other VA Roles</h2>
+  <p>Not every VA role looks the same. A social-media VA lives inside content calendars, captions, and engagement metrics. A creative VA might focus on graphic design or video editing. The Admin VA, by contrast, is generalist and operational &mdash; the work is less about producing content and more about keeping the business's daily machinery running smoothly. Where a social-media VA is judged by engagement, an Admin VA is judged by whether nothing falls through the cracks.</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">1st</div><div class="stat-label">Admin support is often the very first role a growing business hires help for</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">core pillars make up the heart of Admin VA work, covered in the next section</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">of businesses eventually need someone managing the operational basics</div></div>
+  </div>
+
+  <h2>Why Almost Every Business Owner Eventually Needs This</h2>
+  <p>A solo business owner can survive on hustle for a while, but as the client list grows, so does the volume of email, scheduling, and paperwork. Without support, one of two things happens: the owner burns out trying to do it all, or important details start slipping &mdash; missed replies, double-booked meetings, lost files. An Admin VA exists precisely to prevent that breakdown, giving the business a reliable operational foundation it can grow on top of.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Rosa runs a small consulting business and used to spend her mornings buried in email instead of meeting clients. After hiring an Admin VA to triage her inbox, manage her calendar, and organize her files, she got back nearly two hours a day &mdash; time she now spends on the work that actually grows her business.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Write a two-sentence description of what an Admin VA is, in your own words. You will use language like this in your own profile and client conversations throughout this module.</p>
+  </div>
+
+  <div class="mini-game" id="game1">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Role Definition Sorter</div>
+    <div class="mg-inst">Drag each task into whether it is a typical Admin VA task or not.</div>
+    <div class="drag-pool" id="g1-pool"></div>
+    <div class="drag-zones">
+      <div class="drag-zone" id="g1-zone-good" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label good"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Admin VA Task</div></div>
+      <div class="drag-zone" id="g1-zone-bad" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g1')"><div class="zone-label bad"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Not an Admin VA Task</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g1')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="dzInit('g1')">Reset</button>
+    <div class="mg-result" id="g1-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-1">
+    <div class="cp-header"><span class="cp-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44"/></svg> Checkpoint</span><span class="cp-header-title">Section 1 Knowledge Check</span></div>
+    <div id="cp-1-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-1-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-1-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Which of the following best describes the core focus of an Admin VA role?</p>
+        <div class="cp-opts" id="cp-1-opts">
+          <label><input type="radio" name="cp1" value="a"> Designing social media graphics for a client's brand</label>
+          <label><input type="radio" name="cp1" value="b"> Providing day-to-day operational and administrative support such as calendars, inbox, and files</label>
+          <label><input type="radio" name="cp1" value="c"> Managing a company's entire accounting and tax filings</label>
+          <label><input type="radio" name="cp1" value="d"> Running paid advertising campaigns</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-1-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(1,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-1-cont" onclick="unlockSection(2)">Continue to Section 2 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section" id="s2">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">2</span> Core Responsibilities of an Admin VA</div>
+
+  <p>The Admin VA role rests on a handful of core pillars. Almost every task you will do in this job falls under one of these categories, so understanding them well is the foundation for everything else in this module.</p>
+
+  <h2>The Five Pillars</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+    <tr><th>Pillar</th><th>What It Covers</th></tr>
+    <tr><td>Calendar &amp; Scheduling</td><td>Booking meetings, avoiding conflicts, sending reminders, and keeping the owner's time protected and organized.</td></tr>
+    <tr><td>Inbox Handling</td><td>Triaging incoming email, flagging what is urgent, drafting replies, and archiving or filing what has been dealt with.</td></tr>
+    <tr><td>File Organization</td><td>Keeping documents named, sorted, and stored in a logical folder structure that anyone on the team can find.</td></tr>
+    <tr><td>Data Entry</td><td>Accurately entering and updating information in spreadsheets, CRMs, or databases the business relies on.</td></tr>
+    <tr><td>Meeting Notes</td><td>Capturing decisions and action items during calls so nothing discussed gets forgotten or lost.</td></tr>
+  </table>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>A <strong>core pillar</strong> is one of the recurring categories of work that makes up the majority of an Admin VA's regular task list, as opposed to occasional or client-specific one-off requests.</p>
+  </div>
+
+  <h2>Why These Five and Not More</h2>
+  <p>Every client engagement looks a little different, but almost all administrative work traces back to one of these five pillars. Learning to recognize which pillar a new request falls under helps you organize your own workflow and communicate more clearly with clients about what you are working on and why.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>When a new client hands you a vague request, try mentally sorting it into one of the five pillars first. It usually clarifies exactly what deliverable they actually need from you.</p>
+  </div>
+
+  <div class="mini-game" id="game2">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-4"/><rect x="9" y="1" width="6" height="6" rx="1" ry="1"/></svg> Responsibility Pillar Matcher</div>
+    <div class="mg-inst">Click a pillar on the left, then click its matching real-world example on the right.</div>
+    <div class="match-grid">
+      <div>
+        <div class="match-col-label">Pillar</div>
+        <div class="match-items" id="g2-left"></div>
+      </div>
+      <div>
+        <div class="match-col-label">Example Task</div>
+        <div class="match-items" id="g2-right"></div>
+      </div>
+    </div>
+    <div class="match-score" id="g2-score">Matched: 0 / 5</div>
+    <div class="mg-result" id="g2-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-2">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 2 Knowledge Check</span></div>
+    <div id="cp-2-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-2-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-2-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Which set of tasks best represents the core pillars of Admin VA work?</p>
+        <div class="cp-opts" id="cp-2-opts">
+          <label><input type="radio" name="cp2" value="a"> Video editing, thumbnail design, and animation</label>
+          <label><input type="radio" name="cp2" value="b"> Calendar management, inbox handling, file organization, data entry, and meeting notes</label>
+          <label><input type="radio" name="cp2" value="c"> Cold calling and appointment setting only</label>
+          <label><input type="radio" name="cp2" value="d"> Website development and hosting</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-2-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(2,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-2-cont" onclick="unlockSection(3)">Continue to Section 3 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section" id="s3">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">3</span> A Day in the Life of an Admin VA</div>
+
+  <p>It helps to picture a realistic day before you start one. Admin VA work is rarely one repeated task &mdash; it is a mix of predictable routines and unpredictable requests, all handled within the hours you have agreed to work with your client.</p>
+
+  <h2>Sample Daily Task List</h2>
+  <p>Here is a realistic daily flow a new Admin VA can copy and adapt to their own client's needs:</p>
+  <ul class="checklist">
+    <li><strong>Morning inbox triage</strong> &mdash; scan overnight emails, flag anything urgent, archive what is resolved</li>
+    <li><strong>Calendar check</strong> &mdash; confirm today's meetings, resolve any scheduling conflicts, send reminders</li>
+    <li><strong>Recurring admin tasks</strong> &mdash; the standing tasks specific to that client, done on a set schedule</li>
+    <li><strong>Ad hoc requests</strong> &mdash; new asks that come in during the day, prioritized alongside existing work</li>
+    <li><strong>Data entry / file upkeep block</strong> &mdash; dedicated time to update spreadsheets and keep folders tidy</li>
+    <li><strong>End-of-day wrap-up</strong> &mdash; a short status update to the client and a look at tomorrow's calendar</li>
+  </ul>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Miguel starts each shift by clearing his client's inbox before anything else, then checks the day's calendar for conflicts. By mid-morning he moves into recurring tasks like updating a lead spreadsheet, leaving afternoons open for whatever ad hoc requests come in. This predictable rhythm keeps him calm even on busy days.</p>
+  </div>
+
+  <h2>Setting Realistic Expectations</h2>
+  <p>New Admin VAs sometimes expect every day to look identical. In reality, the routine tasks anchor your day, while ad hoc requests fill the gaps. Knowing which parts of your day are predictable and which are not helps you plan your time realistically instead of feeling constantly behind.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>Block your recurring tasks into a fixed time each day. It protects that work from getting crowded out by whatever ad hoc request shows up first.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Sketch a rough hour-by-hour version of the sample daily task list above, adjusted for your own available working hours.</p>
+  </div>
+
+  <div class="mini-game" id="game3">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Daily Workflow Sequencer</div>
+    <div class="mg-inst">Drag these tasks into the correct morning-to-evening order.</div>
+    <div class="drag-pool" id="g3-pool"></div>
+    <div class="seq-drop" id="g3-drop" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="seqDrop(event,'g3')"></div>
+    <button class="mg-btn" onclick="seqCheck('g3')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="seqInit('g3')">Reset</button>
+    <div class="mg-result" id="g3-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-3">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 3 Knowledge Check</span></div>
+    <div id="cp-3-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-3-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-3-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">What is the most realistic way to picture a typical Admin VA's day, according to this lesson?</p>
+        <div class="cp-opts" id="cp-3-opts">
+          <label><input type="radio" name="cp3" value="a"> A single repeated task done all day with no variation</label>
+          <label><input type="radio" name="cp3" value="b"> A mix of inbox triage, calendar checks, recurring admin duties, and ad hoc requests handled throughout the day</label>
+          <label><input type="radio" name="cp3" value="c"> Entirely unscheduled, unpredictable work with no routine at all</label>
+          <label><input type="radio" name="cp3" value="d"> Only client meetings, with no independent task work</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-3-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(3,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-3-cont" onclick="unlockSection(4)">Continue to Section 4 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section" id="s4">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">4</span> Skills Every Admin VA Needs</div>
+
+  <p>Admin VA work does not require a specialized technical background, but it does require a specific mix of habits and soft skills. Clients trust Admin VAs with real access to their business, so the traits below matter just as much as any tool you know how to use.</p>
+
+  <h2>The Core Skill Set</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+    <tr><th>Skill</th><th>Why It Matters</th></tr>
+    <tr><td>Organization</td><td>Keeps calendars, files, and tasks structured enough that nothing gets lost or forgotten.</td></tr>
+    <tr><td>Attention to Detail</td><td>Catches small errors &mdash; a wrong date, a typo in a client's name &mdash; before they become real problems.</td></tr>
+    <tr><td>Discretion</td><td>Protects sensitive information the client shares, without needing to be reminded.</td></tr>
+    <tr><td>Written Communication</td><td>Produces clear, professional emails and messages that represent the client well.</td></tr>
+    <tr><td>Basic Tech Comfort</td><td>Picks up new tools and platforms quickly without needing hand-holding for every step.</td></tr>
+    <tr><td>Following Instructions Precisely</td><td>Delivers exactly what was asked, working independently without constant check-ins.</td></tr>
+  </table>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p><strong>Discretion</strong> means handling private or sensitive information responsibly &mdash; not sharing it unnecessarily, and always defaulting to caution when unsure whether something is confidential.</p>
+  </div>
+
+  <h2>Skills You Build Versus Skills You Bring</h2>
+  <p>Tool-specific skills, like learning a particular calendar app, can be picked up quickly on the job. The habits above are different &mdash; organization, discretion, and attention to detail are traits you bring with you and strengthen over time, and clients notice them from your very first week.</p>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Watch Out</div>
+    <p>Do not confuse "I can use lots of software" with "I am organized." Tool knowledge alone does not replace the habits that make an Admin VA genuinely reliable.</p>
+  </div>
+
+  <div class="mini-game" id="game4">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Skills Self-Check</div>
+    <div class="mg-inst">Click every trait that belongs to a strong Admin VA profile, then check your picks.</div>
+    <div class="pick-grid" id="g4-grid"></div>
+    <button class="mg-btn" onclick="pickCheck('g4')">Check My Picks</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="pickInit('g4')">Reset</button>
+    <div class="mg-result" id="g4-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-4">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 4 Knowledge Check</span></div>
+    <div id="cp-4-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-4-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-4-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is discretion considered an essential skill for an Admin VA?</p>
+        <div class="cp-opts" id="cp-4-opts">
+          <label><input type="radio" name="cp4" value="a"> Because Admin VAs never actually see sensitive information</label>
+          <label><input type="radio" name="cp4" value="b"> Because Admin VAs are often trusted with private business details and must protect that trust</label>
+          <label><input type="radio" name="cp4" value="c"> Because discretion is only needed in legal professions</label>
+          <label><input type="radio" name="cp4" value="d"> Because it replaces the need for organization</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-4-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(4,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-4-cont" onclick="unlockSection(5)">Continue to Section 5 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section" id="s5">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">5</span> Tools of the Trade for Admin VAs</div>
+
+  <p>You do not need to master every software tool on day one, but you should know the categories of tools Admin VAs typically work in. Later lessons in Module 7 go deep on each of these &mdash; this section gives you the map before the details.</p>
+
+  <h2>Tool Categories at a Glance</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:30%"><col style="width:70%"></colgroup>
+    <tr><th>Category</th><th>What It's Used For</th></tr>
+    <tr><td>Calendars</td><td>Scheduling meetings, blocking time, and avoiding double-bookings across time zones.</td></tr>
+    <tr><td>Email</td><td>Managing inbox flow, drafting replies, and organizing conversations by topic or urgency.</td></tr>
+    <tr><td>Cloud Storage</td><td>Storing and sharing documents in a structure the whole team can access and understand.</td></tr>
+    <tr><td>Spreadsheets</td><td>Tracking data, budgets, and lists in an organized, sortable, and shareable format.</td></tr>
+    <tr><td>Communication Apps</td><td>Staying in sync with the client and team through chat, video calls, and quick updates.</td></tr>
+  </table>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>A <strong>tool category</strong> is a functional grouping of software &mdash; the specific app your client uses matters less than understanding what job that category of tool is doing for the business.</p>
+  </div>
+
+  <h2>Why the Category Matters More Than the Brand</h2>
+  <p>Every client seems to have a slightly different preferred app for the same job. One client's "cloud storage" might be one platform, another client's might be a different one entirely. If you understand what a cloud storage tool needs to accomplish, you can adapt to whichever specific app a new client already uses, instead of only being useful with the one tool you happen to know.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>When a new client mentions an unfamiliar tool, ask yourself which category it belongs to. That alone tells you roughly what it should do, even before you have opened it.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>List one tool you already know for each of the five categories above. If a category is empty, that is your cue for what to learn next in this module.</p>
+  </div>
+
+  <div class="mini-game" id="game5">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Tool-Category Matcher</div>
+    <div class="mg-inst">Use the dropdown next to each tool to choose its correct category, then check your answers.</div>
+    <div id="g5-rows"></div>
+    <button class="mg-btn" onclick="ddCheck('g5')">Check My Matches</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="ddInit('g5')">Reset</button>
+    <div class="mg-result" id="g5-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-5">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 5 Knowledge Check</span></div>
+    <div id="cp-5-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-5-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-5-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why does this lesson emphasize tool categories rather than specific app names?</p>
+        <div class="cp-opts" id="cp-5-opts">
+          <label><input type="radio" name="cp5" value="a"> Because specific app names never matter to clients</label>
+          <label><input type="radio" name="cp5" value="b"> Because clients use different specific tools, and understanding the category lets a VA adapt to whichever one a client already uses</label>
+          <label><input type="radio" name="cp5" value="c"> Because Admin VAs are not allowed to use named software</label>
+          <label><input type="radio" name="cp5" value="d"> Because every client uses the exact same tools</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-5-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(5,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-5-cont" onclick="unlockSection(6)">Continue to Section 6 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section" id="s6">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">6</span> Setting Expectations With a New Client</div>
+
+  <p>The single biggest predictor of a smooth client relationship is what happens in the first conversation. Clarifying scope, hours, response times, and communication channels up front prevents almost every common misunderstanding that derails new VA engagements.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>A <strong>client kickoff</strong> is the initial conversation and agreement where a VA and client align on scope of work, working hours, expected response times, and the channel they will use to communicate.</p>
+  </div>
+
+  <h2>Client Kickoff Checklist</h2>
+  <p>Use this checklist with every new client before starting work:</p>
+  <ul class="checklist">
+    <li><strong>Scope</strong> &mdash; exactly which tasks are and are not included in this engagement</li>
+    <li><strong>Working hours</strong> &mdash; the days and time window you are available</li>
+    <li><strong>Response time</strong> &mdash; how quickly you will reply to messages during and outside working hours</li>
+    <li><strong>Communication channel</strong> &mdash; the primary app or platform you will use to stay in touch</li>
+    <li><strong>Reporting rhythm</strong> &mdash; how often you will send status updates and in what format</li>
+  </ul>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>Before starting with a new client, Dana spent fifteen minutes on a kickoff call confirming scope, hours, and preferred communication channel. Weeks later, when a request came in outside her agreed hours, both sides already knew exactly how it would be handled &mdash; no awkward conversation needed.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>Put the agreed scope and hours in writing after the kickoff call, even in a short follow-up message. It gives both sides something to point back to later.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Draft a short kickoff message template covering scope, hours, response time, and communication channel, ready to send to your next new client.</p>
+  </div>
+
+  <div class="mini-game" id="game6">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Kickoff Checklist Builder</div>
+    <div class="mg-inst">Click each item that belongs in a proper client kickoff outline until it is 100% complete.</div>
+    <div class="meter-track"><div class="meter-fill" id="g6-fill"></div></div>
+    <div class="meter-label" id="g6-pct">0% complete</div>
+    <div class="meter-items" id="g6-items"></div>
+    <div class="mg-result" id="g6-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-6">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 6 Knowledge Check</span></div>
+    <div id="cp-6-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-6-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-6-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why is it important for an Admin VA to clarify scope, hours, and response times at the start of a client engagement?</p>
+        <div class="cp-opts" id="cp-6-opts">
+          <label><input type="radio" name="cp6" value="a"> It is legally required in every country</label>
+          <label><input type="radio" name="cp6" value="b"> It prevents misunderstandings later by setting clear expectations upfront</label>
+          <label><input type="radio" name="cp6" value="c"> Clients never think about these details themselves</label>
+          <label><input type="radio" name="cp6" value="d"> It guarantees a higher rate automatically</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-6-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(6,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-6-cont" onclick="unlockSection(7)">Continue to Section 7 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section" id="s7">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">7</span> Prioritizing Tasks and Managing Multiple Requests</div>
+
+  <p>Admin VAs rarely work on one thing at a time. Requests arrive from one or several clients, often with competing deadlines. A simple prioritization framework keeps you from dropping something important while chasing whatever request arrived most recently.</p>
+
+  <h2>A Simple Priority Framework</h2>
+  <div class="table-wrap">
+  <table class="les-table">
+    <colgroup><col style="width:22%"><col style="width:33%"><col style="width:25%"><col style="width:20%"></colgroup>
+    <tr><th>Priority Level</th><th>Description</th><th>Example Task</th><th>Typical Turnaround</th></tr>
+    <tr><td>Urgent &amp; Important</td><td>Time-sensitive and high impact if missed</td><td>Same-day client email needing a response</td><td>Within hours</td></tr>
+    <tr><td>Important, Not Urgent</td><td>High impact but no immediate deadline</td><td>Monthly report due next week</td><td>1&ndash;5 business days</td></tr>
+    <tr><td>Low Priority</td><td>Low impact and no real deadline pressure</td><td>General file cleanup</td><td>When time allows</td></tr>
+  </table>
+  </div>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>The <strong>urgent-vs-important framework</strong> sorts tasks by two questions: how soon does this need to happen, and how much impact does it have if delayed? Together, those answers tell you what to work on first.</p>
+  </div>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A VA receives three requests at once: a same-day urgent client email, a monthly report due next week, and a low-priority file cleanup. Using the urgent-vs-important framework, she answers the same-day email first, schedules time later in the week for the report, and fits the cleanup in whenever things are quiet.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>If two tasks feel equally urgent, ask which one causes more damage if it slips. That usually breaks the tie quickly.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Look at your current to-do list and sort each item into Urgent &amp; Important, Important Not Urgent, or Low Priority using the table above.</p>
+  </div>
+
+  <div class="mini-game" id="game7">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Priority Sorter</div>
+    <div class="mg-inst">Drag each request into the priority zone where it belongs.</div>
+    <div class="drag-pool" id="g7-pool"></div>
+    <div class="drag-zones zones3">
+      <div class="drag-zone" id="g7-zone-urgent" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g7')"><div class="zone-label neutral">Urgent &amp; Important</div></div>
+      <div class="drag-zone" id="g7-zone-important" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g7')"><div class="zone-label neutral">Important, Not Urgent</div></div>
+      <div class="drag-zone" id="g7-zone-low" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event,'g7')"><div class="zone-label neutral">Low Priority</div></div>
+    </div>
+    <button class="mg-btn" onclick="dzCheck('g7')">Check My Sort</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="dzInit('g7')">Reset</button>
+    <div class="mg-result" id="g7-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-7">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 7 Knowledge Check</span></div>
+    <div id="cp-7-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-7-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-7-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">A VA receives three requests at once: a same-day urgent client email, a monthly report due next week, and a low-priority file cleanup. What should guide how they are handled?</p>
+        <div class="cp-opts" id="cp-7-opts">
+          <label><input type="radio" name="cp7" value="a"> Always do whichever task arrives last</label>
+          <label><input type="radio" name="cp7" value="b"> A simple urgent-vs-important framework, addressing the same-day request first</label>
+          <label><input type="radio" name="cp7" value="c"> Ignore all three until the client follows up</label>
+          <label><input type="radio" name="cp7" value="d"> Handle them in alphabetical order of task name</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-7-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(7,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-7-cont" onclick="unlockSection(8)">Continue to Section 8 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section" id="s8">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">8</span> Confidentiality and Handling Sensitive Information</div>
+
+  <p>Admin VAs are often given access that few other people outside a business ever get &mdash; passwords, financial details, private client communications. That level of access requires a level of trust that has to be earned and protected, not assumed.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p><strong>Confidentiality</strong> is the practice of protecting a client's private information &mdash; not sharing it, not storing it carelessly, and not discussing it outside the scope of your work for that client.</p>
+  </div>
+
+  <h2>Why This Trust Exists</h2>
+  <p>The Admin VA role often requires deep access to run daily operations: an inbox full of private correspondence, financial spreadsheets, or login credentials to key accounts. Clients extend that access because the work genuinely requires it &mdash; which is exactly why discretion and data protection are non-negotiable, not optional extras.</p>
+
+  <h2>Sample Confidentiality Policy Statement</h2>
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Share With Clients</div>
+    <p>"I treat all client information &mdash; including passwords, financial data, and private communications &mdash; as strictly confidential. I will not share, discuss, or store this information outside the scope of our working agreement, and I use secure, agreed-upon tools for anything sensitive."</p>
+  </div>
+
+  <h2>Practical Habits That Protect Client Trust</h2>
+  <ul class="checklist">
+    <li>Use a password manager instead of writing credentials down in plain text</li>
+    <li>Never discuss client details with anyone outside the working relationship</li>
+    <li>Ask before storing sensitive files anywhere other than the client's approved system</li>
+    <li>Log out of shared or public devices immediately after use</li>
+  </ul>
+
+  <div class="warn-box">
+    <div class="warn-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Watch Out</div>
+    <p>Even casually mentioning a client's business details to a friend or another client is a confidentiality breach. When in doubt, say nothing.</p>
+  </div>
+
+  <div class="mini-game" id="game8">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Confidentiality Scenario Chooser</div>
+    <div class="mg-inst">For each scenario, click the most professional response.</div>
+    <div id="g8-scenarios"></div>
+    <div class="mg-result" id="g8-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-8">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 8 Knowledge Check</span></div>
+    <div id="cp-8-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-8-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-8-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Why are Admin VAs often trusted with sensitive information like passwords or financial details?</p>
+        <div class="cp-opts" id="cp-8-opts">
+          <label><input type="radio" name="cp8" value="a"> Because clients are required to share this by law</label>
+          <label><input type="radio" name="cp8" value="b"> Because the role often requires deep access to run daily operations, making discretion and data protection essential</label>
+          <label><input type="radio" name="cp8" value="c"> Because Admin VAs are not able to see this information anyway</label>
+          <label><input type="radio" name="cp8" value="d"> Because sensitive information is never actually shared with VAs</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-8-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(8,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-8-cont" onclick="unlockSection(9)">Continue to Section 9 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section" id="s9">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">9</span> Common Mistakes New Admin VAs Make</div>
+
+  <p>Most new Admin VAs are not held back by lack of skill &mdash; they are held back by a handful of avoidable habits. Recognizing these early saves you from learning them the hard way with a real client.</p>
+
+  <h2>The Most Common Mistakes</h2>
+  <ul class="checklist">
+    <li><strong>Overpromising on turnaround time</strong> &mdash; committing to deadlines that sound good but are not realistic to hit</li>
+    <li><strong>Disorganized file systems</strong> &mdash; saving things wherever is fastest instead of following a consistent structure</li>
+    <li><strong>Missing small details</strong> &mdash; a wrong date or misspelled name that quietly undermines client trust</li>
+    <li><strong>Failing to flag issues early</strong> &mdash; quietly struggling with a problem instead of raising it before it grows</li>
+  </ul>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>A new VA promised a same-day turnaround on a task that actually needed two days. Rather than flagging the delay early, she stayed quiet until the deadline passed, leaving her client blindsided. A short heads-up message the moment she realized the timeline was tight would have avoided the entire problem.</p>
+  </div>
+
+  <h2>Why Flagging Issues Early Matters Most</h2>
+  <p>Of all the mistakes above, staying silent about a problem is usually the most damaging. Clients can almost always work around a delay or a misunderstanding if they know about it early. What erodes trust is being surprised by a problem that could have been raised days before.</p>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>A quick "this is taking longer than expected, here is my new estimate" message costs you nothing and protects the entire relationship.</p>
+  </div>
+
+  <h2>Action Step</h2>
+  <div class="action-box">
+    <div class="action-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Do This Now</div>
+    <p>Write a one-sentence template you can reuse any time a task is going to take longer than expected, so raising the issue never feels awkward.</p>
+  </div>
+
+  <div class="mini-game" id="game9">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Mistake Spotter</div>
+    <div class="mg-inst">Click each behavior below that represents a bad habit for a new Admin VA.</div>
+    <div class="audit-wrap"><div id="g9-items"></div></div>
+    <button class="mg-btn" onclick="auditCheck('g9')">Check My Flags</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="auditInit('g9')">Reset</button>
+    <div class="mg-result" id="g9-result"></div>
+  </div>
+
+  <div class="checkpoint" id="cp-9">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 9 Knowledge Check</span></div>
+    <div id="cp-9-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-9-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-9-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! Continue below.</div>
+        <p class="cp-question">Which of these is a common mistake new Admin VAs make?</p>
+        <div class="cp-opts" id="cp-9-opts">
+          <label><input type="radio" name="cp9" value="a"> Flagging issues early when something is unclear</label>
+          <label><input type="radio" name="cp9" value="b"> Overpromising on turnaround time and then struggling to deliver</label>
+          <label><input type="radio" name="cp9" value="c"> Keeping an organized file system</label>
+          <label><input type="radio" name="cp9" value="d"> Confirming scope and hours before starting</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-9-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(9,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-9-cont" onclick="unlockSection(10)">Continue to Section 10 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== SECTION 10 ===== -->
+<div class="section" id="s10">
+<div class="section-card">
+  <div class="section-title"><span class="sec-badge">10</span> Growing From Admin VA Into Specialized Roles</div>
+
+  <p>The Admin VA role is not a dead end &mdash; it is a launchpad. The organizational habits, communication skills, and client-management instincts you build here carry directly into more specialized VA roles covered later in this curriculum.</p>
+
+  <div class="def-box">
+    <div class="def-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Definition</div>
+    <p>A <strong>specialization</strong> is a more focused VA role &mdash; such as bookkeeping, project management, or executive assistance &mdash; that builds on strong administrative fundamentals with additional, deeper skills.</p>
+  </div>
+
+  <h2>How Admin Fundamentals Carry Forward</h2>
+  <p>A bookkeeping VA still needs the data-entry accuracy and organization of an Admin VA, just applied to financial records. A project management VA still needs calendar discipline and clear communication, just applied to coordinating a whole team. An executive assistant still needs discretion and inbox management, just at a higher level of trust and complexity. None of these roles skip the fundamentals &mdash; they build directly on top of them.</p>
+
+  <div class="scenario-box">
+    <div class="scenario-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Real Scenario</div>
+    <p>After a year as an Admin VA, Liza noticed she genuinely enjoyed the data entry and spreadsheet side of her work. She began studying basic bookkeeping and gradually shifted her client work toward financial record-keeping &mdash; a natural next step built entirely on the organizational habits she had already mastered.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> Quick Tip</div>
+    <p>Pay attention to which admin tasks you enjoy most. That is usually the clearest signal for which specialization to explore first.</p>
+  </div>
+
+  <div class="mini-game" id="game10">
+    <div class="mg-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Career Path Sequencer</div>
+    <div class="mg-inst">Use the dropdowns to put these growth steps into a logical order, then check your sequence.</div>
+    <div id="g10-rows"></div>
+    <button class="mg-btn" onclick="orderCheck('g10')">Check My Order</button>
+    <button class="mg-btn" style="background:rgba(255,255,255,.18);margin-left:8px" onclick="orderInit('g10')">Reset</button>
+    <div class="mg-result" id="g10-result"></div>
+  </div>
+
+  <div class="yt-wrap">
+    <div class="yt-frame"><iframe src="https://www.youtube-nocookie.com/embed/ay6go1O40Do?rel=0&enablejsapi=1" title="Admin VA Role & Responsibilities — Full Walkthrough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+    <div class="yt-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> 📺 Watch: Admin VA Role & Responsibilities — Full Walkthrough</div>
+  </div>
+
+  <div class="checkpoint" id="cp-10">
+    <div class="cp-header"><span class="cp-badge">Checkpoint</span><span class="cp-header-title">Section 10 Knowledge Check</span></div>
+    <div id="cp-10-locked" class="cp-locked"><div class="cp-lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><p>Complete the activity above to unlock this checkpoint.</p></div>
+    <div id="cp-10-content" style="display:none">
+      <div class="cp-content">
+        <div class="cp-passed-note" id="cp-10-passed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Checkpoint passed! You have finished all sections.</div>
+        <p class="cp-question">Why does this lesson describe Admin VA skills as the "foundation" for later specializations like bookkeeping or executive assistance?</p>
+        <div class="cp-opts" id="cp-10-opts">
+          <label><input type="radio" name="cp10" value="a"> Because those roles require entirely unrelated skills</label>
+          <label><input type="radio" name="cp10" value="b"> Because strong organizational and admin fundamentals carry over and support more specialized VA roles later</label>
+          <label><input type="radio" name="cp10" value="c"> Because Admin VA is a completely separate career with no connection to other roles</label>
+          <label><input type="radio" name="cp10" value="d"> Because specialization is not recommended for VAs</label>
+        </div>
+        <div class="checkpoint-feedback" id="cp-10-fb"></div>
+        <button class="btn-check" onclick="checkAnswer(10,'b')">Submit Answer</button>
+        <button class="btn-continue" id="cp-10-cont" onclick="unlockFinal()">See Key Takeaways →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== FINAL BLOCK ===== -->
+<div class="final-block" id="final-block">
+  <div class="takeaways">
+    <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Key Takeaways</h3>
+    <ul class="checklist">
+      <li>The Admin VA role is the operational backbone of a small business, handling calendars, inbox, files, data entry, and meeting notes.</li>
+      <li>A realistic day mixes predictable routines with ad hoc requests &mdash; both are normal parts of the job.</li>
+      <li>Organization, attention to detail, discretion, communication, and tech comfort matter more than any single tool.</li>
+      <li>Understanding tool categories lets you adapt to whichever specific apps a new client already uses.</li>
+      <li>Clarifying scope, hours, response time, and communication channel at kickoff prevents most misunderstandings.</li>
+      <li>A simple urgent-vs-important framework helps you handle competing requests without dropping anything.</li>
+      <li>Discretion and data protection are essential because Admin VAs are trusted with sensitive information.</li>
+      <li>Avoiding common mistakes &mdash; overpromising, disorganization, and staying silent about problems &mdash; builds client trust fast.</li>
+      <li>Strong admin fundamentals are the foundation for later specializations like bookkeeping, project management, and executive assistance.</li>
+    </ul>
+  </div>
+  <div class="complete-wrap">
+    <p>You have completed LES019. Mark this lesson as complete to unlock the next lesson in Module 7.</p>
+    <button class="btn-complete" id="btn-mark-complete" onclick="markLessonComplete()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Mark Lesson as Complete</button>
+    <div id="complete-msg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:6px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Lesson marked complete!</div>
+  </div>
+</div>
+
+</div>
+<script>
+const LESSON_ID = "LES019";
+const SAVE_KEY = "lhph_LES019";
+let TOTAL_SECTIONS = 1;
+
+let state = {
+  sectionsUnlocked: 1,
+  sectionsDone: [],
+  cpPassed: [],
+  finalUnlocked: false,
+  lessonCompleted: false
+};
+
+function save() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) { const saved = JSON.parse(raw); state = Object.assign({}, state, saved); }
+  } catch(e) {}
+}
+
+function updateProgress() {
+  const label = document.getElementById("progress-label");
+  const pct = document.getElementById("progress-pct");
+  const fill = document.getElementById("progress-fill");
+  const done = state.sectionsDone.length;
+  const percent = Math.round((done / TOTAL_SECTIONS) * 100);
+  label.textContent = state.finalUnlocked ? "Lesson Complete Area" : ("Section " + state.sectionsUnlocked + " of " + TOTAL_SECTIONS);
+  pct.textContent = percent + "% complete";
+  fill.style.width = percent + "%";
+}
+
+function updateTOC() {
+  document.querySelectorAll(".toc-list a").forEach(a => {
+    const n = parseInt(a.dataset.toc, 10);
+    a.classList.remove("toc-locked", "toc-current", "toc-done");
+    if (state.sectionsDone.indexOf(n) !== -1) { a.classList.add("toc-done"); }
+    else if (n === state.sectionsUnlocked) { a.classList.add("toc-current"); }
+    else if (n > state.sectionsUnlocked) { a.classList.add("toc-locked"); }
+  });
+}
+
+function unlockSection(n) {
+  if (!state.sectionsDone.includes(n - 1) && n > 1) { state.sectionsDone.push(n - 1); }
+  state.sectionsUnlocked = Math.max(state.sectionsUnlocked, n);
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const target = document.getElementById("s" + n);
+  if (target) { target.classList.add("is-visible"); target.scrollIntoView({behavior:"smooth", block:"start"}); }
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockFinal() {
+  if (!state.sectionsDone.includes(TOTAL_SECTIONS)) { state.sectionsDone.push(TOTAL_SECTIONS); }
+  state.finalUnlocked = true;
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const fb = document.getElementById("final-block");
+  fb.classList.add("is-visible");
+  fb.scrollIntoView({behavior:"smooth", block:"start"});
+  updateProgress(); updateTOC(); save();
+}
+
+function unlockCP(n) {
+  const locked = document.getElementById("cp-" + n + "-locked");
+  const content = document.getElementById("cp-" + n + "-content");
+  if (locked) locked.style.display = "none";
+  if (content) content.style.display = "block";
+}
+
+function checkAnswer(n, correctVal) {
+  const opts = document.querySelectorAll("input[name=cp" + n + "]");
+  let chosen = null;
+  opts.forEach(o => { if (o.checked) chosen = o.value; });
+  const fb = document.getElementById("cp-" + n + "-fb");
+  const labels = document.querySelectorAll("#cp-" + n + "-opts label");
+  labels.forEach(l => l.classList.remove("opt-correct", "opt-incorrect"));
+  if (!chosen) {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Please choose an answer first.";
+    return;
+  }
+  if (chosen === correctVal) {
+    fb.className = "checkpoint-feedback fb-correct";
+    fb.style.display = "block";
+    fb.textContent = "Correct! Great work.";
+    opts.forEach(o => { if (o.value === correctVal) o.closest("label").classList.add("opt-correct"); });
+    document.getElementById("cp-" + n + "-passed").style.display = "flex";
+    document.getElementById("cp-" + n + "-cont").style.display = "inline-flex";
+    if (!state.cpPassed.includes(n)) { state.cpPassed.push(n); }
+    save();
+  } else {
+    fb.className = "checkpoint-feedback fb-incorrect";
+    fb.style.display = "block";
+    fb.textContent = "Not quite — review the section above and try again.";
+    opts.forEach(o => {
+      if (o.value === chosen) o.closest("label").classList.add("opt-incorrect");
+    });
+  }
+}
+
+function markLessonComplete() {
+  state.lessonCompleted = true;
+  save();
+  document.getElementById("btn-mark-complete").disabled = true;
+  document.getElementById("complete-msg").style.display = "block";
+  try{window.parent.postMessage({action:"lessonComplete"},"*");}catch(e){}
+}
+
+function restoreUI() {
+  if (state.lessonCompleted) {
+    document.querySelectorAll(".section").forEach(s => s.classList.add("is-visible"));
+    document.getElementById("final-block").classList.add("is-visible");
+    for (let i = 1; i <= TOTAL_SECTIONS; i++) {
+      unlockCP(i);
+      const passedNote = document.getElementById("cp-" + i + "-passed");
+      if (passedNote) passedNote.style.display = "flex";
+      const cont = document.getElementById("cp-" + i + "-cont");
+      if (cont) cont.style.display = "inline-flex";
+    }
+    document.getElementById("btn-mark-complete").disabled = true;
+    document.getElementById("complete-msg").style.display = "block";
+    state.sectionsUnlocked = TOTAL_SECTIONS;
+    state.finalUnlocked = true;
+    updateProgress(); updateTOC();
+    return;
+  }
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("is-visible"));
+  const cur = document.getElementById("s" + state.sectionsUnlocked);
+  if (cur) cur.classList.add("is-visible");
+  if (state.finalUnlocked) { document.getElementById("final-block").classList.add("is-visible"); }
+  state.cpPassed.forEach(n => {
+    unlockCP(n);
+    const passedNote = document.getElementById("cp-" + n + "-passed");
+    if (passedNote) passedNote.style.display = "flex";
+    const cont = document.getElementById("cp-" + n + "-cont");
+    if (cont) cont.style.display = "inline-flex";
+  });
+  updateProgress(); updateTOC();
+}
+
+/* ============ TOUCH-DRAG SUPPORT (shared) ============ */
+let touchDragEl = null;
+let touchDragText = null;
+function findDropContainer(x, y) {
+  const el = document.elementFromPoint(x, y);
+  if (!el) return null;
+  return el.closest(".drag-zone, .seq-drop, #g3-pool, #g1-pool, #g7-pool");
+}
+function bindTouchDrag(el, text) {
+  el.addEventListener("touchstart", e => {
+    touchDragEl = el; touchDragText = text;
+    el.classList.add("dragging");
+  }, {passive:true});
+  el.addEventListener("touchmove", e => {
+    if (!touchDragEl) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    document.querySelectorAll(".drag-zone, .seq-drop").forEach(z => z.classList.remove("drag-over"));
+    const container = findDropContainer(t.clientX, t.clientY);
+    if (container && (container.classList.contains("drag-zone") || container.classList.contains("seq-drop"))) {
+      container.classList.add("drag-over");
+    }
+  }, {passive:false});
+  el.addEventListener("touchend", e => {
+    if (!touchDragEl) return;
+    const t = e.changedTouches[0];
+    document.querySelectorAll(".drag-zone, .seq-drop").forEach(z => z.classList.remove("drag-over"));
+    const container = findDropContainer(t.clientX, t.clientY);
+    if (container) {
+      if (container.id && container.id.indexOf("-drop") !== -1) {
+        container.appendChild(touchDragEl);
+        seqRenumber(container);
+      } else if (container.classList.contains("drag-zone")) {
+        container.appendChild(touchDragEl);
+      } else if (container.id && container.id.indexOf("-pool") !== -1) {
+        container.appendChild(touchDragEl);
+        if (container.id === (touchDragEl.closest(".seq-drop") ? "" : container.id)) { /* no-op */ }
+      }
+    }
+    touchDragEl.classList.remove("dragging");
+    touchDragEl = null; touchDragText = null;
+  }, {passive:true});
+}
+
+/* ============ GENERIC DRAG-ZONE ENGINE ============ */
+const dzData = {};
+function dzMakeCard(text) {
+  const el = document.createElement("div");
+  el.className = "drag-card";
+  el.draggable = true;
+  el.textContent = text;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  bindTouchDrag(el, text);
+  return el;
+}
+function dzOver(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
+function dzLeave(e) { e.currentTarget.classList.remove("drag-over"); }
+function dzDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const dragging = document.querySelector(".drag-card.dragging") || Array.from(document.querySelectorAll(".drag-card")).find(c => c.textContent === text);
+  if (dragging) { e.currentTarget.appendChild(dragging); }
+}
+function dzInit(gid) {
+  const conf = dzData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  pool.innerHTML = "";
+  conf.zones.forEach(z => {
+    const zone = document.getElementById(gid + "-zone-" + z);
+    if (zone) Array.from(zone.children).forEach(c => { if (c.classList && c.classList.contains("drag-card")) c.remove(); });
+  });
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => pool.appendChild(dzMakeCard(item.text)));
+}
+function dzCheck(gid) {
+  const conf = dzData[gid];
+  const zoneEls = conf.zones.map(z => document.getElementById(gid + "-zone-" + z));
+  let correct = 0, total = conf.items.length, placed = 0;
+  conf.items.forEach(item => {
+    for (let zi = 0; zi < zoneEls.length; zi++) {
+      const zone = zoneEls[zi];
+      const cards = Array.from(zone.querySelectorAll(".drag-card"));
+      const card = cards.find(c => c.textContent === item.text);
+      if (card) {
+        placed++;
+        if (conf.zones[zi] === item.zone) { correct++; card.classList.remove("wrong-shake"); void card.offsetWidth; card.classList.add("correct-flash"); }
+        else { card.classList.remove("correct-flash"); void card.offsetWidth; card.classList.add("wrong-shake"); }
+      }
+    }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (placed < total) {
+    result.className = "mg-result lose";
+    result.textContent = "Place all " + total + " items into a zone first (" + placed + " placed).";
+    return;
+  }
+  if (correct === total) {
+    result.className = "mg-result win";
+    result.textContent = "All " + total + " correct! Excellent sorting.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + total + " correct. Check the shaking cards and try again.";
+  }
+}
+
+/* ============ GENERIC SEQUENCER ENGINE ============ */
+const seqData = {};
+function seqMakeItem(text, i) {
+  const el = document.createElement("div");
+  el.className = "step-item";
+  el.draggable = true;
+  el.dataset.text = text;
+  el.innerHTML = "<span class=\"step-num\">" + (i+1) + "</span><span>" + text + "</span>";
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData("text/plain", text); el.classList.add("dragging"); });
+  el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  bindTouchDrag(el, text);
+  return el;
+}
+function seqRenumber(container) {
+  Array.from(container.children).forEach((el, i) => {
+    const numSpan = el.querySelector(".step-num");
+    if (numSpan) numSpan.textContent = i + 1;
+  });
+}
+function seqInit(gid) {
+  const conf = seqData[gid];
+  const pool = document.getElementById(gid + "-pool");
+  const drop = document.getElementById(gid + "-drop");
+  pool.innerHTML = ""; drop.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach((t, i) => pool.appendChild(seqMakeItem(t, i)));
+  pool.addEventListener("dragover", e => e.preventDefault());
+  pool.addEventListener("drop", e => {
+    e.preventDefault();
+    const text = e.dataTransfer.getData("text/plain");
+    const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+    if (dragging) pool.appendChild(dragging);
+    seqRenumber(drop);
+  });
+}
+function seqDrop(e, gid) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  const text = e.dataTransfer.getData("text/plain");
+  const drop = document.getElementById(gid + "-drop");
+  const dragging = document.querySelector(".step-item.dragging") || Array.from(document.querySelectorAll(".step-item")).find(c => c.dataset.text === text);
+  if (dragging) { drop.appendChild(dragging); seqRenumber(drop); }
+}
+function seqCheck(gid) {
+  const conf = seqData[gid];
+  const drop = document.getElementById(gid + "-drop");
+  const items = Array.from(drop.children).map(el => el.dataset.text);
+  const result = document.getElementById(gid + "-result");
+  if (items.length < conf.order.length) {
+    result.className = "mg-result lose";
+    result.textContent = "Drag all " + conf.order.length + " steps into the sequence first.";
+    return;
+  }
+  let correct = true;
+  for (let i = 0; i < conf.order.length; i++) { if (items[i] !== conf.order[i]) { correct = false; break; } }
+  if (correct) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect order! Well done.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "That order is not quite right yet. Rearrange and check again.";
+    Array.from(drop.children).forEach(el => { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); });
+  }
+}
+
+/* ============ GENERIC MATCH ENGINE (click-to-match) ============ */
+const matchData = {};
+let matchSel = {};
+function matchInit(gid) {
+  const conf = matchData[gid];
+  const left = document.getElementById(gid + "-left");
+  const right = document.getElementById(gid + "-right");
+  left.innerHTML = ""; right.innerHTML = "";
+  matchSel[gid] = { left: null, matched: 0 };
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const leftShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  const rightShuffled = [...conf.pairs].sort(() => Math.random() - 0.5);
+  leftShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.term; el.dataset.key = p.term;
+    el.onclick = () => matchClickLeft(gid, el, p.term);
+    left.appendChild(el);
+  });
+  rightShuffled.forEach(p => {
+    const el = document.createElement("div");
+    el.className = "match-item"; el.textContent = p.def; el.dataset.key = p.term;
+    el.onclick = () => matchClickRight(gid, el, p.term);
+    right.appendChild(el);
+  });
+  document.getElementById(gid + "-score").textContent = "Matched: 0 / " + conf.pairs.length;
+}
+function matchClickLeft(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  document.querySelectorAll("#" + gid + "-left .match-item").forEach(e => e.classList.remove("selected"));
+  el.classList.add("selected");
+  matchSel[gid].left = term;
+}
+function matchClickRight(gid, el, term) {
+  if (el.classList.contains("matched")) return;
+  const sel = matchSel[gid].left;
+  if (!sel) return;
+  const conf = matchData[gid];
+  const leftEl = document.querySelector("#" + gid + "-left .match-item.selected");
+  if (sel === term) {
+    el.classList.remove("selected"); el.classList.add("matched");
+    if (leftEl) leftEl.classList.add("matched");
+    matchSel[gid].matched++;
+    matchSel[gid].left = null;
+    document.getElementById(gid + "-score").textContent = "Matched: " + matchSel[gid].matched + " / " + conf.pairs.length;
+    if (matchSel[gid].matched === conf.pairs.length) {
+      const result = document.getElementById(gid + "-result");
+      result.className = "mg-result win";
+      result.textContent = "All pillars matched correctly!";
+      confettiBurst();
+      unlockCP(conf.cp);
+    }
+  } else {
+    el.classList.add("wrong");
+    if (leftEl) leftEl.classList.add("wrong");
+    setTimeout(() => { el.classList.remove("wrong"); if (leftEl) { leftEl.classList.remove("wrong", "selected"); } }, 600);
+    matchSel[gid].left = null;
+  }
+}
+
+/* ============ GENERIC AUDIT/CLICK-FLAG ENGINE ============ */
+const auditData = {};
+function auditInit(gid) {
+  const conf = auditData[gid];
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "audit-item"; el.dataset.problem = item.problem; el.dataset.done = "0";
+    el.innerHTML = "<span class=\"audit-icon\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/></svg></span><span class=\"audit-text\">" + item.text + "</span><span class=\"audit-flag\">Flagged</span>";
+    el.addEventListener("click", () => auditClick(gid, el, item));
+    container.appendChild(el);
+  });
+}
+function auditClick(gid, el, item) {
+  if (el.dataset.done === "1") return;
+  if (item.problem) {
+    el.dataset.done = "1"; el.classList.add("flagged");
+  } else {
+    el.style.background = "rgba(90,138,106,0.12)";
+    setTimeout(() => { el.style.background = ""; }, 500);
+  }
+}
+function auditCheck(gid) {
+  const conf = auditData[gid];
+  const flagged = document.querySelectorAll("#" + gid + "-items .audit-item.flagged").length;
+  const totalProblems = conf.items.filter(i => i.problem).length;
+  const result = document.getElementById(gid + "-result");
+  if (flagged < totalProblems) {
+    result.className = "mg-result lose";
+    result.textContent = "Found " + flagged + " of " + totalProblems + " mistakes. Keep looking.";
+    return;
+  }
+  result.className = "mg-result win";
+  result.textContent = "All " + totalProblems + " mistakes found! Sharp eye.";
+  confettiBurst();
+  unlockCP(conf.cp);
+}
+
+/* ============ PICK / MULTI-SELECT ENGINE (click to toggle, then check) ============ */
+const pickData = {};
+let pickSel = {};
+function pickInit(gid) {
+  const conf = pickData[gid];
+  const grid = document.getElementById(gid + "-grid");
+  grid.innerHTML = "";
+  pickSel[gid] = new Set();
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "pick-item";
+    el.textContent = item.text;
+    el.onclick = () => {
+      if (el.classList.contains("selected")) {
+        el.classList.remove("selected");
+        pickSel[gid].delete(item.text);
+      } else {
+        el.classList.add("selected");
+        pickSel[gid].add(item.text);
+      }
+    };
+    grid.appendChild(el);
+  });
+}
+function pickCheck(gid) {
+  const conf = pickData[gid];
+  const goodSet = new Set(conf.items.filter(i => i.good).map(i => i.text));
+  const chosen = pickSel[gid] || new Set();
+  const result = document.getElementById(gid + "-result");
+  let allMatch = chosen.size === goodSet.size;
+  if (allMatch) { chosen.forEach(t => { if (!goodSet.has(t)) allMatch = false; }); }
+  if (allMatch) {
+    result.className = "mg-result win";
+    result.textContent = "Exactly right! Those are the traits of a strong Admin VA.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = "Not quite — review your selections and try again.";
+    document.querySelectorAll("#" + gid + "-grid .pick-item.selected").forEach(el => {
+      if (!goodSet.has(el.textContent)) { el.classList.add("wrong-shake"); setTimeout(() => el.classList.remove("wrong-shake"), 700); }
+    });
+  }
+}
+
+/* ============ DROPDOWN MATCH ENGINE (tool → category) ============ */
+const ddData = {};
+function ddInit(gid) {
+  const conf = ddData[gid];
+  const container = document.getElementById(gid + "-rows");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  conf.rows.forEach((row, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "dd-row";
+    const span = document.createElement("span");
+    span.textContent = row.tool;
+    const select = document.createElement("select");
+    select.id = gid + "-sel-" + idx;
+    let opts = "<option value=\"\">Choose category...</option>";
+    conf.categories.forEach(c => { opts += "<option value=\"" + c + "\">" + c + "</option>"; });
+    select.innerHTML = opts;
+    wrap.appendChild(span);
+    wrap.appendChild(select);
+    container.appendChild(wrap);
+  });
+}
+function ddCheck(gid) {
+  const conf = ddData[gid];
+  let correct = 0;
+  conf.rows.forEach((row, idx) => {
+    const select = document.getElementById(gid + "-sel-" + idx);
+    if (select.value === row.category) { correct++; select.style.boxShadow = "0 0 0 2px #8fb89c"; }
+    else { select.style.boxShadow = "0 0 0 2px #ef4444"; }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (correct === conf.rows.length) {
+    result.className = "mg-result win";
+    result.textContent = "All " + conf.rows.length + " tools matched to the right category!";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + conf.rows.length + " correct. Fix the highlighted rows and check again.";
+  }
+}
+
+/* ============ SCENARIO CHOOSER ENGINE ============ */
+const scenarioData = {};
+let scenarioSolved = {};
+function scenarioInit(gid) {
+  const conf = scenarioData[gid];
+  const container = document.getElementById(gid + "-scenarios");
+  container.innerHTML = "";
+  scenarioSolved[gid] = new Array(conf.scenarios.length).fill(false);
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  conf.scenarios.forEach((sc, si) => {
+    const wrap = document.createElement("div");
+    wrap.className = "scenario-choice";
+    const prompt = document.createElement("div");
+    prompt.className = "sc-prompt";
+    prompt.textContent = sc.prompt;
+    wrap.appendChild(prompt);
+    const opts = [...sc.options].sort(() => Math.random() - 0.5);
+    opts.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "sc-opt";
+      btn.textContent = opt.text;
+      btn.onclick = () => {
+        if (scenarioSolved[gid][si]) return;
+        if (opt.correct) {
+          btn.classList.add("sc-correct");
+          scenarioSolved[gid][si] = true;
+          Array.from(wrap.querySelectorAll(".sc-opt")).forEach(b => b.disabled = true);
+          scenarioCheckAll(gid);
+        } else {
+          btn.classList.add("sc-incorrect");
+          setTimeout(() => btn.classList.remove("sc-incorrect"), 600);
+        }
+      };
+      wrap.appendChild(btn);
+    });
+    container.appendChild(wrap);
+  });
+}
+function scenarioCheckAll(gid) {
+  const conf = scenarioData[gid];
+  const solved = scenarioSolved[gid];
+  if (solved.every(s => s)) {
+    const result = document.getElementById(gid + "-result");
+    result.className = "mg-result win";
+    result.textContent = "All scenarios handled professionally. Well done.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  }
+}
+
+/* ============ DROPDOWN ORDER ENGINE (career path sequencer) ============ */
+const orderData = {};
+function orderInit(gid) {
+  const conf = orderData[gid];
+  const container = document.getElementById(gid + "-rows");
+  container.innerHTML = "";
+  const result = document.getElementById(gid + "-result");
+  if (result) { result.className = "mg-result"; result.textContent = ""; }
+  const shuffled = [...conf.order].sort(() => Math.random() - 0.5);
+  shuffled.forEach((text, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "dd-row";
+    const span = document.createElement("span");
+    span.textContent = text;
+    const select = document.createElement("select");
+    select.id = gid + "-pos-" + idx;
+    select.dataset.text = text;
+    let opts = "<option value=\"\">Position...</option>";
+    for (let i = 1; i <= conf.order.length; i++) { opts += "<option value=\"" + i + "\">Step " + i + "</option>"; }
+    select.innerHTML = opts;
+    wrap.appendChild(span);
+    wrap.appendChild(select);
+    container.appendChild(wrap);
+  });
+}
+function orderCheck(gid) {
+  const conf = orderData[gid];
+  const selects = Array.from(document.querySelectorAll("#" + gid + "-rows select"));
+  let correct = 0;
+  const usedPositions = {};
+  selects.forEach(sel => {
+    const correctPos = conf.order.indexOf(sel.dataset.text) + 1;
+    const chosenPos = parseInt(sel.value, 10);
+    if (chosenPos === correctPos) { correct++; sel.style.boxShadow = "0 0 0 2px #8fb89c"; }
+    else { sel.style.boxShadow = "0 0 0 2px #ef4444"; }
+  });
+  const result = document.getElementById(gid + "-result");
+  if (correct === selects.length) {
+    result.className = "mg-result win";
+    result.textContent = "Perfect growth path! You have finished all sections.";
+    confettiBurst();
+    unlockCP(conf.cp);
+  } else {
+    result.className = "mg-result lose";
+    result.textContent = correct + " of " + selects.length + " in the correct step. Fix the highlighted rows and check again.";
+  }
+}
+
+/* ============ CHECKLIST-BUILDER ENGINE (click correct items only) ============ */
+const buildData = {};
+let buildAdded = {};
+function buildInit(gid) {
+  const conf = buildData[gid];
+  buildAdded[gid] = 0;
+  const goodCount = conf.items.filter(i => i.good).length;
+  const container = document.getElementById(gid + "-items");
+  container.innerHTML = "";
+  document.getElementById(gid + "-fill").style.width = "0%";
+  document.getElementById(gid + "-pct").textContent = "0% complete";
+  const result = document.getElementById(gid + "-result");
+  result.className = "mg-result"; result.textContent = "";
+  const shuffled = [...conf.items].sort(() => Math.random() - 0.5);
+  shuffled.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "meter-item";
+    el.textContent = item.text;
+    el.onclick = () => {
+      if (el.classList.contains("added")) return;
+      if (!item.good) {
+        el.classList.add("wrong-shake");
+        setTimeout(() => el.classList.remove("wrong-shake"), 700);
+        return;
+      }
+      el.classList.add("added");
+      buildAdded[gid]++;
+      const pct = Math.round((buildAdded[gid] / goodCount) * 100);
+      document.getElementById(gid + "-fill").style.width = pct + "%";
+      document.getElementById(gid + "-pct").textContent = pct + "% complete";
+      if (buildAdded[gid] === goodCount) {
+        result.className = "mg-result win";
+        result.textContent = "Kickoff outline 100% complete! This is what a strong kickoff looks like.";
+        confettiBurst();
+        unlockCP(conf.cp);
+      }
+    };
+    container.appendChild(el);
+  });
+}
+
+/* ============ CONFETTI ============ */
+function confettiBurst() {
+  const colors = ["#5a8a6a","#8fb89c","#f0a868","#ffffff"];
+  for (let i = 0; i < 16; i++) {
+    const c = document.createElement("div");
+    c.style.position = "fixed";
+    c.style.left = (40 + Math.random()*20) + "vw";
+    c.style.top = "40vh";
+    c.style.width = "8px"; c.style.height = "8px";
+    c.style.background = colors[i % colors.length];
+    c.style.borderRadius = "2px";
+    c.style.zIndex = 5000;
+    c.style.transition = "transform 1s ease, opacity 1s ease";
+    document.body.appendChild(c);
+    requestAnimationFrame(() => {
+      c.style.transform = "translate(" + ((Math.random()-0.5)*200) + "px," + (200 + Math.random()*200) + "px) rotate(" + (Math.random()*720) + "deg)";
+      c.style.opacity = "0";
+    });
+    setTimeout(() => c.remove(), 1100);
+  }
+}
+
+/* ============ GAME 1: Role Definition Sorter ============ */
+dzData.g1 = { zones: ["good","bad"], cp: 1, items: [
+  { text: "Managing a client's calendar and scheduling meetings", zone: "good" },
+  { text: "Triaging and replying to routine emails", zone: "good" },
+  { text: "Organizing files into labeled folders", zone: "good" },
+  { text: "Entering data into a tracking spreadsheet", zone: "good" },
+  { text: "Typing up notes and action items from a call", zone: "good" },
+  { text: "Designing a full brand identity and logo", zone: "bad" },
+  { text: "Filing a business's official tax return", zone: "bad" },
+  { text: "Running a paid Facebook ad campaign", zone: "bad" },
+  { text: "Editing a client's YouTube video", zone: "bad" },
+  { text: "Providing legal contract advice", zone: "bad" }
+]};
+
+/* ============ GAME 2: Responsibility Pillar Matcher ============ */
+matchData.g2 = { cp: 2, pairs: [
+  { term: "Calendar & Scheduling", def: "Booking a client call and sending a reminder the day before" },
+  { term: "Inbox Handling", def: "Flagging an urgent email and drafting a reply for approval" },
+  { term: "File Organization", def: "Renaming and sorting invoices into a shared folder by month" },
+  { term: "Data Entry", def: "Updating a spreadsheet with new leads from a signup form" },
+  { term: "Meeting Notes", def: "Typing up decisions and action items during a team call" }
+]};
+
+/* ============ GAME 3: Daily Workflow Sequencer ============ */
+seqData.g3 = { cp: 3, order: [
+  "Morning inbox triage",
+  "Calendar check for the day",
+  "Recurring admin tasks block",
+  "Ad hoc requests as they arrive",
+  "Data entry and file upkeep block",
+  "End-of-day wrap-up and status update"
+]};
+
+/* ============ GAME 4: Skills Self-Check ============ */
+pickData.g4 = { cp: 4, items: [
+  { text: "Strong organizational habits", good: true },
+  { text: "Attention to detail", good: true },
+  { text: "Discretion with sensitive information", good: true },
+  { text: "Clear written communication", good: true },
+  { text: "Comfort learning new tools quickly", good: true },
+  { text: "Ability to follow instructions independently", good: true },
+  { text: "Preference for working without any structure", good: false },
+  { text: "Comfort sharing client details casually", good: false },
+  { text: "Avoiding new software whenever possible", good: false },
+  { text: "Waiting for constant supervision on every task", good: false }
+]};
+
+/* ============ GAME 5: Tool-Category Matcher ============ */
+ddData.g5 = { cp: 5, categories: ["Calendars","Email","Cloud Storage","Spreadsheets","Communication Apps"], rows: [
+  { tool: "Google Calendar", category: "Calendars" },
+  { tool: "Outlook Mail", category: "Email" },
+  { tool: "Dropbox", category: "Cloud Storage" },
+  { tool: "Excel", category: "Spreadsheets" },
+  { tool: "Zoom", category: "Communication Apps" }
+]};
+
+/* ============ GAME 6: Kickoff Checklist Builder ============ */
+buildData.g6 = { cp: 6, items: [
+  { text: "Scope of work discussed and agreed", good: true },
+  { text: "Working hours confirmed", good: true },
+  { text: "Expected response time set", good: true },
+  { text: "Preferred communication channel chosen", good: true },
+  { text: "Reporting rhythm agreed", good: true },
+  { text: "Client's social media password shared upfront", good: false },
+  { text: "Vague list of tasks with no scope", good: false },
+  { text: "Assuming 24/7 availability without asking", good: false }
+]};
+
+/* ============ GAME 7: Priority Sorter ============ */
+dzData.g7 = { zones: ["urgent","important","low"], cp: 7, items: [
+  { text: "Client needs a same-day reply to an urgent email", zone: "urgent" },
+  { text: "A scheduled meeting has a last-minute conflict this afternoon", zone: "urgent" },
+  { text: "A monthly performance report is due next week", zone: "important" },
+  { text: "Updating the client's CRM with new contacts before month-end", zone: "important" },
+  { text: "Reorganizing an already-functional folder structure", zone: "low" },
+  { text: "Archiving very old completed tasks with no deadline", zone: "low" }
+]};
+
+/* ============ GAME 8: Confidentiality Scenario Chooser ============ */
+scenarioData.g8 = { cp: 8, scenarios: [
+  { prompt: "A friend asks what your client's monthly revenue is, out of curiosity.", options: [
+    { text: "Politely explain that you cannot share client financial details", correct: true },
+    { text: "Give a rough estimate since it is just a friend", correct: false },
+    { text: "Share the exact number since it is not a big deal", correct: false }
+  ]},
+  { prompt: "You accidentally see a private email meant for someone else while checking your client's inbox.", options: [
+    { text: "Continue reading since you already opened it", correct: false },
+    { text: "Close it immediately and do not mention its contents to anyone", correct: true },
+    { text: "Forward it to yourself to review later", correct: false }
+  ]},
+  { prompt: "A client asks you to store their banking password in a plain shared document.", options: [
+    { text: "Store it as requested without comment", correct: false },
+    { text: "Suggest using a secure password manager instead", correct: true },
+    { text: "Write it down on paper at your desk", correct: false }
+  ]},
+  { prompt: "Another client asks casually about a different client's business details.", options: [
+    { text: "Share a few harmless details since they are also your client", correct: false },
+    { text: "Decline and explain that each client's information stays confidential", correct: true },
+    { text: "Change the subject without addressing the request", correct: false }
+  ]}
+]};
+
+/* ============ GAME 9: Mistake Spotter ============ */
+auditData.g9 = { cp: 9, items: [
+  { text: "Promises a same-day turnaround without checking the actual task first", problem: true },
+  { text: "Saves files directly into a clearly labeled folder structure", problem: false },
+  { text: "Notices a tight deadline and quietly says nothing about it", problem: true },
+  { text: "Sends a quick heads-up the moment a delay becomes likely", problem: false },
+  { text: "Skims past a client's name without double-checking the spelling", problem: true },
+  { text: "Confirms scope and hours before starting new work", problem: false },
+  { text: "Keeps files scattered across random, unlabeled folders", problem: true }
+]};
+
+/* ============ GAME 10: Career Path Sequencer ============ */
+orderData.g10 = { cp: 10, order: [
+  "Build strong Admin VA fundamentals across calendar, inbox, files, and data entry",
+  "Take on light bookkeeping or data-heavy tasks for interested clients",
+  "Support project timelines and coordinate small teams",
+  "Take on higher-trust executive assistant responsibilities",
+  "Choose a specialization to deepen and market as your primary focus"
+]};
+
+/* ============ SPLASH ANIMATION ============ */
+const spMsgs = [
+  [0, "Initializing LES019..."],
+  [15, "Loading lesson content..."],
+  [30, "Preparing activities and games..."],
+  [50, "Setting up your checkpoints..."],
+  [70, "Almost there..."],
+  [88, "LES019 is ready — launching!"]
+];
+let spStart = null;
+const SP_DURATION = 4000;
+function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+function spAnimate(ts) {
+  if (!spStart) spStart = ts;
+  const raw = Math.min((ts - spStart) / SP_DURATION, 1);
+  const pct = Math.round(easeInOut(raw) * 100);
+  document.getElementById("sp-fill").style.width = pct + "%";
+  document.getElementById("sp-pct").textContent = pct + "%";
+  let msg = spMsgs[0][1];
+  for (const [threshold, text] of spMsgs) { if (pct >= threshold) msg = text; }
+  document.getElementById("sp-msg").textContent = msg;
+  if (raw < 1) { requestAnimationFrame(spAnimate); }
+  else {
+    const sp = document.getElementById("splash");
+    sp.classList.add("fade-out");
+    setTimeout(() => { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 700);
+  }
+}
+
+/* ============ INIT ============ */
+window.addEventListener("DOMContentLoaded", () => {
+  TOTAL_SECTIONS = document.querySelectorAll(".section[id^='s']").length || 1;
+  if (window.location.search.indexOf("completed=1") !== -1) {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      let s = raw ? JSON.parse(raw) : {};
+      s.lessonCompleted = true;
+      s.sectionsUnlocked = TOTAL_SECTIONS;
+      s.finalUnlocked = true;
+      s.sectionsDone = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.sectionsDone.push(i);
+      s.cpPassed = [];
+      for (let i = 1; i <= TOTAL_SECTIONS; i++) s.cpPassed.push(i);
+      localStorage.setItem(SAVE_KEY, JSON.stringify(s));
+    } catch(e) {}
+  }
+  load();
+  restoreUI();
+  dzInit("g1");
+  matchInit("g2");
+  seqInit("g3");
+  pickInit("g4");
+  ddInit("g5");
+  buildInit("g6");
+  dzInit("g7");
+  scenarioInit("g8");
+  auditInit("g9");
+  orderInit("g10");
+  requestAnimationFrame(spAnimate);
+});
+</script>
+<script id="premium-behaviors">
+(function(){
+  // Purely additive: stagger-reveal direct children of a section the moment it
+  // becomes visible, without touching any existing state/logic/IDs.
+  function staggerReveal(section){
+    var kids = section.querySelectorAll(':scope > *:not(.section-title)');
+    kids.forEach(function(el, i){
+      el.classList.add('reveal-child');
+      el.style.animationDelay = (i * 55) + 'ms';
+    });
+  }
+  function watch(el){
+    if(!el || el.dataset.premiumWatched) return;
+    el.dataset.premiumWatched = '1';
+    var mo = new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.attributeName === 'class' && el.classList.contains('is-visible') && !el.dataset.premiumRevealed){
+          el.dataset.premiumRevealed = '1';
+          staggerReveal(el);
+        }
+      });
+    });
+    mo.observe(el, {attributes:true});
+    if(el.classList.contains('is-visible')){
+      el.dataset.premiumRevealed = '1';
+      staggerReveal(el);
+    }
+  }
+  document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+})();
+</script>
+
+</body>
+</html>
