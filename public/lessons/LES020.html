@@ -313,6 +313,20 @@ html{scroll-behavior:smooth}
   content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(255,255,255,.12),transparent 70%);
   animation:auroraDrift 10s var(--ease) infinite alternate;pointer-events:none;
 }
+
+/* ── Admin preview mode (?preview=1): force every section visible,
+   regardless of each lesson's own quiz/unlock state. Pure CSS override —
+   deliberately not touching each lesson's internal JS, since different
+   lessons implement locking with different (sometimes closure-scoped)
+   variable names, so a JS-based "auto pass" would silently fail on some. ── */
+html.lhph-preview .section{display:block!important}
+html.lhph-preview #final-block{display:block!important}
+html.lhph-preview .toc-locked{pointer-events:auto!important;color:var(--s600)!important;cursor:pointer!important}
+#lhph-preview-banner{
+  position:fixed;top:0;left:0;right:0;z-index:99999;background:#0f172a;color:#fff;
+  text-align:center;font:700 12px/1 "Sora",Inter,sans-serif;padding:9px 12px;letter-spacing:.04em;
+  box-shadow:0 2px 12px rgba(0,0,0,.25);
+}
 </style>
 
 <body>
@@ -1964,6 +1978,17 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
   document.querySelectorAll(".section[id^='s'], #final-block").forEach(watch);
+
+  // ── Admin preview mode ──
+  var params = new URLSearchParams(window.location.search);
+  if(params.get('preview') === '1'){
+    document.documentElement.classList.add('lhph-preview');
+    var banner = document.createElement('div');
+    banner.id = 'lhph-preview-banner';
+    banner.textContent = '👁 ADMIN PREVIEW — all sections force-unlocked for review, progress not saved';
+    document.body.prepend(banner);
+    document.body.style.paddingTop = (document.body.style.paddingTop ? document.body.style.paddingTop + ' + ' : '') + '34px';
+  }
 })();
 </script>
 

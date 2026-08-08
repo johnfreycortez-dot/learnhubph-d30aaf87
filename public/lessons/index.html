@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnHub PH — Admin Lesson Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --p950:#1a0533;--p800:#4c1a87;--p700:#6d28d9;--p600:#7c3aed;--i500:#6366f1;
+    --g500:#22c55e;--g600:#16a34a;--r500:#ef4444;--a500:#f59e0b;
+    --s900:#0f172a;--s700:#334155;--s500:#64748b;--s300:#cbd5e1;--s100:#f1f5f9;--s50:#f8fafc;--w:#fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--s50);color:var(--s700);padding:28px 16px 80px}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-family:Sora,sans-serif;font-size:22px;font-weight:800;color:var(--s900);margin-bottom:4px}
+  .sub{font-size:13px;color:var(--s500);margin-bottom:22px;line-height:1.6}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .card{background:#fff;border:1px solid var(--s100);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+  .lid{font-family:Sora,sans-serif;font-weight:800;font-size:14px;color:var(--p700)}
+  .title{font-size:12px;color:var(--s500);margin-bottom:12px;line-height:1.5;min-height:32px}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+  .badge.pending{background:var(--s100);color:var(--s500)}
+  .badge.ok{background:rgba(34,197,94,.12);color:var(--g600)}
+  .badge.bad{background:rgba(239,68,68,.12);color:var(--r500)}
+  .badge.none{background:rgba(245,158,11,.12);color:var(--a500)}
+  .actions{display:flex;gap:8px}
+  .actions a{flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 10px;border-radius:9px;text-decoration:none}
+  .btn-preview{background:linear-gradient(135deg,var(--p700),var(--i500));color:#fff}
+  .btn-plain{background:var(--s100);color:var(--s700)}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+  .toolbar button{background:linear-gradient(135deg,var(--p700),var(--i500));color:#fff;border:none;padding:10px 18px;
+    border-radius:10px;font-weight:700;font-size:12px;cursor:pointer}
+  .toolbar button:disabled{opacity:.6}
+  .summary{display:flex;gap:8px;font-size:12px;font-weight:700}
+  .summary span{background:#fff;border:1px solid var(--s100);border-radius:8px;padding:6px 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LearnHub PH — Admin Lesson Review</h1>
+  <div class="sub">
+    Every lesson, one click each. <strong>Preview</strong> opens the lesson with every section
+    (including the video) force-unlocked — no quiz answering needed. <strong>Normal view</strong>
+    opens it exactly as a student would see it, section-by-section.
+  </div>
+
+  <div class="toolbar">
+    <button id="run">Check all video statuses</button>
+    <div class="summary" id="summary" style="display:none"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const lessons = [
+{id:"LES001", vid:"I2pwcAVonKI", title:"Social Media Management Explained"},
+{id:"LES002", vid:"ZOdL2NAxuKQ", title:""},
+{id:"LES003", vid:"je4aSf7Qn9k", title:""},
+{id:"LES004", vid:"QKKgGU-DOa8", title:""},
+{id:"LES005", vid:"jzWxBuvwuwQ", title:""},
+{id:"LES006", vid:"", title:"(no video section in this lesson)"},
+{id:"LES007", vid:"Lgvr1Gnl-1A", title:""},
+{id:"LES008", vid:"j9tyQX9AWmg", title:""},
+{id:"LES009", vid:"P5Xg75QySiE", title:""},
+{id:"LES010", vid:"ZhEirJOL2ds", title:""},
+{id:"LES011", vid:"xgp6eELYY1M", title:""},
+{id:"LES012", vid:"tMTxikrSe8g", title:"Setting Up Your VA Workspace"},
+{id:"LES013", vid:"vHrQ-Yd7XwI", title:"Google Workspace Essentials"},
+{id:"LES014", vid:"lGPqOyMRv_g", title:"Trello, Asana & Project Management Tools"},
+{id:"LES015", vid:"EDATYbzYGiE", title:"Communication Tools: Slack, Zoom & Email"},
+{id:"LES016", vid:"SlrRXcYU0Ik", title:"Building Your VA Portfolio"},
+{id:"LES017", vid:"WNtFyfJoCdI", title:"Where to Find Clients"},
+{id:"LES018", vid:"6Z6bVS5-G6k", title:"Writing a Winning Proposal"},
+{id:"LES019", vid:"ay6go1O40Do", title:"Admin VA Role & Responsibilities"},
+{id:"LES020", vid:"5Et7W1o7oWA", title:"Calendar & Schedule Management"},
+{id:"LES021", vid:"MKtqfCfZNEE", title:"File Organization & Cloud Storage"},
+{id:"LES022", vid:"1XctnF7C74s", title:"Professional Email Writing"},
+{id:"LES023", vid:"T3CZe5Rj_bI", title:"Creating Reports & Documents"},
+{id:"LES024", vid:"cST_Q5VpLRw", title:"Meeting Minutes & Action Items"},
+{id:"LES025", vid:"JtdUgJGI_Oo", title:"Automating Tasks with Make.com & Zapier"},
+{id:"LES026", vid:"XOx2lO6ydGk", title:"Data Entry & Spreadsheet Management"},
+{id:"LES027", vid:"nRhozVH_9EA", title:"SOP Writing for Admin Processes"},
+{id:"LES028", vid:"2LqxpI_aPUg", title:"Design Fundamentals: Color, Font & Layout"},
+{id:"LES029", vid:"", title:"(no video section in this lesson)"},
+{id:"LES030", vid:"MdpCCwwPOsY", title:"Exporting & Delivering Design Files"},
+{id:"LES031", vid:"LEEiSUlfgIo", title:"Social Media Post Design"},
+{id:"LES032", vid:"pBcNkTB-NCw", title:"Stories, Reels Covers & Thumbnails"},
+];
+
+const grid = document.getElementById('grid');
+lessons.forEach(l => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'card-' + l.id;
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="lid">${l.id}</div>
+      <span class="badge ${l.vid ? 'pending' : 'none'}">${l.vid ? 'Not checked' : 'No video'}</span>
+    </div>
+    <div class="title">${l.title || '&nbsp;'}</div>
+    <div class="actions">
+      <a class="btn-preview" href="./${l.id}.html?preview=1" target="_blank">Preview (all unlocked)</a>
+      <a class="btn-plain" href="./${l.id}.html" target="_blank">Normal view</a>
+    </div>`;
+  grid.appendChild(card);
+});
+
+async function checkVideo(vid) {
+  try {
+    const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${vid}&format=json`);
+    return res.ok;
+  } catch (e) { return false; }
+}
+
+document.getElementById('run').addEventListener('click', async (e) => {
+  e.target.disabled = true;
+  e.target.textContent = 'Checking...';
+  let ok = 0, bad = 0, none = 0;
+  for (const l of lessons) {
+    const badge = document.querySelector('#card-' + l.id + ' .badge');
+    if (!l.vid) { none++; continue; }
+    const works = await checkVideo(l.vid);
+    badge.className = 'badge ' + (works ? 'ok' : 'bad');
+    badge.textContent = works ? 'Working' : 'Broken';
+    works ? ok++ : bad++;
+  }
+  e.target.textContent = 'Check all video statuses';
+  e.target.disabled = false;
+  const summary = document.getElementById('summary');
+  summary.style.display = 'flex';
+  summary.innerHTML = `<span style="color:var(--g600)">✓ ${ok}</span><span style="color:var(--r500)">✕ ${bad}</span><span style="color:var(--a500)">— ${none}</span>`;
+});
+</script>
+</body>
+</html>
